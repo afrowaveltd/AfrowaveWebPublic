@@ -1,0 +1,221 @@
+$bg: #d8f0f8;
+$foreground: #0a2b3d;
+$formForeground: #cbe8f3;
+$bodyBackground: #b0d6e5;
+$link: #328ba8;
+$linkHover: #276b82;
+$linkActive: #1b4d5c;
+$formBackground: #93c2d5;
+$redBorder: #7f2626;
+$disabledBackground: #87a4b2;
+$disabledForeground: #6c7b84;
+$formControlValidBackground: #6a9fb0;
+$formControlInvalidBackground: #a84a4a;
+$navbar: rgba(144,192,213,0.8);
+$hr: $redBorder;
+$success: rgb(40,160,60);
+$error: #aa4444;
+$warning: #c6863b;
+$info: #357cb4;
+$highlight: #ffffff;
+$my: #3a97b8;
+$family: #51c6dd;
+$admin: #8b2e4d;
+$borderLight: #688a96;
+$shadow: rgba(100,150,160,0.5);
+$modalBackground: rgba(200,230,240,0.8);
+
+:root {
+	--jd-color-background-default: $bg;
+	--jd-color-border: $linkHover;
+	--jd-color-panel: $bg;
+	--jd-color-icon: $error;
+}
+
+a {
+	color: $link;
+}
+
+a:hover {
+	color: $linkHover;
+}
+
+a:active {
+	color: $linkActive;
+}
+
+body {
+	background-color: $bg;
+	color: $foreground;
+}
+
+.navbar {
+	background-color: $navbar;
+	color: $highlight;
+}
+
+a.nav-link {
+	color: $link;
+}
+
+a.nav-link:hover {
+	color: $linkHover;
+}
+
+a.nav-link:active {
+	color: $linkActive;
+}
+
+.container {
+	color: $foreground;
+	background-color: $bodyBackground;
+}
+
+.dimmed {
+	color: $navbar;
+}
+
+.form-control {
+	color: $formForeground;
+	background-color: $formBackground;
+}
+
+.form {
+	color: $formForeground;
+	background-color: $formBackground;
+}
+
+input {
+	-webkit-tap-highlight-color: $highlight;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	background-color: $formBackground, !important;
+	color: $formForeground !important;
+	-webkit-text-fill-color: $formForeground !important;
+	transition: background-color 1s ease-in-out 5000s !important;
+}
+
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+	background-color: $formBackground, !important;
+	color: $formForeground !important;
+	-webkit-text-fill-color: $formForeground !important;
+	transition: background-color 1s ease-in-out 5000s !important;
+}
+
+.form-control:disabled {
+	background-color: $disabledBackground;
+	color: $disabledForeground;
+}
+
+.form-control:valid {
+	background-color: $formBackground;
+	color: $formForeground;
+}
+
+.form-control:active {
+	background-color: $disabledBackground;
+	color: $disabledForeground;
+}
+
+.success {
+	color: $success
+}
+
+.helper {
+	color: $highlight;
+	border: solid 2px $redBorder;
+	padding: 10px;
+	margin-right: 0px;
+	-moz-border-radius: inherit;
+	-webkit-border-radius: inherit;
+	border-radius: inherit;
+	border-radius: 8px 8px;
+}
+
+.input-valid {
+	border-color: $success;
+}
+
+.input-invalid {
+	border-color: $error;
+}
+
+.success {
+	color: $success;
+}
+
+.error {
+	color: $error;
+}
+
+.warning {
+	color: $warning;
+}
+
+.information {
+	color: $info;
+}
+
+.btn-primary {
+	background-color: $link;
+	border-color: $link;
+	color: $highlight;
+}
+
+.btn-primary:hover {
+	background-color: $link;
+	border-color: $linkHover;
+	color: $highlight;
+}
+
+.btn:disabled {
+	background-color: $disabledBackground;
+	color: $disabledForeground;
+	border-color: $link;
+}
+
+table.result {
+	border: 2px solid $redBorder;
+	border-radius: 7px;
+	padding: 5px;
+	width: 95%;
+	background-color: $formBackground;
+}
+
+th.result {
+	border: 2px solid $redBorder;
+	padding: 5px;
+	color: $formForeground;
+}
+
+td.result {
+	border: 1px solid $redBorder;
+	padding: 5px;
+}
+
+table {
+	margin-top: 10px;
+	width: 95%;
+	margin-right: auto;
+	border-radius: 7px;
+	margin-left: auto;
+	background-color: $formBackground;
+	color: $formForeground;
+}
+
+.terms h1, h2, h3, h4, h5, h6 {
+	color: $linkHover;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.terms li {
+	color: $info;
+}

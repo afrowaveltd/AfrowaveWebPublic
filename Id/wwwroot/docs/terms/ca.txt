@@ -1,0 +1,69 @@
+
+  Termes i condicions per a la Comunitat Afrowave
+
+Data efectiu: 22. 12. 2024
+
+    Resum de la Comunitat Europea
+
+La Comunitat Afrowave és un projecte de codi obert que proporciona serveis de lliure ús. Els nostres serveis inclouen (però no estan limitats a):
+
+- Un sistema d' autenticació i autorització similar a OAuth, usat per projectes Afrowave i disponible per projectes externs de comunitat.
+- Aplicacions de xat i plataformes de xarxes socials.
+- Els blogs de notícies i altres plataformes de compartició de suports.
+- Suport multilingüe per als usuaris de tot el món.
+
+Serveis Premium, com ara enviar missatges de text (SMS) o altres serveis que inclouen costos externs, poden ser oferts en el futur. Les càrregues d'aquests serveis només cobriran les despeses associades (p. ex., adquisició, taxes SMS).
+
+    Dades i privadesa de l' usuari
+     Col· lecció de dades i ús
+ID d' usuari: dades d' usuari, com detalls d' autenticació, es compartiran mitjançant projectes Afrowave per proporcionar accés directe i accés.
+Galetes: Les galetes s' usen per a emmagatzemar opcions com preferències del tema fosc o lleuger, llenguatge d' usuari i fitxes de sessió. No s' accediran galetes de tercers o s' accediran per l'Afrowave.
+PIBR Compliança: Afrowasalomina amb el PIBR. Les vostres dades personals no es compartiran amb cap servei de tercers o entitats sense consentiment explícita.
+
+    Compartició de dades
+Els usuaris poden escollir quines dades personals compartir amb els amics, el públic general, o els visitants no registrats. Els usuaris mantenen el control sobre els seus paràmetres de visibilitat de dades.
+La responsabilitat del contingut generat per l' usuari es troba completament amb el creador del contingut. L'Afrowave no és adequat per a cap informació compartida.
+
+    Ús dels serveis
+     L'ús dels serveis Afrowave és lliure per a tots els usuaris, subjecte a aquestes condicions:
+- Els usuaris de qualsevol edat poden accedir a la plataforma.
+- El contingut està marcat com a uidault només es restrictarà als usuaris adults.
+- Abusos, contingut il·legal (com està definit per la llei de la UE) i altres materials prohibits estan totalment prohibits.
+- Reserves d'Afrowa el dret d'eliminar contingut il·legal o abusiu i suspendre o acabar comptes que violen aquests termes.
+
+    Denominació de l' usuari
+
+Els usuaris són únicament responsables del contingut que creen, comparteixen o distribueixen els serveis Afrowave.
+
+Els usuaris no han d' iniciar:
+
+- posting o compartir contingut il·legal o perjudicial.
+- Harasment, abusos o discriminació.
+- Activitats que violen lleis o estàndards comunitaris.
+
+    Política d' adquisició
+
+Publicitzar-se es permet als serveis Afrowave, oferir-la als estàndards comunitaris i no promoure activitats il·legals ni perjudicials.
+
+    Implementació multilingüe
+
+Afrowave ofereix traduccions en múltiples idiomes per assegurar la inclusivitat. Mentre que cada esforç està fet per proporcionar traduccions exactes, la versió anglesa prevalrà en cas de discrepàncies.
+
+    Complisió legal i disclaimista
+
+L'Afrowave opera amb les lleis de la UE.
+No som capaços de fer-nos mal ús dels serveis o de tercers reclamació d'activitats d'usuari.
+Encara que Afrontave assegura una plataforma segura, els usuaris són responsables de protegir les seves credencials i dades sensibles.
+
+    Actualitza als termes i les condicions
+
+En qualsevol moment reserva el dret d'actualitzar aquests termes i condicions. Els canvis importants es comunicaran als usuaris mitjançant correu electrònic o a la plataforma.
+
+    Informació del contacte
+
+Si teniu alguna pregunta o dubtes, contacteu amb nosaltres:
+
+Lloc web: https://afrowave.ltd
+
+Correu electrònic: info@afrowave.ltd
+

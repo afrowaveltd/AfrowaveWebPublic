@@ -1,0 +1,77 @@
+﻿@page
+@model Id.Pages.Install.IndexModel
+@{
+	ViewData["Title"] = Model.t["Administrator settings"];
+}
+@section Scripts {
+	<script src="~/js/api.js"></script>
+	<script src="~/js/install.js"></script>
+    <script src="~/js/validations_admin.js"></script>
+}
+
+
+<div class="row">
+	<div class="col-md-12">
+		<h2>@Model.t["Administrator"]</h2>
+		<hr />
+	</div>
+	<div class="col-md-7">
+		<h2 class="text-center">@Model.t["Create administrator's account"]</h2>
+		<div id="form-div">
+			<form method="post">
+				<div class="form-group">
+					<div id="email_err" class="text-danger p-2 pb-0"></div>
+					<label for="admin_email">@Model.t["Email"]</label>
+					<input asp-for="Input.Email" 
+						type="email" 
+						class="form-control" 
+						required
+						onfocus="loadHelp('Install_Email')"
+						onchange="checkMail(this); testEmail(this);"
+						onblur="checkMail(this); testEmail(this);" />
+				</div>
+				<div class="form-group">
+                    <div id="password_err" class="text-danger p-2 pb-0"></div>
+					<label for="Input.Password">@Model.t["Password"]</label>
+					<input asp-for="Input.Password"
+						   type="password"	   
+						   class="form-control"
+						   id="password"
+						   required
+						   onfocus="loadHelp('Install_Password')"
+						   onblur="checkPassword(this.value, this); checkPasswordConfirm(document.getElementById('confirm_password').value, this.value, document.getElementById('confirm_password'))"
+						   onkeypress="checkPassword(this.value, this); checkPasswordConfirm(document.getElementById('confirm_password').value, this.value, document.getElementById('confirm_password'))"
+						   onclick="checkPassword(this.value, this); checkPasswordConfirm(document.getElementById('confirm_password').value, this.value, document.getElementById('confirm_password'))"/>
+				</div>
+                <div class="form-group">
+                    <div id="password_confirm_err" class="text-danger p-2 pb-0"></div>
+                    <label for="Input.Password">@Model.t["Confirm password"]</label>
+                    <input type="password"
+                           asp-for="Input.PasswordConfirm"
+						   id="confirm_password"
+						   class="form-control" required
+						   onfocus="loadHelp('Install_ConfirmPassword')"
+						   onkeyup="checkPasswordConfirm(document.getElementById('password').value, this.value, this)"  />
+                </div>
+				<div class="text-right">
+				<button 
+					type="submit" 
+					id="submit" 
+					class="btn btn-primary btn-block mt-3" 
+					disabled>
+					@Model.t["Next"]
+				</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="col-md-5">
+		<div id="div_help" class="helper" style="display:none">
+		</div>
+	</div>
+</div>
+<script language="javascript">
+	let active_page = "admin";
+	let help = ('Install_CreateAdmin');
+
+</script>

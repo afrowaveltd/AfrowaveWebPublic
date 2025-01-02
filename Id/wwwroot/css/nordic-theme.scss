@@ -1,0 +1,221 @@
+$bg: #233d4d; // Deep blue-gray
+$foreground: #a1a2a1; // Soft white-gray
+$formForeground: #d1c4e9; // Muted lavender
+$bodyBackground: #f7f7f7; // Frost white
+$link: #4caf50; // Pine green
+$linkHover: #2e7d32; // Forest green
+$linkActive: #388e3c; // Deeper green
+$formBackground: #546e7a; // Slate gray
+$redBorder: #d32f2f; // Scandinavian red
+$disabledBackground: #90a4ae; // Light blue-gray
+$disabledForeground: #b0bec5; // Silver blue
+$formControlValidBackground: #388e3c; // Deep green
+$formControlInvalidBackground: #d32f2f; // Bold red
+$navbar: #607d8b; // Gray-blue
+$hr: #8eacbb; // Muted blue
+$success: #76d275; // Bright green
+$error: #f44336; // Flame red
+$warning: #ffca28; // Goldenrod
+$info: #2979ff; // Clear sky blue
+$highlight: #212121; // Almost black
+$my: #81c784; // Pastel green
+$family: #ffcc80; // Warm orange
+$admin: #ff7043; // Bold orange
+$borderLight: #37474f; // Cool gray
+$shadow: rgba(50, 50, 50, 0.5); // Neutral shadow
+$modalBackground: rgba(20, 30, 40, 0.8); // Cool dark overlay
+
+:root {
+	--jd-color-background-default: $bg;
+	--jd-color-border: $linkHover;
+	--jd-color-panel: $bg;
+	--jd-color-icon: $error;
+}
+
+a {
+	color: $link;
+}
+
+a:hover {
+	color: $linkHover;
+}
+
+a:active {
+	color: $linkActive;
+}
+
+body {
+	background-color: $bg;
+	color: $foreground;
+}
+
+.navbar {
+	background-color: $navbar;
+	color: $highlight;
+}
+
+a.nav-link {
+	color: $link;
+}
+
+a.nav-link:hover {
+	color: $linkHover;
+}
+
+a.nav-link:active {
+	color: $linkActive;
+}
+
+.container {
+	color: $foreground;
+	background-color: $bodyBackground;
+}
+
+.dimmed {
+	color: $navbar;
+}
+
+.form-control {
+	color: $formForeground;
+	background-color: $formBackground;
+}
+
+.form {
+	color: $formForeground;
+	background-color: $formBackground;
+}
+
+input {
+	-webkit-tap-highlight-color: $highlight;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	background-color: $formBackground, !important;
+	color: $formForeground !important;
+	-webkit-text-fill-color: $formForeground !important;
+	transition: background-color 1s ease-in-out 5000s !important;
+}
+
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+	background-color: $formBackground, !important;
+	color: $formForeground !important;
+	-webkit-text-fill-color: $formForeground !important;
+	transition: background-color 1s ease-in-out 5000s !important;
+}
+
+.form-control:disabled {
+	background-color: $disabledBackground;
+	color: $disabledForeground;
+}
+
+.form-control:valid {
+	background-color: $formBackground;
+	color: $formForeground;
+}
+
+.form-control:active {
+	background-color: $disabledBackground;
+	color: $disabledForeground;
+}
+
+.success {
+	color: $success
+}
+
+.helper {
+	color: $highlight;
+	border: solid 2px $redBorder;
+	padding: 10px;
+	margin-right: 0px;
+	-moz-border-radius: inherit;
+	-webkit-border-radius: inherit;
+	border-radius: inherit;
+	border-radius: 8px 8px;
+}
+
+.input-valid {
+	border-color: $success;
+}
+
+.input-invalid {
+	border-color: $error;
+}
+
+.success {
+	color: $success;
+}
+
+.error {
+	color: $error;
+}
+
+.warning {
+	color: $warning;
+}
+
+.information {
+	color: $info;
+}
+
+.btn-primary {
+	background-color: $link;
+	border-color: $link;
+	color: $highlight;
+}
+
+.btn-primary:hover {
+	background-color: $link;
+	border-color: $linkHover;
+	color: $highlight;
+}
+
+.btn:disabled {
+	background-color: $disabledBackground;
+	color: $disabledForeground;
+	border-color: $link;
+}
+
+table.result {
+	border: 2px solid $redBorder;
+	border-radius: 7px;
+	padding: 5px;
+	width: 95%;
+	background-color: $formBackground;
+}
+
+th.result {
+	border: 2px solid $redBorder;
+	padding: 5px;
+	color: $formForeground;
+}
+
+td.result {
+	border: 1px solid $redBorder;
+	padding: 5px;
+}
+
+table {
+	margin-top: 10px;
+	width: 95%;
+	margin-right: auto;
+	border-radius: 7px;
+	margin-left: auto;
+	background-color: $formBackground;
+	color: $formForeground;
+}
+
+.terms h1, h2, h3, h4, h5, h6 {
+	color: $linkHover;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.terms li {
+	color: $info;
+}

@@ -1,0 +1,32 @@
+﻿@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<Id.Pages.Install.IndexModel> t;
+
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+        <a class="nav-link dimmed @InstallNavPages.IndexNavClass(ViewContext)" id="nav_user" asp-page="./Index">@t["Administrator settings"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link dimmed @InstallNavPages.BrandNavClass(ViewContext)" id="nav_brand" asp-page="./Brand">@t["Brand"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link dimmed @InstallNavPages.ApplicationNavClass(ViewContext)" id="nav_application" asp-page="./Application">@t["Application settings"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link dimmed @InstallNavPages.RolesNavClass(ViewContext)" id="nav_roles" asp-page="./ApplicationRoles">@t["Setup roles"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link dimmed @InstallNavPages.SmtpNavClass(ViewContext)" id="nav_smtp" asp-page="./SmtpSettings">@t["Smtp settings"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link dimmed @InstallNavPages.LoginNavClass(ViewContext)" id="nav_login" asp-page="./LoginRules">@t["Login settings"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link dimmed @InstallNavPages.PasswordNavClass(ViewContext)" id="nav_password" asp-page="./PasswordRules">@t["Password settings"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link dimmed @InstallNavPages.CookieNavClass(ViewContext)" id="nav_cookie" asp-page="./Cookie">@t["Cookie settings"]</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link dimmed @InstallNavPages.JwtNavClass(ViewContext)" id="nav_jwt" asp-page="./JwtSettings">@t["Jwt settings"]</a>
+    </li>
+</ul>

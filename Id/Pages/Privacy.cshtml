@@ -1,0 +1,11 @@
+﻿@page
+@model TermsModel
+@inject IStringLocalizer<TermsModel> t
+
+@{
+    ViewData["Title"] = t["Terms and Conditions"];
+}
+
+<div class="terms">
+    @Html.Raw(Model.TermsHtml)
+</div>

@@ -1,0 +1,167 @@
+﻿@page
+@model Id.Pages.Install.ApplicationRolesModel
+@{
+    ViewData["Title"] = Model.t["Application roles"]; 
+}
+
+@section Scripts {
+    <script src="~/js/api.js"></script>
+    <script src="~/js/install.js"></script>
+    <script src="~/js/validations_agreements.js"></script>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>@Model.t["Application roles"]</h2>
+        <hr />
+    </div>
+    <div class="col-md-7">
+        <h2 class="text-center">@Model.t["Create Authenticator Application Roles"]</h2>
+        <hr />
+        <div id="form-div">
+            <div class="error">
+                @Model.ErrorMessage
+            </div>
+            <div id="data_surface">
+                <table id="data_table" class="result">
+                    <tr>
+                        <th class="result">@Model.t["Process"]</th>
+                        <th class="result">@Model.t["Success"]</th>
+                        <th class="result">@Model.t["Data"]</th>
+                    </tr>
+                    <tr>
+                        <td class="result">@Model.t["Getting User Id"]</td>
+                        <td class="result text-center">
+                            @if(Model.UserIdFound)
+                            {
+                                <span class='text-center success'><i class='bi bi-check-lg'></i></span>
+                            }
+                            @if(!Model.UserIdFound)
+                            {
+                                <span class='text-center error'><i class='bi bi-x-lg'></i></span>
+                            }
+                        </td>
+                        <td class="result">@Model.UserIdData</td>
+                    </tr>
+                    <tr>
+                        <td class="result">@Model.t["Getting Application Id"]</td>
+                        <td class="result text-center">
+                            @if (Model.ApplicationIdFound)
+                            {
+                                <span class='text-center success'><i class='bi bi-check-lg'></i></span>
+                            }
+                            @if(!Model.ApplicationIdFound)
+                            {
+                                <span class='text-center error'><i class='bi bi-x-lg'></i></span>
+                            }
+                        </td>
+                        <td class="result">@Model.ApplicationIdData</td>
+                    </tr>
+                </table>
+                <hr />
+                <h4 class="text-center">@Model.CreateRoles</h4>
+                <hr />
+                @if(Model.RoleCreatingResult.Successful)
+                {
+                    <table class="result">
+                        <tr>
+                            <th class="result">@Model.t["Role name"]</th>
+                            <th class="result">@Model.t["Normalized name"]</th>
+                            <th class="result">@Model.t["Role Id"]</th>
+                        </tr>
+                        @foreach(var role in Model.RoleCreatingResult.Data)
+                        {
+                            <tr>
+                                <td class="result">@role.Name</td>
+                                <td class="result">@role.NormalizedName</td>
+                                <td class="result text-end">@role.Id</td>
+                            </tr>
+                        }
+                    </table>
+                    <hr />
+                    <h4 class="text-center">@Model.t["Assign Roles to User"]</h4>
+                    <hr />
+                    <table class="result">
+                        <tr>
+                            <th class="result">@Model.t["Role name"]</th>
+                            <th class="result">@Model.t["Normalized name"]</th>
+                            <th class="result">@Model.t["Role Id"]</th>
+                            <th class="result">@Model.t["Success"]</th>
+                        </tr>
+                        @if(Model.RoleAssigningResult.Count > 0)
+                        {
+                            @foreach(var role in Model.RoleAssigningResult)
+                            {
+                                <tr>
+                                    <td class="result">@role.RoleName</td>
+                                    <td class="result">@role.NormalizedName</td>
+                                    <td class="result text-end">@role.RoleId</td>
+                                    <td class="result text-center">
+                                        @if(role.Successful)
+                                        {
+                                            <span class='text-center success'><i class='bi bi-check-lg'></i></span>
+                                        }
+                                        @if(!role.Successful)
+                                        {
+                                            <span class='text-center error'><i class='bi bi-x-lg'></i></span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }                            
+                </table>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <h3 class="text-center">@Model.t["Application terms and conditions"]</h3>
+        <div id="form_div" class="mb-3">
+            <form name="terms" method="post">
+                <div class="form-group">
+                    <div id="terms_error" class="text-danger p-2 pb-0" style="display:block">
+                        @Model.t["Please accept the terms and conditions"]
+                    </div>
+                    <select asp-for="Input.AgreedToTerms" 
+                               class="form-control"
+                               onchange="checkTerms(this)"
+                               asp-items="@Model.TermsAgreement">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <div id="cookies_error" class="text-danger p-2 pb-0" style="display:block">
+                        @Model.t["Please accept cookies"]
+                    </div>
+                    <select asp-for="Input.AgreedToCookies"
+                            class="form-control"
+                            onchange="checkCookies(this)"
+                            asp-items="@Model.CookiesAgreement">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <div id="datashare_error" class="text-danger p-2 pb-0" style="display:block">
+                        @Model.t["Please accept data sharing"]
+                    </div>
+                    <select asp-for="Input.AgreedSharingUserDetails"
+                            class="form-control"
+                            onchange="checkSharing(this)"
+                            asp-items="@Model.SharingUserDetailsAgreement">
+                    </select>
+                </div>
+                <button type="submit"
+                        id="submit"
+                        class="btn btn-primary btn-block mt-3"
+                        disabled>
+                    @Model.t["Next"]
+                </button>
+            </form>
+        </div>
+        <div id="div_help" class="helper" style="display:none">
+        </div>
+    </div>
+</div>
+
+<script language="javascript">
+    active_page = "roles";
+    help = "Install_ApplicationRoles";
+</script>

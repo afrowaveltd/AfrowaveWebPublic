@@ -1,0 +1,69 @@
+
+  Vilkår og betingelser for Afrowave Community
+
+Effektiv dato: 22.12.2024
+
+    Oversikt over Afrowave Community
+
+Afrowave Community er et open-source-prosjekt som tilbyr gratis-til-bruk tjenester. Våre tjenester inkluderer (men er ikke begrenset til):
+
+- Afrowave ID: Et autentiserings- og autorisasjonssystem som ligner på OAuth, som brukes på tvers av Afrowave-prosjekter og er tilgjengelig for eksterne samfunnsprosjekter.
+- Chatapplikasjoner og sosiale medier plattformer.
+Nyhetsblogger og andre mediedelingsplattformer.
+Flerspråklig støtte til brukere over hele verden.
+
+Premiumtjenester, som å sende tekstmeldinger (SMS) eller andre tjenester som involverer eksterne kostnader, kan tilbys i fremtiden. Avgifter for disse tjenestene vil bare dekke deres tilknyttede utgifter (f.eks hosting, SMS-gebyrer).
+
+    Brukerdata og personvern
+     Datainnsamling og bruk
+Afrowave ID: Brukerdata, som autentiseringsdetaljer, vil bli delt over Afrowave-prosjekter for å gi sømløs innlogging og tilgang.
+Informasjonskapsler: Cookies brukes til å lagre innstillinger som mørke eller lette temainnstillinger, brukerspråk og sesjonssymboler. Ingen tredjeparts cookies vil bli tilgang til eller brukt av Afrowave.
+GDPR Følge: Afrowave overholder GDPR. Dine personopplysninger vil ikke bli delt med tredjepartstjenester eller enheter uten uttrykkelig samtykke.
+
+    Datadeling
+Brukere kan velge hvilke personopplysninger som skal deles med venner, offentlig eller uregistrerte besøkende. Brukere opprettholder kontrollen over innstillingene for datasynlighet.
+Ansvaret for brukergenerert innhold ligger helt hos innholdsskaperen. Afrowave er ikke ansvarlig for delt informasjon.
+
+    Bruk av tjenester
+     Bruken av Afrowave-tjenester er gratis for alle brukere under følgende betingelser:
+- Brukere i alle aldre får tilgang til plattformen.
+- Innhold merket som \"kun voksen\" vil være begrenset til voksne brukere.
+- Misbruk, ulovlig innhold (som definert i EU-retten), og andre forbudte materialer er strengt forbudt.
+- Afrowave forbeholder seg retten til å fjerne ulovlig eller støtende innhold og suspendere eller avslutte kontoer som bryter disse vilkårene.
+
+    Brukeransvar
+
+Brukere er alene ansvarlig for innholdet de oppretter, deler eller distribuerer gjennom Afrowave-tjenester.
+
+Brukere må ikke delta i:
+
+Poste eller dele ulovlig eller skadelig innhold.
+Skade, misbruk eller diskriminering.
+Aktiviteter som bryter EUs lover eller fellesskapsstandarder.
+
+    Reklamepolitikk
+
+Reklame er tillatt på Afrowave tjenester, forutsatt at det overholder fellesskapets standarder og ikke fremmer ulovlige eller skadelige aktiviteter.
+
+    Flerspråklig støtte
+
+Afrowave tilbyr oversettelser på flere språk for å sikre inklusivitet. Mens alle anstrengelser er gjort for å gi nøyaktige oversettelser, vil den engelske versjonen råde i tilfelle av ulikheter.
+
+    Juridisk overholdelse og ansvarsfraskrivelse
+
+Afrowave opererer i samsvar med EUs lover.
+Vi er ikke ansvarlige for misbruk av tjenester eller tredjeparts krav som følge av brukeraktiviteter.
+Mens Afrowave sikrer en sikker plattform, er brukerne ansvarlige for å beskytte sine legitimasjoner og sensitive data.
+
+    Oppdateringer til vilkår og betingelser
+
+Afrowave forbeholder seg retten til å oppdatere disse vilkårene til enhver tid. Betydelige endringer vil bli kommunisert til brukerne via e-post eller på plattformen.
+
+    Kontaktinformasjon
+
+Hvis du har spørsmål eller bekymringer, vennligst kontakt oss på:
+
+Nettsted: https://afrowave.ltd
+
+E-post: info@afrowave.ltd
+

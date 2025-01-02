@@ -1,0 +1,69 @@
+
+  Afro-uhinen komunitatearen baldintzak
+
+Data efektiboa: 22.12.2024
+
+    Afrowave komunitatearen ikuspegi orokorra
+
+Afrowave Komunitatea iturburu irekiko proiektua da, erabilera libreko zerbitzuak eskaintzen dituena. Gure zerbitzuak hauek dira (baina ez daude mugatuta):
+
+- Afrowave ID: OAuthen antzeko autentifikazio- eta baimen-sistema, Afrowave proiektuetan zehar erabilia eta kanpoko komunitate-proiektuetarako erabilgarri.
+- Berriketa aplikazioak eta sare sozialak.
+- Albisteen blogak eta komunikabideak partekatzeko beste plataformak.
+- Mundu osoko erabiltzaileentzako euskarri eleanitza.
+
+Premium zerbitzuak, testu-mezuak (SMS) edo kanpoko kostuak dituzten beste zerbitzu batzuk, etorkizunean eskaini ahal izango dira. Zerbitzu horien kargak beren gastuei bakarrik eragingo die (adibidez, ostatatzeko, SMS gastuak).
+
+    Erabiltzailearen datuak eta pribatutasuna
+     Datuen bilketa eta erabilera
+Afrowave ID: erabiltzailearen datuak, hala nola autentifikazioaren xehetasunak, Afrowave proiektuen bidez partekatuko dira, saio-hasiera eta sarbiderik gabekoa eskaintzeko.
+Cookieak: Cookieak gai ilun edo argien hobespenak, erabiltzaile-hizkuntza eta saio-tokenak bezalako ezarpenak gordetzeko erabiltzen dira. Afrowave-k ez du hirugarrenen cookierik atzituko edo erabiliko.
+GDPR Betetzea: Afro-uhinak GDPR betetzen du. Zure datu pertsonalak ez dira hirugarrenen zerbitzu edo entitateekin partekatuko berariazko baimenik gabe.
+
+    Datuen partekatzea
+Erabiltzaileek aukera dezakete zein datu pertsonal partekatu lagunekin, publiko orokorrarekin edo erregistratu gabeko bisitariekin. Erabiltzaileek datuen ikusgaitasunaren ezarpenak kontrolatzen dituzte.
+Erabiltzaileak sortutako edukien erantzukizuna edukiaren sortzailearekin dago. Afrowave ez da informazio partekatuaren erantzule.
+
+    Zerbitzuak erabiltzea
+     Afrowave zerbitzuak erabiltzea doakoa da erabiltzaile guztientzat, baldintza hauen arabera:
+Edozein adinetako erabiltzaileek plataformara sartzeko baimena dute.
+- "heldu" gisa markatutako edukia helduen erabiltzaileetara mugatuko da.
+-Abusua, legez kanpoko edukia (EBko legeak zehazten duen bezala) eta debekatutako beste material batzuk zorrozki debekatuta daude.
+-Afrowave-k eskubidea du eduki ilegalak edo abusuzkoak kentzeko eta baldintza hauek urratzen dituzten kontuak esekitzeko edo amaitzeko.
+
+    Erabiltzailearen erantzukizunak
+
+Erabiltzaileak dira Afrowave-ren zerbitzuen bidez sortzen, partekatzen edo banatzen duten edukiaren erantzule bakarrak.
+
+Erabiltzaileek ezin dute parte hartu:
+
+- Eduki ilegalak edo kaltegarriak argitaratzea edo partekatzea.
+- Jazarpena, abusua edo diskriminazioa.
+- EBko legeak edo erkidego-arauak urratzen dituzten jarduerak.
+
+    Publizitate-politika
+
+Afrowave-ren zerbitzuetan publizitatea onartzen da, baldin eta komunitate-arauak betetzen baditu eta jarduera ilegalak edo kaltegarriak sustatzen ez baditu.
+
+    Laguntza eleanitza
+
+Afrowave-k hainbat hizkuntzatako itzulpenak eskaintzen ditu inklusibitatea bermatzeko. Itzulpen zehatzak egiteko ahalegin guztiak egiten diren arren, ingelesezko bertsioa nagusituko da desadostasunik izanez gero.
+
+    Lege-betebeharra eta lege-oharra
+
+Afrowavek EBko legeen arabera funtzionatzen du.
+Ez gara erabiltzaileen jardueratik eratorritako zerbitzuen edo hirugarrenen erreklamazioen erabilera okerraren erantzule.
+Afrowave-k plataforma segurua bermatzen duen bitartean, erabiltzaileek beren kredentzialak eta datu sentikorrak babesten dituzte.
+
+    Baldintzak eta baldintzak eguneratzea
+
+Afrowave-k eskubidea du baldintza hauek edozein unetan eguneratzeko. Aldaketa garrantzitsuak jakinaraziko zaizkie erabiltzaileei posta elektronikoz edo plataforman.
+
+    Kontaktuaren informazioa
+
+Galdera edo kezkaren bat baduzu, jar zaitez gurekin harremanetan:
+
+Webgunea: https://afrowave.ltd
+
+Posta elektronikoa: info@afrowave.ltd
+

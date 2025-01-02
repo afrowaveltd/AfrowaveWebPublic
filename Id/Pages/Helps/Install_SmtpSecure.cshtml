@@ -1,0 +1,16 @@
+﻿@page
+@model Id.Pages.Helps.Install_SmtpSecure_Model
+@{
+}
+<h2 class="information text-center">@Model.Title</h2>
+
+@foreach(var line in Model.Lines)
+{
+    <p>@line</p>
+}
+<ul>
+	@foreach(var option in Model.Options)
+	{
+		<li>@option</li>
+	}	
+</ul>

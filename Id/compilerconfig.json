@@ -1,0 +1,70 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/dark-theme.css",
+    "inputFile": "wwwroot/css/dark-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/light-theme.css",
+    "inputFile": "wwwroot/css/light-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/desert-theme.css",
+    "inputFile": "wwwroot/css/desert-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/ember-theme.css",
+    "inputFile": "wwwroot/css/ember-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/forest-theme.css",
+    "inputFile": "wwwroot/css/forest-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/glacier-theme.css",
+    "inputFile": "wwwroot/css/glacier-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/lavender-theme.css",
+    "inputFile": "wwwroot/css/lavender-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/midnight-theme.css",
+    "inputFile": "wwwroot/css/midnight-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/ocean-theme.css",
+    "inputFile": "wwwroot/css/ocean-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/peach-theme.css",
+    "inputFile": "wwwroot/css/peach-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/sunset-theme.css",
+    "inputFile": "wwwroot/css/sunset-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/twilight-theme.css",
+    "inputFile": "wwwroot/css/twilight-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/african-theme.css",
+    "inputFile": "wwwroot/css/african-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/japanese-theme.css",
+    "inputFile": "wwwroot/css/japanese-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/mediterranean-theme.css",
+    "inputFile": "wwwroot/css/mediterranean-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/nordic-theme.css",
+    "inputFile": "wwwroot/css/nordic-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/socialistic-theme.css",
+    "inputFile": "wwwroot/css/socialistic-theme.scss"
+  }
+]

@@ -1,0 +1,7 @@
+@import './themes/shared-variables.scss'; // Shared variables (if any)
+@import './common.scss'; // Common styles applied to both themes
+
+// Dynamically include either dark or light theme
+:root {
+	@import './themes/theme-variables.scss';
+}

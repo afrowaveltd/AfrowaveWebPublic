@@ -1,0 +1,15 @@
+﻿@page
+@model Id.Pages.Helps.Install_ApplicationRolesModel
+@{
+}
+
+<h3 class="text-center information">@Model.Title</h3>
+<hr />
+
+@foreach(var line in Model.Lines)
+{
+    <p>@line</p>
+}
+<p>
+    <a href='/privacy' target='_blank'>@Model.t["Rules"]</a>
+</p>

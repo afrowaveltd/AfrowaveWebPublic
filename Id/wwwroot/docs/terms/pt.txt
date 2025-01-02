@@ -1,0 +1,69 @@
+
+  Termos e Condições para a Comunidade de Afrowave
+
+Data efetiva: 22.12.2024
+
+    Visão geral da Comunidade de Afrowave
+
+A Afrowave Community é um projeto de código aberto que oferece serviços gratuitos. Nossos serviços incluem (mas não estão limitados a):
+
+- ID de Afrowave: Um sistema de autenticação e autorização semelhante ao OAuth, usado em projetos de Afrowave e disponível para projetos comunitários externos.
+- Aplicações de bate-papo e plataformas de mídia social.
+- Blogs de notícias e outras plataformas de compartilhamento de mídia.
+- Suporte multilíngue para usuários em todo o mundo.
+
+Os serviços premium, como o envio de mensagens de texto (SMS) ou outros serviços envolvendo custos externos, podem ser oferecidos no futuro. Os encargos para esses serviços só cobrirão suas despesas associadas (por exemplo, hospedagem, taxas de SMS).
+
+    Dados do usuário e privacidade
+     Coleta de dados e uso
+ID Afrowave: Os dados do usuário, como detalhes de autenticação, serão compartilhados em projetos Afrowave para fornecer login e acesso sem costura.
+Cookies: Os cookies são usados para armazenar configurações como preferências de tema escuro ou leve, linguagem de usuário e tokens de sessão. Nenhum cookie de terceiros será acessado ou usado pela Afrowave.
+RGPD Conformidade: Afrowave está em conformidade com o GDPR. Seus dados pessoais não serão compartilhados com quaisquer serviços ou entidades de terceiros sem consentimento explícito.
+
+    Partilha de dados
+Os usuários podem escolher os dados pessoais para compartilhar com amigos, o público em geral ou visitantes não registrados. Os usuários mantêm o controle sobre suas configurações de visibilidade de dados.
+A responsabilidade pelo conteúdo gerado pelo usuário está inteiramente com o criador de conteúdo. Afrowave não é responsável por nenhuma informação compartilhada.
+
+    Uso de Serviços
+     O uso de serviços Afrowave é gratuito para todos os usuários, sujeito a estas condições:
+- Os usuários de qualquer idade podem acessar a plataforma.
+- O conteúdo marcado como “apenas adulto” será restrito a usuários adultos.
+- Abuso, conteúdo ilegal (conforme definido pela legislação da UE), e outros materiais proibidos são estritamente proibidos.
+- A Afrowave reserva o direito de remover conteúdo ilegal ou abusivo e suspender ou encerrar contas que violem estes termos.
+
+    Responsabilidades do usuário
+
+Os usuários são exclusivamente responsáveis pelo conteúdo que criam, compartilham ou distribuem através dos serviços Afrowave.
+
+Os usuários não devem se envolver em:
+
+- Postar ou compartilhar conteúdo ilegal ou prejudicial.
+- Assédio, abuso ou discriminação.
+- Atividades que violem as leis da UE ou as normas comunitárias.
+
+    Política de publicidade
+
+A publicidade é permitida em serviços de Afrowave, desde que adere aos padrões comunitários e não promove atividades ilegais ou prejudiciais.
+
+    Suporte multilíngue
+
+Afrowave oferece traduções em vários idiomas para garantir a inclusividade. Enquanto todo esforço é feito para fornecer traduções precisas, a versão em inglês prevalecerá em caso de quaisquer discrepâncias.
+
+    Conformidade Legal e Disclaimer
+
+A Afrowave opera em conformidade com as leis da UE.
+Não somos responsáveis por qualquer uso indevido de serviços ou reivindicações de terceiros decorrentes de atividades do usuário.
+Enquanto a Afrowave garante uma plataforma segura, os usuários são responsáveis por proteger suas credenciais e dados confidenciais.
+
+    Atualizações aos Termos e Condições
+
+Afrowave reserva-se o direito de atualizar estes termos e condições a qualquer momento. Alterações significativas serão comunicadas aos usuários por e-mail ou na plataforma.
+
+    InformaÃ§Ãμes de contato
+
+Se você tiver alguma dúvida ou preocupação, entre em contato conosco em:
+
+Site: https://afrowave.ltd
+
+Email: info@afrowave.ltd
+

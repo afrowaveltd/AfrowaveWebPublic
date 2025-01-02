@@ -1,0 +1,69 @@
+
+  Téarmaí agus Coinníollacha don Phobal Afra-thonn
+
+Dáta Éifeachtach: 22.12.2024
+
+    Forbhreathnú ar an gComhphobal Afrathonn
+
+Is tionscadal foinse oscailte é an Comhphobal Afra-thonn a sholáthraíonn seirbhísí saor in aisce le húsáid. I measc ár seirbhísí (ach nach bhfuil teoranta dóibh):
+
+- Afrawave ID: Córas fíordheimhnithe agus údaraithe cosúil le OAuth, a úsáidtear thar thionscadail Afrawave agus atá ar fáil do thionscadail phobail sheachtracha.
+- Iarratais Chat agus ardáin meáin shóisialta.
+- blogs Nuacht agus ardáin meáin eile a roinnt.
+- Tacaíocht ilteangach d'úsáideoirí ar fud an domhain.
+
+Féadfar seirbhísí préimhe, amhail teachtaireachtaí téacs a sheoladh (SMS) nó seirbhísí eile a bhaineann le costais sheachtracha, a thairiscint sa todhchaí. Ní chumhdóidh muirir i leith na seirbhísí sin ach a gcuid costas gaolmhar (m.sh., táillí óstála, SMS).
+
+    Sonraí Úsáideora agus Príobháideacht
+     Bailiúchán Sonraí agus Úsáid
+ID Afrawave: Déanfar sonraí úsáideora, mar shampla sonraí fíordheimhnithe, a roinnt ar thionscadail Afrawave chun logáil isteach agus rochtain gan uaim a sholáthar.
+Fianáin: Fianáin a úsáidtear chun suímh cosúil le roghanna téama dorcha nó solas, teanga úsáideora, agus comharthaí seisiún a stóráil. Ní dhéanfaidh Afrawave aon fhianáin tríú páirtí a rochtain ná a úsáid.
+OTIR Comhlíonadh: Comhlíonann Afrathonn leis an GDPR. Ní roinnfear do shonraí pearsanta le haon seirbhísí nó eintitis tríú páirtí gan toiliú sainráite.
+
+    Sonraí a roinnt
+Is féidir le húsáideoirí a roghnú cad iad na sonraí pearsanta a roinnt le cairde, an pobal i gcoitinne, nó cuairteoirí neamhchláraithe. Coinníonn úsáideoirí rialú ar a gcuid socruithe infheictheachta sonraí.
+Freagracht d'ábhar úsáideora-a ghintear go hiomlán leis an cruthaitheoir ábhar. Níl Afrawave faoi dhliteanas aon fhaisnéis chomhroinnte.
+
+    Úsáid Seirbhísí
+     Tá an úsáid a bhaint as seirbhísí Afrawave saor in aisce do gach úsáideoir, faoi réir na gcoinníollacha seo:
+- Tá cead ag úsáideoirí d'aois ar bith rochtain a fháil ar an ardán.
+- Beidh ábhar marcáilte mar "aosach amháin" srianta d'úsáideoirí fásta.
+- Tá cosc iomlán ar mhí-úsáid, ábhar neamhdhleathach (mar a shainmhínítear le dlí an AE), agus ábhair thoirmiscthe eile.
+- Forchoimeádann Afrawave an ceart ábhar neamhdhleathach nó maslach a bhaint agus cuntais a sháraíonn na téarmaí sin a chur ar fionraí nó a fhoirceannadh.
+
+    Freagrachtaí úsáideora
+
+Is iad na húsáideoirí amháin atá freagrach as an ábhar a chruthaíonn siad, a roinnt, nó a dháileadh trí sheirbhísí Afra-thonn.
+
+Ní mór d'úsáideoirí dul i mbun:
+
+- Ábhar neamhdhleathach nó díobhálach a phostáil nó a roinnt.
+- Harassment, mí-úsáid, nó idirdhealú.
+- Gníomhaíochtaí a sháraíonn dlíthe an AE nó caighdeáin phobail.
+
+    Polasaí Príobháideachta
+
+Ceadaítear fógraíocht ar sheirbhísí Afra-thonn, ar choinníoll go gcloíonn sé le caighdeáin phobail agus nach gcuireann sé gníomhaíochtaí neamhdhleathacha nó díobhálacha chun cinn.
+
+    Tacaíocht do Mhic Léinn
+
+Tugann Afrawave aistriúcháin i dteangacha éagsúla chun neamhchinnteacht a chinntiú. Cé go ndéantar gach iarracht aistriúcháin chruinn a chur ar fáil, beidh an leagan Béarla i réim i gcás aon neamhréireachtaí.
+
+    Comhlíonadh Dlí agus Séanadh
+
+Feidhmíonn Afrawave i gcomhréir le dlíthe an AE.
+Nílimid faoi dhliteanas as aon mhí-úsáid seirbhísí nó éilimh tríú páirtí a eascraíonn as gníomhaíochtaí úsáideora.
+Cé go n-áirithíonn Afrawave ardán slán, tá úsáideoirí freagrach as a gcuid dintiúir agus sonraí íogaire a chosaint.
+
+    Nuashonruithe chuig Téarmaí agus Coinníollacha
+
+Forchoimeádann Afrawave an ceart chun na téarmaí agus na coinníollacha seo a thabhairt cothrom le dáta ag am ar bith. Cuirfear athruithe suntasacha in iúl d'úsáideoirí trí ríomhphost nó ar an ardán.
+
+    Déan Teagmháil Linn
+
+Má tá aon cheist agat nó imní ort, déan teagmháil linn ag:
+
+Láithreán Gréasáin: https://afrowave.ltd
+
+Ríomhphost: info@afrowave.ltd
+

@@ -1,0 +1,85 @@
+﻿@using Id.Services
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<Id.Pages.IndexModel> t;
+@inject ICookieService cookieService;
+@inject ISelectOptionsServices options;
+
+@{
+    ViewData["theme"] = cookieService.GetOrCreateCookie("theme", "dark", 0);
+
+    var theme = cookieService.GetOrCreateCookie("theme", "dark", 0);
+    var style = $"/css/{theme}-theme.css";
+    string selected = cookieService.GetCookie("language") ?? "en";
+
+    List<SelectListItem> languageSelectList = await options.GetLanguagesOptionsAsync(selected);
+	List<SelectListItem> themeSelectList = await options.GetThemesAsync(theme);
+    string direction = await options.GetDirectionAsync(selected);
+}
+
+<!DOCTYPE html>
+<html lang="@selected" dir="@direction">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Afrowave" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @t["Id"]</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Id.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="@style" asp-append-version="true" />
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
+            <div class="container-xxl">
+                <a class="navbar-brand" asp-area="" asp-page="/Index" title=@t["Home page"]><img src="/img/favicon_32.png" /></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Account" title="@t["Account"]"><i class="bi bi-person"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Privacy" title="@t["Rules"]"><i class="bi bi-info-circle"></i></a>
+                        </li>
+                    </ul>
+        
+                    <select id="language_selector" class="nav-item form" style="margin-right: 10px; padding-top:2px; padding-bottom: 2px; padding-left: 5px;" onchange="changeLanguage(this.value)" asp-items="@languageSelectList"></select>
+                    <select id="theme_selector" class="nav-item form" style="margin-right: 10px; padding-top:2px;  padding-bottom: 2px; padding-left: 5px;" onchange="setTheme(this.value)" asp-items="@themeSelectList"></select>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3 pt-3">
+            @RenderBody()
+        </main>
+    </div>
+    <!--
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - Id - <a asp-area="" asp-page="/Privacy">@t["Rules"]</a>
+        </div>
+    </footer>
+    -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

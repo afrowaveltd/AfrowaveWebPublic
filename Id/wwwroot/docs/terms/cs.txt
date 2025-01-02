@@ -1,0 +1,69 @@
+
+  Podmínky a ujednání pro komunitu Afrowave
+
+Účinný od: 22.12.2024
+
+    Přehled
+
+Afrowave Community je open-source projekt, který poskytuje bezplatné služby. Naše služby zahrnují (ale nejsou omezeny na):
+
+- Afrowave ID: Autorizační a autorizační systém podobný systému OAuth, používaný v rámci projektů Afrowave a dostupný pro projekty členů komunity.
+- Chat aplikace a platforma sociálních médií.
+- Zprávy blogy a další platformy pro sdílení informací, názorů a debaty na různá témata.
+- Vícejazyčná podpora pro uživatele po celém světě. Překlady jsou k dispozici pro zajištění přístupnosti a inkluzivity.
+
+Premium služby, jako je zasílání textových zpráv (SMS) nebo jiné služby zahrnující externí náklady, mohou být nabízeny v budoucnu. Poplatky za tyto služby budou pokrývat pouze jejich související výdaje (např. hosting, SMS poplatky).
+
+    Uživatelské údaje a soukromí
+     Shromažďování a využívání údajů
+ID Afrowave: Uživatelská data, jako jsou údaje o autentizaci, budou sdílena v rámci projektu Afrowave pro zajištění bezproblémového přihlášení a přístupu.
+Cookies: Cookies se používají k ukládání nastavení, jako je motiv zobrazení, jazyk, a přístupové informace. Žádné cookies třetích stran nebudou používány společností Afrowave.
+GDPR Soulad: Afrowave je v souladu s GDPR. Vaše osobní údaje nebudou bez výslovného souhlasu sdíleny se službami nebo subjekty třetích stran.
+
+    Sdílení dat
+Uživatelé si mohou vybrat, jaké osobní údaje sdílet s přáteli, širokou veřejností nebo neregistrovanými návštěvníky. Uživatelé udržují kontrolu nad nastavením viditelnosti dat.
+Odpovědnost za uživatelsky vytvořený obsah spočívá výhradně na tvůrci obsahu. Afrowave neodpovídá za žádné sdílené informace.
+
+    Využívání služeb
+     Používání služeb Afrowave je zdarma pro všechny uživatele, za těchto podmínek:
+- Věk uživatelů není omezen, tvůrce obsahu zodpovídá za řádné označení nevhodného obsahu pro nedospělé uživatele.
+- Obsah označený jako "pouze pro dospělé" nebude zobrazován jiným než dospělým osobám.
+- Zneužití, nezákonný obsah (podle právních předpisů EU) a jiné ilegální materiály jsou přísně zakázány.
+- Afrowave si vyhrazuje právo odstranit nezákonný nebo zneužívající obsah a pozastavit nebo ukončit účty, které tyto podmínky porušují.
+
+    Povinnosti uživatelů
+
+Uživatelé jsou zcela zodpovědní za obsah, který vytvářejí, sdílejí nebo distribuují prostřednictvím služeb Afrowave.
+
+Uživatelé nesmí:
+
+- Vytvářet nebo sdílet nezákonný nebo škodlivý obsah.
+- Obtěžovat, insultovat nebo diskriminovat ostatní členy komunity.
+- Provádět činnosti, které porušují právní předpisy EU nebo standardy komunity.
+
+    Reklamy a inzerce
+
+Reklama je povolena, pokud dodržuje standardy komunity a nepodporuje nelegální nebo škodlivé činnosti.
+
+    Vícejazyčná podpora
+
+Afrowave nabízí překlady v několika jazycích pro zajištění inclusivity. Zatímco je vynaloženo veškeré úsilí na poskytnutí přesných překladů, anglická verze bude mít přednost v případě jakýchkoli rozporů.
+
+    Právní soulad a omezení
+
+Afrowave funguje v souladu s právními předpisy EU.
+Neručíme za zneužití služeb nebo za nároky třetích stran vyplývající z činnosti uživatelů.
+Zatímco Afrowave zajišťuje bezpečnou platformu, uživatelé jsou zodpovědní za ochranu svých citlivých údajů.
+
+    Aktualizace podmínek
+
+Afrowave si vyhrazuje právo kdykoli aktualizovat tyto podmínky. Významné změny budou sděleny uživatelům prostřednictvím e-mailu nebo na platformě.
+
+    Kontaktní informace
+
+Máte-li jakékoli dotazy nebo obavy, kontaktujte nás na:
+
+Adresa:		https://afrowave.ltd
+
+E-mail: info@afrowave.ltd
+

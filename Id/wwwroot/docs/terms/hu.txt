@@ -1,0 +1,69 @@
+
+  Az Afrough Közösségre vonatkozó feltételek
+
+Hatékony dátum: 2012.12.22
+
+    Az afrohullámú közösség áttekintése
+
+Az Afrough Community nyílt forráskódú projekt, amely ingyenes szolgáltatást nyújt. Szolgáltatásaink közé tartoznak (de nem korlátozódnak):
+
+- Afroft ID: Az OAuth-hoz hasonló hitelesítési és engedélyezési rendszer, amelyet afrohullámú projektekben használnak, és külső közösségi projektekhez is rendelkezésre áll.
+- Chat alkalmazások és közösségi média platformok.
+- Hírblogok és más médiamegosztó platformok.
+- Többnyelvű támogatás a felhasználók számára világszerte.
+
+Prémium szolgáltatások, például szöveges üzenetek (SMS) küldése vagy egyéb, külső költségekkel járó szolgáltatások a jövőben kínálhatók. Ezek a szolgáltatások csak a kapcsolódó költségeket fedezik (pl. hosting, SMS díjak).
+
+    Felhasználói adatok és adatvédelem
+     Adatgyűjtés és felhasználás
+Dokumentumazonosító: A felhasználói adatokat, például a hitelesítési adatokat, az Afrohullámú projektek között megosztják, hogy zökkenőmentes bejelentkezést és hozzáférést biztosítsanak.
+Sütik: A sütiket olyan beállítások tárolására használják, mint a sötét vagy világos téma beállítások, a felhasználói nyelv és a munkamenet zsetonok. A harmadik fél sütikhez nem férhet hozzá, illetve nem használhatja az Afrower.
+GDPR Megfelelés: A légi jármű megfelel a GDPR-nek. Személyes adatait nem osztjuk meg harmadik fél szolgálataival vagy szervezeteivel kifejezett hozzájárulás nélkül.
+
+    Adatmegosztás
+A felhasználók megválaszthatják, hogy milyen személyes adatokat osztanak meg a barátaikkal, a nyilvánossággal vagy a regisztrálatlan látogatókkal. A felhasználók továbbra is felügyelik adatlátási beállításaikat.
+A felhasználók által generált tartalmakért teljes mértékben a tartalomszerző felel. Az afro nem felel a megosztott információkért.
+
+    Szolgáltatások igénybevétele
+     Az afrohullámú szolgáltatások használata minden felhasználó számára ingyenes, a következő feltételekkel:
+- Bármilyen korú felhasználók hozzáférhetnek a platformhoz.
+- A "csak felnőttként" jelölt tartalom a felnőtt felhasználókra korlátozódik.
+- A visszaélések, az illegális tartalom (az uniós jog meghatározása szerint) és más tiltott anyagok szigorúan tiltottak.
+- Az afro fenntartja a jogot, hogy eltávolítsa a jogellenes vagy visszaélésszerű tartalmat, és felfüggessze vagy megszüntesse az e feltételeket sértő számlákat.
+
+    Felhasználói felelősség
+
+A felhasználók kizárólag az általuk létrehozott, megosztott vagy az afrohullámú szolgáltatásokon keresztül terjesztett tartalmakért felelősek.
+
+A felhasználók nem vehetnek részt:
+
+- Illegális vagy káros tartalmak elhelyezése vagy megosztása.
+- Zaklatás, bántalmazás vagy diszkrimináció.
+- Tevékenységek, amelyek megsértik az uniós jogszabályokat vagy közösségi szabványokat.
+
+    Hirdetési politika
+
+A hirdetés megengedett az afrohullámú szolgáltatások esetében, feltéve, hogy az megfelel a közösségi előírásoknak, és nem támogatja az illegális vagy káros tevékenységeket.
+
+    Többnyelvű támogatás
+
+Az afro több nyelven is fordít, hogy biztosítsa az inkluzivitást. Míg minden erőfeszítés, hogy pontos fordítások, az angol verzió fog uralkodni, ha bármilyen eltérés.
+
+    Jogi megfelelés és nyilatkozat
+
+A légi közlekedés az uniós jogszabályoknak megfelelően működik.
+Nem vagyunk felelősek a szolgáltatásokkal való visszaélésért vagy a felhasználói tevékenységekből eredő harmadik fél követeléseiért.
+Míg az Afrowth biztonságos platformot biztosít, a felhasználók felelősek a megbízhatóságuk és az érzékeny adataik védelméért.
+
+    A Feltételek frissítése
+
+Az Afriques fenntartja magának a jogot, hogy ezeket a feltételeket bármikor frissítse. Jelentős változások lesznek közölni a felhasználók e-mailben vagy a platform.
+
+    Kapcsolattartási információk
+
+Ha bármilyen kérdése vagy aggálya van, kérjük, forduljon hozzánk a következő címen:
+
+Weboldal: https://afrowave.ltd
+
+E-mail: info@afrowave.ltd
+

@@ -1,0 +1,85 @@
+﻿@page
+@model Id.Pages.Install.BrandModel
+@{
+	ViewData["Title"] = Model.t["Brand"];
+}
+@section Scripts {
+	<script src="~/js/api.js"></script>
+	<script src="~/js/install.js"></script>
+	<script src="~/js/validations_brand.js"></script>
+}
+<style>
+	#icon_preview img {
+		width: 32px;
+		height: 32px;
+		margin-left: -13px;
+		margin-top: -61px;
+		object-fit: cover;
+		/* Ensures the image fits nicely */
+	}
+</style>
+
+<div class="row">
+	<div class="col-md-12">
+		<h2>@Model.t["Brand"]</h2>
+		<hr />
+	</div>
+	<div class="col-md-7">
+		<h2 class="text-center">@Model.t["Create brand"]</h2>
+		<div id="form-div">
+			<form method="post" id="addBrand" enctype="multipart/form-data">
+				<div class="form-group">
+					<div id="brand_err" class="text-danger p-2 pb-0"></div>
+					<label for="brand_name">@Model.t["Brand name"]</label>
+					<input asp-for="Input.Name" type="text" class="form-control" required
+						onfocus="loadHelp('Install_BrandName')" onchange="checkBrand(this);" />
+				</div>
+				<div class="form-group">
+					<div id="brand_url_err" class="text-danger p-2 pb-0"></div>
+					<label for="brand_url">@Model.t["Website"]</label>
+					<input asp-for="Input.Website" type="text" class="form-control"
+						onfocus="loadHelp('Install_BrandWebsite')" onchange="checkUrl(this)" />
+				</div>
+				<div class="form-group">
+					<label for="Input_Description">@Model.t["Description"]</label>
+					<textarea asp-for="Input.Description" rows="5" class="form-control"
+						onfocus="loadHelp('Install_BrandDescription')">
+                </textarea>
+				</div>
+				<div class="form-group">
+					<div id="brand_email_err" class="text-danger p-2 pb-0"></div>
+					<label for="Input_ContactEmail">@Model.t["Contact email"]</label>
+					<input asp-for="Input.Email" type="email" class="form-control" onfocus="loadHelp('Install_BrandEmail')"
+						onchange="checkMail(this)"
+						onblur="checkMail(this)"/>
+				</div>
+				<div class="form-group">
+					<div id="brand_logo_err" class="text-danger p-2 pb-0"></div>
+					<label for="brand_logo">@Model.t["Logo"]</label>
+					<input asp-for="Input.CompanyLogo" type="file" class="form-control"
+						onfocus="loadHelp('Install_BrandLogo')" onload="checkIcon(this)" onchange="checkIcon(this)" />
+				</div>
+				<input type="hidden" asp-for="Input.OwnerId" value="@Model.Input.OwnerId"/>
+				<div class="row">
+					<div class="col-1">
+						<button type="submit" id="submit" class="btn btn-primary btn-block mt-3" disabled>
+							@Model.t["Next"]
+						</button>
+					</div>
+					<div class="col-1 offset-10" id="icon_preview"></div>
+				</div>
+			</form>
+
+		</div>
+	</div>
+	<div class="col-md-5">
+		<div id="div_help" class="helper" style="display:none">
+		</div>
+	</div>
+</div>
+
+<script language="javascript">
+	let active_page = "brand";
+	let help = ('Install_Brand');
+
+</script>

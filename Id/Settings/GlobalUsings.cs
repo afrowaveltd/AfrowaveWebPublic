@@ -1,0 +1,11 @@
+﻿global using Id.Data;
+global using Id.Models;
+global using Id.Models.DatabaseModels;
+global using Id.Services;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Mvc.RazorPages;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Localization;
+global using SharedTools.Models;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;

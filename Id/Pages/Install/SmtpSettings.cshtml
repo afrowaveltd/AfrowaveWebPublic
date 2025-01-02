@@ -1,0 +1,113 @@
+﻿@page
+@model Id.Pages.Install.SmtpSettingsModel
+@{
+	ViewData["Title"] = Model.t["Smtp settings"];
+}
+@section Scripts {
+	<script src="~/js/api.js"></script>
+	<script src="~/js/install.js"></script>
+	<script src="~/js/validations_smtp.js"></script>
+}
+
+<div class="row">
+	<div class="col-md-12">
+		<h2>@Model.t["Smtp settings"]</h2>
+		<hr />
+	</div>
+	<div class="col-md-7">
+		<h2 class="text-center">@Model.t["Configure server for sending emails"]</h2>
+		<div id="form-div">
+			<form method="post" id="addSmtp" enctype="multipart/form-data">
+				<div class="form-group">
+					<div id="smtp_err" class="text-danger p-2 pb-0"></div>
+					<label for="smtp_server">@Model.t["SMTP server"]</label>
+					<input asp-for="Input.Host" type="text" class="form-control"
+						onfocus="loadHelp('Install_SmtpServer')" onchange="checkSmtp(this);" />
+				</div>
+				<div class="form-group">
+					<div id="smtp_port_err" class="text-danger p-2 pb-0"></div>
+					<label for="smtp_port">@Model.t["Port"]</label>
+					<input asp-for="Input.Port" type="number" class="form-control"
+						onfocus="loadHelp('Install_SmtpPort')" onchange="checkPort(this)" />
+				</div>
+				<div class="form-group">
+					<div id="smtp_user_err" class="text-danger p-2 pb-0"></div>
+					<label for="smtp_user">@Model.t["Login"]</label>
+					<input asp-for="Input.SmtpUsername" type="text" class="form-control"
+						onfocus="loadHelp('Install_SmtpUser')" onchange="checkUser(this)" />
+				</div>
+				<div class="form-group">
+					<div id="smtp_pass_err" class="text-danger p-2 pb-0"></div>
+					<label for="smtp_pass">@Model.t["Password"]</label>
+					<input asp-for="Input.SmtpPassword" type="password" class="form-control"
+						onfocus="loadHelp('Install_SmtpPassword')" onchange="checkPass(this)" />
+				</div>
+				<div class="form-group">
+					<div id="smtp_email_err" class="text-danger p-2 pb-0"></div>
+					<label for="smtp_email">@Model.t["Sender email"]</label>
+					<input asp-for="Input.SenderEmail" 
+						value="@Model.Input.SenderEmail" type="email" class="form-control"
+						onfocus="loadHelp('Install_SmtpEmail')" 
+						onchange="checkMail(this)" />
+				</div>
+				<div class="form-group">
+					<div id="smtp_sender_err" class="text-danger p-2 pb-0"></div>
+					<label for="smtp_sender">@Model.t["Sender Name"]</label>
+					<input asp-for="Input.SenderName" type="text" class="form-control"
+						value="@Model.Input.SenderName"
+						onfocus="loadHelp('Install_SmtpSender')" 
+						onchange="checkSender(this)" />
+				</div>
+				<div class="form-group">
+					<div id="sso_err" class="text-danger p-2 pb-0"></div>
+					<label for="smtp_secure">@Model.t["Secure Socket Options"]</label>
+					<select asp-for="Input.Secure" class="form-control"
+						asp-items="@Model.options"
+						onfocus="loadHelp('Install_SmtpSecure')"
+						onchange="checkSecure(this)"></select>
+				</div>
+				<div class="form-group">
+					<div id="uselogin_err" class="text-danger p-2 pb-0"></div>
+					<label for="smtp_secure">@Model.t["SMTP requires authentication"]</label>
+					<select asp-for="Input.AuthorizationRequired" class="form-control"
+							onfocus="loadHelp('Install_SmtpAuthorizationRequired')"
+							onchange="checkAuthorizationRequired(this)">
+						<option value="true" selected>@Model.t["Yes"]</option>
+						<option value="false">@Model.t["No"]</option>
+						</select>
+				</div>
+				
+				<input type="hidden" asp-for="Input.ApplicationId" value="@Model.Input.ApplicationId" />
+				<div class="row mb-3">
+					<div class="col-4">
+						<button type="button" id="detectSmtp" class="btn btn-danger mt-3" disabled>
+							@Model.t["Detect settings"]
+						</button>
+					</div>
+					<div class="offset-1 col-4">
+						<button type="button" id="testSmtp" class="btn btn-secondary mt-3" disabled>
+							@Model.t["Test settings"]
+						</button>
+					</div>
+					<div class="offset-1 col-2">
+						<button type="submit" id="submit" class="btn btn-primary btn-block mt-3" disabled>
+							@Model.t["Next"]
+						</button>
+					</div>
+				</div>
+
+
+			</form>
+		</div>
+	</div>
+	<div class="col-md-5">
+		<div id="div_help" class="helper" style="display:none">
+		</div>
+	</div>
+</div>
+
+<script language="javascript">
+	let active_page = "smtp";
+	let help = ('Install_Smtp');
+</script>
+

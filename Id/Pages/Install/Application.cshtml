@@ -1,0 +1,114 @@
+﻿@page
+@model Id.Pages.Install.ApplicationModel
+@{
+    ViewData["Title"] = Model.t["Application settings"];
+}
+@section Scripts {
+    <script src="~/js/api.js"></script>
+    <script src="~/js/install.js"></script>
+    <script src="~/js/validations_application.js"></script>
+}
+<style>
+    #icon_preview img {
+        width: 32px;
+        height: 32px;
+        margin-left: -13px;
+        margin-top: -61px;
+        object-fit: cover; /* Ensures the image fits nicely */
+        
+    }
+</style>
+<div class="row">
+    <div class="col-md-12">
+        <h2>@Model.t["Application"]</h2>
+        <hr />
+    </div>
+    <div class="col-md-7">
+        <h2 class="text-center">@Model.t["Create Authenticator Application"]</h2>
+        <div id="form-div">
+            <div class="error">
+                @Model.ErrorMessage
+            </div>
+            <form method="post" id="addApplication" enctype="multipart/form-data">
+                <div class="form-group">
+                    <div id="application_name_err" class="text-danger p-2 pb-0"></div>
+                    <label for="Input_ApplicationName">@Model.t["Application name"]</label>
+                    <input asp-for="Input.ApplicationName"
+                        class="form-control"
+                        required
+                        onfocus="loadHelp('Install_ApplicationName')"
+                        onkeyup="checkName(this)"
+                        onclick="checkName(this)"
+                        value="Authenticator"/>
+                </div>
+                <div class="form-group">
+                    <label for="application_description">@Model.t["Description"]</label>
+                    <textarea asp-for="Input.ApplicationDescription"
+                           rows="5"
+                           class="form-control"
+                           onfocus="loadHelp('Install_ApplicationDescription')">
+                    </textarea>
+                </div>
+                <div class="form-group">
+                    <div id="application_email_err" class="text-danger p-2 pb-0"></div>
+                    <label for="Input_ApplicationEmail">@Model.t["Application email"]</label>
+                    <input asp-for="Input.ApplicationEmail"
+                           class="form-control"
+                           required
+                           onfocus="loadHelp('Install_ApplicationEmail')"
+                           onkeyup="checkEmail(this)"
+                           onblur="checkEmail(this)"
+                           onclick="checkEmail(this)" />
+                </div>
+                <div class="form-group">
+                    <div id="application_website_err" class="text-danger p-2 pb-0"></div>
+                    <label for="Input_ApplicationWebsite">@Model.t["Application website"]</label>
+                    <input asp-for="Input.ApplicationWebsite"
+                           class="form-control"
+                           required
+                           onfocus="loadHelp('Install_ApplicationWebsite')"
+                           onkeyup="checkWebsite(this)"
+                           onclick="checkWebsite(this)"
+                           onblur="checkWebsite(this)"
+                           value="Authenticator" />
+                </div>
+                <div class="form-group">
+                    <div id="application_icon_err" class="text-danger p-2 pb-0"></div>
+                    <label for="application_icon">@Model.t["Logo"]</label>
+                    <input asp-for="Input.ApplicationIcon" type="file" 
+                           class="form-control"
+                           accept=".jpg,.jpeg,.png,.bmp"
+                           onfocus="loadHelp('Install_ApplicationIcon')"
+                           onload="checkIcon(this)"
+                           onchange="checkIcon(this)"/>
+                </div>
+                <input type="hidden" asp-for="Input.OwnerId" value="@Model.Input.OwnerId" />
+                <input type="hidden" asp-for="Input.BrandId" value="@Model.Input.BrandId" />
+                <div class="row">
+                    <div class="col-1">
+                    <button type="submit"
+                            id="submit"
+                            class="btn btn-primary btn-block mt-3"
+                            disabled>
+                        @Model.t["Next"]
+                    </button>
+                    </div>
+                    <div class="col-1 offset-10" id="icon_preview"></div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div id="div_help" class="helper" style="display:none">
+        </div>
+    </div>
+</div>
+
+
+
+<script language="javascript">
+    active_page = "application";
+    help = 'Install_Application';
+</script>
