@@ -22,47 +22,48 @@
 				<div class="form-group">
 					<div id="smtp_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_server">@Model.t["SMTP server"]</label>
-					<input asp-for="Input.Host" type="text" class="form-control"
+					<input asp-for="Input.Host" type="text" class="form-control" id="smtp_host"
 						onfocus="loadHelp('Install_SmtpServer')" onchange="checkSmtp(this);" />
 				</div>
 				<div class="form-group">
 					<div id="smtp_port_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_port">@Model.t["Port"]</label>
-					<input asp-for="Input.Port" type="number" class="form-control"
+					<input asp-for="Input.Port" type="number" class="form-control" id="smtp_port"
 						onfocus="loadHelp('Install_SmtpPort')" onchange="checkPort(this)" />
 				</div>
 				<div class="form-group">
 					<div id="smtp_user_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_user">@Model.t["Login"]</label>
-					<input asp-for="Input.SmtpUsername" type="text" class="form-control"
+					<input asp-for="Input.SmtpUsername" type="text" class="form-control" id="smtp_user"
 						onfocus="loadHelp('Install_SmtpUser')" onchange="checkUser(this)" />
 				</div>
 				<div class="form-group">
 					<div id="smtp_pass_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_pass">@Model.t["Password"]</label>
-					<input asp-for="Input.SmtpPassword" type="password" class="form-control"
+					<input asp-for="Input.SmtpPassword" type="password" class="form-control" id="smtp_pass"
 						onfocus="loadHelp('Install_SmtpPassword')" onchange="checkPass(this)" />
 				</div>
 				<div class="form-group">
 					<div id="smtp_email_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_email">@Model.t["Sender email"]</label>
 					<input asp-for="Input.SenderEmail" 
-						value="@Model.Input.SenderEmail" type="email" class="form-control"
+						value="@Model.Input.SenderEmail" type="email" class="form-control" id="smtp_email"
 						onfocus="loadHelp('Install_SmtpEmail')" 
 						onchange="checkMail(this)" />
 				</div>
 				<div class="form-group">
-					<div id="smtp_sender_err" class="text-danger p-2 pb-0"></div>
+					<div id="smtp_name_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_sender">@Model.t["Sender Name"]</label>
-					<input asp-for="Input.SenderName" type="text" class="form-control"
+					<input asp-for="Input.SenderName" type="text" class="form-control" id="smtp_name"
 						value="@Model.Input.SenderName"
 						onfocus="loadHelp('Install_SmtpSender')" 
 						onchange="checkSender(this)" />
 				</div>
 				<div class="form-group">
-					<div id="sso_err" class="text-danger p-2 pb-0"></div>
+					<div id="smtp_sso_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_secure">@Model.t["Secure Socket Options"]</label>
 					<select asp-for="Input.Secure" class="form-control"
+							id="smtp_sso"
 						asp-items="@Model.options"
 						onfocus="loadHelp('Install_SmtpSecure')"
 						onchange="checkSecure(this)"></select>
@@ -70,7 +71,7 @@
 				<div class="form-group">
 					<div id="uselogin_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_secure">@Model.t["SMTP requires authentication"]</label>
-					<select asp-for="Input.AuthorizationRequired" class="form-control"
+					<select asp-for="Input.AuthorizationRequired" id="auth_required" lass="form-control"
 							onfocus="loadHelp('Install_SmtpAuthorizationRequired')"
 							onchange="checkAuthorizationRequired(this)">
 						<option value="true" selected>@Model.t["Yes"]</option>
