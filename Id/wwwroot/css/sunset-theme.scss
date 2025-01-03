@@ -23,7 +23,26 @@ $family: #ff8844;
 $admin: #bb4411;
 $borderLight: #cc8f55;
 $shadow: rgba(240,140,100, 0.5);
-$modalBackground: rgba(60,20,0,0.8);
+
+.spinner {
+	width: 32px;
+	height: 32px;
+	border: 4px solid $shadow;
+	border-top-color: $foreground;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin: 20px auto;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
 
 :root {
 	--jd-color-background-default: $bg;

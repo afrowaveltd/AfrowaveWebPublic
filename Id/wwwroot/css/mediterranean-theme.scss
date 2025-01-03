@@ -24,6 +24,27 @@ $admin: #ff4500; // Bold orange
 $borderLight: #2e8b57; // Sea green
 $shadow: rgba(100, 100, 100, 0.5); // Neutral shadow
 $modalBackground: rgba(40, 40, 20, 0.8); // Olive overlay
+
+.spinner {
+	width: 32px;
+	height: 32px;
+	border: 4px solid $shadow;
+	border-top-color: $foreground;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin: 20px auto;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
 :root {
 	--jd-color-background-default: $bg;
 	--jd-color-border: $linkHover;

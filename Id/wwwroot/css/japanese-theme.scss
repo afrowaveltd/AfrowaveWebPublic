@@ -25,6 +25,26 @@ $borderLight: #f08080; // Light coral
 $shadow: rgba(255, 182, 193, 0.5); // Pink shadow
 $modalBackground: rgba(200, 150, 150, 0.8); // Cherry overlay
 
+.spinner {
+	width: 32px;
+	height: 32px;
+	border: 4px solid $shadow;
+	border-top-color: $foreground;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin: 20px auto;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
 :root {
 	--jd-color-background-default: $bg;
 	--jd-color-border: $linkHover;

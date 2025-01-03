@@ -25,6 +25,26 @@ $borderLight: #3e2723; // Dark brown
 $shadow: rgba(80, 60, 30, 0.5); // Muted shadow
 $modalBackground: rgba(30, 20, 10, 0.8); // Dark earthy overlay
 
+.spinner {
+	width: 32px;
+	height: 32px;
+	border: 4px solid $shadow;
+	border-top-color: $foreground;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin: 20px auto;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
 :root {
 	--jd-color-background-default: $bg;
 	--jd-color-border: $linkHover;

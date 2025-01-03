@@ -1,66 +1,67 @@
-﻿:root {
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 4px solid rgba(100, 150, 160, 0.5);
+  border-top-color: #0a2b3d;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 20px auto; }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
+
+:root {
   --jd-color-background-default: $bg;
   --jd-color-border: $linkHover;
   --jd-color-panel: $bg;
-  --jd-color-icon: $error;
-}
+  --jd-color-icon: $error; }
 
 a {
-  color: #328ba8;
-}
+  color: #328ba8; }
 
 a:hover {
-  color: #276b82;
-}
+  color: #276b82; }
 
 a:active {
-  color: #1b4d5c;
-}
+  color: #1b4d5c; }
 
 body {
   background-color: #d8f0f8;
-  color: #0a2b3d;
-}
+  color: #0a2b3d; }
 
 .navbar {
   background-color: rgba(144, 192, 213, 0.8);
-  color: #ffffff;
-}
+  color: #ffffff; }
 
 a.nav-link {
-  color: #328ba8;
-}
+  color: #328ba8; }
 
 a.nav-link:hover {
-  color: #276b82;
-}
+  color: #276b82; }
 
 a.nav-link:active {
-  color: #1b4d5c;
-}
+  color: #1b4d5c; }
 
 .container {
   color: #0a2b3d;
-  background-color: #b0d6e5;
-}
+  background-color: #b0d6e5; }
 
 .dimmed {
-  color: rgba(144, 192, 213, 0.8);
-}
+  color: rgba(144, 192, 213, 0.8); }
 
 .form-control {
   color: #cbe8f3;
-  background-color: #93c2d5;
-}
+  background-color: #93c2d5; }
 
 .form {
   color: #cbe8f3;
-  background-color: #93c2d5;
-}
+  background-color: #93c2d5; }
 
 input {
-  -webkit-tap-highlight-color: #ffffff;
-}
+  -webkit-tap-highlight-color: #ffffff; }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -69,8 +70,7 @@ input:-webkit-autofill:active {
   background-color: #93c2d5, !important;
   color: #cbe8f3 !important;
   -webkit-text-fill-color: #cbe8f3 !important;
-  transition: background-color 1s ease-in-out 5000s !important;
-}
+  transition: background-color 1s ease-in-out 5000s !important; }
 
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
@@ -79,27 +79,22 @@ select:-webkit-autofill:active {
   background-color: #93c2d5, !important;
   color: #cbe8f3 !important;
   -webkit-text-fill-color: #cbe8f3 !important;
-  transition: background-color 1s ease-in-out 5000s !important;
-}
+  transition: background-color 1s ease-in-out 5000s !important; }
 
 .form-control:disabled {
   background-color: #87a4b2;
-  color: #6c7b84;
-}
+  color: #6c7b84; }
 
 .form-control:valid {
   background-color: #93c2d5;
-  color: #cbe8f3;
-}
+  color: #cbe8f3; }
 
 .form-control:active {
   background-color: #87a4b2;
-  color: #6c7b84;
-}
+  color: #6c7b84; }
 
 .success {
-  color: rgb(40, 160, 60);
-}
+  color: #28a03c; }
 
 .helper {
   color: #ffffff;
@@ -109,69 +104,56 @@ select:-webkit-autofill:active {
   -moz-border-radius: inherit;
   -webkit-border-radius: inherit;
   border-radius: inherit;
-  border-radius: 8px 8px;
-}
+  border-radius: 8px 8px; }
 
 .input-valid {
-  border-color: rgb(40, 160, 60);
-}
+  border-color: #28a03c; }
 
 .input-invalid {
-  border-color: #aa4444;
-}
+  border-color: #aa4444; }
 
 .success {
-  color: rgb(40, 160, 60);
-}
+  color: #28a03c; }
 
 .error {
-  color: #aa4444;
-}
+  color: #aa4444; }
 
 .warning {
-  color: #c6863b;
-}
+  color: #c6863b; }
 
 .information {
-  color: #357cb4;
-}
+  color: #357cb4; }
 
 .btn-primary {
   background-color: #328ba8;
   border-color: #328ba8;
-  color: #ffffff;
-}
+  color: #ffffff; }
 
 .btn-primary:hover {
   background-color: #328ba8;
   border-color: #276b82;
-  color: #ffffff;
-}
+  color: #ffffff; }
 
 .btn:disabled {
   background-color: #87a4b2;
   color: #6c7b84;
-  border-color: #328ba8;
-}
+  border-color: #328ba8; }
 
 table.result {
   border: 2px solid #7f2626;
   border-radius: 7px;
   padding: 5px;
   width: 95%;
-  background-color: #93c2d5;
-}
+  background-color: #93c2d5; }
 
 th.result {
   border: 2px solid #7f2626;
   padding: 5px;
-  color: #cbe8f3;
-}
+  color: #cbe8f3; }
 
 td.result {
   border: 1px solid #7f2626;
-  padding: 5px;
-}
+  padding: 5px; }
 
 table {
   margin-top: 10px;
@@ -180,15 +162,12 @@ table {
   border-radius: 7px;
   margin-left: auto;
   background-color: #93c2d5;
-  color: #cbe8f3;
-}
+  color: #cbe8f3; }
 
 .terms h1, h2, h3, h4, h5, h6 {
   color: #276b82;
   font-weight: bold;
-  font-style: italic;
-}
+  font-style: italic; }
 
 .terms li {
-  color: #357cb4;
-}
+  color: #357cb4; }

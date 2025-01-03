@@ -84,7 +84,7 @@ builder.Services.AddControllers()
 // Middleware
 builder.Services.AddTransient<I18nMiddleware>();
 
-// Scoped služby (HTTP request-based)
+// Scoped sluï¿½by (HTTP request-based)
 builder.Services.AddScoped<ICookieService, CookieService>();
 builder.Services.AddScoped<ITranslatorService, TranslatorService>();
 builder.Services.AddScoped<IApplicationLoader, ApplicationLoader>();
@@ -99,13 +99,16 @@ builder.Services.AddScoped<ITextToHtmlService, TextToHtmlService>();
 builder.Services.AddScoped<ITermsService, TermsService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
-// Transient služby (stateless)
+// Transient sluï¿½by (stateless)
 builder.Services.AddTransient<IStringLocalizerFactory, JsonStringLocalizerFactory>();
 builder.Services.AddTransient<IEncryptionService, EncryptionService>();
 builder.Services.AddTransient<IImageService, ImageService>();
 
-// Singleton služby (globální, thread-safe)
+// Singleton sluï¿½by (globï¿½lnï¿½, thread-safe)
 builder.Services.AddSingleton<ISettingsService, SettingsService>();
+
+// Hosted services
+builder.Services.AddHostedService<ScssCompilerService>();
 
 WebApplication app = builder.Build();
 

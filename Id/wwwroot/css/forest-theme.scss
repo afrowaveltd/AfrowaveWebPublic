@@ -25,6 +25,26 @@ $borderLight: #5f7f5f;
 $shadow: rgba(60,120,60, 0.5);
 $modalBackground: rgba(20,50,20,0.8);
 
+.spinner {
+	width: 32px;
+	height: 32px;
+	border: 4px solid $shadow;
+	border-top-color: $foreground;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin: 20px auto;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
 :root {
 	--jd-color-background-default: $bg;
 	--jd-color-border: $linkHover;
