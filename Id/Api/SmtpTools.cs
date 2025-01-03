@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Id.Api
 {
-	[Route("api/[controller]")]
+	[Route("api/smtp")]
 	[ApiController]
 	public class SmtpTools(IStringLocalizer<SmtpTools> _t, IEmailService email) : ControllerBase
 	{
