@@ -94,7 +94,7 @@ select:-webkit-autofill:active {
   color: #aa6655; }
 
 .success {
-  color: #64c832; }
+  color: #149614; }
 
 .helper {
   color: #1a0a00;
@@ -107,13 +107,13 @@ select:-webkit-autofill:active {
   border-radius: 8px 8px; }
 
 .input-valid {
-  border-color: #64c832; }
+  border-color: #149614; }
 
 .input-invalid {
   border-color: #cc3300; }
 
 .success {
-  color: #64c832; }
+  color: #149614; }
 
 .error {
   color: #cc3300; }

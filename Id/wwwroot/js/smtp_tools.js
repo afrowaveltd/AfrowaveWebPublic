@@ -39,7 +39,7 @@
 
 const detectSmtp = async (host, username = "", password = "") => {
 	// now we create json body of the post request
-	const body = JSON.stringify({ host: host, username: username, password: password });
+	const body = JSON.stringify({ host: host, SmtpUsername: username, SmtpPassword: password });
 	const url = "/api/smtp/autodetect";
 	try {
 		const response = await fetch(url, {
@@ -50,12 +50,19 @@ const detectSmtp = async (host, username = "", password = "") => {
 			body: body,
 		});
 		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
+			const data = {};
+			data.successful = false;
+			data.message = "Error in the HTTP connection to the server";
+			return data;
 		}
 		const data = await response.json();
 		return data;
 	}
 	catch (error) {
+		const data = {};
+		data.successful = false;
+		data.message = "Unknown error:" + error; 
 		console.error("Error:", error);
+		return data;
 	}
 }

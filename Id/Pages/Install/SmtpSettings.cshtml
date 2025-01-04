@@ -20,28 +20,28 @@
 		<div id="form-div">
 			<form method="post" id="addSmtp" enctype="multipart/form-data">
 				<div class="form-group">
-					<div id="smtp_err" class="text-danger p-2 pb-0"></div>
+					<div id="smtp_host_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_server">@Model.t["SMTP server"]</label>
 					<input asp-for="Input.Host" type="text" class="form-control" id="smtp_host"
-						onfocus="loadHelp('Install_SmtpServer')" onchange="checkSmtp(this);" />
+						onfocus="loadHelp('Install_SmtpServer')" onkeypress="checkSmtpHost(this);" />
 				</div>
 				<div class="form-group">
 					<div id="smtp_port_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_port">@Model.t["Port"]</label>
 					<input asp-for="Input.Port" type="number" class="form-control" id="smtp_port"
-						onfocus="loadHelp('Install_SmtpPort')" onchange="checkPort(this)" />
+						onfocus="loadHelp('Install_SmtpPort')" onchange="checkSmtpPort(this)" />
 				</div>
 				<div class="form-group">
 					<div id="smtp_user_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_user">@Model.t["Login"]</label>
 					<input asp-for="Input.SmtpUsername" type="text" class="form-control" id="smtp_user"
-						onfocus="loadHelp('Install_SmtpUser')" onchange="checkUser(this)" />
+						onfocus="loadHelp('Install_SmtpUser')" onchange="checkSmtpUser(this)" />
 				</div>
 				<div class="form-group">
 					<div id="smtp_pass_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_pass">@Model.t["Password"]</label>
 					<input asp-for="Input.SmtpPassword" type="password" class="form-control" id="smtp_pass"
-						onfocus="loadHelp('Install_SmtpPassword')" onchange="checkPass(this)" />
+						onfocus="loadHelp('Install_SmtpPassword')" onchange="checkSmtpPassword(this)" />
 				</div>
 				<div class="form-group">
 					<div id="smtp_email_err" class="text-danger p-2 pb-0"></div>
@@ -49,7 +49,7 @@
 					<input asp-for="Input.SenderEmail" 
 						value="@Model.Input.SenderEmail" type="email" class="form-control" id="smtp_email"
 						onfocus="loadHelp('Install_SmtpEmail')" 
-						onchange="checkMail(this)" />
+						onchange="checkSmtpSenderEmail(this)" />
 				</div>
 				<div class="form-group">
 					<div id="smtp_name_err" class="text-danger p-2 pb-0"></div>
@@ -57,7 +57,7 @@
 					<input asp-for="Input.SenderName" type="text" class="form-control" id="smtp_name"
 						value="@Model.Input.SenderName"
 						onfocus="loadHelp('Install_SmtpSender')" 
-						onchange="checkSender(this)" />
+						onchange="checkSmtpSenderName(this)" />
 				</div>
 				<div class="form-group">
 					<div id="smtp_sso_err" class="text-danger p-2 pb-0"></div>
@@ -66,14 +66,14 @@
 							id="smtp_sso"
 						asp-items="@Model.options"
 						onfocus="loadHelp('Install_SmtpSecure')"
-						onchange="checkSecure(this)"></select>
+						onchange="checkSmtpSecureConnection(this)"></select>
 				</div>
 				<div class="form-group">
 					<div id="uselogin_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_secure">@Model.t["SMTP requires authentication"]</label>
-					<select asp-for="Input.AuthorizationRequired" id="auth_required" lass="form-control"
+					<select asp-for="Input.AuthorizationRequired" id="auth_required" class="form-control"
 							onfocus="loadHelp('Install_SmtpAuthorizationRequired')"
-							onchange="checkAuthorizationRequired(this)">
+							onchange="checkSmtpUseAuthentication(this)">
 						<option value="true" selected>@Model.t["Yes"]</option>
 						<option value="false">@Model.t["No"]</option>
 						</select>
@@ -82,12 +82,18 @@
 				<input type="hidden" asp-for="Input.ApplicationId" value="@Model.Input.ApplicationId" />
 				<div class="row mb-3">
 					<div class="col-4">
-						<button type="button" id="detectSmtp" class="btn btn-danger mt-3" disabled>
+						<button type="button" id="detectSmtp" class="btn btn-danger mt-3"
+						onclick="autodetectSmtp()"
+						disabled>
 							@Model.t["Detect settings"]
 						</button>
 					</div>
-					<div class="offset-1 col-4">
-						<button type="button" id="testSmtp" class="btn btn-secondary mt-3" disabled>
+					<div class="col-1">
+						<div id="spinner" style="padding:0px; margin-top: 13px"></div>
+					</div>
+					<div class="col-4">
+						<button type="button" id="testSmtp" class="btn btn-secondary mt-3" 
+							onclick="testSmtp()" disabled>
 							@Model.t["Test settings"]
 						</button>
 					</div>
@@ -97,7 +103,9 @@
 						</button>
 					</div>
 				</div>
-
+				<div class="row mb-3">
+					<div col="12" class="test-center" id="result_div"></div>
+				</div>
 
 			</form>
 		</div>

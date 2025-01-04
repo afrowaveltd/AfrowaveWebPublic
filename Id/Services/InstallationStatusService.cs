@@ -62,7 +62,43 @@ namespace Id.Services
 
 		public async Task<bool> ProperInstallState(InstalationSteps actualStep)
 		{
+			if(actualStep != InstalationSteps.Administrator && actualStep != InstalationSteps.Brand && actualStep != InstalationSteps.Application)
+			{
+				await CheckAndFixApplicationId();
+			}
 			return await GetInstallationStepAsync() == actualStep;
+		}
+
+		private async Task CheckAndFixApplicationId()
+		{
+			string settingsApplicationId = string.Empty;
+			string dbApplicationId = string.Empty;
+			IdentificatorSettings settings = await _settingsService.GetSettingsAsync();
+			if(settings is null)
+			{
+				settings = new IdentificatorSettings();
+				settings.ApplicationId = string.Empty;
+				await _settingsService.SetSettingsAsync(settings);
+			}
+			else
+			{
+				settingsApplicationId = settings.ApplicationId;
+			}
+			// check if there is only one application - if not, throw exception;
+			var applications = await _context.Applications.ToListAsync();
+			if(applications.Count != 1)
+			{
+				throw new InvalidOperationException("There should be only one application in the database.");
+			}
+			else
+			{
+				dbApplicationId = applications.First().Id;
+			}
+			if(dbApplicationId != settingsApplicationId)
+			{
+				settings.ApplicationId = dbApplicationId;
+				await _settingsService.SetSettingsAsync(settings);
+			}
 		}
 	}
 }
