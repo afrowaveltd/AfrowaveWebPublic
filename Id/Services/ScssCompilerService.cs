@@ -2,16 +2,11 @@
 
 namespace Id.Services
 {
-	public class ScssCompilerService : IHostedService, IDisposable
+	public class ScssCompilerService(ILogger<ScssCompilerService> logger) : IHostedService, IDisposable
 	{
-		private readonly ILogger<ScssCompilerService> _logger;
+		private readonly ILogger<ScssCompilerService> _logger = logger;
 		private readonly string _scssDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "css");
 		private FileSystemWatcher _watcher;
-
-		public ScssCompilerService(ILogger<ScssCompilerService> logger)
-		{
-			_logger = logger;
-		}
 
 		public Task StartAsync(CancellationToken cancellationToken)
 		{

@@ -153,7 +153,6 @@ const checkSmtpPassword = async (element) => {
 }
 
 const checkSmtpSenderEmail = async (element) => {
-	
 	if (element.value.trim() === '') {
 		smtpSenderEmailOk = false;
 		smtpSenderEmailErr.innerHTML = 'Sender Email is required';
@@ -218,7 +217,6 @@ function setSelectedSmtpSecure(value) {
 	}
 }
 
-
 const autodetectSmtp = async () => {
 	const resultDiv = document.getElementById('result_div');
 	resultDiv.innerHTML = "";
@@ -253,6 +251,29 @@ const autodetectSmtp = async () => {
 		resultDiv.classList.remove('success');
 		resultDiv.classList.add('error');
 		resultDiv.innerHTML = await localize(autodetectResult.message);
+	}
+}
+
+const testSmtpSettings = async () => {
+	const hostVal = document.getElementById('smtp_host').value;
+	const portVal = document.getElementById('smtp_port').value;
+	const usernameVal = document.getElementById('smtp_user').value;
+	const passwordVal = document.getElementById('smtp_pass').value;
+	const senderEmailVal = document.getElementById('smtp_email').value;
+	const senderNameVal = document.getElementById('smtp_name').value;
+	const ssoVal = document.getElementById('smtp_sso').value;
+	const authorizationRequiredVal = document.getElementById('auth_required').value;
+	const testResult = await testSmtp(hostVal, portVal, usernameVal, passwordVal, senderEmailVal, senderNameVal, ssoVal, authorizationRequiredVal);
+	const resultDiv = document.getElementById('result_div');
+	resultDiv.innerHTML = "";
+	if (testResult.successful) {
+		resultDiv.classList.remove('error');
+		resultDiv.classList.add('success');
+		resultDiv.innerHTML = await localize(testResult.message);
+	} else {
+		resultDiv.classList.remove('success');
+		resultDiv.classList.add('error');
+		resultDiv.innerHTML = await localize(testResult.message);
 	}
 }
 

@@ -8,15 +8,16 @@
 	authorizationRequired) => {
 	// now we create json body of the post request
 	const body = JSON.stringify({
-		host: host,
-		port: port,
-		username: username,
-		password: password,
-		senderEmail: senderEmail,
-		senderName: senderName,
-		sso: sso,
-		authorizationRequired: authorizationRequired
+		Host: host,
+		Port: parseInt(port, 10),  // Convert Port to an integer
+		Username: username,
+		Password: password,
+		SenderEmail: senderEmail,
+		SenderName: senderName,
+		Secure: parseInt(sso, 10),  // Convert Secure to an integer
+		AuthorizationRequired: authorizationRequired === "true"  // Convert string "true"/"false" to boolean
 	});
+	console.log(body);
 	const url = "/api/smtp/test";
 	try {
 		const response = await fetch(url, {
@@ -27,7 +28,10 @@
 			body: body,
 		});
 		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
+			let res = {};
+			res.successful = false;
+			res.message = `HTTP error! status: ${response.status}`;
+			return res;
 		}
 		const data = await response.json();
 		return data;
@@ -61,7 +65,7 @@ const detectSmtp = async (host, username = "", password = "") => {
 	catch (error) {
 		const data = {};
 		data.successful = false;
-		data.message = "Unknown error:" + error; 
+		data.message = "Unknown error:" + error;
 		console.error("Error:", error);
 		return data;
 	}
