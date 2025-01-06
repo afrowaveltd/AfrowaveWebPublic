@@ -20,52 +20,59 @@
 		<div id="form-div">
 			<form method="post" id="addLoginRules" enctype="multipart/form-data">
 				<div class="form-group">
-					<div id="login_rules_err_max_failed" class="text-danger p-2 pb-0"></div>
+					<div id="login_rules_err_max_failed" class="text-warning p-2 pb-0"></div>
 					<label for="login_rules">@Model.t["Maximal failed login attempts"]</label>
 					<input asp-for="Input.MaxFailedLoginAttempts" type="number" class="form-control" id="max_failed"
 						onfocus="loadHelp('Install_LoginRules_MaxFailed')" />
 				</div>
 				<div class="form-group">
-					<div id="login_rules_err_lockout_time" class="text-danger p-2 pb-0"></div>
-					<label for="login_rules">@Model.t["Login rules"]</label>
-					<input asp-for="Input.LockoutTime" type="text" class="form-control" id="login_rules"
-						onfocus="loadHelp('Install_LoginRules')" />
+					<div id="login_rules_err_lockout_time" class="text-warning p-2 pb-0"></div>
+					<label for="login_rules">@Model.t["Lockout time (in minutes)"]</label>
+					<input asp-for="Input.LockoutTime" type="number" class="form-control" id="lockout_time"
+						onfocus="loadHelp('Install_LoginRules_LockoutTime')" />
 				</div>
 				<div class="form-group">
-					<div id="login_rules_err_password_reset_token_expiration" class="text-danger p-2 pb-0"></div>
-					<label for="login_rules">@Model.t["Login rules"]</label>
-					<input asp-for="Input.PasswordResetTokenExpiration" type="text" class="form-control" id="login_rules"
-						onfocus="loadHelp('Install_LoginRules')" />
+					<div id="login_rules_err_password_reset_token_expiration" class="text-warning p-2 pb-0"></div>
+					<label for="login_rules">@Model.t["Password reset token expiration time (in minutes)"]</label>
+					<input asp-for="Input.PasswordResetTokenExpiration" type="number" class="form-control" id="password_token"
+						onfocus="loadHelp('Install_LoginRules_PasswordResetTokenExpiration')" />
 				</div>
 				<div class="form-group">
-					<div id="login_rules_err_email_token_expiration" class="text-danger p-2 pb-0"></div>
-					<label for="login_rules">@Model.t["Login rules"]</label>
-					<input asp-for="Input.EmailConfirmationTokenExpiration" type="text" class="form-control" id="login_rules"
-						onfocus="loadHelp('Install_LoginRules')" />
+					<div id="login_rules_err_email_token_expiration" class="text-warning p-2 pb-0"></div>
+					<label for="login_rules">@Model.t["Email confirmation token expiration time (in minutes)"]</label>
+					<input asp-for="Input.EmailConfirmationTokenExpiration" type="number" class="form-control" id="email_token"
+						onfocus="loadHelp('Install_LoginRules_EmailConfirmationTokenExpiration')" />
 				</div>
 				<div class="form-group">
-					<div id="login_rules_err_password_expiration" class="text-danger p-2 pb-0"></div>
-					<label for="login_rules">@Model.t["Login rules"]</label>
-					<input asp-for="Input.RefreshTokenExpiration" type="text" class="form-control" id="login_rules"
+					<div id="login_rules_err_refresh_token_expiration" class="text-warning p-2 pb-0"></div>
+					<label for="login_rules">@Model.t["Refresh token expiration time (in days)"]</label>
+					<input asp-for="Input.RefreshTokenExpiration" type="number" class="form-control" id="refresh_token"
 						   onfocus="loadHelp('Install_LoginRules')" />
 				</div>
 				<div class="form-group">
-					<div id="login_rules_err_password_expiration" class="text-danger p-2 pb-0"></div>
-					<label for="login_rules">@Model.t["Login rules"]</label>
-					<input asp-for="Input.AccessTokenExpiration" type="text" class="form-control" id="login_rules"
+					<div id="login_rules_err_access_token_expiration" class="text-warning p-2 pb-0"></div>
+					<label for="login_rules">@Model.t["Access token expiration time (in minutes)"]</label>
+					<input asp-for="Input.AccessTokenExpiration" type="number" class="form-control" id="access_token"
 						   onfocus="loadHelp('Install_LoginRules')" />
 				</div>
 				<div class="form-group">
-					<div id="login_rules_err_password_expiration" class="text-danger p-2 pb-0"></div>
-					<label for="login_rules">@Model.t["Login rules"]</label>
-					<select asp-for="Input.RequireConfirmedEmail" type="text" class="form-control" id="login_rules"
+					<div id="login_rules_err_require_email_confirmation" class="text-warning p-2 pb-0"></div>
+					<label for="login_rules">@Model.t["Confirmed email required for access"]</label>
+					<select asp-for="Input.RequireConfirmedEmail" type="number" class="form-control" id="login_rules"
 						   onfocus="loadHelp('Install_LoginRules')">
 						<option value="true">@Model.t["Yes"]</option>
 						<option value="false">@Model.t["No"]</option>
 					</select>
 				</div>
 				<input asp-for="Input.ApplicationId" type="hidden" value="@Model.Input.ApplicationId" />
+				<button type="submit" id="submit" class="btn btn-primary btn-block mt-3">
+					@Model.t["Next"]
+				</button>
 			</form>
+		</div>
+	</div>
+	<div class="col-md-5">
+		<div id="div_help" class="helper" style="display:none">
 		</div>
 	</div>
 </div>
