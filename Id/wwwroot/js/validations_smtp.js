@@ -109,7 +109,7 @@ const checkSmtpForm = () => {
 		document.getElementById('submit').removeAttribute('disabled');
 	}
 	else {
-		document.getElementById('submit').addAttribute('disabled', 'disabled');
+		document.getElementById('submit').setAttribute('disabled', 'disabled');
 	}
 }
 
@@ -280,6 +280,7 @@ const testSmtpSettings = async () => {
 		resultDiv.classList.add('success');
 		resultDiv.innerHTML = await localize(testResult.message);
 		canSave = true;
+		checkSmtpForm();
 	} else {
 		resultDiv.classList.remove('success');
 		resultDiv.classList.add('error');

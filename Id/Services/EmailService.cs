@@ -21,6 +21,7 @@ namespace Id.Services
 		{
 			string targetEmail = smtpModel.TargetForTesting ?? smtpModel.SenderEmail;
 			ApiResponse<SmtpTestResponse> result = new();
+			result.Message = "SMTP test completed successfully.";
 			SmtpTestResponse response = new SmtpTestResponse();
 			StringBuilder logBuilder = new StringBuilder();
 			if(targetEmail == null || targetEmail == string.Empty)

@@ -77,6 +77,54 @@ namespace Id.Pages.Install
 			return Page();
 		}
 
+		public async Task<IActionResult> OnPostAsync()
+		{
+			if(!await _installationStatus.ProperInstallState(InstalationSteps.SmtpSettings))
+			{
+				_logger.LogWarning("Installation is not in the correct state");
+				return RedirectToPage("/Index");
+			}
+
+			if(!ModelState.IsValid)
+			{
+				return Page();
+			}
+			Application? app = await _context.Applications.FirstOrDefaultAsync(a => a.Id == Input.ApplicationId);
+
+			if(app == null)
+			{
+				_logger.LogError("No application found to be the owner of the smtp settings");
+				return RedirectToPage("/Error");
+			}
+
+			ApplicationSmtpSettings settings = new()
+			{
+				ApplicationId = Input.ApplicationId,
+				Host = Input.Host,
+				Port = Input.Port,
+				Username = Input.SmtpUsername,
+				Password = Input.SmtpPassword,
+				SenderEmail = Input.SenderEmail,
+				SenderName = Input.SenderName,
+				Secure = Input.Secure,
+				AuthorizationRequired = Input.AuthorizationRequired,
+				Application = app
+			};
+
+			try
+			{
+				await _context.ApplicationSmtpSettings.AddAsync(settings);
+				await _context.SaveChangesAsync();
+				return RedirectToPage("/Install/LoginRules");
+			}
+			catch(Exception ex)
+			{
+				_logger.LogError(ex, "Error saving smtp settings");
+				ErrorMessage = t["Error saving smtp settings"];
+				return Page();
+			}
+		}
+
 		private async Task<Application> GetApplicationAsync()
 		{
 			Models.SettingsModels.IdentificatorSettings settings = await _settingsService.GetSettingsAsync();
