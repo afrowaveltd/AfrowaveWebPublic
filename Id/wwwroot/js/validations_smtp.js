@@ -104,6 +104,13 @@ const checkSmtpForm = () => {
 	} else {
 		smtpUseAuthentication.style.borderColor = 'red';
 	}
+
+	if (canSave == true) {
+		document.getElementById('submit').removeAttribute('disabled');
+	}
+	else {
+		document.getElementById('submit').addAttribute('disabled', 'disabled');
+	}
 }
 
 const checkSmtpHost = async (element) => {
@@ -223,9 +230,9 @@ const autodetectSmtp = async () => {
 	const hostName = document.getElementById('smtp_host').value;
 	const user = document.getElementById('smtp_user').value;
 	const pass = document.getElementById('smtp_pass').value;
-	document.getElementById('spinner').classList.add('spinner');
+	document.getElementById('spinner_autodetect').classList.add('spinner');
 	let autodetectResult = await detectSmtp(hostName, user, pass);
-	document.getElementById('spinner').classList.remove('spinner');
+	document.getElementById('spinner_autodetect').classList.remove('spinner');
 	console.log(autodetectResult);
 	if (autodetectResult.successful) {
 		resultDiv.classList.remove('error');
@@ -263,17 +270,21 @@ const testSmtpSettings = async () => {
 	const senderNameVal = document.getElementById('smtp_name').value;
 	const ssoVal = document.getElementById('smtp_sso').value;
 	const authorizationRequiredVal = document.getElementById('auth_required').value;
+	document.getElementById('spinner_test').classList.add('spinner');
 	const testResult = await testSmtp(hostVal, portVal, usernameVal, passwordVal, senderEmailVal, senderNameVal, ssoVal, authorizationRequiredVal);
+	document.getElementById('spinner_test').classList.remove('spinner');
 	const resultDiv = document.getElementById('result_div');
 	resultDiv.innerHTML = "";
 	if (testResult.successful) {
 		resultDiv.classList.remove('error');
 		resultDiv.classList.add('success');
 		resultDiv.innerHTML = await localize(testResult.message);
+		canSave = true;
 	} else {
 		resultDiv.classList.remove('success');
 		resultDiv.classList.add('error');
 		resultDiv.innerHTML = await localize(testResult.message);
+		canSave = false;
 	}
 }
 

@@ -2,9 +2,7 @@
 {
 	public class SmtpTestResponse
 	{
-		public bool Success { get; set; }
 		public SmtpTestErrorType ErrorType { get; set; }
-		public string? ErrorText { get; set; }
 		public string Log { get; set; } = string.Empty;
 	}
 

@@ -21,5 +21,6 @@ namespace Id.Models.CommunicationModels
 
 		public SecureSocketOptions Secure { get; set; } = SecureSocketOptions.Auto;
 		public bool AuthorizationRequired { get; set; } = true;
+		public string? TargetForTesting { get; set; }
 	}
 }

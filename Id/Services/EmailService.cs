@@ -17,10 +17,22 @@ namespace Id.Services
 		private readonly ApplicationDbContext _context = context;
 		private readonly ISettingsService _settings = settings;
 
-		public async Task<SmtpTestResponse> TestSmtpConnectionAsync(SmtpSenderModel smtpModel, string targetEmail)
+		public async Task<ApiResponse<SmtpTestResponse>> TestSmtpConnectionAsync(SmtpSenderModel smtpModel)
 		{
+			string targetEmail = smtpModel.TargetForTesting ?? smtpModel.SenderEmail;
+			ApiResponse<SmtpTestResponse> result = new();
 			SmtpTestResponse response = new SmtpTestResponse();
 			StringBuilder logBuilder = new StringBuilder();
+			if(targetEmail == null || targetEmail == string.Empty)
+			{
+				targetEmail = await GetApplicationEmail(await GetAppicationId());
+				if(targetEmail == string.Empty)
+				{
+					result.Successful = false;
+					result.Message = "No target email was given or found";
+					return result;
+				}
+			}
 
 			try
 			{
@@ -29,7 +41,7 @@ namespace Id.Services
 				using SmtpClient client = new SmtpClient(new ProtocolLogger(memoryStream));
 				await client.ConnectAsync(
 					 smtpModel.Host,
-					 smtpModel.Port ?? 0,
+					 smtpModel.Port ?? 25,
 					 smtpModel.Secure
 				);
 
@@ -38,7 +50,9 @@ namespace Id.Services
 				{
 					if(string.IsNullOrEmpty(smtpModel.Username) || string.IsNullOrEmpty(smtpModel.Password))
 					{
-						throw new ArgumentException("Username and password are required for authentication.");
+						result.Successful = false;
+						result.Message = "Username and password are required for authentication.";
+						return result;
 					}
 
 					await client.AuthenticateAsync(smtpModel.Username, smtpModel.Password);
@@ -61,7 +75,7 @@ namespace Id.Services
 				await client.DisconnectAsync(true);
 
 				// Set success
-				response.Success = true;
+				result.Successful = true;
 				response.ErrorType = SmtpTestErrorType.None;
 
 				// Extract the logs from the MemoryStream
@@ -69,46 +83,46 @@ namespace Id.Services
 			}
 			catch(MailKit.Security.AuthenticationException ex)
 			{
-				response.Success = false;
+				result.Successful = false;
 				response.ErrorType = SmtpTestErrorType.AuthenticationFailed;
-				response.ErrorText = ex.Message;
+				result.Message = ex.Message;
 			}
 			catch(SmtpCommandException ex)
 			{
-				response.Success = false;
+				result.Successful = false;
 				response.ErrorType = ex.ErrorCode switch
 				{
 					SmtpErrorCode.RecipientNotAccepted => SmtpTestErrorType.InvalidRecipient,
 					SmtpErrorCode.SenderNotAccepted => SmtpTestErrorType.Other,
 					_ => SmtpTestErrorType.Other
 				};
-				response.ErrorText = $"SMTP Command Error: {ex.Message}";
+				result.Message = $"SMTP Command Error";
 			}
-			catch(SmtpProtocolException ex)
+			catch(SmtpProtocolException)
 			{
-				response.Success = false;
+				result.Successful = false;
 				response.ErrorType = SmtpTestErrorType.ConnectionFailed;
-				response.ErrorText = $"Protocol Error: {ex.Message}";
+				result.Message = $"Protocol Error";
 			}
-			catch(TimeoutException ex)
+			catch(TimeoutException)
 			{
-				response.Success = false;
+				result.Successful = false;
 				response.ErrorType = SmtpTestErrorType.Timeout;
-				response.ErrorText = $"Timeout: {ex.Message}";
+				result.Message = $"Timeout";
 			}
-			catch(Exception ex)
+			catch(Exception)
 			{
-				response.Success = false;
+				result.Successful = false;
 				response.ErrorType = SmtpTestErrorType.Other;
-				response.ErrorText = $"Unexpected Error: {ex.Message}";
+				result.Message = $"Connection error";
 			}
 			finally
 			{
 				// Ensure the log is attached even if there's an error
 				response.Log ??= logBuilder.ToString();
 			}
-
-			return response;
+			result.Data = response;
+			return result;
 		}
 
 		public async Task<ApiResponse<SmtpSenderModel>> AutodetectSmtpSettingsAsync(SmtpSenderModel smtpModel)
@@ -361,6 +375,11 @@ namespace Id.Services
 		{
 			Models.SettingsModels.IdentificatorSettings applicationSettings = await _settings.GetSettingsAsync();
 			return applicationSettings.ApplicationId;
+		}
+
+		private async Task<string> GetApplicationEmail(string applicationId)
+		{
+			return await _context.Applications.Where(s => s.Id == applicationId).Select(s => s.ApplicationEmail).FirstOrDefaultAsync() ?? string.Empty;
 		}
 	}
 }

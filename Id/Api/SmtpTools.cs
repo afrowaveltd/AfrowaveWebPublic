@@ -36,10 +36,10 @@ namespace Id.Api
 		[AllowAnonymous]
 		[HttpPost]
 		[Route("test")]
-		public async Task<SmtpTestResponse> TestSettings([System.Web.Http.FromBody] SmtpSenderModel model)
+		public async Task<ApiResponse<SmtpTestResponse>> TestSettings([System.Web.Http.FromBody] SmtpSenderModel model)
 		{
 			// Test settings
-			return new SmtpTestResponse();
+			return await _email.TestSmtpConnectionAsync(model);
 		}
 	}
 }

@@ -14,6 +14,6 @@ namespace Id.Services
 
 		Task<ApiResponse<Dictionary<string, bool>>> SendEmailsAsync(string applicationId, List<string> targetEmails, string subject, string htmlBody, string textBody);
 
-		Task<SmtpTestResponse> TestSmtpConnectionAsync(SmtpSenderModel smtpModel, string targetEmail);
+		Task<ApiResponse<SmtpTestResponse>> TestSmtpConnectionAsync(SmtpSenderModel smtpModel);
 	}
 }
