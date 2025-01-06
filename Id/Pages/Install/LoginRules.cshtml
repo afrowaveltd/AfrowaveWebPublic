@@ -1,5 +1,54 @@
 ﻿@page
 @model Id.Pages.Install.LoginRulesModel
 @{
+	ViewData["Title"] = Model.t["Login settings"];
 }
-LoginRules
+
+@section Scripts {
+	<script src="~/js/api.js"></script>
+	<script src="~/js/install.js"></script>
+	<script src="~/js/validations_login.js"></script>
+}
+
+<div class="row">
+	<div class="col-md-12">
+		<h2>@Model.t["Login settings"]</h2>
+		<hr />
+	</div>
+	<div class="col-md-7">
+		<h2 class="text-center">@Model.t["Configure login rules"]</h2>
+		<div id="form-div">
+			<form method="post" id="addLoginRules" enctype="multipart/form-data">
+				<div class="form-group">
+					<div id="login_rules_err" class="text-danger p-2 pb-0"></div>
+					<label for="login_rules">@Model.t["Maximal failed login attempts"]</label>
+					<input asp-for="Input.MaxFailedLoginAttempts" type="number" class="form-control" id="max_failed"
+						onfocus="loadHelp('Install_LoginRules_MaxFailed')" />
+				</div>
+				<div class="form-group">
+					<div id="login_rules_err" class="text-danger p-2 pb-0"></div>
+					<label for="login_rules">@Model.t["Login rules"]</label>
+					<input asp-for="Input.LoginRules" type="text" class="form-control" id="login_rules"
+						onfocus="loadHelp('Install_LoginRules')" />
+				</div>
+				<div class="form-group">
+					<div id="login_rules_err" class="text-danger p-2 pb-0"></div>
+					<label for="login_rules">@Model.t["Login rules"]</label>
+					<input asp-for="Input.LoginRules" type="text" class="form-control" id="login_rules"
+						onfocus="loadHelp('Install_LoginRules')" />
+				</div>
+				<div class="form-group">
+					<div id="login_rules_err" class="text-danger p-2 pb-0"></div>
+					<label for="login_rules">@Model.t["Login rules"]</label>
+					<input asp-for="Input.LoginRules" type="text" class="form-control" id="login_rules"
+						onfocus="loadHelp('Install_LoginRules')" />
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script language="javascript">
+	let active_page = "login";
+	let help = ('Install_Login');
+</script>

@@ -12,11 +12,11 @@
 	public class LoginRules
 	{
 		public int MaxFailedLoginAttempts { get; set; } = 0;
-		public int LockoutTime { get; set; } = 0;
-		public int PasswordResetTokenExpiration { get; set; } = 0;
-		public int EmailConfirmationTokenExpiration { get; set; } = 0;
-		public int RefreshTokenExpiration { get; set; } = 0;
-		public int AccessTokenExpiration { get; set; } = 0;
+		public int LockoutTime { get; set; } = 0; // in minutes
+		public int PasswordResetTokenExpiration { get; set; } = 0; // in minutes
+		public int EmailConfirmationTokenExpiration { get; set; } = 0; // in minutes
+		public int RefreshTokenExpiration { get; set; } = 0; // in days
+		public int AccessTokenExpiration { get; set; } = 0; // in minutes
 		public bool RequireConfirmedEmail { get; set; } = false;
 	}
 

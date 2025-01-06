@@ -7,15 +7,17 @@ namespace Id.Services
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly IApplicationLoader _loader;
+		private readonly IStringLocalizer<SelectOptionsServices> t;
 
 		private readonly string _cssFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory
 									  .Substring(0, AppDomain.CurrentDomain.BaseDirectory
 									  .IndexOf("bin")), "wwwroot", "css");
 
-		public SelectOptionsServices(ApplicationDbContext context, IApplicationLoader loader)
+		public SelectOptionsServices(ApplicationDbContext context, IApplicationLoader loader, IStringLocalizer<SelectOptionsServices> _t)
 		{
 			_context = context;
 			_loader = loader;
+			t = _t;
 		}
 
 		public async Task<List<SelectListItem>> GetLanguagesOptionsAsync(string selected)
