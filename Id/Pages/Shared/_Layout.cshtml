@@ -13,7 +13,7 @@
     string selected = cookieService.GetCookie("language") ?? "en";
 
     List<SelectListItem> languageSelectList = await options.GetLanguagesOptionsAsync(selected);
-	List<SelectListItem> themeSelectList = await options.GetThemesAsync(theme);
+	List<SelectListItem> themeSelectList = await options.GetThemesAsync(theme, null);
     string direction = await options.GetDirectionAsync(selected);
 }
 

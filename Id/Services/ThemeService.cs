@@ -4,7 +4,7 @@
 											  IWebHostEnvironment environment) : IThemeService
 	{
 		private readonly ILogger<ThemeService> _logger = logger;
-		private readonly string _cssFolderPath = _cssFolderPath = Path.Combine(environment.WebRootPath, "css");
+		private readonly string _cssFolderPath = Path.Combine(environment.WebRootPath, "css");
 
 		public async Task<List<string>> GetThemeNamesAsync(string? userId)
 		{
