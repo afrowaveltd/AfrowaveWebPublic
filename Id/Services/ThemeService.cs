@@ -37,7 +37,8 @@
 			string referenceThemePath = Path.Combine(_cssFolderPath, "light-theme.scss");
 			if(!File.Exists(referenceThemePath))
 			{
-				throw new FileNotFoundException("Reference theme file not found.", referenceThemePath);
+				_logger.LogError("Reference theme file not found.");
+				return;
 			}
 			string referenceContent = await File.ReadAllTextAsync(referenceThemePath);
 

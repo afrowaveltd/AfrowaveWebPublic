@@ -12,7 +12,7 @@ namespace Id.Pages.Helps
 		{
 			Lines.Add(_t["The login rules are used to configure the login process. The following rules are available:"]);
 
-			LiElements.Add("<b class='information'>" + _t["Max failed login attempts"] + "</b> " + _t["The maximum number of failed login attempts before the account is locked."]);
+			LiElements.Add("<b class='information'>" + _t["Maximal failed login attempts"] + "</b> " + _t["The maximum number of failed login attempts before the account is locked."]);
 			LiElements.Add("<b class='information'>" + _t["Lockout time"] + "</b> " + _t["The time in minutes the account is locked after the maximum number of failed login attempts"]);
 			LiElements.Add("<b class='information'>" + _t["Password reset token expiration"] + "</b> " + _t["The time in minutes the password reset token is valid."]);
 			LiElements.Add("<b class='information'>" + _t["Email confirmation token expiration"] + "</b> " + _t["The time in minutes the email confirmation token is valid."]);
