@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
 $bg: #000000;
 $foreground: #33FF33;
 $formForeground: #99FF99;
@@ -21,6 +22,15 @@ $highlight: #00AA00;
 $borderLight: #006600;
 $shadow: rgba(0, 255, 0, 0.5);
 $modalBackground: rgba(0, 10, 0, 0.9);
+$font: 'IBM Plex Mono', monospace;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

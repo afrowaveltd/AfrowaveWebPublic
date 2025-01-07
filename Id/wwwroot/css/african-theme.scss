@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Mali&display=swap');
 $bg: #603913; // Earthy brown
 $foreground: #040106; // Soft cream
 $formForeground: #ffe082; // Warm yellow
@@ -24,6 +25,16 @@ $admin: #bf360c; // Dark terracotta
 $borderLight: #3e2723; // Dark brown
 $shadow: rgba(80, 60, 30, 0.5); // Muted shadow
 $modalBackground: rgba(30, 20, 10, 0.8); // Dark earthy overlay
+$font: 'Mali', sans-serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
+
 
 .spinner {
 	width: 32px;

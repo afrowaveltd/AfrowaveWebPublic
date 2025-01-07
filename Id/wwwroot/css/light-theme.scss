@@ -24,6 +24,15 @@ $admin: #bb0000;
 $borderLight: #333333;
 $shadow: rgba(150,150,150, 0.5);
 $modalBackground: rgba(0.2,0.2,0.2,0.8);
+$font: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

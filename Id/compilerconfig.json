@@ -126,5 +126,13 @@
   {
     "outputFile": "wwwroot/css/freePalestine-theme.css",
     "inputFile": "wwwroot/css/freePalestine-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/atarist-theme.css",
+    "inputFile": "wwwroot/css/atarist-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/as400-theme.css",
+    "inputFile": "wwwroot/css/as400-theme.scss"
   }
 ]
