@@ -54,11 +54,11 @@ a.nav-link:active {
 
 .form-control {
   color: #F0F0F0;
-  background-color: #C0C0C0; }
+  background-color: #B0B0B0; }
 
 .form {
   color: #F0F0F0;
-  background-color: #C0C0C0; }
+  background-color: #B0B0B0; }
 
 input {
   -webkit-tap-highlight-color: #FFFFE0; }
@@ -67,7 +67,7 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  background-color: #C0C0C0, !important;
+  background-color: #B0B0B0, !important;
   color: #F0F0F0 !important;
   -webkit-text-fill-color: #F0F0F0 !important;
   transition: background-color 1s ease-in-out 5000s !important; }
@@ -76,7 +76,7 @@ select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus,
 select:-webkit-autofill:active {
-  background-color: #C0C0C0, !important;
+  background-color: #B0B0B0, !important;
   color: #F0F0F0 !important;
   -webkit-text-fill-color: #F0F0F0 !important;
   transition: background-color 1s ease-in-out 5000s !important; }
@@ -86,7 +86,7 @@ select:-webkit-autofill:active {
   color: #AAAAAA; }
 
 .form-control:valid {
-  background-color: #C0C0C0;
+  background-color: #B0B0B0;
   color: #F0F0F0; }
 
 .form-control:active {
@@ -144,7 +144,7 @@ table.result {
   border-radius: 7px;
   padding: 5px;
   width: 95%;
-  background-color: #C0C0C0; }
+  background-color: #B0B0B0; }
 
 th.result {
   border: 2px solid #660000;
@@ -161,7 +161,7 @@ table {
   margin-right: auto;
   border-radius: 7px;
   margin-left: auto;
-  background-color: #C0C0C0;
+  background-color: #B0B0B0;
   color: #F0F0F0; }
 
 .terms h1, h2, h3, h4, h5, h6 {

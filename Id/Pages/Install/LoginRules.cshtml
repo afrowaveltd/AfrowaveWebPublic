@@ -47,19 +47,19 @@
 					<div id="login_rules_err_refresh_token_expiration" class="text-warning p-2 pb-0"></div>
 					<label for="login_rules">@Model.t["Refresh token expiration time (in days)"]</label>
 					<input asp-for="Input.RefreshTokenExpiration" type="number" class="form-control" id="refresh_token"
-						   onfocus="loadHelp('Install_LoginRules')" />
+						   onfocus="loadHelp('Install_LoginRules_RefreshTokenExpiration')" />
 				</div>
 				<div class="form-group">
 					<div id="login_rules_err_access_token_expiration" class="text-warning p-2 pb-0"></div>
 					<label for="login_rules">@Model.t["Access token expiration time (in minutes)"]</label>
 					<input asp-for="Input.AccessTokenExpiration" type="number" class="form-control" id="access_token"
-						   onfocus="loadHelp('Install_LoginRules')" />
+						   onfocus="loadHelp('Install_LoginRules_AccessTokenExpiration')" />
 				</div>
 				<div class="form-group">
 					<div id="login_rules_err_require_email_confirmation" class="text-warning p-2 pb-0"></div>
 					<label for="login_rules">@Model.t["Confirmed email required for access"]</label>
 					<select asp-for="Input.RequireConfirmedEmail" type="number" class="form-control" id="login_rules"
-						   onfocus="loadHelp('Install_LoginRules')">
+						   onfocus="loadHelp('Install_LoginRules_RequireConfirmedEmail')">
 						<option value="true">@Model.t["Yes"]</option>
 						<option value="false">@Model.t["No"]</option>
 					</select>
