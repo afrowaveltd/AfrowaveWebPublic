@@ -45,7 +45,7 @@ namespace Id.Services
 
 		private void EnsureCssFilesUpToDate()
 		{
-			foreach(var scssFile in Directory.GetFiles(_scssDirectory, "*-theme.scss"))
+			foreach(string scssFile in Directory.GetFiles(_scssDirectory, "*-theme.scss"))
 			{
 				CompileScssToCss(scssFile);
 			}
@@ -55,9 +55,9 @@ namespace Id.Services
 		{
 			try
 			{
-				var cssFilePath = Path.ChangeExtension(scssFilePath, ".css");
-				var scssContent = File.ReadAllText(scssFilePath);
-				var compiledCss = SassCompiler.Compile(scssContent);
+				string cssFilePath = Path.ChangeExtension(scssFilePath, ".css");
+				string scssContent = File.ReadAllText(scssFilePath);
+				CompilationResult compiledCss = SassCompiler.Compile(scssContent);
 
 				File.WriteAllText(cssFilePath, compiledCss.CompiledContent);
 				_logger.LogInformation("Compiled {ScssFile} -> {CssFile}", scssFilePath, cssFilePath);

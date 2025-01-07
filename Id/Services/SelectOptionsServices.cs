@@ -49,9 +49,9 @@ namespace Id.Services
 			return languages;
 		}
 
-		public async Task<List<SelectListItem>> GetThemesAsync(string selected)
+		public async Task<List<SelectListItem>> GetThemesAsync(string selected, string? userId)
 		{
-			List<string> themes = await GetThemeNamesAsync();
+			List<string> themes = await GetThemeNamesAsync(userId);
 
 			List<SelectListItem> items = [];
 
@@ -70,9 +70,9 @@ namespace Id.Services
 
 		public async Task<List<SelectListItem>> GetSecureSocketOptionsAsync(SecureSocketOptions selected = SecureSocketOptions.Auto)
 		{
-			var options = Enum.GetValues<SecureSocketOptions>();
+			SecureSocketOptions[] options = Enum.GetValues<SecureSocketOptions>();
 
-			var items = options.Select(option => new SelectListItem
+			List<SelectListItem> items = options.Select(option => new SelectListItem
 			{
 				Value = ((int)option).ToString(),
 				Text = option.ToString(),
@@ -92,7 +92,7 @@ namespace Id.Services
 			return language.Rtl == 1 ? "rtl" : "ltr";
 		}
 
-		private async Task<List<string>> GetThemeNamesAsync()
+		private async Task<List<string>> GetThemeNamesAsync(string? userId)
 		{
 			if(!Directory.Exists(_cssFolderPath))
 			{
@@ -101,12 +101,17 @@ namespace Id.Services
 
 			return await Task.Run(() =>
 			{
-				var themeFiles = Directory.GetFiles(_cssFolderPath, "*-theme.css", SearchOption.TopDirectoryOnly);
+				string[] themeFiles = Directory.GetFiles(_cssFolderPath, "*-theme.css", SearchOption.TopDirectoryOnly);
 
-				var themeNames = themeFiles
+				List<string> themeNames = themeFiles
 					 .Select(file => Path.GetFileNameWithoutExtension(file)) // Extract file name without extension
-					 .Where(fileName => fileName.EndsWith("-theme"))          // Ensure it ends with "-theme"
-					 .Select(fileName => fileName.Replace("-theme", ""))     // Remove the "-theme" part
+					 .Select(fileName =>
+					 {
+						 string[] parts = fileName.Split('_', 2); // Split by first underscore
+						 return parts.Length == 2 ? (parts[0], parts[1]) : ("public", fileName); // Extract UserId or mark as public
+					 })
+					 .Where(theme => theme.Item1 == "public" || theme.Item1 == userId) // Filter by UserId or public
+					 .Select(theme => theme.Item2.Replace("-theme", "")) // Remove "-theme" part
 					 .ToList();
 
 				return themeNames;

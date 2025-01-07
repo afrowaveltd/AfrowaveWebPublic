@@ -103,6 +103,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddTransient<IStringLocalizerFactory, JsonStringLocalizerFactory>();
 builder.Services.AddTransient<IEncryptionService, EncryptionService>();
 builder.Services.AddTransient<IImageService, ImageService>();
+builder.Services.AddTransient<IThemeService, ThemeService>();
 
 // Singleton slu�by (glob�ln�, thread-safe)
 builder.Services.AddSingleton<ISettingsService, SettingsService>();

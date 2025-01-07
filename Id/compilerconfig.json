@@ -66,5 +66,65 @@
   {
     "outputFile": "wwwroot/css/socialistic-theme.css",
     "inputFile": "wwwroot/css/socialistic-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/as400_theme.css",
+    "inputFile": "wwwroot/css/as400_theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/atarist_theme.css",
+    "inputFile": "wwwroot/css/atarist_theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/buddhism_theme.css",
+    "inputFile": "wwwroot/css/buddhism_theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/hackermatrix_theme.css",
+    "inputFile": "wwwroot/css/hackermatrix_theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/hinduism_theme.css",
+    "inputFile": "wwwroot/css/hinduism_theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/christianity_theme.css",
+    "inputFile": "wwwroot/css/christianity_theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/islam_theme.css",
+    "inputFile": "wwwroot/css/islam_theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/judaism_theme.css",
+    "inputFile": "wwwroot/css/judaism_theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/linuxtux_theme.css",
+    "inputFile": "wwwroot/css/linuxtux_theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/macos_theme.css",
+    "inputFile": "wwwroot/css/macos_theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/neon_theme.css",
+    "inputFile": "wwwroot/css/neon_theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/ubuntu_theme.css",
+    "inputFile": "wwwroot/css/ubuntu_theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/windowsxp_theme.css",
+    "inputFile": "wwwroot/css/windowsxp_theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/zen_theme.css",
+    "inputFile": "wwwroot/css/zen_theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/freePalestine-theme.css",
+    "inputFile": "wwwroot/css/freePalestine-theme.scss"
   }
 ]
