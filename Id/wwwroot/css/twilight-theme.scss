@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla&display=swap');
 $bg: #24162d;
 $foreground: #f8e6ff;
 $formForeground: #e6c1f5;
@@ -24,6 +25,15 @@ $admin: #aa3366;
 $borderLight: #8b6d8b;
 $shadow: rgba(60,40,80, 0.5);
 $modalBackground: rgba(50,30,60,0.8);
+$font: 'Karla', sans-serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

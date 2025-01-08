@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&display=swap');
 $bg: #fef4f4; // Cherry blossom pink
 $foreground: #2c2c2c; // Charcoal black
 $formForeground: #fff0f5; // Soft pink
@@ -24,6 +25,15 @@ $admin: #ff0000; // Pure red
 $borderLight: #f08080; // Light coral
 $shadow: rgba(255, 182, 193, 0.5); // Pink shadow
 $modalBackground: rgba(200, 150, 150, 0.8); // Cherry overlay
+$font: 'Sawarabi Mincho', serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

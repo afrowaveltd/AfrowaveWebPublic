@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
 $bg: #9e1b1b; // Revolutionary red
 $foreground: #fdf5e6; // Off-white
 $formForeground: #fbe9e7; // Light peach
@@ -24,6 +25,15 @@ $admin: #b71c1c; // Deep red
 $borderLight: #8a2c2c; // Maroon
 $shadow: rgba(110, 0, 0, 0.5); // Red shadow
 $modalBackground: rgba(50, 0, 0, 0.8); // Dark red overlay
+$font: 'Oswald', sans-serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

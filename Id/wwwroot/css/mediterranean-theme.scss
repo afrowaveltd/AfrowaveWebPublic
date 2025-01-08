@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant&display=swap');
 $bg: #f4e3c1; // Sun-kissed beige
 $foreground: #3e442b; // Olive green
 $formForeground: #ffecb3; // Pastel yellow
@@ -24,6 +25,15 @@ $admin: #ff4500; // Bold orange
 $borderLight: #2e8b57; // Sea green
 $shadow: rgba(100, 100, 100, 0.5); // Neutral shadow
 $modalBackground: rgba(40, 40, 20, 0.8); // Olive overlay
+$font: 'Cormorant', serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

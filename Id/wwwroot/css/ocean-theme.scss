@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather&display=swap');
 $bg: #033b4a;
 $foreground: #eef7fa;
 $formForeground: #c2e8f2;
@@ -24,6 +25,15 @@ $admin: #802f2f;
 $borderLight: #406070;
 $shadow: rgba(40,80,90, 0.5);
 $modalBackground: rgba(10,30,40,0.8);
+$font: 'Merriweather', serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

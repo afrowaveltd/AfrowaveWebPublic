@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
 $bg: #f6f0fa;
 $foreground: #3d2b50;
 $formForeground: #ffffff;
@@ -24,6 +25,15 @@ $admin: #993355;
 $borderLight: #836093;
 $shadow: rgba(120,90,160,0.5);
 $modalBackground: rgba(220,200,240,0.8);
+$font: 'Quicksand', sans-serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

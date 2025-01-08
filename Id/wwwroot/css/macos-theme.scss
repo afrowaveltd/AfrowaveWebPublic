@@ -21,6 +21,15 @@ $highlight: #8e8e93;
 $borderLight: #C0C0C0;
 $shadow: rgba(0, 0, 0, 0.3);
 $modalBackground: rgba(240, 240, 240, 0.9);
+$font: -apple-system, BlinkMacSystemFont, 'San Francisco', sans-serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

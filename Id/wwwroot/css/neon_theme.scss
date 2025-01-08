@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
 $bg: #000000;
 $foreground: #00FFEA;
 $formForeground: #F8F8F8;
@@ -21,6 +22,15 @@ $highlight: #CCCCCC;
 $borderLight: #404040;
 $shadow: rgba(255, 255, 0, 0.5);
 $modalBackground: rgba(0, 0, 0, 0.9);
+$font: 'Orbitron', sans-serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

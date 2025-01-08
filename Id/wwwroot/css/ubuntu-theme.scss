@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
 $bg: #2C001E;
 $foreground: #FFFFFF;
 $formForeground: #E6E6E6;
@@ -21,6 +22,15 @@ $highlight: #EEEEEE;
 $borderLight: #4A148C;
 $shadow: rgba(150, 100, 150, 0.5);
 $modalBackground: rgba(30, 10, 30, 0.9);
+$font: 'Ubuntu', sans-serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

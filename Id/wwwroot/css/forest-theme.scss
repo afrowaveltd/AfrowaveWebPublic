@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap');
 $bg: #2e4e2d;
 $foreground: #e7ffe7;
 $formForeground: #c8f5c8;
@@ -24,6 +25,7 @@ $admin: #994545;
 $borderLight: #5f7f5f;
 $shadow: rgba(60,120,60, 0.5);
 $modalBackground: rgba(20,50,20,0.8);
+$font: 'Cormorant Garamond', serif;
 
 .spinner {
 	width: 32px;

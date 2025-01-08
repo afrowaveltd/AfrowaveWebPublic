@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
 $bg: #ffead4;
 $foreground: #3b2a20;
 $formForeground: #ffdca2;
@@ -24,6 +25,15 @@ $admin: #a83333;
 $borderLight: #d9a28f;
 $shadow: rgba(200,150,120,0.5);
 $modalBackground: rgba(255,230,200,0.8);
+$font: 'Raleway', sans-serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

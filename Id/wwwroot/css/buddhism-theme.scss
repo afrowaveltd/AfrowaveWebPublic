@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Tibetan&display=swap');
 $bg: #CC6600;
 $foreground: #F0E68C;
 $formForeground: #EAEAEA;
@@ -21,6 +22,15 @@ $highlight: #EEEEEE;
 $borderLight: #2E2E2E;
 $shadow: rgba(255, 255, 255, 0.3);
 $modalBackground: rgba(50, 20, 10, 0.9);
+$font: 'Noto Serif Tibetan', serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

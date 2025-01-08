@@ -1,3 +1,10 @@
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+  font-family: -apple-system, BlinkMacSystemFont, "San Francisco", sans-serif;
+  display: flex;
+  flex-direction: column; }
+
 .spinner {
   width: 32px;
   height: 32px;

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel&display=swap');
 $bg: #a97c50;
 $foreground: #3d1f0f;
 $formForeground: #e9d6bb;
@@ -24,6 +25,15 @@ $admin: #cc4411;
 $borderLight: #755c3c;
 $shadow: rgba(160,120,90, 0.5);
 $modalBackground: rgba(80,60,40,0.8);
+$font: 'Cinzel', serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

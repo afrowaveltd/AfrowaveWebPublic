@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Tahoma&display=swap');
 $bg: #002E5D;
 $foreground: #FFFFFF;
 $formForeground: #F0F0F0;
@@ -21,6 +22,15 @@ $highlight: #FFFFE0;
 $borderLight: #A0A0A0;
 $shadow: rgba(0, 0, 0, 0.5);
 $modalBackground: rgba(58, 110, 165, 0.8);
+$font: 'Tahoma', sans-serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

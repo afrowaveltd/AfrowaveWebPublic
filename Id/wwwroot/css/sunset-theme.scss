@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 $bg: #ff5e00;
 $foreground: #301400;
 $formForeground: #ffd6b3;
@@ -23,6 +24,15 @@ $family: #ff8844;
 $admin: #bb4411;
 $borderLight: #cc8f55;
 $shadow: rgba(240,140,100, 0.5);
+$font: 'Dancing Script', cursive;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Scheherazade+New&display=swap');
 $bg: #1A3D2A;
 $foreground: #E5E5E5;
 $formForeground: #CCCCCC;
@@ -21,6 +22,15 @@ $highlight: #FFFFE0;
 $borderLight: #3C6E47;
 $shadow: rgba(0, 255, 0, 0.5);
 $modalBackground: rgba(20, 40, 30, 0.9);
+$font: 'Scheherazade New', serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;

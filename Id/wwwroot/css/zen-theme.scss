@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
 $bg: #D4C2A8;
 $foreground: #3F3F3F;
 $formForeground: #666666;
@@ -21,6 +22,15 @@ $highlight: #000000;
 $borderLight: #AAA28C;
 $shadow: rgba(90, 80, 60, 0.5);
 $modalBackground: rgba(230, 220, 200, 0.9);
+$font: 'Josefin Sans', sans-serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
 
 .spinner {
 	width: 32px;
