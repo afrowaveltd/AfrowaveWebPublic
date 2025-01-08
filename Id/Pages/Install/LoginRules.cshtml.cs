@@ -36,8 +36,6 @@ namespace Id.Pages.Install
 			public int LockoutTime { get; set; } = 15;
 			public int PasswordResetTokenExpiration { get; set; } = 15;
 			public int EmailConfirmationTokenExpiration { get; set; } = 15;
-			public int RefreshTokenExpiration { get; set; } = 150;
-			public int AccessTokenExpiration { get; set; } = 15;
 			public bool RequireConfirmedEmail { get; set; } = true;
 			public string ApplicationId { get; set; } = string.Empty;
 		}

@@ -1,0 +1,248 @@
+@import url('https://fonts.googleapis.com/css2?family=Arial&display=swap');
+$bg: #808080;
+$foreground: #000000;
+$formForeground: #000000;
+$bodyBackground: #C0C0C0;
+$link: #0000FF;
+$linkHover: #FF0000;
+$linkActive: #800080;
+$formBackground: #E0E0E0;
+$redBorder: #FF0000;
+$disabledBackground: #A0A0A0;
+$disabledForeground: #606060;
+$formControlValidBackground: #008000;
+$formControlInvalidBackground: #800000;
+$navbar: rgba(128, 128, 128, 0.8);
+$hr: $redBorder;
+$success: #008000;
+$error: #800000;
+$warning: #FF9900;
+$info: #0000FF;
+$highlight: #FFFFFF;
+$borderLight: #606060;
+$shadow: rgba(0, 0, 0, 0.5);
+$modalBackground: rgba(128, 128, 128, 0.8);
+$font: 'Arial', sans-serif;
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 60px;
+	font-family: $font;
+	display: flex;
+	flex-direction: column;
+}
+
+.spinner {
+	width: 32px;
+	height: 32px;
+	border: 4px solid $shadow;
+	border-top-color: $foreground;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin: 20px auto;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+:root {
+	--jd-color-background-default: $bg;
+	--jd-color-border: $linkHover;
+	--jd-color-panel: $bg;
+	--jd-color-icon: $error;
+}
+
+a {
+	color: $link;
+}
+
+a:hover {
+	color: $linkHover;
+}
+
+a:active {
+	color: $linkActive;
+}
+
+body {
+	background-color: $bg;
+	color: $foreground;
+}
+
+.navbar {
+	background-color: $navbar;
+	color: $highlight;
+}
+
+a.nav-link {
+	color: $link;
+}
+
+a.nav-link:hover {
+	color: $linkHover;
+}
+
+a.nav-link:active {
+	color: $linkActive;
+}
+
+.container {
+	color: $foreground;
+	background-color: $bodyBackground;
+}
+
+.dimmed {
+	color: $navbar;
+}
+
+.form-control {
+	color: $formForeground;
+	background-color: $formBackground;
+}
+
+.form {
+	color: $formForeground;
+	background-color: $formBackground;
+}
+
+input {
+	-webkit-tap-highlight-color: $highlight;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	background-color: $formBackground, !important;
+	color: $formForeground !important;
+	-webkit-text-fill-color: $formForeground !important;
+	transition: background-color 1s ease-in-out 5000s !important;
+}
+
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+	background-color: $formBackground, !important;
+	color: $formForeground !important;
+	-webkit-text-fill-color: $formForeground !important;
+	transition: background-color 1s ease-in-out 5000s !important;
+}
+
+.form-control:disabled {
+	background-color: $disabledBackground;
+	color: $disabledForeground;
+}
+
+.form-control:valid {
+	background-color: $formBackground;
+	color: $formForeground;
+}
+
+.form-control:active {
+	background-color: $disabledBackground;
+	color: $disabledForeground;
+}
+
+.success {
+	color: $success
+}
+
+.helper {
+	color: $highlight;
+	border: solid 2px $redBorder;
+	padding: 10px;
+	margin-right: 0px;
+	-moz-border-radius: inherit;
+	-webkit-border-radius: inherit;
+	border-radius: inherit;
+	border-radius: 8px 8px;
+}
+
+.input-valid {
+	border-color: $success;
+}
+
+.input-invalid {
+	border-color: $error;
+}
+
+.success {
+	color: $success;
+}
+
+.error {
+	color: $error;
+}
+
+.warning {
+	color: $warning;
+}
+
+.information {
+	color: $info;
+}
+
+.btn-primary {
+	background-color: $link;
+	border-color: $link;
+	color: $highlight;
+}
+
+.btn-primary:hover {
+	background-color: $link;
+	border-color: $linkHover;
+	color: $highlight;
+}
+
+.btn:disabled {
+	background-color: $disabledBackground;
+	color: $disabledForeground;
+	border-color: $link;
+}
+
+table.result {
+	border: 2px solid $redBorder;
+	border-radius: 7px;
+	padding: 5px;
+	width: 95%;
+	background-color: $formBackground;
+}
+
+th.result {
+	border: 2px solid $redBorder;
+	padding: 5px;
+	color: $formForeground;
+}
+
+td.result {
+	border: 1px solid $redBorder;
+	padding: 5px;
+}
+
+table {
+	margin-top: 10px;
+	width: 95%;
+	margin-right: auto;
+	border-radius: 7px;
+	margin-left: auto;
+	background-color: $formBackground;
+	color: $formForeground;
+}
+
+.terms h1, h2, h3, h4, h5, h6 {
+	color: $linkHover;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.terms li {
+	color: $info;
+}

@@ -1,1 +1,33 @@
-{"ApplicationId":"840e3370-f1a6-4994-b76e-25f99ec3cf2c","LoginRules":{"MaxFailedLoginAttempts":0,"LockoutTime":0,"PasswordResetTokenExpiration":0,"EmailConfirmationTokenExpiration":0,"RefreshTokenExpiration":0,"AccessTokenExpiration":0,"RequireConfirmedEmail":false},"PasswordRules":{"MinimumLength":0,"MaximumLength":0,"RequireNonAlphanumeric":false,"RequireLowercase":false,"RequireUppercase":false,"RequireDigit":false},"Cookie":{"Name":"","Domain":"","Path":"","Secure":false,"HttpOnly":false,"Expiration":0},"JwtSettings":{"Secret":"","Issuer":"","Audience":"","AccessTokenExpiration":0,"RefreshTokenExpiration":0}}
+{
+	"ApplicationId": "840e3370-f1a6-4994-b76e-25f99ec3cf2c",
+	"LoginRules": {
+		"MaxFailedLoginAttempts": 0,
+		"LockoutTime": 0,
+		"PasswordResetTokenExpiration": 0,
+		"EmailConfirmationTokenExpiration": 0,
+		"RequireConfirmedEmail": false
+	},
+	"PasswordRules": {
+		"MinimumLength": 0,
+		"MaximumLength": 0,
+		"RequireNonAlphanumeric": false,
+		"RequireLowercase": false,
+		"RequireUppercase": false,
+		"RequireDigit": false
+	},
+	"Cookie": {
+		"Name": "",
+		"Domain": "",
+		"Path": "",
+		"Secure": false,
+		"HttpOnly": false,
+		"Expiration": 0
+	},
+	"JwtSettings": {
+		"Secret": "",
+		"Issuer": "",
+		"Audience": "",
+		"AccessTokenExpiration": 0,
+		"RefreshTokenExpiration": 0
+	}
+}

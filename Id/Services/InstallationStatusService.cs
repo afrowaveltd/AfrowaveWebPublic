@@ -36,7 +36,7 @@ namespace Id.Services
 			{
 				return InstalationSteps.ApplicationRoles;
 			}
-			var smtpSettings = await _context.ApplicationSmtpSettings.FirstOrDefaultAsync();
+			ApplicationSmtpSettings? smtpSettings = await _context.ApplicationSmtpSettings.FirstOrDefaultAsync();
 			if(smtpSettings == null || string.IsNullOrEmpty(smtpSettings.Host))
 			{
 				return InstalationSteps.SmtpSettings;
@@ -49,13 +49,17 @@ namespace Id.Services
 			{
 				return InstalationSteps.PasswordRules;
 			}
-			if(settings.Cookie == null || string.IsNullOrEmpty(settings.Cookie.Name))
+			if(settings.CookieSettings == null || string.IsNullOrEmpty(settings.CookieSettings.Name))
 			{
-				return InstalationSteps.Cookie;
+				return InstalationSteps.CookieSettings;
 			}
 			if(settings.JwtSettings == null || string.IsNullOrEmpty(settings.JwtSettings.Secret))
 			{
 				return InstalationSteps.JwtSettings;
+			}
+			if(settings.CorsSettings == null || !settings.CorsSettings.CorsConfigured)
+			{
+				return InstalationSteps.CorsSettings;
 			}
 			return InstalationSteps.Finish;
 		}
@@ -72,7 +76,6 @@ namespace Id.Services
 		private async Task CheckAndFixApplicationId()
 		{
 			string settingsApplicationId = string.Empty;
-			string dbApplicationId = string.Empty;
 			IdentificatorSettings settings = await _settingsService.GetSettingsAsync();
 			if(settings is null)
 			{
@@ -85,7 +88,8 @@ namespace Id.Services
 				settingsApplicationId = settings.ApplicationId;
 			}
 			// check if there is only one application - if not, throw exception;
-			var applications = await _context.Applications.ToListAsync();
+			List<Application> applications = await _context.Applications.ToListAsync();
+			string dbApplicationId;
 			if(applications.Count != 1)
 			{
 				throw new InvalidOperationException("There should be only one application in the database.");
