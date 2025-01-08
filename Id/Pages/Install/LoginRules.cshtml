@@ -22,14 +22,20 @@
 				<div class="form-group">
 					<div id="login_rules_err_max_failed" class="text-warning p-2 pb-0"></div>
 					<label for="login_rules">@Model.t["Maximal failed login attempts"]</label>
-					<input asp-for="Input.MaxFailedLoginAttempts" type="number" class="form-control" id="max_failed"
-						onfocus="loadHelp('Install_LoginRules_MaxFailed')" />
+					<input asp-for="Input.MaxFailedLoginAttempts" 
+						type="number" 
+						class="form-control" 
+						id="max_failed"
+						onfocus="loadHelp('Install_LoginRules_MaxFailed')"
+						onkeyup="checkMaxFailed(this)"
+						/>
 				</div>
 				<div class="form-group">
 					<div id="login_rules_err_lockout_time" class="text-warning p-2 pb-0"></div>
 					<label for="login_rules">@Model.t["Lockout time (in minutes)"]</label>
 					<input asp-for="Input.LockoutTime" type="number" class="form-control" id="lockout_time"
-						onfocus="loadHelp('Install_LoginRules_LockoutTime')" />
+						onfocus="loadHelp('Install_LoginRules_LockoutTime')"
+						onkeyup="checkLockoutTime(this)"/>
 				</div>
 				<div class="form-group">
 					<div id="login_rules_err_password_reset_token_expiration" class="text-warning p-2 pb-0"></div>
