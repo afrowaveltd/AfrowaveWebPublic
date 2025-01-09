@@ -52,5 +52,25 @@ namespace Id.Pages.Install
 
 			return Page();
 		}
+
+		public async Task<IActionResult> OnPostAsync()
+		{
+			if(!ModelState.IsValid)
+			{
+				return Page();
+			}
+			var settings = await _settings.GetSettingsAsync();
+			settings.PasswordRules = new()
+			{
+				MinimumLength = Input.MinimumLength,
+				MaximumLength = Input.MaximumLength,
+				RequireDigit = Input.RequireDigit,
+				RequireLowercase = Input.RequireLowercase,
+				RequireNonAlphanumeric = Input.RequireNonAlphanumeric,
+				RequireUppercase = Input.RequireUppercase
+			};
+			await _settings.SetSettingsAsync(settings);
+			return RedirectToPage("/Install/CookieSettings");
+		}
 	}
 }
