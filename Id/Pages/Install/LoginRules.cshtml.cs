@@ -30,6 +30,22 @@ namespace Id.Pages.Install
 			return Page();
 		}
 
+		public async Task<IActionResult> OnPostAsync()
+		{
+			if(!ModelState.IsValid)
+			{
+				return Page();
+			}
+			IdentificatorSettings settings = await _settings.GetSettingsAsync();
+			settings.LoginRules.MaxFailedLoginAttempts = Input.MaxFailedLoginAttempts;
+			settings.LoginRules.LockoutTime = Input.LockoutTime;
+			settings.LoginRules.PasswordResetTokenExpiration = Input.PasswordResetTokenExpiration;
+			settings.LoginRules.EmailConfirmationTokenExpiration = Input.EmailConfirmationTokenExpiration;
+			settings.LoginRules.RequireConfirmedEmail = Input.RequireConfirmedEmail;
+			await _settings.SetSettingsAsync(settings);
+			return RedirectToPage("/Install/PasswordRules");
+		}
+
 		public class InputModel
 		{
 			public int MaxFailedLoginAttempts { get; set; } = 5;

@@ -92,6 +92,26 @@ namespace Id.Services
 			return language.Rtl == 1 ? "rtl" : "ltr";
 		}
 
+		public async Task<List<SelectListItem>> GetBinaryOptionsAsync(bool selected = true)
+		{
+			List<SelectListItem> items = new()
+			{
+				new SelectListItem
+				{
+					Value = "true",
+					Text = t["Yes"],
+					Selected = selected
+				},
+				new SelectListItem
+				{
+					Value = "false",
+					Text = t["No"],
+					Selected = !selected
+				}
+			};
+			return await Task.FromResult(items);
+		}
+
 		private async Task<List<string>> GetThemeNamesAsync(string? userId)
 		{
 			if(!Directory.Exists(_cssFolderPath))

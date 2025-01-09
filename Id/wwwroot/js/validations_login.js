@@ -35,17 +35,17 @@ const setInvalid = (element, errorElement, message) => {
 
 const checkMaxFailed = async (element) => {
 	if (element.value < 0) {
-		warning = await localize("Max failed login attempts must be a positive number");
+		warning = await localize("The value must be a positive number or zero");
 		setInvalid(element, maxFailedError, warning);
 		maxFailedOk = false;
 	}
 	else if (element.value == 0) {
-		warning = await localize("Max failed login attempts set to 0 will disable account lockout");
+		warning = await localize("The max failed login attempts set to 0 will disable account locking out");
 		setInvalid(element, maxFailedError, warning);
 		maxFailedOk = true;
 	}
 	else if (element.value < 3) {
-		warning = await localize("Max failed login attempts set to less than 3 is not recommended");
+		warning = await localize("The maximum failed login attempts set to less than 3 is not recommended");
 		setInvalid(element, maxFailedError, warning);
 		maxFailedOk = true;
 	}
@@ -59,12 +59,12 @@ const checkMaxFailed = async (element) => {
 
 const checkLockoutTime = async (element) => {
 	if (element.value < 0) {
-		warning = await localize("Max lockout time must be a positive number");
+		warning = await localize("The value must be a positive number or zero");
 		setInvalid(element, lockoutTimeError, warning);
 		lockoutTimeOk = false;
 	}
 	else if (element.value == 0) {
-		warning = await localize("Attention! Account lockout time set to 0 will lock out accounts indefinitely");
+		warning = await localize("The account lockout time set to 0 will lock out accounts indefinitely");
 		setInvalid(element, lockoutTimeError, warning);
 		lockoutTimeOk = true;
 	}
@@ -72,6 +72,58 @@ const checkLockoutTime = async (element) => {
 		warning = '';
 		setValid(element, lockoutTimeError);
 		lockoutTimeOk = true;
+	}
+	checkForm();
+}
+
+const checkPasswordTokenExpiration = async (element) => {
+	if (element.value < 0) {
+		warning = await localize("The value must be a positive number or zero");
+		setInvalid(element, passwordTokenError, warning);
+		passwordTokenOk = false;
+	}
+	else if (element.value == 0) {
+		warning = await localize("The password reset token expiration set to 0 will make token valid until it is used");
+		setInvalid(element, passwordTokenError, warning);
+		passwordTokenOk = true;
+	}
+	else {
+		warning = '';
+		setValid(element, passwordTokenError);
+		passwordTokenOk = true;
+	}
+	checkForm();
+}
+
+const checkEmailTokenExpiration = async (element) => {
+	if (element.value < 0) {
+		warning = await localize("The value must be a positive number or zero");
+		setInvalid(element, emailTokenError, warning);
+		emailTokenOk = false;
+	}
+	else if (element.value == 0) {
+		warning = await localize("The email confirmation token expiration set to 0 will make token valid until it is used");
+		setInvalid(element, emailTokenError, warning);
+		emailTokenOk = true;
+	}
+	else {
+		warning = '';
+		setValid(element, emailTokenError);
+		emailTokenOk = true;
+	}
+	checkForm();
+}
+
+const checkRequireConfirmedEmail = async (element) => {
+	if (element.value == "true") {
+		warning = '';
+		setValid(element, requireConfirmation);
+		requireConfirmationOk = true;
+	}
+	else {
+		warning = await localize("Disabling email confirmation will allow users to login without confirming their email");
+		setInvalid(element, requireConfirmation, warning);
+		requireConfirmationOk = true;
 	}
 	checkForm();
 }

@@ -5,6 +5,7 @@ namespace Id.Services
 {
 	public interface ISelectOptionsServices
 	{
+		Task<List<SelectListItem>> GetBinaryOptionsAsync(bool selected = true);
 		Task<string> GetDirectionAsync(string code);
 
 		Task<List<SelectListItem>> GetLanguagesOptionsAsync(string selected);
