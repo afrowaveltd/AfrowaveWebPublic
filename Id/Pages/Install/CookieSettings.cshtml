@@ -1,5 +1,103 @@
 ﻿@page
-@model Id.Pages.Install.CookieModel
+@model Id.Pages.Install.CookieSettingsModel
 @{
+	ViewData["Title"] = Model.t["Cookie settings"];
 }
-Cookie
+
+@section Scripts {
+	<script src="~/js/api.js"></script>
+	<script src="~/js/install.js"></script>
+	<script src="~/js/validations_cookie.js"></script>
+}
+
+<div class="row">
+	<div class="col-md-12">
+		<h2>@Model.t["Cookie settings"]</h2>
+		<hr />
+	</div>
+	<div class="col-md-7">
+		<h2 class="text-center">@Model.t["Configure cookie rules"]</h2>
+		<div id="form-div">
+		<form method="post" id="addLoginRules" enctype="multipart/form-data">
+			<div class="form-group">
+				<div id="login_rules_err_max_failed" class="text-warning p-2 pb-0"></div>
+				<label>@Model.t["Cookie name"]</label>
+				<input asp-for="Input.CookieName" 
+					type="text"
+					value="@Model.Input.CookieName"
+					class="form-control"
+					id="cookie_name"
+					onfocus="loadHelp('Install_CookieRules_Name')"
+				   onkeydown="checkName(this)" 
+		S		   onchange="checkName(this)" />
+			</div>
+				<div class="form-group">
+					<div id="login_rules_err_max_failed" class="text-warning p-2 pb-0"></div>
+					<label>@Model.t["Cookie domain"]</label>
+					<input asp-for="Input.CookieDomain"
+						   value="@Model.Input.CookieDomain"
+						   type="text"
+						   class="form-control"
+						   id="cookie_domain"
+						   onfocus="loadHelp('Install_CookieRules_Domain')"
+						   onkeydown="checkDomain(this)"
+						   onchange="checkDomain(this)" />
+				</div>
+				<div class="form-group">
+					<div id="login_rules_err_max_failed" class="text-warning p-2 pb-0"></div>
+					<label>@Model.t["Cookie path"]</label>
+					<input asp-for="Input.CookiePath"
+					 value="@Model.Input.CookiePath"
+						   type="text"
+						   class="form-control"
+						   id="cookie_path"
+						   onfocus="loadHelp('Install_CookieRules_Path')"
+						   onkeydown="checkPath(this)"
+						   onchange="checkPath(this)" />
+				</div>
+				<div class="form-group">
+					<label>@Model.t["Secure cookie"]</label>
+					<select asp-for="Input.CookieSecure" class="form-control" id="require_non_alphanumeric"
+							asp-items="Model.CookieSecureOptions">
+					</select>
+				</div>
+				<div class="form-group">
+					<label>@Model.t["Same Site cookie"]</label>
+					<select asp-for="Input.CookieSameSite" class="form-control" id="require_non_alphanumeric"
+							asp-items="Model.CookieSameSiteOptions">
+						</select>
+				</div>
+				<div class="form-group">
+					<label>@Model.t["HTTP only cookie"]</label>
+					<select asp-for="Input.CookieHttpOnly" class="form-control" id="require_non_alphanumeric"
+							asp-items="Model.CookieHttpOnlyOptions">
+					</select>
+				</div>
+				<div class="form-group">
+					<div id="cookie_expiration_err" class="text-warning p-2 pb-0"></div>
+					<label>@Model.t["Cookie expiration (min)"]</label>
+					<input asp-for="Input.CookieExpiration"
+						   value="@Model.Input.CookieExpiration"
+						   type="number"
+						   class="form-control"
+						   id="cookie_name"
+						   onfocus="loadHelp('Install_CookieRules_Expiration')"
+						   onkeydown="checkExpiration(this)"
+						   S onchange="checkExpiration(this)" />
+				</div>
+				<button type="submit" id="submit" class="btn btn-primary btn-block mt-3">
+					@Model.t["Next"]
+				</button>
+		</form>
+		</div>
+	</div>
+	<div class="col-md-5">
+		<div id="div_help" class="helper" style="display:none">
+		</div>
+	</div>
+</div>
+
+<script language="javascript">
+	let active_page = "cookie";
+	let help = ('Install_Cookie');
+</script>

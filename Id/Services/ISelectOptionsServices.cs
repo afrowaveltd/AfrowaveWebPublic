@@ -9,7 +9,7 @@ namespace Id.Services
 		Task<string> GetDirectionAsync(string code);
 
 		Task<List<SelectListItem>> GetLanguagesOptionsAsync(string selected);
-
+		Task<List<SelectListItem>> GetSameSiteModeOptionsAsync(SameSiteMode selected = SameSiteMode.Lax);
 		Task<List<SelectListItem>> GetSecureSocketOptionsAsync(SecureSocketOptions selected = SecureSocketOptions.Auto);
 
 		Task<List<SelectListItem>> GetThemesAsync(string selected, string? userId);

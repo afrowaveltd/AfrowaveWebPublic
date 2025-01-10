@@ -49,7 +49,7 @@ namespace Id.Services
 			{
 				return InstalationSteps.PasswordRules;
 			}
-			if(settings.CookieSettings == null || string.IsNullOrEmpty(settings.CookieSettings.Name))
+			if(settings.CookieSettings == null || string.IsNullOrEmpty(settings.CookieSettings.Domain))
 			{
 				return InstalationSteps.CookieSettings;
 			}

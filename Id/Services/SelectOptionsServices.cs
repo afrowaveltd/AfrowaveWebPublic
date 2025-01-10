@@ -112,6 +112,18 @@ namespace Id.Services
 			return await Task.FromResult(items);
 		}
 
+		public async Task<List<SelectListItem>> GetSameSiteModeOptionsAsync(SameSiteMode selected = SameSiteMode.Lax)
+		{
+			SameSiteMode[] options = Enum.GetValues<SameSiteMode>();
+			List<SelectListItem> items = options.Select(option => new SelectListItem
+			{
+				Value = ((int)option).ToString(),
+				Text = option.ToString(),
+				Selected = option == selected
+			}).ToList();
+			return await Task.FromResult(items);
+		}
+
 		private async Task<List<string>> GetThemeNamesAsync(string? userId)
 		{
 			if(!Directory.Exists(_cssFolderPath))
