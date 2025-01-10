@@ -1,3 +1,4 @@
+using Id.Models.SettingsModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Id.Pages.Install
@@ -34,6 +35,11 @@ namespace Id.Pages.Install
 
 		public async Task<IActionResult> OnGetAsync()
 		{
+			if(!await _statusService.ProperInstallState(InstalationSteps.CookieSettings))
+			{
+				return RedirectToPage("/");
+			}
+
 			CookieSecureOptions = await _selectOptionsService.GetBinaryOptionsAsync(true);
 			CookieSameSiteOptions = await _selectOptionsService.GetSameSiteModeOptionsAsync(SameSiteMode.Lax);
 			CookieHttpOnlyOptions = await _selectOptionsService.GetBinaryOptionsAsync(true);
@@ -42,7 +48,31 @@ namespace Id.Pages.Install
 
 		public async Task<IActionResult> OnPostAsync()
 		{
-			return Page();
+			if(!await _statusService.ProperInstallState(InstalationSteps.CookieSettings))
+			{
+				return RedirectToPage("/");
+			}
+
+			if(!ModelState.IsValid)
+			{
+				return Page();
+			}
+
+			var settings = await _settingsService.GetSettingsAsync();
+			settings.CookieSettings = new CookieSettings()
+			{
+				Name = Input.CookieName,
+				Domain = Input.CookieDomain,
+				Path = Input.CookiePath,
+				Secure = Input.CookieSecure,
+				SameSite = Input.CookieSameSite,
+				HttpOnly = Input.CookieHttpOnly,
+				Expiration = Input.CookieExpiration
+			};
+
+			await _settingsService.SetSettingsAsync(settings);
+
+			return RedirectToPage("/Install/JwtSettings");
 		}
 	}
 }

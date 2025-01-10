@@ -44,4 +44,9 @@ window.onload = async () => {
 			break;
 	};
 	loadHelp(help);
+	try {
+		await startup();
+	} catch {
+		console.log("No startup function");
+	}
 };

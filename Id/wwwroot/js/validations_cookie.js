@@ -47,7 +47,7 @@ const checkName = async (element) => {
 		// check if the name is valid
 		const regex = /^[a-zA-Z0-9_.]+$/;
 		if (!regex.test(element.value)) {
-			setInvalid(element, nameError, await localize('Name must contain only letters, numbers and underscores'));
+			setInvalid(element, nameError, await localize('Name must contain only letters, numbers, underscores and dot'));
 			nameOk = false;
 		} else {
 			setValid(element, nameError);
@@ -82,7 +82,7 @@ const checkPath = async (element) => {
 	}
 
 	// check if the path is valid
-	const regex = /^[a-zA-Z0-9_.]+$/;
+	const regex = /^[a-zA-Z0-9_./]+$/;
 	if (!regex.test(element.value)) {
 		setInvalid(element, pathError, await localize('Path must contain only letters, numbers and underscores'));
 		pathOk = false;
@@ -91,4 +91,65 @@ const checkPath = async (element) => {
 		pathOk = true;
 	}
 	checkForm();
+}
+
+const checkSecure = async (element) => {
+	if (element.value == 'true') {
+		setValid(element, secureError);
+		secureOk = true;
+	} else {
+		setInvalid(element, secureError, await localize('This option is less secure'));
+		secureOk = true;
+	}
+	checkForm();
+}
+
+const checkSameSite = async (element) => {
+	if (element.value == '0') {
+		setInvalid(element, sameSiteError, await localize('This option is less secure'));
+		sameSiteOk = true;
+	} else {
+		setValid(element, sameSiteError);
+		sameSiteOk = true;
+	}
+	checkForm();
+}
+
+const checkHttpOnly = async (element) => {
+	if (element.value == 'true') {
+		setValid(element, httpOnlyError);
+		httpOnlyOk = true;
+	} else {
+		setInvalid(element, httpOnlyError, await localize('This option is less secure'));
+		httpOnlyOk = true;
+	}
+	checkForm();
+}
+
+const checkExpiration = async (element) => {
+	if (element.value < 0) {
+		setInvalid(element, expirationError, await localize('The value must be a positive number or zero'));
+		expirationOk = false;
+	} else {
+		setValid(element, expirationError);
+		expirationOk = true;
+	}
+	checkForm();
+}
+
+const startup = async () => {
+	const name = document.getElementById('cookie_name');
+	const domain = document.getElementById('cookie_domain');
+	const path = document.getElementById('cookie_path');
+	const secure = document.getElementById('cookie_secure');
+	const sameSite = document.getElementById('cookie_same_site');
+	const httpOnly = document.getElementById('cookie_http_only');
+	const expiration = document.getElementById('cookie_expiration');
+	await checkName(name);
+	await checkDomain(domain);
+	await checkPath(path);
+	await checkSecure(secure);
+	await checkSameSite(sameSite);
+	await checkHttpOnly(httpOnly);
+	await checkExpiration(expiration);
 }

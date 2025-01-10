@@ -6,8 +6,8 @@
 
 @section Scripts {
 	<script src="~/js/api.js"></script>
-	<script src="~/js/install.js"></script>
 	<script src="~/js/validations_cookie.js"></script>
+	<script src="~/js/install.js"></script>
 }
 
 <div class="row">
@@ -55,35 +55,37 @@
 				<div class="form-group">
 					<div id="cookie_secure_err" class="text-warning p-2 pb-0"></div>
 					<label>@Model.t["Secure cookie"]</label>
-					<select asp-for="Input.CookieSecure" class="form-control" id="require_non_alphanumeric"
-							asp-items="Model.CookieSecureOptions">
+					<select asp-for="Input.CookieSecure" class="form-control" id="cookie_secure"
+							asp-items="Model.CookieSecureOptions"
+							onchange="checkSecure(this)">
 					</select>
 				</div>
 				<div class="form-group">
 					<div id="cookie_same_site_err" class="text-warning p-2 pb-0"></div>
 					<label>@Model.t["Same Site cookie"]</label>
-					<select asp-for="Input.CookieSameSite" class="form-control" id="require_non_alphanumeric"
-							asp-items="Model.CookieSameSiteOptions">
+					<select asp-for="Input.CookieSameSite" class="form-control" id="cookie_same_site"
+							asp-items="Model.CookieSameSiteOptions"
+							onchange="checkSameSite(this)">
 						</select>
 				</div>
 				<div class="form-group">
 					<div id="cookie_http_only_err" class="text-warning p-2 pb-0"></div>
 					<label>@Model.t["HTTP only cookie"]</label>
-					<select asp-for="Input.CookieHttpOnly" class="form-control" id="require_non_alphanumeric"
-							asp-items="Model.CookieHttpOnlyOptions">
+					<select asp-for="Input.CookieHttpOnly" class="form-control" id="cookie_http_only"
+							asp-items="Model.CookieHttpOnlyOptions"
+							onchange="checkHttpOnly(this)">
 					</select>
 				</div>
 				<div class="form-group">
-					<div id="cookie_expiration_err" class="text-warning p-2 pb-0"></div>
+					<div id="cookie_expiration_err" class="text-danger p-2 pb-0"></div>
 					<label>@Model.t["Cookie expiration (min)"]</label>
 					<input asp-for="Input.CookieExpiration"
 						   value="@Model.Input.CookieExpiration"
 						   type="number"
 						   class="form-control"
-						   id="cookie_name"
-						   onfocus="loadHelp('Install_CookieRules_Expiration')"
+						   id="cookie_expiration"
 						   onkeydown="checkExpiration(this)"
-						   S onchange="checkExpiration(this)" />
+						   onchange="checkExpiration(this)" />
 				</div>
 				<button type="submit" id="submit" class="btn btn-primary btn-block mt-3">
 					@Model.t["Next"]
