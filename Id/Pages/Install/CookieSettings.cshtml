@@ -20,54 +20,54 @@
 		<div id="form-div">
 		<form method="post" id="addLoginRules" enctype="multipart/form-data">
 			<div class="form-group">
-				<div id="login_rules_err_max_failed" class="text-warning p-2 pb-0"></div>
+				<div id="cookie_name_err" class="text-danger p-2 pb-0"></div>
 				<label>@Model.t["Cookie name"]</label>
 				<input asp-for="Input.CookieName" 
 					type="text"
 					value="@Model.Input.CookieName"
 					class="form-control"
 					id="cookie_name"
-					onfocus="loadHelp('Install_CookieRules_Name')"
 				   onkeydown="checkName(this)" 
 		S		   onchange="checkName(this)" />
 			</div>
 				<div class="form-group">
-					<div id="login_rules_err_max_failed" class="text-warning p-2 pb-0"></div>
+					<div id="cookie_domain_err" class="text-danger p-2 pb-0"></div>
 					<label>@Model.t["Cookie domain"]</label>
 					<input asp-for="Input.CookieDomain"
 						   value="@Model.Input.CookieDomain"
 						   type="text"
 						   class="form-control"
 						   id="cookie_domain"
-						   onfocus="loadHelp('Install_CookieRules_Domain')"
 						   onkeydown="checkDomain(this)"
 						   onchange="checkDomain(this)" />
 				</div>
 				<div class="form-group">
-					<div id="login_rules_err_max_failed" class="text-warning p-2 pb-0"></div>
+					<div id="cookie_path_err" class="text-danger p-2 pb-0"></div>
 					<label>@Model.t["Cookie path"]</label>
 					<input asp-for="Input.CookiePath"
 					 value="@Model.Input.CookiePath"
 						   type="text"
 						   class="form-control"
 						   id="cookie_path"
-						   onfocus="loadHelp('Install_CookieRules_Path')"
 						   onkeydown="checkPath(this)"
 						   onchange="checkPath(this)" />
 				</div>
 				<div class="form-group">
+					<div id="cookie_secure_err" class="text-warning p-2 pb-0"></div>
 					<label>@Model.t["Secure cookie"]</label>
 					<select asp-for="Input.CookieSecure" class="form-control" id="require_non_alphanumeric"
 							asp-items="Model.CookieSecureOptions">
 					</select>
 				</div>
 				<div class="form-group">
+					<div id="cookie_same_site_err" class="text-warning p-2 pb-0"></div>
 					<label>@Model.t["Same Site cookie"]</label>
 					<select asp-for="Input.CookieSameSite" class="form-control" id="require_non_alphanumeric"
 							asp-items="Model.CookieSameSiteOptions">
 						</select>
 				</div>
 				<div class="form-group">
+					<div id="cookie_http_only_err" class="text-warning p-2 pb-0"></div>
 					<label>@Model.t["HTTP only cookie"]</label>
 					<select asp-for="Input.CookieHttpOnly" class="form-control" id="require_non_alphanumeric"
 							asp-items="Model.CookieHttpOnlyOptions">
