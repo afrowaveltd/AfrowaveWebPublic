@@ -16,8 +16,6 @@ namespace Id.Pages.Helps
 			LiElements.Add("<b class='information'>" + _t["Lockout time"] + "</b> " + _t["The time in minutes the account is locked after the maximum number of failed login attempts"]);
 			LiElements.Add("<b class='information'>" + _t["Password reset token expiration"] + "</b> " + _t["The time in minutes the password reset token is valid."]);
 			LiElements.Add("<b class='information'>" + _t["Email confirmation token expiration"] + "</b> " + _t["The time in minutes the email confirmation token is valid."]);
-			//LiElements.Add("<b class='information'>" + _t["Refresh token expiration"] + "</b> " + _t["The time in days the refresh token is valid."]);
-			//LiElements.Add("<b class='information'>" + _t["Access token expiration"] + "</b> " + _t["The time in minutes the access token is valid."]);
 			LiElements.Add("<b class='information'>" + _t["Require confirmed email"] + "</b> " + _t["If true, the user must confirm the email address before logging in."]);
 
 			return Page();

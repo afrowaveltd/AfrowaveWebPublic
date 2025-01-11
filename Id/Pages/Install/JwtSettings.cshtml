@@ -27,6 +27,7 @@
 						   value="@Model.Input.Issuer"
 						   class="form-control"
 						   id="issuer"
+						   onfocus="loadHelp('Install_Jwt_Issuer')"
 						   onkeydown="checkIssuer(this)"
 						   onchange="checkIssuer(this)" />
 				</div>
@@ -38,6 +39,7 @@
 						   type="text"
 						   class="form-control"
 						   id="audience"
+						   onfocus="loadHelp('Install_Jwt_Audience')"
 						   onkeydown="checkAudience(this)"
 						   onchange="checkAudience(this)" />
 				</div>

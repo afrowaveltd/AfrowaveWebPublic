@@ -1,0 +1,16 @@
+﻿@page
+@model Id.Pages.Helps.Install_JwtModel
+@{
+}
+<h2 class="information text-center">@Model.Title</h2>
+
+@foreach(var line in Model.Lines)
+{
+	<p>@Html.Raw(line)</p>
+}
+<ul>
+	@foreach(var item in Model.LiElements)
+	{
+		<li>@Html.Raw(item)</li>
+	}
+</ul>
