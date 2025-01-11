@@ -53,7 +53,7 @@ namespace Id.Services
 			{
 				return InstalationSteps.CookieSettings;
 			}
-			if(settings.JwtSettings == null || string.IsNullOrEmpty(settings.JwtSettings.Secret))
+			if(settings.JwtSettings == null || string.IsNullOrEmpty(settings.JwtSettings.Issuer))
 			{
 				return InstalationSteps.JwtSettings;
 			}

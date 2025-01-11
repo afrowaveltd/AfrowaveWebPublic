@@ -1,21 +1,71 @@
 ﻿@page
 @model Id.Pages.Install.JwtSettingsModel
 @{
+	ViewData["Title"] = Model.t["J settings"];
 }
-JwtSettings
 
-<!--
+@section Scripts {
+	<script src="~/js/api.js"></script>
+	<script src="~/js/validations_jwt.js"></script>
+	<script src="~/js/install.js"></script>
+}
 
+<div class="row">
+	<div class="col-md-12">
+		<h2>@Model.t["Jwt settings"]</h2>
+		<hr />
+	</div>
+	<div class="col-md-7">
+		<h2 class="text-center">@Model.t["Configure JWT rules"]</h2>
+		<div id="form-div">
+		<form method="post" id="addJwtSettings" enctype="multipart/form-data">
 				<div class="form-group">
-					<div id="login_rules_err_refresh_token_expiration" class="text-warning p-2 pb-0"></div>
-					<label for="login_rules">Model.t["Refresh token expiration time (in days)"]</label>
-					<input asp-for="Input.RefreshTokenExpiration" type="number" class="form-control" id="refresh_token"
-						   onfocus="loadHelp('Install_LoginRules_RefreshTokenExpiration')" />
+					<div id="issuer_err" class="text-danger p-2 pb-0"></div>
+					<label>@Model.t["Issuer"]</label>
+					<input asp-for="Input.Issuer"
+						   type="text"
+						   value="@Model.Input.Issuer"
+						   class="form-control"
+						   id="issuer"
+						   onkeydown="checkIssuer(this)"
+						   onchange="checkIssuer(this)" />
 				</div>
 				<div class="form-group">
-					<div id="login_rules_err_access_token_expiration" class="text-warning p-2 pb-0"></div>
-					<label for="login_rules">Model.t["Access token expiration time (in minutes)"]</label>
+					<div id="audience_err" class="text-danger p-2 pb-0"></div>
+					<label>@Model.t["Audience"]</label>
+					<input asp-for="Input.Audience"
+						   value="@Model.Input.Audience"
+						   type="text"
+						   class="form-control"
+						   id="audience"
+						   onkeydown="checkAudience(this)"
+						   onchange="checkAudience(this)" />
+				</div>
+				<div class="form-group">
+					<div id="access_token_expiration_err" class="text-error p-2 pb-0"></div>
+					<label for="login_rules">@Model.t["Access token expiration time (in minutes)"]</label>
 					<input asp-for="Input.AccessTokenExpiration" type="number" class="form-control" id="access_token"
 						   onfocus="loadHelp('Install_LoginRules_AccessTokenExpiration')" />
 				</div>
-				-->
+				<div class="form-group">
+					<div id="refresh_token_expiration_err" class="text-warning p-2 pb-0"></div>
+					<label for="login_rules">@Model.t["Refresh token expiration time (in days)"]</label>
+					<input asp-for="Input.RefreshTokenExpiration" type="number" class="form-control" id="refresh_token"
+						   onfocus="loadHelp('Install_LoginRules_RefreshTokenExpiration')" />
+				</div>
+				<button type="submit" id="submit" class="btn btn-primary btn-block mt-3">
+					@Model.t["Next"]
+				</button>
+		</form>
+	</div>
+	</div>
+		<div class="col-md-5">
+			<div id="div_help" class="helper" style="display:none">
+			</div>
+		</div>
+</div>
+
+	<script language="javascript">
+		let active_page = "jwt";
+		let help = ('Install_Jwt');
+	</script>
