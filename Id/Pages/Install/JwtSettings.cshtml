@@ -44,16 +44,20 @@
 						   onchange="checkAudience(this)" />
 				</div>
 				<div class="form-group">
-					<div id="access_token_expiration_err" class="text-error p-2 pb-0"></div>
+					<div id="access_token_expiration_err" class="text-danger p-2 pb-0"></div>
 					<label for="login_rules">@Model.t["Access token expiration time (in minutes)"]</label>
 					<input asp-for="Input.AccessTokenExpiration" type="number" class="form-control" id="access_token"
-						   onfocus="loadHelp('Install_LoginRules_AccessTokenExpiration')" />
+						   onfocus="loadHelp('Install_LoginRules_AccessTokenExpiration')" 
+						   onkeydown="checkAccessTokenExpiration(this)"
+						   onchange="checkAccessTokenExpiration(this)" />
 				</div>
 				<div class="form-group">
-					<div id="refresh_token_expiration_err" class="text-warning p-2 pb-0"></div>
+					<div id="refresh_token_expiration_err" class="text-danger p-2 pb-0"></div>
 					<label for="login_rules">@Model.t["Refresh token expiration time (in days)"]</label>
 					<input asp-for="Input.RefreshTokenExpiration" type="number" class="form-control" id="refresh_token"
-						   onfocus="loadHelp('Install_LoginRules_RefreshTokenExpiration')" />
+						   onfocus="loadHelp('Install_LoginRules_RefreshTokenExpiration')"
+						   onkeydown="checkRefreshTokenExpiration(this)"
+						   onchange="checkRefreshTokenExpiration(this)" />
 				</div>
 				<button type="submit" id="submit" class="btn btn-primary btn-block mt-3">
 					@Model.t["Next"]

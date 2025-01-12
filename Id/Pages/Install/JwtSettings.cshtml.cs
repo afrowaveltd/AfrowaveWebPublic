@@ -30,5 +30,28 @@ namespace Id.Pages.Install
 			}
 			return Page();
 		}
+
+		public async Task<IActionResult> OnPostAsync()
+		{
+			if(!await _statusService.ProperInstallState(InstalationSteps.JwtSettings))
+			{
+				return RedirectToPage("/");
+			}
+			if(!ModelState.IsValid)
+			{
+				return Page();
+			}
+
+			var settings = await _settingsService.GetSettingsAsync();
+			settings.JwtSettings = new()
+			{
+				Issuer = Input.Issuer,
+				Audience = Input.Audience,
+				AccessTokenExpiration = Input.AccessTokenExpiration,
+				RefreshTokenExpiration = Input.RefreshTokenExpiration
+			};
+			await _settingsService.SetSettingsAsync(settings);
+			return RedirectToPage("/Install/CorsSettings");
+		}
 	}
 }
