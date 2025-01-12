@@ -1,1 +1,52 @@
-{"ApplicationId":"2e908f47-287e-4b4c-9b9f-c8a2b0abb5c9","LoginRules":{"MaxFailedLoginAttempts":5,"LockoutTime":15,"PasswordResetTokenExpiration":15,"EmailConfirmationTokenExpiration":15,"RequireConfirmedEmail":true},"PasswordRules":{"MinimumLength":8,"MaximumLength":64,"RequireNonAlphanumeric":false,"RequireLowercase":true,"RequireUppercase":true,"RequireDigit":true},"CookieSettings":{"Name":".AuthCookie","Domain":"afrowave.ltd","Path":"/","Secure":true,"SameSite":1,"HttpOnly":true,"Expiration":60},"JwtSettings":{"Issuer":"afrowave.ltd","Audience":"*","AccessTokenExpiration":30,"RefreshTokenExpiration":7},"CorsSettings":{"PolicyMode":0,"AllowedOrigins":["*"],"AllowedMethods":["GET","POST","PUT","DELETE"],"AllowedHeaders":["Content-Type","Authorization","Accept-Language"],"AllowCredentials":false,"CorsConfigured":false}}
+{
+	"ApplicationId": "2e908f47-287e-4b4c-9b9f-c8a2b0abb5c9",
+	"LoginRules": {
+		"MaxFailedLoginAttempts": 5,
+		"LockoutTime": 15,
+		"PasswordResetTokenExpiration": 15,
+		"EmailConfirmationTokenExpiration": 15,
+		"RequireConfirmedEmail": true
+	},
+	"PasswordRules": {
+		"MinimumLength": 8,
+		"MaximumLength": 64,
+		"RequireNonAlphanumeric": false,
+		"RequireLowercase": true,
+		"RequireUppercase": true,
+		"RequireDigit": true
+	},
+	"CookieSettings": {
+		"Name": ".AuthCookie",
+		"Domain": "afrowave.ltd",
+		"Path": "/",
+		"Secure": true,
+		"SameSite": 1,
+		"HttpOnly": true,
+		"Expiration": 60
+	},
+	"JwtSettings": {
+		"Issuer": "afrowave.ltd",
+		"Audience": "*",
+		"AccessTokenExpiration": 30,
+		"RefreshTokenExpiration": 7
+	},
+	"CorsSettings": {
+		"PolicyMode": 0,
+		"AllowedOrigins": [
+			"*"
+		],
+		"AllowedMethods": [
+			"GET",
+			"POST",
+			"PUT",
+			"DELETE"
+		],
+		"AllowedHeaders": [
+			"Content-Type",
+			"Authorization",
+			"Accept-Language"
+		],
+		"AllowCredentials": false,
+		"CorsConfigured": false
+	}
+}

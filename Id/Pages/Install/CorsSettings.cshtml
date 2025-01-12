@@ -1,5 +1,63 @@
 ﻿@page
+@using Id.Models.SettingsModels
 @model Id.Pages.Install.CorsSettingsModel
+@inject IStringLocalizer<CorsSettingsModel> t
+
 @{
+    ViewData["Title"] = t["CORS Settings"];
 }
-Cors
+
+<h2>@t["Configure CORS Settings"]</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label for="policyMode">@t["CORS Policy Mode"]</label>
+        <select id="policyMode" name="Input.PolicyMode" class="form-control">
+            <option value="AllowAll" selected="@(Model.Input.PolicyMode == CorsPolicyMode.AllowAll)">Allow All</option>
+            <option value="AllowSpecific" selected="@(Model.Input.PolicyMode == CorsPolicyMode.AllowSpecific)">Allow Specific</option>
+            <option value="DenyAll" selected="@(Model.Input.PolicyMode == CorsPolicyMode.DenyAll)">Deny All</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="allowedOrigins">@t["Allowed Origins"]</label>
+        <select id="allowedOrigins" name="Input.AllowedOrigins" multiple class="form-control">
+            <option value="*" selected="@((Model.Input.AllowedOrigins.Contains("*")) ? "selected" : null)">Any (*)</option>
+            <option value="https://example.com" selected="@((Model.Input.AllowedOrigins.Contains("https://example.com")) ? "selected" : null)">example.com</option>
+            <option value="https://myapp.com" selected="@((Model.Input.AllowedOrigins.Contains("https://myapp.com")) ? "selected" : null)">myapp.com</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="allowedMethods">@t["Allowed Methods"]</label>
+        <select id="allowedMethods" name="Input.AllowedMethods" multiple class="form-control">
+            <option value="GET" selected="@((Model.Input.AllowedMethods.Contains("GET")) ? "selected" : null)">GET</option>
+            <option value="POST" selected="@((Model.Input.AllowedMethods.Contains("POST")) ? "selected" : null)">POST</option>
+            <option value="PUT" selected="@((Model.Input.AllowedMethods.Contains("PUT")) ? "selected" : null)">PUT</option>
+            <option value="DELETE" selected="@((Model.Input.AllowedMethods.Contains("DELETE")) ? "selected" : null)">DELETE</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="allowedHeaders">@t["Allowed Headers"]</label>
+        <select id="allowedHeaders" name="Input.AllowedHeaders" multiple class="form-control">
+            <option value="Content-Type" selected="@((Model.Input.AllowedHeaders.Contains("Content-Type")) ? "selected" : null)">Content-Type</option>
+            <option value="Authorization" selected="@((Model.Input.AllowedHeaders.Contains("Authorization")) ? "selected" : null)">Authorization</option>
+            <option value="Accept-Language" selected="@((Model.Input.AllowedHeaders.Contains("Accept-Language")) ? "selected" : null)">Accept-Language</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>
+            <input type="checkbox" name="Input.AllowCredentials" value="true" checked="@Model.Input.AllowCredentials"> @t["Allow Credentials"]
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label>
+            <input type="checkbox" name="Input.CorsConfigured" value="true" checked="@Model.Input.CorsConfigured"> @t["Enable CORS"]
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">@t["Save"]</button>
+</form>
