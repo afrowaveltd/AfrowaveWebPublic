@@ -7,57 +7,101 @@
     ViewData["Title"] = t["CORS Settings"];
 }
 
-<h2>@t["Configure CORS Settings"]</h2>
+@section Scripts {
+	<script src="~/js/api.js"></script>
+	<script src="~/js/validations_cors.js"></script>
+	<script src="~/js/install.js"></script>
+}
 
-<form method="post">
-    <div class="form-group">
-        <label for="policyMode">@t["CORS Policy Mode"]</label>
-        <select id="policyMode" name="Input.PolicyMode" class="form-control">
-            <option value="AllowAll" selected="@(Model.Input.PolicyMode == CorsPolicyMode.AllowAll)">Allow All</option>
-            <option value="AllowSpecific" selected="@(Model.Input.PolicyMode == CorsPolicyMode.AllowSpecific)">Allow Specific</option>
-            <option value="DenyAll" selected="@(Model.Input.PolicyMode == CorsPolicyMode.DenyAll)">Deny All</option>
-        </select>
+<div class="row">
+	<div class="col-md-12">
+		<h2>@t["CORS settings"]</h2>
+		<hr />
+	</div>
+	<div class="col-md-7">
+    <h2>@t["Configure CORS settings"]</h2>
+    <div id="form-div">
+    <form method="post">
+        
+        <div class="form-group">
+            <label for="policyMode">@t["CORS Policy Mode"]</label>
+            <select id="policyMode" name="Input.PolicyMode" class="form-control">
+                <option value="AllowAll" selected="@(Model.Input.PolicyMode == CorsPolicyMode.AllowAll)">Allow All</option>
+                <option value="AllowSpecific" selected="@(Model.Input.PolicyMode == CorsPolicyMode.AllowSpecific)">Allow Specific</option>
+                <option value="DenyAll" selected="@(Model.Input.PolicyMode == CorsPolicyMode.DenyAll)">Deny All</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+                    <label for="allowedOrigins">@t["Allowed Origins"]</label><a href="#" onclick="addOrigin()" style="margin: 20px"><i class="bi bi-plus-circle"></i></a>
+					<select id="allowedOrigins" name="Input.AllowedOrigins" multiple class="form-control">
+                <option value="https://afrowave.ltd" selected="@((Model.Input.AllowedOrigins.Contains("https://afrowave.ltd")) ? "selected" : null)">afrowave.ltd</option>
+                <option value="https://id.afrowave.ltd" selected="@((Model.Input.AllowedOrigins.Contains("https://id.afrowave.ltd")) ? "selected" : null)">id.afrowave.ltd</option>
+            </select>
+        </div>
+
+                <div class="form-group">
+                    <label for="allowAnyMethod">@t["Allow any method"]</label>
+                    <select id="allowAnyMethod"
+                            name="Input.AllowAnyMethod"
+                            class="form-control"
+                            asp-items="Model.AllowAnyMethodOptions">
+                    </select>
+                    </label>
+                </div>
+
+        <div class="form-group">
+         <label for="allowedMethods">@t["Allowed Methods"]</label>
+            <select id="allowedMethods" 
+                name="Input.AllowedMethods" 
+                multiple 
+                class="form-control"
+                asp-items="Model.HttpMethodsOptions">
+            </select>
+        </div>
+
+                <div class="form-group">
+                    <label for="allowHeaders">@t["Allow any headers"]</label>
+                    <select id="allowHeaderss"
+                            name="Input.AllowAnyHeader"
+                            class="form-control"
+                            asp-items="Model.AllowAnyHeaderOptions">
+                    </select>
+                    </label>
+                </div>
+
+        <div class="form-group">
+            <label for="allowedHeaders">@t["Allowed Headers"]</label>
+            <select id="allowedHeaders" 
+                name="Input.AllowedHeaders" 
+                multiple 
+                class="form-control"
+                asp-items="Model.HttpHeadersOptions">
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="allowCredentials">@t["Allow Credentials"]</label>
+            <select id="allowCredentials" 
+                name="Input.AllowCredentials" 
+                class="form-control"
+                asp-items="Model.AllowCredentialsOptions">
+            </select>
+            </label>
+        </div>
+        <button type="submit" id="submit" class="btn btn-primary btn-block mt-3">
+            @Model.t["Next"]
+        </button>
+    </form>
     </div>
-
-    <div class="form-group">
-        <label for="allowedOrigins">@t["Allowed Origins"]</label>
-        <select id="allowedOrigins" name="Input.AllowedOrigins" multiple class="form-control">
-            <option value="*" selected="@((Model.Input.AllowedOrigins.Contains("*")) ? "selected" : null)">Any (*)</option>
-            <option value="https://example.com" selected="@((Model.Input.AllowedOrigins.Contains("https://example.com")) ? "selected" : null)">example.com</option>
-            <option value="https://myapp.com" selected="@((Model.Input.AllowedOrigins.Contains("https://myapp.com")) ? "selected" : null)">myapp.com</option>
-        </select>
     </div>
-
-    <div class="form-group">
-        <label for="allowedMethods">@t["Allowed Methods"]</label>
-        <select id="allowedMethods" name="Input.AllowedMethods" multiple class="form-control">
-            <option value="GET" selected="@((Model.Input.AllowedMethods.Contains("GET")) ? "selected" : null)">GET</option>
-            <option value="POST" selected="@((Model.Input.AllowedMethods.Contains("POST")) ? "selected" : null)">POST</option>
-            <option value="PUT" selected="@((Model.Input.AllowedMethods.Contains("PUT")) ? "selected" : null)">PUT</option>
-            <option value="DELETE" selected="@((Model.Input.AllowedMethods.Contains("DELETE")) ? "selected" : null)">DELETE</option>
-        </select>
+    <div class="col-md-5">
+        <div id="div_help" class="helper" style="display:none">
+        </div>
     </div>
+</div>
 
-    <div class="form-group">
-        <label for="allowedHeaders">@t["Allowed Headers"]</label>
-        <select id="allowedHeaders" name="Input.AllowedHeaders" multiple class="form-control">
-            <option value="Content-Type" selected="@((Model.Input.AllowedHeaders.Contains("Content-Type")) ? "selected" : null)">Content-Type</option>
-            <option value="Authorization" selected="@((Model.Input.AllowedHeaders.Contains("Authorization")) ? "selected" : null)">Authorization</option>
-            <option value="Accept-Language" selected="@((Model.Input.AllowedHeaders.Contains("Accept-Language")) ? "selected" : null)">Accept-Language</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label>
-            <input type="checkbox" name="Input.AllowCredentials" value="true" checked="@Model.Input.AllowCredentials"> @t["Allow Credentials"]
-        </label>
-    </div>
-
-    <div class="form-group">
-        <label>
-            <input type="checkbox" name="Input.CorsConfigured" value="true" checked="@Model.Input.CorsConfigured"> @t["Enable CORS"]
-        </label>
-    </div>
-
-    <button type="submit" class="btn btn-primary">@t["Save"]</button>
-</form>
+<script language="javascript">
+    let active_page = "cors";
+    let help = ('Install_Cors');
+</script>

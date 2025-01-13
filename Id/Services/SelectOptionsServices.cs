@@ -20,6 +20,96 @@ namespace Id.Services
 			t = _t;
 		}
 
+		public async Task<List<SelectListItem>> GetBinaryOptionsAsync(bool selected = true)
+		{
+			List<SelectListItem> items = new()
+			{
+				new SelectListItem
+				{
+					Value = "true",
+					Text = t["Yes"],
+					Selected = selected
+				},
+				new SelectListItem
+				{
+					Value = "false",
+					Text = t["No"],
+					Selected = !selected
+				}
+			};
+			return await Task.FromResult(items);
+		}
+
+		public async Task<string> GetDirectionAsync(string code)
+		{
+			Language? language = await _context.Languages.FirstOrDefaultAsync(l => l.Code == code);
+			if(language == null)
+			{
+				return "ltr";
+			}
+			return language.Rtl == 1 ? "rtl" : "ltr";
+		}
+
+		public async Task<List<SelectListItem>> GetHttpHeadersAsync(List<string> selected)
+		{
+			List<string> headers = new()
+			{
+				"Accept",
+				"Accept-Encoding",
+				"Accept-Language",
+				"Authorization",
+				"Cache-Control",
+				"Connection",
+				"Content-Length",
+				"Content-Type",
+				"Cookie",
+				"Host",
+				"Origin",
+				"Referer",
+				"User-Agent",
+				"Proxy-Authorization",
+				"WWW-Authenticate",
+				"Set-Cookie",
+
+  				"Access-Control-Allow-Origin",
+				"Access-Control-Allow-Methods",
+				"Access-Control-Allow-Headers",
+				"Access-Control-Allow-Credentials",
+				"Access-Control-Expose-Headers",
+				"Access-Control-Max-Age",
+				"Access-Control-Request-Method",
+				"Access-Control-Request-Headers",
+
+				"X-Requested-With",
+				"X-Frame-Options",
+				"X-Content-Type-Options",
+				"X-XSS-Protection",
+				"X-API-Key",
+				"X-Auth-Token",
+				"X-Correlation-ID"
+			};
+
+			List<SelectListItem> items = headers.Select(header => new SelectListItem
+			{
+				Value = header,
+				Text = header,
+				Selected = selected.Contains(header)
+			}).ToList();
+			return await Task.FromResult(items);
+		}
+
+		public async Task<List<SelectListItem>> GetHttpMethodsAsync(List<string> selected)
+		{
+			string[] methods = new[] { "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD" };
+			List<SelectListItem> items = methods.Select(method => new SelectListItem
+			{
+				Value = method,
+				Text = method,
+				Selected = selected.Contains(method) || selected.Contains("all")
+			}).ToList();
+			return await Task.FromResult(items);
+		}
+
 		public async Task<List<SelectListItem>> GetLanguagesOptionsAsync(string selected)
 		{
 			string[] codes = _loader.GetSupportedCultures();
@@ -49,23 +139,16 @@ namespace Id.Services
 			return languages;
 		}
 
-		public async Task<List<SelectListItem>> GetThemesAsync(string selected, string? userId)
+		public async Task<List<SelectListItem>> GetSameSiteModeOptionsAsync(SameSiteMode selected = SameSiteMode.Lax)
 		{
-			List<string> themes = await GetThemeNamesAsync(userId);
-
-			List<SelectListItem> items = [];
-
-			foreach(string theme in themes)
+			SameSiteMode[] options = Enum.GetValues<SameSiteMode>();
+			List<SelectListItem> items = options.Select(option => new SelectListItem
 			{
-				items.Add(new SelectListItem
-				{
-					Selected = theme == selected,
-					Value = theme,
-					Text = theme
-				});
-			}
-
-			return items;
+				Value = ((int)option).ToString(),
+				Text = option.ToString(),
+				Selected = option == selected
+			}).ToList();
+			return await Task.FromResult(items);
 		}
 
 		public async Task<List<SelectListItem>> GetSecureSocketOptionsAsync(SecureSocketOptions selected = SecureSocketOptions.Auto)
@@ -79,48 +162,6 @@ namespace Id.Services
 				Selected = option == selected
 			}).ToList();
 
-			return await Task.FromResult(items);
-		}
-
-		public async Task<string> GetDirectionAsync(string code)
-		{
-			Language? language = await _context.Languages.FirstOrDefaultAsync(l => l.Code == code);
-			if(language == null)
-			{
-				return "ltr";
-			}
-			return language.Rtl == 1 ? "rtl" : "ltr";
-		}
-
-		public async Task<List<SelectListItem>> GetBinaryOptionsAsync(bool selected = true)
-		{
-			List<SelectListItem> items = new()
-			{
-				new SelectListItem
-				{
-					Value = "true",
-					Text = t["Yes"],
-					Selected = selected
-				},
-				new SelectListItem
-				{
-					Value = "false",
-					Text = t["No"],
-					Selected = !selected
-				}
-			};
-			return await Task.FromResult(items);
-		}
-
-		public async Task<List<SelectListItem>> GetSameSiteModeOptionsAsync(SameSiteMode selected = SameSiteMode.Lax)
-		{
-			SameSiteMode[] options = Enum.GetValues<SameSiteMode>();
-			List<SelectListItem> items = options.Select(option => new SelectListItem
-			{
-				Value = ((int)option).ToString(),
-				Text = option.ToString(),
-				Selected = option == selected
-			}).ToList();
 			return await Task.FromResult(items);
 		}
 
@@ -148,6 +189,25 @@ namespace Id.Services
 
 				return themeNames;
 			});
+		}
+
+		public async Task<List<SelectListItem>> GetThemesAsync(string selected, string? userId)
+		{
+			List<string> themes = await GetThemeNamesAsync(userId);
+
+			List<SelectListItem> items = [];
+
+			foreach(string theme in themes)
+			{
+				items.Add(new SelectListItem
+				{
+					Selected = theme == selected,
+					Value = theme,
+					Text = theme
+				});
+			}
+
+			return items;
 		}
 	}
 }

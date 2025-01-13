@@ -51,9 +51,12 @@
 	public class CorsSettings
 	{
 		public CorsPolicyMode PolicyMode { get; set; } = CorsPolicyMode.AllowAll;
-		public List<string> AllowedOrigins { get; set; } = ["*"];
-		public List<string> AllowedMethods { get; set; } = ["GET", "POST", "PUT", "DELETE"];
-		public List<string> AllowedHeaders { get; set; } = ["Content-Type", "Authorization", "Accept-Language"];
+		public List<string> AllowedOrigins { get; set; } = [];
+
+		public bool AllowAnyMethod { get; set; } = false;
+		public List<string> AllowedMethods { get; set; } = [];
+		public bool AllowAnyHeader { get; set; } = false;
+		public List<string> AllowedHeaders { get; set; } = [];
 		public bool AllowCredentials { get; set; } = false;
 		public bool CorsConfigured { get; set; } = false;
 	}
