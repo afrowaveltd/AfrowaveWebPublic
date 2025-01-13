@@ -21,22 +21,35 @@
 	<div class="col-md-7">
     <h2>@t["Configure CORS settings"]</h2>
     <div id="form-div">
-    <form method="post">
+    <form method="post" onformchange="console.log('changed')">
         
         <div class="form-group">
+            <div id="policy_mode_err" class="text-warning p-2 pb-0"></div>
             <label for="policyMode">@t["CORS Policy Mode"]</label>
-            <select id="policyMode" name="Input.PolicyMode" class="form-control">
-                <option value="AllowAll" selected="@(Model.Input.PolicyMode == CorsPolicyMode.AllowAll)">Allow All</option>
-                <option value="AllowSpecific" selected="@(Model.Input.PolicyMode == CorsPolicyMode.AllowSpecific)">Allow Specific</option>
-                <option value="DenyAll" selected="@(Model.Input.PolicyMode == CorsPolicyMode.DenyAll)">Deny All</option>
+            <select id="policyMode" 
+                name="Input.PolicyMode"
+                onchange="checkPolicyMode(this)"
+                class="form-control">
+                <option value="AllowAll" selected="@(Model.Input.PolicyMode == CorsPolicyMode.AllowAll)">@t["Allow all"]</option>
+                <option value="AllowSpecific" selected="@(Model.Input.PolicyMode == CorsPolicyMode.AllowSpecific)">@t["Allow specific"]</option>
+                <option value="DenyAll" selected="@(Model.Input.PolicyMode == CorsPolicyMode.DenyAll)">@t["Deny all"]</option>
             </select>
+        </div>
+        
+        <div class="form-group" id="addOriginAddress" style="display: none">
+			<div id="add_origin_err" class="text-danger p-2 pb-0"></div>
+            <label>@t["Add origin"]</label>
+            <input type="text" id="addOriginValue" class="form-control" onchange="addOriginToList(this.value)" />
         </div>
 
         <div class="form-group">
-                    <label for="allowedOrigins">@t["Allowed Origins"]</label><a href="#" onclick="addOrigin()" style="margin: 20px"><i class="bi bi-plus-circle"></i></a>
+                    <label for="allowedOrigins">@t["Allowed Origins"]</label>
+                    <a href="#" onclick="addOrigin()" style="margin: 20px" title="@t["Add origin"]">
+                        <i class="bi bi-plus-circle"></i>
+                    </a>
 					<select id="allowedOrigins" name="Input.AllowedOrigins" multiple class="form-control">
-                <option value="https://afrowave.ltd" selected="@((Model.Input.AllowedOrigins.Contains("https://afrowave.ltd")) ? "selected" : null)">afrowave.ltd</option>
-                <option value="https://id.afrowave.ltd" selected="@((Model.Input.AllowedOrigins.Contains("https://id.afrowave.ltd")) ? "selected" : null)">id.afrowave.ltd</option>
+                <option value="https://afrowave.ltd" selected onabort=" ">https://afrowave.ltd</option>
+                <option value="https://id.afrowave.ltd" selected>https://id.afrowave.ltd</option>
             </select>
         </div>
 
@@ -62,7 +75,7 @@
 
                 <div class="form-group">
                     <label for="allowHeaders">@t["Allow any headers"]</label>
-                    <select id="allowHeaderss"
+                    <select id="allowHeaders"
                             name="Input.AllowAnyHeader"
                             class="form-control"
                             asp-items="Model.AllowAnyHeaderOptions">
