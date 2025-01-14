@@ -47,8 +47,8 @@ namespace Id.Pages.Install
 			HttpHeadersOptions = await _selectOptions.GetHttpHeadersAsync(Input.AllowedHeaders);
 			AllowAnyOriginOptions = await _selectOptions.GetBinaryOptionsAsync(true);
 			AllowAnyMethodOptions = await _selectOptions.GetBinaryOptionsAsync(true);
-			AllowAnyHeaderOptions = await _selectOptions.GetBinaryOptionsAsync(false);
-			AllowCredentialsOptions = await _selectOptions.GetBinaryOptionsAsync(false);
+			AllowAnyHeaderOptions = await _selectOptions.GetBinaryOptionsAsync(true);
+			AllowCredentialsOptions = await _selectOptions.GetBinaryOptionsAsync(true);
 			IdentificatorSettings settings = await _settingsService.GetSettingsAsync();
 			CorsSettings cors = settings.CorsSettings ?? new CorsSettings();
 

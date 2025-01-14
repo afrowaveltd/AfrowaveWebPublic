@@ -24,11 +24,11 @@
     <form method="post" onformchange="console.log('changed')">
         
         <div class="form-group">
-            <div id="policy_mode_err" class="text-warning p-2 pb-0"></div>
             <label for="policyMode">@t["CORS Policy Mode"]</label>
+            <div id="policy_mode_err" class="text-warning p-2 pb-1"></div>
             <select id="policyMode" 
                 name="Input.PolicyMode"
-                onchange="checkPolicyMode(this)"
+                onchange="checkForm()"
                 class="form-control">
                 <option value="AllowAll" selected="@(Model.Input.PolicyMode == CorsPolicyMode.AllowAll)">@t["Allow all"]</option>
                 <option value="AllowSpecific" selected="@(Model.Input.PolicyMode == CorsPolicyMode.AllowSpecific)">@t["Allow specific"]</option>
@@ -42,9 +42,13 @@
             <input type="text" id="addOriginValue" class="form-control" onchange="addOriginToList(this.value)" />
         </div>
 
-        <div class="form-group">
+        <div class="form-group" id="allowedOriginsSelect">
                     <label for="allowedOrigins">@t["Allowed Origins"]</label>
-                    <a href="#" onclick="addOrigin()" style="margin: 20px" title="@t["Add origin"]">
+                    <a href="#" 
+                    onclick="addOrigin()" 
+                    class="ms-3"
+                    id="addOriginButton"
+                    title="@t["Add origin"]">
                         <i class="bi bi-plus-circle"></i>
                     </a>
 					<select id="allowedOrigins" name="Input.AllowedOrigins" multiple class="form-control">
@@ -52,43 +56,51 @@
                 <option value="https://id.afrowave.ltd" selected>https://id.afrowave.ltd</option>
             </select>
         </div>
-
-                <div class="form-group">
-                    <label for="allowAnyMethod">@t["Allow any method"]</label>
-                    <select id="allowAnyMethod"
-                            name="Input.AllowAnyMethod"
-                            class="form-control"
-                            asp-items="Model.AllowAnyMethodOptions">
-                    </select>
-                    </label>
-                </div>
-
+        
         <div class="form-group">
-         <label for="allowedMethods">@t["Allowed Methods"]</label>
+            <label for="allowAnyMethod">@t["Allow any method"]</label>
+                <div id="all_methods_err" class="text-warning p-2 pb-0"></div>
+
+                <select id="allowAnyMethod"
+                        name="Input.AllowAnyMethod"
+                        class="form-control"
+                        onchange="checkForm()"
+                        asp-items="Model.AllowAnyMethodOptions">
+                 </select>
+            </label>
+        </div>
+
+        <div class="form-group" id="allowedMethodsSelect">
+            <label for="allowedMethods">@t["Allowed Methods"]</label>
+                    <div id="allowed_methods_err" class="text-warning p-2 pb-0"></div>
             <select id="allowedMethods" 
                 name="Input.AllowedMethods" 
                 multiple 
                 class="form-control"
+                onchange="checkForm()"
                 asp-items="Model.HttpMethodsOptions">
             </select>
         </div>
 
-                <div class="form-group">
-                    <label for="allowHeaders">@t["Allow any headers"]</label>
-                    <select id="allowHeaders"
-                            name="Input.AllowAnyHeader"
-                            class="form-control"
-                            asp-items="Model.AllowAnyHeaderOptions">
-                    </select>
-                    </label>
-                </div>
-
         <div class="form-group">
+            <label for="allowAnyHeaders">@t["Allow any headers"]</label>
+                    <div id="allow_any_headers_err" class="text-warning p-2 pb-0"></div>
+                <select id="allowAnyHeaders"
+                        name="Input.AllowAnyHeader"
+                        class="form-control"
+                        onchange="checkForm()"
+                        asp-items="Model.AllowAnyHeaderOptions">
+                </select>
+            </label>
+        </div>
+
+        <div class="form-group" id="allowedHeadersSelect">
             <label for="allowedHeaders">@t["Allowed Headers"]</label>
             <select id="allowedHeaders" 
                 name="Input.AllowedHeaders" 
                 multiple 
                 class="form-control"
+                onchange="checkForm()"
                 asp-items="Model.HttpHeadersOptions">
             </select>
         </div>
@@ -97,7 +109,7 @@
             <label for="allowCredentials">@t["Allow Credentials"]</label>
             <select id="allowCredentials" 
                 name="Input.AllowCredentials" 
-                class="form-control"
+                class="form-control input-valid"
                 asp-items="Model.AllowCredentialsOptions">
             </select>
             </label>
