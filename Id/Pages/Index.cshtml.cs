@@ -63,7 +63,7 @@ namespace Id.Pages
 
 				case InstalationSteps.Result:
 					_logger.LogInformation("Redirecting to Result page");
-					return RedirectToPage("/Install/Result");
+					return RedirectToPage("/Install/InstallationResult");
 
 				case InstalationSteps.Finish:
 					_logger.LogDebug("Installation not needed");
