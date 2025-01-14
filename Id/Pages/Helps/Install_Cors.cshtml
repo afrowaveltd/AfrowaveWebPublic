@@ -1,10 +1,10 @@
 ﻿@page
-@model Id.Pages.Install.Install_SmtpUserModel
+@model Id.Pages.Helps.Install_CorsModel
 @{
 }
 <h2 class="information text-center">@Model.Title</h2>
 
 @foreach(var line in Model.Lines)
 {
-    <p>@line</p>
+	<p>@Html.Raw(line)</p>
 }

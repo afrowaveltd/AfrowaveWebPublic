@@ -83,14 +83,16 @@ namespace Id.Pages.Install
 			{
 				PolicyMode = Input.PolicyMode,
 				AllowedOrigins = Input.AllowedOrigins,
+				AllowAnyMethod = Input.AllowAnyMethod,
 				AllowedMethods = Input.AllowedMethods,
+				AllowAnyHeader = Input.AllowAnyHeader,
 				AllowedHeaders = Input.AllowedHeaders,
 				AllowCredentials = Input.AllowCredentials,
-				CorsConfigured = Input.CorsConfigured
+				CorsConfigured = true
 			};
 
 			await _settingsService.SetSettingsAsync(settings);
-			return RedirectToPage("/Install/NextStep"); // Adjust for next step
+			return RedirectToPage("/Install/InstallationResult"); // Adjust for next step
 		}
 	}
 }

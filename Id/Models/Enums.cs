@@ -20,6 +20,7 @@
 		CookieSettings,
 		JwtSettings,
 		CorsSettings,
+		Result,
 		Finish
 	}
 }

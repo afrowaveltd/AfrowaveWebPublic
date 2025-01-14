@@ -61,6 +61,10 @@ namespace Id.Services
 			{
 				return InstalationSteps.CorsSettings;
 			}
+			if(settings.InstallationFinished == false)
+			{
+				return InstalationSteps.Result;
+			}
 			return InstalationSteps.Finish;
 		}
 

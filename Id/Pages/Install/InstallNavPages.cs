@@ -15,6 +15,7 @@ namespace Id.Pages.Install
 		public static string Cookie => "#";
 		public static string JwtSettings => "#";
 		public static string CorsSettings => "#";
+		public static string InstallationResult => "#";
 
 		public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 
@@ -35,6 +36,8 @@ namespace Id.Pages.Install
 		public static string JwtNavClass(ViewContext viewContext) => PageNavClass(viewContext, JwtSettings);
 
 		public static string CorsNavClass(ViewContext viewContext) => PageNavClass(viewContext, CorsSettings);
+
+		public static string ResultNavClass(ViewContext viewContext) => PageNavClass(viewContext, InstallationResult);
 
 		public static string PageNavClass(ViewContext viewContext, string page)
 		{

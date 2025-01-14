@@ -16,6 +16,7 @@ const allowAnyHeaders = document.getElementById('allowAnyHeaders');
 const allowAnyHeadersError = document.getElementById('allow_any_headers_err');
 const allowedHeadersSelect = document.getElementById('allowedHeadersSelect');
 const allowCredentials = document.getElementById('allowCredentials');
+const allowCredentialsError = document.getElementById('allow_credentials_err');
 const submitButton = document.getElementById('submit');
 
 const setValid = (element, errorElement) => {
@@ -32,7 +33,6 @@ const setInvalid = (element, errorElement, message) => {
 
 const isMultiSelectSelected = () => {
 	if (!allowedMethods) {
-		console.error("Element not found:", selectId);
 		return false;
 	}
 
@@ -88,12 +88,21 @@ const checkAllHeaders = async () => {
 const checkAllowedHeaders = async () => {
 }
 
+const checkAllowCredentials = async () => {
+	if (policyMode.value == 'AllowAll' && allowCredentials.value == 'true') {
+		allowCredentials.value = 'false';
+		setInvalid(allowCredentials, allowCredentialsError, await localize('Policy \'allow all\' can\'t be combined with allowing credentials'))
+	}
+	else setValid(allowCredentials, allowCredentialsError);
+}
+
 const checkForm = async () => {
 	await checkPolicyMode();
 	await checkMethod();
 	await checkAllMethods();
 	await checkAllHeaders();
 	await checkAllowedHeaders();
+	await checkAllowCredentials();
 }
 
 const isValidUrl = (url) => {

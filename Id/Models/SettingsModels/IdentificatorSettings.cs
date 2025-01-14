@@ -8,6 +8,7 @@
 		public CookieSettings CookieSettings { get; set; } = new();
 		public JwtSettings JwtSettings { get; set; } = new();
 		public CorsSettings CorsSettings { get; set; } = new();
+		public bool InstallationFinished { get; set; } = false;
 	}
 
 	public class LoginRules
