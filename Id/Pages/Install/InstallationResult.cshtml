@@ -1,7 +1,7 @@
 ﻿@page
 @model Id.Pages.Install.InstallationResultModel
 @{
-	ViewData["Title"] = "Installation result";
+	ViewData["Title"] = Model.t["Installation result"];
 }
 
 @section Scripts {
@@ -14,7 +14,9 @@
 		<hr />
 	</div>
 	<div class="col-md-7">
-		<h2>Installation result</h2>
+		<h1>@Model.t["Congratulations!"]</h1>
+		<h3>@Model.t["Installation completed successfully."] </h3>
+		<hr />
 	</div>
 	<div class="col-md-5">
 				<div id="div_help" class="helper" style="display:none">

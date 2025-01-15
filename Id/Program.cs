@@ -109,7 +109,8 @@ builder.Services.AddTransient<IThemeService, ThemeService>();
 builder.Services.AddSingleton<ISettingsService, SettingsService>();
 
 // Hosted services
-builder.Services.AddHostedService<ScssCompilerService>();
+//builder.Services.AddHostedService<ScssCompilerService>();
+builder.Services.AddHostedService<ThemeManagementService>();
 
 WebApplication app = builder.Build();
 

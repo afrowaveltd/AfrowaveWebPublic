@@ -1,19 +1,12 @@
 namespace Id.Pages
 {
-	public class IndexModel : PageModel
-	{
-		private readonly ILogger<IndexModel> _logger;
-		private readonly ApplicationDbContext _context;
-		private readonly IInstallationStatusService _installationStatus;
-
-		public IndexModel(ILogger<IndexModel> logger,
+	public class IndexModel(ILogger<IndexModel> logger,
 			 ApplicationDbContext context,
-			 IInstallationStatusService installationStatus)
-		{
-			_logger = logger;
-			_context = context;
-			_installationStatus = installationStatus;
-		}
+			 IInstallationStatusService installationStatus) : PageModel
+	{
+		private readonly ILogger<IndexModel> _logger = logger;
+		private readonly ApplicationDbContext _context = context;
+		private readonly IInstallationStatusService _installationStatus = installationStatus;
 
 		public async Task<ActionResult> OnGetAsync()
 		{

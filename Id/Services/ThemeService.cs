@@ -6,6 +6,8 @@
 		private readonly ILogger<ThemeService> _logger = logger;
 		private readonly string _cssFolderPath = Path.Combine(environment.WebRootPath, "css");
 
+		public string GetCssFolderPath() => _cssFolderPath;
+
 		public async Task<List<string>> GetThemeNamesAsync(string? userId)
 		{
 			if(!Directory.Exists(_cssFolderPath))
@@ -42,22 +44,26 @@
 			}
 			string referenceContent = await File.ReadAllTextAsync(referenceThemePath);
 
-			// Extract only non-color definitions from reference
+			// Extract only non-color definitions from reference, keeping the first line (assumed font import)
 			string[] referenceLines = referenceContent.Split('\n');
-			string nonColorContent = string.Join("\n", referenceLines.Where(line => !line.Trim().StartsWith("$")));
+			string referenceFontLine = referenceLines.Length > 0 ? referenceLines[0] : "";
+			string nonColorContent = string.Join("\n", referenceLines.Skip(1).Where(line => !line.Trim().StartsWith("$")));
 
 			string[] themeFiles = Directory.GetFiles(_cssFolderPath, "*-theme.scss", SearchOption.TopDirectoryOnly);
 			foreach(string themeFile in themeFiles)
 			{
 				string content = await File.ReadAllTextAsync(themeFile);
 				string[] lines = content.Split('\n');
-				string userColorLines = string.Join("\n", lines.Where(line => line.Trim().StartsWith("$")));
-				string existingNonColorContent = string.Join("\n", lines.Where(line => !line.Trim().StartsWith("$")));
+
+				// Keep the first line (assumed font) from the user's file if it exists
+				string userFontLine = lines.Length > 0 ? lines[0] : "";
+				string userColorLines = string.Join("\n", lines.Skip(1).Where(line => line.Trim().StartsWith("$")));
+				string existingNonColorContent = string.Join("\n", lines.Skip(1).Where(line => !line.Trim().StartsWith("$")));
 
 				// Check if non-color content is different from reference
 				if(existingNonColorContent.Trim() != nonColorContent.Trim())
 				{
-					string mergedContent = userColorLines + "\n" + nonColorContent;
+					string mergedContent = $"{userFontLine}\n{userColorLines}\n{nonColorContent}";
 					await File.WriteAllTextAsync(themeFile, mergedContent);
 				}
 			}
