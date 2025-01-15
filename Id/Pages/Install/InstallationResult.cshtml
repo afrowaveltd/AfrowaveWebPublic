@@ -1,4 +1,29 @@
 ﻿@page
 @model Id.Pages.Install.InstallationResultModel
 @{
+	ViewData["Title"] = "Installation result";
 }
+
+@section Scripts {
+	<script src="~/js/api.js"></script>
+	<script src="~/js/install.js"></script>
+}
+<div class="row">
+	<div class="col-md-12">
+		<h2>@Model.t["Installation result"]</h2>
+		<hr />
+	</div>
+	<div class="col-md-7">
+		<h2>Installation result</h2>
+	</div>
+	<div class="col-md-5">
+				<div id="div_help" class="helper" style="display:none">
+				</div>
+	</div>
+
+</div>
+
+<script language="javascript">
+	let active_page = "result";
+			let help = ('Install_Result');
+</script>
