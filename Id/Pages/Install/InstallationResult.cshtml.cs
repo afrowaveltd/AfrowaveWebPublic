@@ -1,19 +1,73 @@
+using Id.Models.SettingsModels;
+using SharedTools.Services;
+using System.Globalization;
+
 namespace Id.Pages.Install
 {
 	public class InstallationResultModel(IStringLocalizer<InstallationResultModel> _t,
 		ApplicationDbContext context,
 		ISettingsService settingsService,
 		IInstallationStatusService installationStatus,
+		ITranslatorService translatorService,
 		ILogger<InstallationResultModel> logger) : PageModel
 	{
 		public readonly IStringLocalizer<InstallationResultModel> t = _t;
-		public readonly ApplicationDbContext _context = context;
-		public readonly ISettingsService _settingsService = settingsService;
-		public readonly IInstallationStatusService _statusService = installationStatus;
-		public readonly ILogger<InstallationResultModel> _logger = logger;
+		private readonly ApplicationDbContext _context = context;
+		private readonly ISettingsService _settingsService = settingsService;
+		private readonly IInstallationStatusService _statusService = installationStatus;
+		private readonly ILogger<InstallationResultModel> _logger = logger;
+		private readonly ITranslatorService _translatorService = translatorService;
+
+		public string CurrentCulture { get; private set; }
+		public string BrandName { get; set; } = string.Empty;
+		public string BrandDescription { get; set; } = string.Empty;
+		public int BrandId { get; set; } = 0;
+		public string BrandEmail { get; set; } = string.Empty;
+		public string BrandWebsite { get; set; } = string.Empty;
+		public string BrandLogoLink { get; set; } = "/img/no-logo.png";
+		public string ApplicationName { get; set; } = string.Empty;
+		public string ApplicationDescription { get; set; } = string.Empty;
+		public string ApplicationEmail { get; set; } = string.Empty;
+		public string ApplicationWebsite { get; set; } = string.Empty;
+		public string ApplicationLogoLink { get; set; } = "/img/no-logo.png";
+		public string AdminName { get; set; } = string.Empty;
+		public string AdminEmail { get; set; } = string.Empty;
+		public IdentificatorSettings IdentificatorSettings { get; set; } = new IdentificatorSettings();
 
 		public async Task<IActionResult> OnGetAsync()
 		{
+			if(!await _statusService.ProperInstallState(InstalationSteps.Result))
+			{
+				return RedirectToPage("/");
+			}
+			CurrentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+			IdentificatorSettings = await _settingsService.GetSettingsAsync();
+			Application application = await _context.Applications.Include(s => s.SmtpSettings).FirstOrDefaultAsync(s => s.Id == IdentificatorSettings.ApplicationId) ?? new();
+			User admin = await _context.Users.FirstOrDefaultAsync(s => s.Id == application.OwnerId) ?? new();
+			ApplicationSmtpSettings smtpSettings = application.SmtpSettings ?? new();
+			Brand? brand = await _context.Brands.FirstOrDefaultAsync(s => s.Id == application.BrandId);
+			BrandName = brand.Name ?? string.Empty;
+			BrandId = brand.Id;
+			ApiResponse<TranslateResponse> apiResponse = await _translatorService.AutodetectSourceLanguageAndTranslateAsync(brand.Description, CurrentCulture);
+			if(apiResponse.Successful)
+			{
+				if(apiResponse.Data?.DetectedLanguage?.Language == CurrentCulture)
+				{
+					BrandDescription = brand.Description ?? string.Empty;
+				}
+				else
+				{
+					BrandDescription = apiResponse.Data?.TranslatedText ?? string.Empty;
+				}
+			}
+			else
+			{
+				BrandDescription = brand.Description ?? string.Empty;
+			}
+
+			BrandEmail = brand.Email ?? string.Empty;
+			BrandWebsite = brand.Website ?? string.Empty;
+
 			return Page();
 		}
 	}

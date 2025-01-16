@@ -17,6 +17,32 @@
 		<h1>@Model.t["Congratulations!"]</h1>
 		<h3>@Model.t["Installation completed successfully."] </h3>
 		<hr />
+		<div class="row">
+			<div class="col-12 navbar" style="border-radius: 10px; margin-bottom: 10px">
+				<table class="result" style="border-radius: 7px;">
+					<tr class="result">
+						<th class="result"><img src="/brands/@Model.BrandId/icons/icon-32x32.png"></th>
+						<th colspan="2" class="text-center result">@Model.t["Brand"]</th>
+					</tr>
+					<tr class="result">
+						<th class="result">@Model.t["Brand name"]</th>
+						<td class="result" colspan="2">@Model.BrandName</td>
+						
+					</tr>
+					<tr class="result">
+						<th class="result">@Model.t["Brand description"]</th>
+						<td class="result" colspan="2">@Model.BrandDescription</td>
+					</tr>
+					<tr class="result">
+						<th class="result">@Model.t["Brand website"]</th>
+						<td class="result" colspan="2"><a href="@Model.BrandWebsite" target="_blank">@Model.BrandWebsite</a></td>
+					</tr>
+					<tr class="result">
+						<th class="result">@Model.t["Brand email"]</th>
+						<td class="result" colspan="2"><a href="mailto:@Model.BrandEmail">@Model.BrandEmail</a></td>
+				</table>
+			</div>
+		</div>
 	</div>
 	<div class="col-md-5">
 				<div id="div_help" class="helper" style="display:none">
