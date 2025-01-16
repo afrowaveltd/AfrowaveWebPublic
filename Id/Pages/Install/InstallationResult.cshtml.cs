@@ -6,6 +6,8 @@ namespace Id.Pages.Install
 {
 	public class InstallationResultModel(IStringLocalizer<InstallationResultModel> _t,
 		ApplicationDbContext context,
+		IApplicationService applicationService,
+		IBrandService brandService,
 		ISettingsService settingsService,
 		IInstallationStatusService installationStatus,
 		ITranslatorService translatorService,
@@ -13,6 +15,8 @@ namespace Id.Pages.Install
 	{
 		public readonly IStringLocalizer<InstallationResultModel> t = _t;
 		private readonly ApplicationDbContext _context = context;
+		private readonly IApplicationService _applicationService = applicationService;
+		private readonly IBrandService _brandService = brandService;
 		private readonly ISettingsService _settingsService = settingsService;
 		private readonly IInstallationStatusService _statusService = installationStatus;
 		private readonly ILogger<InstallationResultModel> _logger = logger;
@@ -29,6 +33,7 @@ namespace Id.Pages.Install
 		public string ApplicationDescription { get; set; } = string.Empty;
 		public string ApplicationEmail { get; set; } = string.Empty;
 		public string ApplicationWebsite { get; set; } = string.Empty;
+		public string ApplicationId { get; set; } = string.Empty;
 		public string ApplicationLogoLink { get; set; } = "/img/no-logo.png";
 		public string AdminName { get; set; } = string.Empty;
 		public string AdminEmail { get; set; } = string.Empty;
@@ -43,11 +48,14 @@ namespace Id.Pages.Install
 			CurrentCulture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
 			IdentificatorSettings = await _settingsService.GetSettingsAsync();
 			Application application = await _context.Applications.Include(s => s.SmtpSettings).FirstOrDefaultAsync(s => s.Id == IdentificatorSettings.ApplicationId) ?? new();
+			ApplicationId = application.Id;
+			ApplicationLogoLink = _applicationService.GetApplicationIconPath(application.Id);
 			User admin = await _context.Users.FirstOrDefaultAsync(s => s.Id == application.OwnerId) ?? new();
 			ApplicationSmtpSettings smtpSettings = application.SmtpSettings ?? new();
 			Brand? brand = await _context.Brands.FirstOrDefaultAsync(s => s.Id == application.BrandId);
 			BrandName = brand.Name ?? string.Empty;
 			BrandId = brand.Id;
+			BrandLogoLink = _brandService.GetBrandIconPath(brand.Id);
 			ApiResponse<TranslateResponse> apiResponse = await _translatorService.AutodetectSourceLanguageAndTranslateAsync(brand.Description, CurrentCulture);
 			if(apiResponse.Successful)
 			{
@@ -67,6 +75,27 @@ namespace Id.Pages.Install
 
 			BrandEmail = brand.Email ?? string.Empty;
 			BrandWebsite = brand.Website ?? string.Empty;
+			ApplicationName = application.Name ?? string.Empty;
+
+			ApiResponse<TranslateResponse> appResponse = await _translatorService.AutodetectSourceLanguageAndTranslateAsync(application.Description, CurrentCulture);
+			if(appResponse.Successful)
+			{
+				if(appResponse.Data?.DetectedLanguage?.Language == CurrentCulture)
+				{
+					ApplicationDescription = application.Description ?? string.Empty;
+				}
+				else
+				{
+					ApplicationDescription = appResponse.Data?.TranslatedText ?? string.Empty;
+				}
+			}
+			else
+			{
+				ApplicationDescription = application.Description ?? string.Empty;
+			}
+
+			ApplicationEmail = application.ApplicationEmail ?? string.Empty;
+			ApplicationWebsite = application.ApplicationWebsite ?? string.Empty;
 
 			return Page();
 		}

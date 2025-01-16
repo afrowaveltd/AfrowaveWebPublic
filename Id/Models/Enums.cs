@@ -7,6 +7,16 @@
 		Other
 	}
 
+	public enum LogoSize
+	{
+		png16px,
+		png32px,
+		png76px,
+		png152px,
+		png120px,
+		pngOriginal
+	}
+
 	public enum InstalationSteps
 	{
 		Administrator,

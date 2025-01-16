@@ -4,7 +4,9 @@ namespace Id.Services
 {
    public interface IBrandService
    {
-      Task<bool> IsBrandNameUnique(string name);
+		string GetBrandIconPath(int brandId, LogoSize size);
+		string GetBrandIconPath(int brandId);
+		Task<bool> IsBrandNameUnique(string name);
 
       Task<CreateBrandResponse> RegisterBrandAsync(CreateBrandModel model);
    }
