@@ -17,41 +17,39 @@
 		<h1>@Model.t["Congratulations!"]</h1>
 		<h3>@Model.t["Installation completed successfully."] </h3>
 		<hr />
-				<table class="result" style="border-radius: 7px;">
-					<tr>
-						<th class="result" style="width: 40%"><img src="@Model.BrandLogoLink" style="width:32px;"></th>
-						<th class="text-center result">@Model.t["Brand"]</th>
-					</tr>
-					<tr class="result">
-						<th class="result">@Model.t["Brand name"]</th>
-						<td class="result">@Model.BrandName</td>
-						
-					</tr>
-					<tr class="result">
-						<th class="result">@Model.t["Brand description"]</th>
-						<td class="result">@Model.BrandDescription</td>
-					</tr>
-					<tr class="result">
-						<th class="result">@Model.t["Brand website"]</th>
-						<td class="result"><a href="@Model.BrandWebsite" target="_blank">@Model.BrandWebsite</a></td>
-					</tr>
-					<tr class="result">
-						<th class="result">@Model.t["Brand email"]</th>
-						<td class="result"><a href="mailto:@Model.BrandEmail">@Model.BrandEmail</a></td>
-				</table>
+		<table class="result" style="border-radius: 7px;">
+			<tr>
+				<th class="result" style="width: 40%"><span "><img src="@Model.BrandLogoLink" style="width: 32px; height:32px;"></span></th>
+				<th class="text-center result"><h4>@Model.t["Brand"]</h4></th>
+			</tr>
+			<tr class="result">
+				<th class="result">@Model.t["Brand name"]</th>
+				<td class="result">@Model.BrandName</td>
+			</tr>
+			<tr class="result">
+				<th class="result">@Model.t["Brand description"]</th>
+				<td class="result"><span style="font-style: italic">@Model.BrandDescription</span</td>
+			</tr>
+			<tr class="result">
+				<th class="result">@Model.t["Brand website"]</th>
+				<td class="result"><a href="@Model.BrandWebsite" target="_blank">@Model.BrandWebsite</a></td>
+			</tr>
+			<tr class="result">
+				<th class="result">@Model.t["Brand email"]</th>
+				<td class="result"><a href="mailto:@Model.BrandEmail">@Model.BrandEmail</a></td>
+		</table>
 		<table class="result" style="border-radius: 7px;">
 			<tr>
 				<th class="result" style="width: 40%"><img src="@Model.ApplicationLogoLink" style="width:32px"></th>
-				<th class="text-center result">@Model.t["Application"]</th>
+				<th class="text-center result"><h4>@Model.t["Application"]</h4></th>
 			</tr>
 			<tr class="result">
 				<th class="result">@Model.t["Application name"]</th>
 				<td class="result">@Model.ApplicationName</td>
-
 			</tr>
 			<tr class="result">
 				<th class="result">@Model.t["Application description"]</th>
-				<td class="result">@Model.ApplicationDescription</td>
+				<td class="result"><span style="font-style: italic">@Model.ApplicationDescription</span></td>
 			</tr>
 			<tr class="result">
 				<th class="result">@Model.t["Application website"]</th>
@@ -61,6 +59,59 @@
 				<th class="result">@Model.t["Application email"]</th>
 				<td class="result"><a href="mailto:@Model.ApplicationEmail">@Model.ApplicationEmail</a></td>
 		</table>
+
+		<table class="result" style="border-radius: 7px;">
+			<tr>
+				<th class="result" style="width: 40%"><span class="information mt-0 mb-0" style="font-size: 1.5em"><i class="bi bi-person-square"></span></i></th>
+				<th class="text-center result"><h4>@Model.t["Administrator"]</h4></th>
+			</tr>
+			<tr class="result">
+				<th class="result">@Model.t["Administrator name"]</th>
+				<td class="result">@Model.AdminName</td>
+
+			</tr>
+			<tr class="result">
+				<th class="result">@Model.t["Administrator roles"]</th>
+				<td class="result"><span style="font-style: italic">@Model.AdminRoles</span></td>
+			</tr>
+		</table>
+
+		<table class="result" style="border-radius: 7px;">
+			<tr>
+				<th class="result" style="width: 40%"><span class="information mt-0 mb-0" style="font-size: 1.5em"><i class="bi bi-envelope-paper"></i></i></th>
+				<th class="text-center result"><h4>@Model.t["Smtp settings"]</h4></th>
+			</tr>
+			<tr class="result">
+				<th class="result">@Model.t["SMTP server"]</th>
+				<td class="result">@Model.SmtpSettings.Host</td>
+			</tr>
+			<tr class="result">
+				<th class="result">@Model.t["SMTP port"]</th>
+				<td class="result">@Model.SmtpSettings.Port.ToString()</td>
+			</tr>
+			<tr class="result">
+				<th class="result">@Model.t["SMTP Secure socket options"]</th>
+				<td class="result">@Model.SmtpSettings.Secure.ToString()</td>
+			</tr>
+			<tr class="result">
+				<th class="result">@Model.t["SMTP Sender"]</th>
+				<td class="result">@Model.SmtpSettings.SenderName</td>
+			</tr>
+			<tr class="result">
+				<th class="result">@Model.t["SMTP Sender Email"]</th>
+				<td class="result"><a href="mailto:@Model.SmtpSettings.SenderEmail">@Model.SmtpSettings.SenderEmail</a></td>
+			</tr>
+			<tr class="result">
+				<th class="result">@Model.t["SMTP requires authentication"]</th>
+				<td class="result">@Model.SmtpNeedsAuthentication</td>
+			</tr>
+		</table>
+		<form method="post">
+		<button type="submit" id="submit" class="btn btn-primary btn-block mt-3 ms-3">
+					@Model.t["Finish"]
+				</button>
+		</form>
+
 	</div>
 	<div class="col-md-5">
 				<div id="div_help" class="helper" style="display:none">

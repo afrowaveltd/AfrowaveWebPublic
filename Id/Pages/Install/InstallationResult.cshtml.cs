@@ -36,7 +36,9 @@ namespace Id.Pages.Install
 		public string ApplicationId { get; set; } = string.Empty;
 		public string ApplicationLogoLink { get; set; } = "/img/no-logo.png";
 		public string AdminName { get; set; } = string.Empty;
-		public string AdminEmail { get; set; } = string.Empty;
+		public string AdminRoles { get; set; } = string.Empty;
+		public ApplicationSmtpSettings SmtpSettings { get; set; } = new ApplicationSmtpSettings();
+		public string SmtpNeedsAuthentication { get; set; } = string.Empty;
 		public IdentificatorSettings IdentificatorSettings { get; set; } = new IdentificatorSettings();
 
 		public async Task<IActionResult> OnGetAsync()
@@ -51,6 +53,7 @@ namespace Id.Pages.Install
 			ApplicationId = application.Id;
 			ApplicationLogoLink = _applicationService.GetApplicationIconPath(application.Id);
 			User admin = await _context.Users.FirstOrDefaultAsync(s => s.Id == application.OwnerId) ?? new();
+			AdminName = admin.DisplayName;
 			ApplicationSmtpSettings smtpSettings = application.SmtpSettings ?? new();
 			Brand? brand = await _context.Brands.FirstOrDefaultAsync(s => s.Id == application.BrandId);
 			BrandName = brand.Name ?? string.Empty;
@@ -96,6 +99,10 @@ namespace Id.Pages.Install
 
 			ApplicationEmail = application.ApplicationEmail ?? string.Empty;
 			ApplicationWebsite = application.ApplicationWebsite ?? string.Empty;
+			List<string> roles = await _context.UserRoles.Include(s => s.ApplicationRole).Select(s => s.ApplicationRole.NormalizedName).ToListAsync() ?? new();
+			AdminRoles = string.Join(", ", roles);
+			SmtpSettings = await _context.ApplicationSmtpSettings.FirstOrDefaultAsync(s => s.ApplicationId == application.Id) ?? new();
+			SmtpNeedsAuthentication = SmtpSettings.AuthorizationRequired ? t["Yes"] : t["No"];
 
 			return Page();
 		}

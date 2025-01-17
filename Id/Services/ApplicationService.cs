@@ -26,21 +26,37 @@ namespace Id.Services
 
 		public string GetApplicationIconPath(string applicationId, LogoSize size)
 		{
-			var filePath = string.Empty;
-			var noLogo = "/img/no-icon.png";
-			if(string.IsNullOrEmpty(applicationId)) { return noLogo; }
-			filePath = size switch
+			string noLogo = "/img/no-icon.png";
+			if(string.IsNullOrEmpty(applicationId))
+			{ return noLogo; }
+			string filePath = size switch
 			{
-				LogoSize.png16px => Path.Combine("applications", applicationId, "icon16.png"),
-				LogoSize.png32px => Path.Combine("applications", applicationId, "icon32.png"),
-				LogoSize.png76px => Path.Combine("applications", applicationId, "icon76.png"),
-				LogoSize.png120px => Path.Combine("applications", applicationId, "icon120.png"),
-				LogoSize.png152px => Path.Combine("applications", applicationId, "icon152.png"),
-				_ => Path.Combine("applications", applicationId, "original-icon*.png"),
+				LogoSize.png16px => Path.Combine("applications", applicationId, "icons", "icon-16x16.png"),
+				LogoSize.png32px => Path.Combine("applications", applicationId, "icons", "icon-32x32.png"),
+				LogoSize.png76px => Path.Combine("applications", applicationId, "icons", "icon-76x76.png"),
+				LogoSize.png120px => Path.Combine("applications", applicationId, "icons", "icon-120x120.png"),
+				LogoSize.png152px => Path.Combine("applications", applicationId, "icons", "icon-152x152.png"),
+				_ => Path.Combine("applications", applicationId, "icons", "original-icon*.png"),
 			};
 			if(File.Exists(Path.Combine(appImgDirectory, filePath)))
 			{
-				return filePath;
+				if(size == LogoSize.pngOriginal)
+				{
+					return $"/applications/{applicationId}/icons/original-icon-*.png";
+				}
+				else
+				{
+					string fileName = size switch
+					{
+						LogoSize.png16px => "icon-16x16.png",
+						LogoSize.png32px => "icon-32x32.png",
+						LogoSize.png76px => "icon-76x76.png",
+						LogoSize.png120px => "icon-120x120.png",
+						LogoSize.png152px => "icon-152x152.png",
+						_ => "icon-*.png"
+					};
+					return $"/applications/{applicationId}/icons/{fileName}";
+				}
 			}
 			else
 			{

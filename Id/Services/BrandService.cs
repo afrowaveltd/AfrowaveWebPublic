@@ -28,10 +28,10 @@ namespace Id.Services
 		public string GetBrandIconPath(int brandId, LogoSize size)
 		{
 			string applicationId = brandId.ToString();
-			var filePath = string.Empty;
-			var noLogo = "/img/no-icon.png";
-			if(string.IsNullOrEmpty(applicationId)) { return noLogo; }
-			filePath = size switch
+			string noLogo = "/img/no-icon.png";
+			if(string.IsNullOrEmpty(applicationId))
+			{ return noLogo; }
+			string filePath = size switch
 			{
 				LogoSize.png16px => Path.Combine("brands", applicationId, "icons", "icon-16x16.png"),
 				LogoSize.png32px => Path.Combine("brands", applicationId, "icons", "icon-32x32.png"),
@@ -48,7 +48,16 @@ namespace Id.Services
 				}
 				else
 				{
-					return $"/brands/{applicationId}/icons/icon-{size}x{size}.png";
+					string fileName = size switch
+					{
+						LogoSize.png16px => "icon-16x16.png",
+						LogoSize.png32px => "icon-32x32.png",
+						LogoSize.png76px => "icon-76x76.png",
+						LogoSize.png120px => "icon-120x120.png",
+						LogoSize.png152px => "icon-152x152.png",
+						_ => "icon-*.png"
+					};
+					return $"/brands/{applicationId}/icons/{fileName}";
 				}
 			}
 			else
