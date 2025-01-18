@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Content Remove="compilerconfig.json" />
-    <Content Remove="Settings\settings.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,7 +22,6 @@
 
   <ItemGroup>
     <None Include="compilerconfig.json" />
-    <None Include="Settings\settings.json" />
   </ItemGroup>
 
   <ItemGroup>

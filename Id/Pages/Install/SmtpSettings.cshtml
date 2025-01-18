@@ -34,13 +34,13 @@
 				<div class="form-group">
 					<div id="smtp_user_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_user">@Model.t["Login"]</label>
-					<input asp-for="Input.SmtpUsername" type="text" class="form-control" id="smtp_user"
+					<input asp-for="Input.SmtpUsername" type="text" class="form-control" id="smtp_user" autocomplete="off"
 						onfocus="loadHelp('Install_SmtpUser')" onchange="checkSmtpUser(this)" />
 				</div>
 				<div class="form-group">
 					<div id="smtp_pass_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_pass">@Model.t["Password"]</label>
-					<input asp-for="Input.SmtpPassword" type="password" class="form-control" id="smtp_pass"
+					<input asp-for="Input.SmtpPassword" type="password" class="form-control" id="smtp_pass" autocompolete="off"
 						onfocus="loadHelp('Install_SmtpPassword')" onchange="checkSmtpPassword(this)" />
 				</div>
 				<div class="form-group">

@@ -32,7 +32,8 @@ namespace Id.Services
 				return InstalationSteps.Application;
 			}
 			IdentificatorSettings settings = await _settingsService.GetSettingsAsync();
-			if(settings is null || string.IsNullOrEmpty(settings.ApplicationId))
+			bool rolesExit = await _context.ApplicationRoles.AnyAsync();
+			if(!rolesExit)
 			{
 				return InstalationSteps.ApplicationRoles;
 			}
@@ -83,19 +84,26 @@ namespace Id.Services
 			IdentificatorSettings settings = await _settingsService.GetSettingsAsync();
 			if(settings is null)
 			{
-				settings = new IdentificatorSettings();
-				settings.ApplicationId = string.Empty;
-				await _settingsService.SetSettingsAsync(settings);
+				return;
 			}
 			else
 			{
 				settingsApplicationId = settings.ApplicationId;
+				if(settingsApplicationId == null)
+				{
+					return;
+				}
 			}
 			// check if there is only one application - if not, throw exception;
 			List<Application> applications = await _context.Applications.ToListAsync();
 			string dbApplicationId;
 			if(applications.Count != 1)
 			{
+				if(applications.Count == 0)
+				{
+					return;
+				}
+
 				throw new InvalidOperationException("There should be only one application in the database.");
 			}
 			else

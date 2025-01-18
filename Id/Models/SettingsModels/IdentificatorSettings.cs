@@ -24,7 +24,7 @@
 	{
 		public int MinimumLength { get; set; } = 8;
 		public int MaximumLength { get; set; } = 128;
-		public bool RequireNonAlphanumeric { get; set; } = true;
+		public bool RequireNonAlphanumeric { get; set; } = false;
 		public bool RequireLowercase { get; set; } = true;
 		public bool RequireUppercase { get; set; } = true;
 		public bool RequireDigit { get; set; } = true;
