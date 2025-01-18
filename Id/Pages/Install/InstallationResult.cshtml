@@ -14,12 +14,14 @@
 		<hr />
 	</div>
 	<div class="col-md-7">
+			<form method="post" id="addApplication">
+			<input asp-for="Input.InstallationFinished" type="hidden" value="true" />
 		<h1>@Model.t["Congratulations!"]</h1>
-		<h3>@Model.t["Installation completed successfully."] </h3>
+		<h3>@Model.t["Installation completed successfully."]</h3>
 		<hr />
 		<table class="result" style="border-radius: 7px;">
 			<tr>
-				<th class="result" style="width: 40%"><span "><img src="@Model.BrandLogoLink" style="width: 32px; height:32px;"></span></th>
+				<th class="result" style="width: 40%"><img src="@Model.BrandLogoLink" style="width: 32px; height:32px;"></th>
 				<th class="text-center result"><h4>@Model.t["Brand"]</h4></th>
 			</tr>
 			<tr class="result">
@@ -28,7 +30,7 @@
 			</tr>
 			<tr class="result">
 				<th class="result">@Model.t["Brand description"]</th>
-				<td class="result"><span style="font-style: italic">@Model.BrandDescription</span</td>
+				<td class="result"><span style="font-style: italic">@Model.BrandDescription</span></td>
 			</tr>
 			<tr class="result">
 				<th class="result">@Model.t["Brand website"]</th>
@@ -78,7 +80,7 @@
 
 		<table class="result" style="border-radius: 7px;">
 			<tr>
-				<th class="result" style="width: 40%"><span class="information mt-0 mb-0" style="font-size: 1.5em"><i class="bi bi-envelope-paper"></i></i></th>
+				<th class="result" style="width: 40%"><span class="information mt-0 mb-0" style="font-size: 1.5em"><i class="bi bi-envelope-paper"><span></i></i></th>
 				<th class="text-center result"><h4>@Model.t["Smtp settings"]</h4></th>
 			</tr>
 			<tr class="result">
@@ -106,16 +108,15 @@
 				<td class="result">@Model.SmtpNeedsAuthentication</td>
 			</tr>
 		</table>
-		<form method="post">
+
 		<button type="submit" id="submit" class="btn btn-primary btn-block mt-3 ms-3">
 					@Model.t["Finish"]
-				</button>
+		</button>
 		</form>
-
 	</div>
+
 	<div class="col-md-5">
-				<div id="div_help" class="helper" style="display:none">
-				</div>
+				<div id="div_help" class="helper" style="display:none"></div>
 	</div>
 
 </div>

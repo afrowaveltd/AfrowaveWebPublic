@@ -22,6 +22,14 @@ namespace Id.Pages.Install
 		private readonly ILogger<InstallationResultModel> _logger = logger;
 		private readonly ITranslatorService _translatorService = translatorService;
 
+		[BindProperty]
+		public InputModel Input { get; set; }
+
+		public class InputModel
+		{
+			public bool InstallationFinished { get; set; }
+		}
+
 		public string CurrentCulture { get; private set; }
 		public string BrandName { get; set; } = string.Empty;
 		public string BrandDescription { get; set; } = string.Empty;
@@ -40,6 +48,18 @@ namespace Id.Pages.Install
 		public ApplicationSmtpSettings SmtpSettings { get; set; } = new ApplicationSmtpSettings();
 		public string SmtpNeedsAuthentication { get; set; } = string.Empty;
 		public IdentificatorSettings IdentificatorSettings { get; set; } = new IdentificatorSettings();
+
+		public async Task<IActionResult> OnPostAsync()
+		{
+			if(!await _statusService.ProperInstallState(InstalationSteps.Result))
+			{
+				return RedirectToPage("/");
+			}
+			IdentificatorSettings = await _settingsService.GetSettingsAsync();
+			IdentificatorSettings.InstallationFinished = true;
+			await _settingsService.SetSettingsAsync(IdentificatorSettings);
+			return RedirectToPage("/Index");
+		}
 
 		public async Task<IActionResult> OnGetAsync()
 		{
