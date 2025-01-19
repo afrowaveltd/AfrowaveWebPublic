@@ -104,12 +104,14 @@ builder.Services.AddTransient<IStringLocalizerFactory, JsonStringLocalizerFactor
 builder.Services.AddTransient<IEncryptionService, EncryptionService>();
 builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddTransient<IThemeService, ThemeService>();
+builder.Services.AddTransient<IUiTranslatorService, UiTranslatorService>();
 
 // Singleton slu�by (glob�ln�, thread-safe)
 builder.Services.AddSingleton<ISettingsService, SettingsService>();
 
 // Hosted services
 builder.Services.AddHostedService<ScssCompilerService>();
+builder.Services.AddHostedService<UiTranslatorHostedService>();
 //builder.Services.AddHostedService<ThemeManagementService>();
 
 WebApplication app = builder.Build();
