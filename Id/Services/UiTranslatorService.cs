@@ -6,6 +6,8 @@ namespace Id.Services
 	{
 		private readonly ILogger<UiTranslatorService> _logger = logger;
 		private readonly ITranslatorService _translator = translator;
+		private readonly string LocalePath = "";
+		private readonly string TempPath = "";
 
 		public async Task RunTranslationsAsync()
 		{
