@@ -10,6 +10,7 @@
 		public DbSet<Country> Countries { get; set; } = null!;
 		public DbSet<Language> Languages { get; set; } = null!;
 		public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
+		public DbSet<UiTranslatorLog> UiTranslatorLogs { get; set; } = null!;
 		public DbSet<User> Users { get; set; } = null!;
 		public DbSet<UserAddress> UserAddresses { get; set; } = null!;
 		public DbSet<UserRole> UserRoles { get; set; } = null!;
