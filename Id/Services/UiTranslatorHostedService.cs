@@ -10,7 +10,7 @@
 		public Task StartAsync(CancellationToken cancellationToken)
 		{
 			_logger.LogInformation("UiTranslatorHostedService is starting.");
-			_timer = new Timer(DoWork, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(15));
+			_timer = new Timer(DoWork, null, TimeSpan.FromMinutes(20), TimeSpan.FromMinutes(60));
 			return Task.CompletedTask;
 		}
 
