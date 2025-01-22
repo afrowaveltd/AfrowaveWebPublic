@@ -1,19 +1,6 @@
 ﻿using Id.Models.SettingsModels;
 using SharedTools.Services;
 
-/*
-			 * 1. Load UI translator settings from appsettings.json - done;
-			 * 2. Load the default translations file from the file system
-			 * 3. Check if old translations are available
-			 * 4. Compare the default translations with the old translations
-			  * 5. In each language check if there are redundand translations,
-			  * 6. If there are, remove them from the actual language file
-			  * 7. Translate the values in the queue
-			  * 8. Save the new translations to the file system
-			 * 9. Do this with all supported languages, except the one which are in the settings list of exceptions.
-			  * 10. End the cycle
-			 */
-
 namespace Id.Services
 {
 	public class UiTranslatorService(ILogger<UiTranslatorService> logger,
@@ -57,10 +44,10 @@ namespace Id.Services
 				}
 			}
 			log.StartTime = DateTime.UtcNow;
-			Console.WriteLine(localesPath);
-			Console.WriteLine(tempFolderPath);
+
 			defaultLanguage = uiTranslator.DefaultLanguage;
 			ignoredLanguages = uiTranslator.IgnoredLanguages;
+
 			List<string> supportedLanguages = [.. (await _translator.GetSupportedLanguagesAsync())];
 			if(supportedLanguages == null || supportedLanguages.Count == 0)
 			{
@@ -124,6 +111,7 @@ namespace Id.Services
 					}
 				}
 				// 5. In each language check if there are redundant translations
+				int toTranslate = 0;
 				int translatedCount = 0;
 				int removedCount = 0;
 				int translationErrors = 0;
@@ -138,6 +126,7 @@ namespace Id.Services
 					// 6. If there are, remove them from the actual language file
 					foreach(KeyValuePair<string, string> translation in targetTranslations)
 					{
+						toTranslate++;
 						if(!defaultTranslations.ContainsKey(translation.Key))
 						{
 							_logger.LogWarning("Redundant translation found for {key} in {language}", translation.Key, targetLanguage);
@@ -190,12 +179,13 @@ namespace Id.Services
 				}
 				log.EndTime = DateTime.UtcNow;
 				log.TotalTime = log.EndTime - log.StartTime;
+				log.PhrazesToTranslateCount = toTranslate;
 				log.TranslatedPhrazesCount = translatedCount;
 				log.PhrazesToRemoveCount = removedCount;
 				log.TranslationErrorCount = translationErrors;
 				await StoreOldTranslation(defaultTranslations);
-				await _context.UiTranslatorLogs.AddAsync(log);
-				await _context.SaveChangesAsync();
+				_ = await _context.UiTranslatorLogs.AddAsync(log);
+				_ = await _context.SaveChangesAsync();
 			}
 			else
 			{
