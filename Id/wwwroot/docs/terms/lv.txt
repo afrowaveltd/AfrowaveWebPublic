@@ -1,0 +1,69 @@
+
+  Noteikumi un nosacījumi attiecībā uz Afrowave kopienu
+
+Spēkā stāšanās datums: 22.12.2024
+
+    Pārskats par lauku kopienu
+
+Afrowave Community ir atvērtā pirmkoda projekts, kas sniedz bezmaksas pakalpojumus. Mūsu pakalpojumi ietver (bet neaprobežojas ar):
+
+- Afrowave ID: Autentificēšanas un autorizācijas sistēma, kas līdzīga OAuth, izmanto visā Afrowave projektos un pieejama ārējiem kopienas projektiem.
+- Tērzēšanas lietojumprogrammas un sociālo mediju platformas.
+- Ziņu blogi un citas mediju koplietošanas platformas.
+- Daudzvalodu atbalsts lietotājiem visā pasaulē.
+
+Nākotnē var tikt piedāvāti Premium pakalpojumi, piemēram, īsziņu nosūtīšana (SMS) vai citi pakalpojumi, kas saistīti ar ārējām izmaksām. Maksa par šiem pakalpojumiem sedz tikai ar tiem saistītos izdevumus (piem., hostinga, SMS maksa).
+
+    Lietotāja dati un privātums
+     Datu vākšana un izmantošana
+Afrowave ID: Lietotāja dati, piemēram, autentifikācijas detaļas, tiks koplietoti Afrowave projektos, lai nodrošinātu nevainojamu pieteikšanās un piekļuvi.
+Sīkdatnes: Sīkdatnes tiek izmantotas, lai saglabātu tādus iestatījumus kā tumši vai gaiši tēmas preferences, lietotāja valoda, un sesijas marķieri. Afrowave nepiekļūst un neizmanto trešo pušu sīkdatnes.
+GDPR Atbilstība: Afrowave atbilst GDPR. Jūsu personas dati netiks koplietoti ar trešo personu pakalpojumiem vai vienībām bez skaidras piekrišanas.
+
+    Datu koplietošana
+Lietotāji var izvēlēties, kādus personas datus kopīgot ar draugiem, sabiedrību vai nereģistrētiem apmeklētājiem. Lietotāji saglabā kontroli pār saviem datu redzamības iestatījumiem.
+Atbildība par lietotāju radītu saturu pilnībā gulstas uz satura radītāju. Afrowave nav atbildīgs par informācijas apmaiņu.
+
+    Pakalpojumu izmantošana
+     Afrowave pakalpojumu izmantošana ir bezmaksas visiem lietotājiem, ievērojot šos nosacījumus:
+- Jebkura vecuma lietotājiem ir atļauts piekļūt platformai.
+- Saturu, kas apzīmēts tikai pieaugušajiem, drīkst izmantot tikai pieaugušie lietotāji.
+- Ļaunprātīga izmantošana, nelikumīgs saturs (kā definēts ES tiesību aktos) un citi aizliegti materiāli ir stingri aizliegti.
+- Afrowave patur tiesības noņemt nelikumīgu vai ļaunprātīgu saturu un apturēt vai izbeigt kontus, kas pārkāpj šos noteikumus.
+
+    Lietotāja pienākumi
+
+Lietotāji ir pilnībā atbildīgi par saturu, ko tie izveido, koplieto vai izplata, izmantojot Afrowave pakalpojumus.
+
+Lietotāji nedrīkst iesaistīties:
+
+- nelikumīga vai kaitīga satura nosūtīšana vai izplatīšana.
+- Uzmākšanās, ļaunprātīga izmantošana vai diskriminācija.
+- darbības, kas pārkāpj ES tiesību aktus vai Kopienas standartus.
+
+    Reklāmas politika
+
+Reklāma ir atļauta uz Afrowave pakalpojumiem, ja tā atbilst Kopienas standartiem un neveicina nelikumīgas vai kaitīgas darbības.
+
+    Daudzvalodu atbalsts
+
+Afrowave piedāvā tulkojumus vairākās valodās, lai nodrošinātu iekļautību. Lai gan tiek darīts viss iespējamais, lai nodrošinātu precīzus tulkojumus, nesakritību gadījumā noteicošā būs angļu valodas versija.
+
+    Juridiskā atbilstība un atruna
+
+Afrowave darbojas saskaņā ar ES tiesību aktiem.
+Mēs neesam atbildīgi par jebkādu ļaunprātīgu pakalpojumu vai trešo personu prasības, kas izriet no lietotāju darbībām.
+Kamēr Afrowave nodrošina drošu platformu, lietotāji ir atbildīgi par savu akreditācijas datu un sensitīvu datu aizsardzību.
+
+    Noteikumu atjauninājumi
+
+Afrowave patur tiesības jebkurā laikā atjaunināt šos noteikumus un nosacījumus. Būtiskas izmaiņas tiks paziņots lietotājiem pa e-pastu vai platformā.
+
+    Kontaktinformācija
+
+Ja jums ir kādi jautājumi vai bažas, lūdzu, sazinieties ar mums:
+
+Tīmekļa vietne: https://afrowave.ltd
+
+E-pasts: info@afrowave.ltd
+

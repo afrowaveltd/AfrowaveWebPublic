@@ -1,0 +1,69 @@
+
+  Afroaaltoyhteisön ehdot
+
+Voimaantulopäivä: 22.12.2024
+
+    Yleiskatsaus afroaaltoyhteisöön
+
+Afroaaltoyhteisö on avoimen lähdekoodin hanke, joka tarjoaa maksuttomia palveluja. Palvelumme sisältävät (mutta eivät rajoitu):
+
+- Afrowave ID: Afrowave-projekteissa käytetty OAuthin kaltainen tunnistus- ja valtuutusjärjestelmä, joka on käytettävissä ulkoisiin yhteisön hankkeisiin.
+- Chat sovelluksia ja sosiaalisen median alustoja.
+- Uutisblogit ja muut medianjakoalustat.
+- Monikielinen tuki käyttäjille ympäri maailmaa.
+
+Tulevaisuudessa voidaan tarjota maksullisia palveluja, kuten tekstiviestien lähettämistä tai muita palveluja, joihin liittyy ulkoisia kustannuksia. Näistä palveluista perittävät maksut kattavat ainoastaan niihin liittyvät kulut (esim.
+
+    Käyttäjätiedot ja tietosuoja
+     Tietojen keruu ja käyttö
+Afrowave ID: Käyttäjätiedot, kuten todentamistiedot, jaetaan Afrowave-projekteille saumattoman kirjautumisen ja pääsyn varmistamiseksi.
+Evästeet: Evästeitä käytetään asetusten kuten tumman tai kevyen teeman asetukset, käyttäjän kieli ja istuntopoletit. Afrowave ei käytä kolmannen osapuolen evästeitä.
+GDPR Vaatimustenmukaisuus: Afrowave noudattaa tietosuoja-asetusta. Henkilötietojasi ei jaeta kolmansille osapuolille ilman nimenomaista suostumusta.
+
+    Tietojen jakaminen
+Käyttäjät voivat valita, mitä henkilötietoja jakaa ystävien, suuren yleisön tai rekisteröimättömien vierailijoiden kanssa. Käyttäjät valvovat tietojen näkyvyyttä koskevia asetuksiaan.
+Vastuu käyttäjän luomasta sisällöstä on kokonaan sisällön luojalla. Afrowave ei ole vastuussa mistään jaetusta tiedosta.
+
+    Palvelujen käyttö
+     Afrowave-palvelujen käyttö on ilmaista kaikille käyttäjille seuraavin edellytyksin:
+- Minkä ikäiset käyttäjät saavat käyttää alustaa.
+- Vain aikuisiksi merkitty sisältö rajataan aikuisiin.
+- Väärinkäyttö, laiton sisältö (joka määritellään EU:n lainsäädännössä) ja muut kielletyt materiaalit ovat ehdottomasti kiellettyjä.
+- Afrowave pidättää oikeuden poistaa laitonta tai loukkaavaa sisältöä ja keskeyttää tai lopettaa tilit, jotka rikkovat näitä ehtoja.
+
+    Käyttäjän velvollisuudet
+
+Käyttäjät ovat yksin vastuussa Afrowave-palvelujen kautta luomastaan, jakamastaan sisällöstä.
+
+Käyttäjät eivät saa
+
+- Laittoman tai haitallisen sisällön lähettäminen tai jakaminen.
+- Häirintää, hyväksikäyttöä tai syrjintää.
+- EU:n lainsäädäntöä tai yhteisön normeja rikkovat toimet.
+
+    Mainospolitiikka
+
+Mainonta on sallittua Afrowave-palveluissa edellyttäen, että se noudattaa yhteisön standardeja eikä edistä laitonta tai haitallista toimintaa.
+
+    Monikielinen tuki
+
+Afrowave tarjoaa käännöksiä useilla kielillä, jotta voidaan varmistaa inklusiivisuus. Vaikka pyritään kaikin tavoin toimittamaan tarkkoja käännöksiä, englanninkielinen versio on etusijalla, jos poikkeavuuksia.
+
+    Oikeudellinen vaatimustenmukaisuus ja vastuuvapauslauseke
+
+Afrowave toimii EU:n lainsäädännön mukaisesti.
+Emme ole vastuussa mistään käyttäjien toiminnasta johtuvista palvelujen väärinkäytöstä tai kolmannen osapuolen vaatimuksista.
+Vaikka Afrowave takaa turvallisen alustan, käyttäjät ovat vastuussa tunnuksiensa ja arkaluonteisten tietojensa suojaamisesta.
+
+    Päivitykset ehtoihin
+
+Afrowave pidättää oikeuden päivittää näitä ehtoja milloin tahansa. Merkittävistä muutoksista ilmoitetaan käyttäjille sähköpostitse tai alustalla.
+
+    Yhteystiedot
+
+Jos sinulla on kysyttävää tai huolenaiheita, ota yhteyttä:
+
+Verkkosivusto: https://afrowave.ltd
+
+Sähköposti: info@afrowave.ltd
+

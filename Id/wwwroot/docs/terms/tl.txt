@@ -1,0 +1,69 @@
+
+  Mga Terminasyon at Kalagayan Para sa Pamayanang Afrowave
+
+Mabisang Petsa: 22.12.2024
+
+    Overview ng Pamayanang Afrowave
+
+Ang Pamayanang Afrowave ay isang open-source na proyekto na nagbibigay ng mga serbisyong free-to-use. Kabilang sa ating mga paglilingkod (ngunit hindi limitado):
+
+- Afrowave ID: Isang sistemang kompirmasyon at indibidwal na katulad ng OAuth, na ginagamit sa ibayo ng mga proyektong Afrowave at makukuha para sa mga proyektong panlabas na komunidad.
+- Chat applications at social media platforms.
+- Balita blogs at iba pang media na nagbabahagi ng plataporma.
+- Multilingwal na suporta para sa mga gumagamit sa buong mundo.
+
+Ang mga serbisyong premium, tulad ng pagpapadala ng mga text (SMS) o iba pang mga serbisyo na kinasasangkutan ng mga panlabas na gastos, ay maaaring ialok sa hinaharap. Ang mga paratang para sa mga serbisyong ito ay sasaklaw lamang sa kanilang mga kaugnay na gastos (hal.g., hosting, SMS singil).
+
+    User Data at Pribadong Buhay
+     Koleksiyon ng mga Data at ang Paggamit Nito
+Afrowave ID: Ang mga datos ng user, gaya ng mga detalye ng pagiging totoo, ay ibabahagi sa ibayo ng mga proyekto ng Afrowave upang maglaan ng walang - tigil na pagpasok at pagpasok.
+Mga pagkain: Ang mga cookies ay ginagamit upang mag-imbak ng mga settings tulad ng dark o light theme chopts, user language, at mga adaptation tokens. Walang ikatlong-party cookies ang access o gagamitin ng Afrowave.
+GDPR Compilation: Ang Afrowave compions sa GDPR. Ang iyong personal na datos ay hindi ibabahagi sa anumang ikatlong-bahaging serbisyo o mga entity nang walang maliwanag na pahintulot.
+
+    Pagbabahagi ng mga Data
+Maaaring piliin ng mga gumagamit nito kung anong personal na impormasyon ang dapat ibahagi sa mga kaibigan, sa publiko, o sa mga bisitang hindi nakarehistro. Pinananatili ng mga gumagamit nito ang kontrol sa kanilang nakikitang mga impormasyon.
+Pananagutan para sa user-generated na nilalaman ay lubos na nakasalalay sa nilalamang manlilikha. Hindi mananagot ang isangfrowave sa anumang impormasyong ibinahagi.
+
+    Paggamit ng mga Serbisyo
+     Ang paggamit ng mga serbisyong Afrowave ay libre para sa lahat ng gumagamit nito, nasa ilalim ng ganitong mga kalagayan:
+- Ang mga gumagamit ng anumang edad ay pinapayagang pumasok sa plataporma.
+- Ang kasiyahan na minarkahan bilang “ “ adult ay malilimitahan sa mga gumagamit na adulto.
+- Pag-abuso, ilegal na nilalaman (gaya ng binibigyan kahulugan ng batas ng EU), at iba pang ipinagbabawal na materyales ay mahigpit na ipinagbabawal.
+- Afrowave ay nag-iimbak ng karapatan na alisin ang ilegal o mapang-abusong nilalaman at itigil o wakasan ang mga account na lumalabag sa mga terminong ito.
+
+    Mga Pananagutan sa Paggamit
+
+Ang mga user ay tanging responsable sa nilalaman na kanilang nililikha, ibinabahagi, o ipinamamahagi sa pamamagitan ng mga serbisyong Afrowave.
+
+Ang mga gumagamit ay hindi dapat makibahagi:
+
+- Paglalagay o pagbabahagi ng ilegal o nakapipinsalang nilalaman.
+- panliligalig, pang-aabuso, o diskriminasyon.
+- Mga gawaing lumalabag sa mga batas ng EU o mga pamantayan ng pamayanan.
+
+    Patakaran sa Pag - aanunsiyo
+
+Ang pag - aanunsiyo ay pinahihintulutan sa mga serbisyo ng Afrowave, kung ito ay sumusunod sa mga pamantayan ng pamayanan at hindi nagtataguyod ng ilegal o nakapipinsalang mga gawain.
+
+    Maraming - Gamit
+
+Ang Afrowave ay nag - aalok ng mga salin sa maraming wika upang matiyak ang kawalang - interes. Samantalang ginagawa ang lahat ng pagsisikap upang maglaan ng tumpak na mga salin, ang bersiyong Ingles ay mananaig sakaling magkaroon ng anumang pagkakasalungatan.
+
+    Legal na Katapatan at Pagiging Walang - Sala
+
+Ang Aprikano ay kumikilos bilang pagsunod sa mga batas ng EU.
+Hindi tayo mananagot sa anumang maling paggamit sa mga serbisyo o ikatlong-bahaging pag-aangkin na nagmumula sa mga gawaing panggamit.
+Bagaman tinitiyak ng Afrowave ang isang ligtas na plataporma, ang mga gumagamit nito ang may pananagutan sa pangangalaga sa kanilang mga kredensiyal at sensitibong impormasyon.
+
+    Mga Update sa mga Terminasyon at Kalagayan
+
+Ang afrowave ay nag - iimbak ng karapatan na i - update ang mga terminong ito at mga kalagayan anumang oras. Magbibigay ng malalaking pagbabago sa mga gumagamit nito sa pamamagitan ng email o sa plataporma.
+
+    Impormasyon Tungkol sa Pakikipag - ugnayan
+
+Kung ikaw ay may anumang mga katanungan o mga pagkabahala, pakisuyong makipag - ugnayan sa atin sa:
+
+Website: https://afrowave.ltd
+
+Email: Info Janafwave.ltd
+

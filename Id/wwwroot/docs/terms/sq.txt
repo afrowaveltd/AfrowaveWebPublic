@@ -1,0 +1,69 @@
+
+  Kushtet dhe kushtet për komunitetin e afërt
+
+Data efektive: 22.12.2024
+
+    Pamje e bashkësisë së afërt
+
+Komuniteti Afrowave është një projekt i burimeve të hapura që siguron shërbime pa përdorim. Shërbimet tona përfshijnë (por nuk janë të kufizuara):
+
+ID: Një sistem identifikimi dhe autorizimi i ngjashëm me OAuth, i përdorur në të gjitha projektet e Afrowave dhe i disponueshëm për projektet e komunitetit të jashtëm.
+- Aplikimet për biseda dhe platformat e mediave sociale.
+- Bloget e lajmeve dhe platformat tjera të ndarjes së mediave.
+- Mbështetje shumëgjuhëshe për përdoruesit anembanë botës.
+
+Në të ardhmen mund të ofrohen shërbime parajsore, si dërgimi i mesazheve me tekst (SMS) ose shërbime të tjera që përfshijnë kostot e jashtme. Akuzat për këto shërbime do të mbulojnë vetëm shpenzimet e tyre të lidhura (p.sh., mirëmbajtje, shpenzimet SMS).
+
+    Të dhënat e përdoruesit dhe privacia
+     Koleksioni dhe përdorimi i të dhënave
+ID Afrowave: Të dhënat e përdoruesit, të tilla si detajet e autentifikimit, do të ndahen në të gjitha projektet e Afrowave për të siguruar hyrje dhe hyrje pa dalje.
+Cookies: Kukitë përdoren për të ruajtur rregullimet si preferencat e errëta ose të lehta të temës, gjuhën e përdoruesit dhe shenjat e seancës. Nuk do të ketë biskota të treta apo të përdorura nga Afrowave.
+PBR Compliance: Afrowave kompesohen me PBR. Të dhënat tuaja personale nuk do të ndahen me asnjë shërbim apo njësi të tretë pa pëlqimin e qartë.
+
+    Shpërndarja e të dhënave
+Përdoruesit mund të zgjedhin çfarë të dhënash personale të ndajnë me miqtë, publikun e përgjithshëm ose vizitorët e paregjistruar. Përdoruesit mbajnë kontrollin mbi rregullimet e tyre të shikimit të të dhënave.
+Përgjegjësia për përmbajtjen e krijuar nga përdoruesi i përket krejtësisht krijuesit të përmbajtjes. Afrowave nuk është përgjegjës për ndonjë informacion të përbashkët.
+
+    Përdorimi i shërbimeve
+     Përdorimi i shërbimeve Afrowave është falas për të gjithë përdoruesit, subjekt i këtyre kushteve:
+- Përdoruesit e çdo moshe lejohen të hyjnë në platformë.
+- Përmbajtja e shënuar si "Adult" do të kufizohet vetëm tek përdoruesit e të rriturve.
+Abuzimi, përmbajtja e paligjshme (si përcaktuar nga ligji i BE) dhe materiale të tjera të ndaluara janë rreptësisht të ndaluara.
+-Afrowave rezervon të drejtën për të hequr përmbajtjen e paligjshme apo abuzive dhe për të pezulluar ose përfunduar llogaritë që shkelin këto terma.
+
+    Përgjegjësitë e përdoruesit
+
+Përdoruesit janë vetëm përgjegjës për përmbajtjen që krijojnë, ndajnë ose shpërndajnë nëpërmjet shërbimeve Afrowave.
+
+Përdoruesit nuk duhet të përfshihen në:
+
+- Postimi apo ndarja e materialeve të paligjshme apo të dëmshme.
+- Dëmtim, abuzim apo diskriminim.
+- Veprimtari që shkelin ligjet e BE apo standardet e komunitetit.
+
+    Politika e reklamave
+
+Reklamat lejohen në shërbimet Afrowave, me kusht që ajo t'u përmbahet standardeve të komunitetit dhe të mos nxisë veprimtari të paligjshme apo të dëmshme.
+
+    Mbështetje shumëgjuhëshe
+
+Afrowave ofron përkthime në shumë gjuhë për të siguruar mospërfilljen. Edhe pse çdo përpjekje është bërë për të siguruar përkthime të sakta, versioni anglez do të mbizotërojë në rast mospërputhjesh.
+
+    Komplikimi ligjor dhe shfletuesi
+
+Afrowave operon në përputhje me ligjet e BE.
+Ne nuk jemi përgjegjës për ndonjë shpërdorim të shërbimeve apo pretendime të partive të treta që dalin nga veprimtaritë e përdoruesve.
+Ndërsa Afrowave siguron një platformë të sigurtë, përdoruesit janë përgjegjës për mbrojtjen e kredencialeve dhe të dhënave të tyre të ndjeshme.
+
+    Përditësohen kushtet dhe kushtet
+
+Afrowave rezervon të drejtën për të përditësuar këto terma dhe kushte në çdo kohë. Ndryshime të rëndësishme do t'u komunikohen përdoruesve nëpërmjet postës elektronike ose në platformë.
+
+    Informacione mbi kontaktin
+
+Nëse keni ndonjë pyetje ose shqetësim, ju lutemi të na kontaktoni me:
+
+Siti web: https://afrowave.ltd
+
+Email: informacion@afrowave.ltd
+
