@@ -20,7 +20,7 @@ namespace Id.Pages.Helps
 				 data.LoginRules.RequireConfirmedEmail ? t["Yes"] : t["No"]);
 			loginRules.LiElements.Add("2. " + t["Lockout time"],
 				$"{data.LoginRules.LockoutTime} {t["minutes"]}");
-			loginRules.LiElements.Add("3. " + t["Max login attempts"],
+			loginRules.LiElements.Add("3. " + t["Maximal failed login attempts"],
 				$"{data.LoginRules.MaxFailedLoginAttempts}");
 			loginRules.LiElements.Add("4. " + t["Password reset token expiration"],
 				$"{data.LoginRules.PasswordResetTokenExpiration} {t["minutes"]}");
