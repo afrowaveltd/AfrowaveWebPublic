@@ -160,6 +160,7 @@ if(!app.Environment.IsDevelopment())
 	_ = app.UseHsts();
 }
 
+app.UseStatusCodePagesWithReExecute("/Error/{0}");
 app.UseHttpsRedirection();
 
 app.UseForwardedHeaders();
