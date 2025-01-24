@@ -83,6 +83,7 @@ builder.Services.AddControllers()
 
 // Middleware
 builder.Services.AddTransient<I18nMiddleware>();
+builder.Services.AddTransient<ErrorMiddleware>();
 
 // Scoped slu�by (HTTP request-based)
 builder.Services.AddScoped<ICookieService, CookieService>();
@@ -105,6 +106,7 @@ builder.Services.AddTransient<IEncryptionService, EncryptionService>();
 builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddTransient<IThemeService, ThemeService>();
 builder.Services.AddTransient<IUiTranslatorService, UiTranslatorService>();
+builder.Services.AddTransient<IErrorResponseService, ErrorResponseService>();
 
 // Singleton slu�by (glob�ln�, thread-safe)
 builder.Services.AddSingleton<ISettingsService, SettingsService>();
@@ -142,6 +144,7 @@ foreach(ApiResponse<List<string>> result in assetTranslationResults)
 string[] supportedCultures = loader.GetSupportedCultures();
 
 app.UseMiddleware<I18nMiddleware>();
+app.UseMiddleware<ErrorMiddleware>();
 
 app.UseRequestLocalization(options =>
 {
@@ -149,10 +152,10 @@ app.UseRequestLocalization(options =>
 			 .AddSupportedUICultures(supportedCultures)
 			 .SetDefaultCulture(supportedCultures[0]);
 });
+app.UseExceptionHandler("/Error");
 
 if(!app.Environment.IsDevelopment())
 {
-	_ = app.UseExceptionHandler("/Error");
 	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 	_ = app.UseHsts();
 }
