@@ -4,9 +4,11 @@ namespace Id.Services
 {
    public interface IApplicationService
    {
+		Task<string> CheckApplicationId(string applicationId);
 		string GetApplicationIconPath(string applicationId, LogoSize size);
 		string GetApplicationIconPath(string applicationId);
 		string GetApplicationImagePath(string applicationId);
+		Task<string> GetDefaultApplicationId();
 		Task<bool> IsApplicationNameUnique(string name);
         Task<RegisterApplicationResult> RegisterApplicationAsync(RegisterApplicationModel input);
     }

@@ -1,4 +1,5 @@
 ﻿using Id.Models.CommunicationModels;
+using Id.Models.SettingsModels;
 using SharedTools.Services;
 
 namespace Id.Services
@@ -6,13 +7,14 @@ namespace Id.Services
 	public class ApplicationService(ApplicationDbContext context,
 	  IImageService imageService,
 	  IEncryptionService encryptionService,
-
+      ISettingsService settings,
 	  ILogger<ApplicationService> logger) : IApplicationService
 	{
 		private readonly ApplicationDbContext _context = context;
 		private readonly IImageService _imageService = imageService;
 		private readonly IEncryptionService _encryptionService = encryptionService;
 		private readonly ILogger<ApplicationService> _logger = logger;
+		private readonly ISettingsService _settings = settings;
 
 		private string appImgDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory
 			 .Substring(0, AppDomain.CurrentDomain.BaseDirectory
@@ -72,6 +74,24 @@ namespace Id.Services
 		public string GetApplicationImagePath(string applicationId)
 		{
 			return GetApplicationIconPath(applicationId, LogoSize.pngOriginal);
+		}
+
+		public async Task<string> CheckApplicationId(string applicationId)
+		{
+			if(Guid.TryParse(applicationId, out Guid id))
+			{
+				if(await _context.Applications.FindAsync(id) != null)
+				{
+					return applicationId;
+				}
+			}
+			return string.Empty;
+		}
+
+		public async Task<string> GetDefaultApplicationId()
+		{
+			IdentificatorSettings settings = await _settings.GetSettingsAsync();
+			return settings.ApplicationId;
 		}
 
 		public async Task<RegisterApplicationResult> RegisterApplicationAsync(RegisterApplicationModel input)

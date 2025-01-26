@@ -10,6 +10,9 @@
 		public string OwnerId { get; set; } = string.Empty;
 		public int BrandId { get; set; }
 		public string? ApplicationWebsite { get; set; } = string.Empty;
+		public string? ApplicationPrivacyPolicy { get; set; } = string.Empty;
+		public string? ApplicationTermsAndConditions { get; set; } = string.Empty;
+		public string? ApplicationCookiesPolicy { get; set; } = string.Empty;
 		public string? RedirectUri { get; set; }
 		public string? PostLogoutRedirectUri { get; set; }
 		public string? ClientSecret { get; set; }

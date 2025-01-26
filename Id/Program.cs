@@ -112,8 +112,8 @@ builder.Services.AddTransient<IErrorResponseService, ErrorResponseService>();
 builder.Services.AddSingleton<ISettingsService, SettingsService>();
 // I need to use the settings service and load the settings to use them for cookies and JWT configuration
 ISettingsService settingsService = builder.Services.BuildServiceProvider().GetRequiredService<ISettingsService>();
-var settings = await settingsService.GetSettingsAsync();
-builder.Services.AddSingleton(settings);
+var Settings = await settingsService.GetSettingsAsync();
+builder.Services.AddSingleton(Settings);
 
 // Hosted services
 builder.Services.AddHostedService<ScssCompilerService>();

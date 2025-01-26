@@ -1,0 +1,19 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using Microsoft.Extensions.Localization;
+@inject IStringLocalizer<Id.Pages.Install.IndexModel> t;
+
+<ul class="nav nav-pills flex-column">
+	@if (User.Identity?.IsAuthenticated ?? false)
+	{
+
+	}
+	else
+	{
+		<li class="nav-item">
+			<a class="nav-link dimmed" id="nav_register" asp-page="./Register">@t["Register"]</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link dimmed" id="nav_register" asp-page="./Login">@t["Login"]</a>
+		</li>
+	}
+</ul>

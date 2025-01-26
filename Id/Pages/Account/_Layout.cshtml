@@ -1,0 +1,27 @@
+﻿@using Id.Services;
+@using Microsoft.Extensions.Localization;
+
+@inject IStringLocalizer<Id.Pages.Install.IndexModel> t;
+
+@{
+    ViewData["Title"] = t["Account"];
+    Layout = ViewData.TryGetValue("ParentLayout", out var parentLayout)
+    ? parentLayout?.ToString()
+    : "/Pages/Shared/_Layout.cshtml";
+}
+
+
+
+<h1 class="text-center">@t["Account"]</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-3">
+        <partial name="_AccountNav" />
+    </div>
+    <div class="col-md-9">
+        @RenderBody()
+    </div>
+</div>
+@await RenderSectionAsync("Scripts", required: false)
+
