@@ -15,7 +15,7 @@ namespace Id.Pages.Account
 		private readonly IApplicationService _applicationService = applicationService;
 		private readonly IEncryptionService _encryptionService = encryptionService;
 		private readonly IRoleService _roleService = roleService;
-		private readonly IStringLocalizer<RegisterUserModel> t = _t;
+		public readonly IStringLocalizer<RegisterUserModel> t = _t;
 		public ApplicationPublicInfo? ApplicationInfo { get; set; } = null;
 
 		[BindProperty]

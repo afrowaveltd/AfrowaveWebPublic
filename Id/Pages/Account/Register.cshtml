@@ -1,6 +1,18 @@
 ﻿@page "{applicationId?}"
 @model Id.Pages.Account.RegisterUserModel
 @{
+	ViewData["Title"] = Model.t["Register"];
 }
-Register
+section Scripts {
+	<script src="~/js/api.js"></script>
+	<script src="~/js/account.js"></script>
+	<script src="~/js/validations.js"></script>
+}
+
+<script language="javascript">
+	let active_page = "register";
+	let help = 'Account_RegisterUser';
+</script>
+
+
 
