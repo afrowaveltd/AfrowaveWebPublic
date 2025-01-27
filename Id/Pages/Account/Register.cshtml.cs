@@ -16,6 +16,7 @@ namespace Id.Pages.Account
 		private readonly IEncryptionService _encryptionService = encryptionService;
 		private readonly IRoleService _roleService = roleService;
 		private readonly IStringLocalizer<RegisterUserModel> t = _t;
+		public ApplicationPublicInfo? ApplicationInfo { get; set; } = null;
 
 		[BindProperty]
 		public RegisterApplicationUserModel Input { get; set; } = new();
@@ -48,6 +49,13 @@ namespace Id.Pages.Account
 			}
 			else
 			{
+				ApplicationInfo = await _applicationService.GetPublicInfoAsync(ApplicationId);
+				if(ApplicationInfo == null)
+				{
+					_logger.LogError("ApplicationInfo is null");
+					return RedirectToPage("/Error/404");
+				}
+
 				return Page();
 			}
 		}

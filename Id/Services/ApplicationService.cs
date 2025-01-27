@@ -28,7 +28,7 @@ namespace Id.Services
 
 		public async Task<ApplicationPublicInfo?> GetPublicInfoAsync(string applicationId)
 		{
-			Application? application = await _context.Applications.Include(s => s.Brand).FirstOrDefaultAsync(s => s.Id == applicationId);
+			Application? application = await _context.Applications.Include(s => s.Brand).Where(s => s.Id == applicationId).FirstOrDefaultAsync();
 			if(application == null)
 			{
 				return null;
