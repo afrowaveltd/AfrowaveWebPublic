@@ -10,10 +10,10 @@
 	else
 	{
 		<li class="nav-item">
-			<a class="nav-link dimmed" id="nav_register" asp-page="./Register">@t["Register"]</a>
+			<a class="nav-link dimmed @AccountNavPages.RegisterNavClass(ViewContext)" id="nav_register" asp-page="./Register">@t["Register"]</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link dimmed" id="nav_login" asp-page="./Login">@t["Login"]</a>
+			<a class="nav-link dimmed @AccountNavPages.LoginNavClass(ViewContext)" id="nav_login" asp-page="./Login">@t["Login"]</a>
 		</li>
 	}
 </ul>

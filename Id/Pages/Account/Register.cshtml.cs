@@ -23,7 +23,7 @@ namespace Id.Pages.Account
 		[FromRoute]
 		public string? ApplicationId { get; set; }
 
-		public async Task OnGetAsync()
+		public async Task<IActionResult> OnGetAsync()
 		{
 			// Check if ApplicationId from the route is null or empty
 			if(string.IsNullOrEmpty(ApplicationId))
@@ -40,7 +40,15 @@ namespace Id.Pages.Account
 			{
 				// Redirect to the error page
 				_logger.LogError("ApplicationId is invalid");
-				RedirectToPage("/Error/404");
+				_ = RedirectToPage("/Error/404");
+			}
+			if(User.Identity?.IsAuthenticated ?? false)
+			{
+				return RedirectToPage("./QuickRegistration/" + ApplicationId);
+			}
+			else
+			{
+				return Page();
 			}
 		}
 

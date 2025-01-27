@@ -7,7 +7,7 @@ namespace Id.Services
 	public class ApplicationService(ApplicationDbContext context,
 	  IImageService imageService,
 	  IEncryptionService encryptionService,
-      ISettingsService settings,
+		ISettingsService settings,
 	  ILogger<ApplicationService> logger) : IApplicationService
 	{
 		private readonly ApplicationDbContext _context = context;
@@ -24,6 +24,24 @@ namespace Id.Services
 		public async Task<bool> IsApplicationNameUnique(string name)
 		{
 			return (!await _context.Applications.Where(s => s.Name.ToLower().Trim() == name.ToLower().Trim()).AnyAsync());
+		}
+
+		public async Task<ApplicationPublicInfo?> GetPublicInfoAsync(string applicationId)
+		{
+			Application? application = await _context.Applications.Include(s => s.Brand).FirstOrDefaultAsync(s => s.Id == applicationId);
+			if(application == null)
+			{
+				return null;
+			}
+			ApplicationPublicInfo result = new();
+			result.ApplicationId = application.Id;
+			result.ApplicationName = application.Name;
+			result.ApplicationDescription = application.Description;
+			result.ApplicationWebsite = application.ApplicationWebsite ?? string.Empty;
+			result.ApplicationLogoUrl = GetApplicationIconPath(application.Id, LogoSize.png32px);
+			result.BrandName = application.Brand?.Name ?? string.Empty;
+
+			return result;
 		}
 
 		public string GetApplicationIconPath(string applicationId, LogoSize size)
