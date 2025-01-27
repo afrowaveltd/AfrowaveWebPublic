@@ -1,0 +1,9 @@
+﻿@page
+@model Id.Pages.CookiesModel
+@{
+	ViewData["Title"] = "Cookies";
+}
+
+<div class="terms">
+	@Html.Raw(Model.CookiesHtml)
+</div>

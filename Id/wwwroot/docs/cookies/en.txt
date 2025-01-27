@@ -1,0 +1,43 @@
+   Cookies Policy
+
+This Cookies Policy explains how our application ("we," "our," or "us") uses cookies to provide essential functionality and enhance your experience. By using our application, you agree to the use of cookies as described in this policy.
+
+    1. What Are Cookies?
+
+Cookies are small text files stored on your device when you access and use our application. They allow us to provide essential services, remember your preferences, and improve your experience.
+
+    2. Types of Cookies We Use
+
+Our application uses the following types of cookies:
+
+    1. Authentication Cookies:
+
+- Purpose: To securely authenticate and authorize user access to our application.
+- Details: These cookies store login information to ensure a seamless and secure user experience.
+
+    2. Preference Cookies:
+   
+- Purpose: To remember your chosen language and theme preferences.
+- Details: These cookies help us personalize your experience by storing your language selection and theme settings.
+
+    3. No Tracking or Third-Party Cookies
+
+We do not use tracking cookies or similar technologies for advertising, analytics, or any other purpose. All cookies used are strictly necessary for the functionality of our application and are not shared with third parties.
+
+    4. Managing Cookies
+
+You can manage or delete cookies through your browser settings. Please note that disabling cookies may impact the functionality of our application, including login and personalization features.
+
+    5. Changes to This Cookies Policy
+
+We may update this Cookies Policy from time to time. Any changes will be effective immediately upon posting the updated policy. We encourage you to review this policy periodically to stay informed about how we use cookies.
+
+    6. Contact Us
+
+If you have any questions or concerns about this Cookies Policy, please contact us at:
+
+Email: info@afrowave.ltd
+
+
+  This Cookies Policy is effective as of January 27, 2025.
+

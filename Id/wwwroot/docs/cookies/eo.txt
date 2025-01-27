@@ -1,0 +1,44 @@
+   Kuketoj Politiko
+
+Ĉi tiuj kuketoj Politiko klarigas kiel nia apliko ("ni", "nia", aŭ "ni") uzas kuketojn por provizi esencan funkciecon kaj plifortigi vian sperton. Uzante nian aplikon, vi konsentas pri la uzo de kuketoj kiel priskribite en ĉi tiu politiko.
+
+    1. Kio estas kuketoj?
+
+Kuketoj estas malgrandaj tekstaj dosieroj stokitaj sur via aparato kiam vi aliro kaj uzo nia apliko. Ili permesas al ni disponigi esencajn servojn, memori viajn preferojn, kaj plibonigi vian sperton.
+
+    Tipoj de kuketoj ni uzas
+
+Nia apliko uzas la sekvajn tipojn de kuketoj:
+
+    1. Aŭtentigaj kuketoj:
+
+Celo: Celo: Por certigi aŭtentikecon kaj rajtigi uzantaliron al nia aplikiĝo.
+Detaloj: Tiuj kuketoj stokas logininformojn por certigi senjuntan kaj sekuran uzantsperton.
+
+    2. Antaŭaj kuketoj:
+
+Celo: Celo: Memoru vian elektitan lingvon kaj temon preferoj.
+Detaloj: Ĉi tiuj kuketoj helpas nin personecigi via sperto per stokado de via lingvo selektado kaj temo agordoj.
+
+    3. Neniu Spurado aŭ Tria-Partiaj kuketoj
+
+Ni ne uzas spurantajn kuketojn aŭ similajn teknologiojn por reklamado, analizistoj, aŭ ajna alia celo. Ĉiuj kuketoj uzitaj estas strikte necesaj por la funkcieco de nia apliko kaj ne estas dividitaj kun triaj partioj.
+
+    4. Administraj kuketoj
+
+Vi povas administri aŭ forigi kuketojn tra via retumilo agordoj. Bonvolu noti ke malebligaj kuketoj povas efiki la funkciojn de nia apliko, inkluzive de login kaj personigo trajtoj.
+
+    5. Ŝanĝoj al ĉi tiuj kuketoj Politiko
+
+Ni povas ĝisdatigi ĉi kuketojn Politiko de tempo al tempo. Ĉiuj ŝanĝoj estos efikaj tuj post la ĝisdatigita politiko. Ni kuraĝigas vin revizii ĉi tiun politikon periode por resti informita pri kiel ni uzas kuketojn.
+
+    6. Kontaktu nin
+
+Se vi havas demandojn aŭ zorgojn pri ĉi tiuj kuketoj Politiko, bonvolu kontakti nin ĉe:
+
+Retpoŝto: info@afrowave.ltd
+
+
+  Ĉi tiuj kuketoj Politiko estas efika en la 27-a de januaro 2025.
+
+

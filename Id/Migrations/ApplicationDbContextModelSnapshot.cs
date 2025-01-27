@@ -30,7 +30,16 @@ namespace Id.Migrations
                     b.Property<bool>("AllowRememberConsent")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ApplicationCookiesPolicy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ApplicationEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApplicationPrivacyPolicy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApplicationTermsAndConditions")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ApplicationWebsite")

@@ -1,0 +1,44 @@
+   Politika piškotkov
+
+Ta pravilnik o piškotkih pojasnjuje, kako naš program ("mi", "naš" ali "mi") uporablja piškotke za zagotavljanje bistvene funkcionalnosti in izboljšanje vaše izkušnje. Z uporabo našega programa se strinjate z uporabo piškotkov, kot je opisano v tem pravilniku.
+
+    1. Kaj so piškotki?
+
+Piškotki so majhne besedilne datoteke, shranjene na vaši napravi, ko dostopate do naše aplikacije in jo uporabljate. Omogočajo nam, da zagotavljamo bistvene storitve, si zapomnimo vaše želje in izboljšamo vaše izkušnje.
+
+    2. Vrste piškotkov, ki jih uporabljamo
+
+Naša aplikacija uporablja naslednje vrste piškotkov:
+
+    1. Piškotki overovitve:
+
+- Namen: Za varno avtentikacijo in odobritev dostopa uporabnika do naše aplikacije.
+- Podrobnosti: Ti piškotki shranjujejo prijavne informacije za zagotovitev nemotene in varne uporabniške izkušnje.
+
+    2. Preferenčni piškotki:
+
+- Namen: Da si zapomnite izbrane nastavitve jezika in teme.
+- Podrobnosti: Ti piškotki nam pomagajo prilagoditi vaše izkušnje s shranjevanjem vaše jezikovne izbire in nastavitev teme.
+
+    3. Brez sledilnih ali tretjih piškotkov
+
+Za oglaševanje, analitiko ali kak drug namen ne uporabljamo sledilnih piškotkov ali podobnih tehnologij. Vsi uporabljeni piškotki so nujno potrebni za funkcionalnost naše aplikacije in se ne delijo s tretjimi osebami.
+
+    4. Upravljanje s piškotki
+
+Piškotke lahko upravljate ali izbrišete prek nastavitev brskalnika. Upoštevajte, da lahko onemogočeni piškotki vplivajo na funkcionalnost naše aplikacije, vključno z prijavnimi in personalizacijskimi funkcijami.
+
+    5. Spremembe politike piškotkov
+
+Ta pravilnik o piškotkih lahko občasno posodobimo. Vse spremembe bodo učinkovite takoj po objavi posodobljene politike. Spodbujamo vas, da redno pregledujete to politiko, da boste obveščeni o tem, kako uporabljamo piškotke.
+
+    6. Kontaktiraj nas
+
+Če imate kakršna koli vprašanja ali pomisleke glede tega pravilnika o piškotkih, nas kontaktirajte na:
+
+E-naslov: info@afrovave.ltd
+
+
+  Ta pravilnik o piškotkih je učinkovit od 27. januarja 2025.
+
+

@@ -1,0 +1,44 @@
+   Küpsiste poliitika
+
+See küpsiste poliitika selgitab, kuidas meie rakendus ("meie", "meie" või "meie") kasutab küpsiseid, et tagada oluline funktsionaalsus ja parandada teie kasutuskogemust. Meie rakendust kasutades nõustute küpsiste kasutamisega selles poliitikas kirjeldatud viisil.
+
+    1. Mis on küpsised?
+
+Küpsised on väikesed tekstifailid, mis salvestatakse teie seadmesse, kui sisenete ja kasutate meie rakendust. Need võimaldavad meil pakkuda olulisi teenuseid, pidada meeles teie eelistusi ja parandada teie kogemust.
+
+    2. tüüpi küpsised, mida me kasutame
+
+Meie rakendus kasutab järgmist tüüpi küpsiseid:
+
+    1. Autentimise küpsised:
+
+- Eesmärk: Et turvaliselt autentida ja volitada kasutaja juurdepääsu meie rakendusele.
+Üksikasjad: Need küpsised salvestavad sisselogimisandmeid, et tagada sujuv ja turvaline kasutajakogemus.
+
+    2. Eelistatud küpsised:
+
+- Eesmärk: Teie valitud keele ja teema eelistuste meeldejätmiseks.
+Üksikasjad: Need küpsised aitavad meil teie kogemust isikupärastada, salvestades teie keelevaliku ja teema seaded.
+
+    3. Ei jälgi ega kolmanda osapoole küpsiseid
+
+Me ei kasuta jälgimisküpsiseid või sarnaseid tehnoloogiaid reklaami, analüüsi või mis tahes muul eesmärgil. Kõik kasutatavad küpsised on rangelt vajalikud meie rakenduse toimimiseks ja neid ei jagata kolmandate osapooltega.
+
+    4. Küpsiste haldamine
+
+Saate küpsiseid hallata või kustutada oma brauseri seadete kaudu. Pange tähele, et küpsiste keelamine võib mõjutada meie rakenduse funktsionaalsust, sealhulgas sisselogimise ja isikupärastamise funktsioone.
+
+    5. Muudatused selles küpsiste poliitikas
+
+Me võime seda küpsisepoliitikat aeg-ajalt uuendada. Kõik muudatused jõustuvad kohe pärast uuendatud poliitika avaldamist. Soovitame teil seda poliitikat regulaarselt üle vaadata, et olla kursis sellega, kuidas me küpsiseid kasutame.
+
+    6. Võta meiega ühendust
+
+Kui teil on selle küpsiste poliitika kohta küsimusi või muresid, võtke meiega ühendust aadressil:
+
+E-post: info@afrowave.ltd
+
+
+  Käesolev küpsiste poliitika kehtib alates 27. jaanuarist 2025.
+
+

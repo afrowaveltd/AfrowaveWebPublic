@@ -1,0 +1,44 @@
+   Sīkdatņu politika
+
+Šajā Sīkdatņu politikā paskaidrots, kā mūsu lietojumprogramma ("mūsu", "mūsu" vai "mūsu") izmanto sīkdatnes, lai nodrošinātu būtisku funkcionalitāti un uzlabotu jūsu pieredzi. Izmantojot mūsu lietotni, jūs piekrītat sīkdatņu izmantošanai, kā aprakstīts šajā politikā.
+
+    1. Kas ir cepumi?
+
+Sīkdatnes ir nelieli teksta faili, kas glabājas jūsu ierīcē, kad jūs piekļūstat mūsu programmai un izmantojat to. Tie ļauj mums sniegt būtiskus pakalpojumus, atcerēties jūsu vēlmes, un uzlabot savu pieredzi.
+
+    2. Izmantoto sīkdatņu veidi
+
+Mūsu aplikācijā tiek izmantotas šādas sīkdatnes:
+
+    1. Autentificēšanas sīkdatnes:
+
+- Mērķis: Lai droši autentificētu un atļautu lietotājam pieeju mūsu aplikācijai.
+- Detaļas: Šie sīkfaili saglabā pieteikšanās informāciju, lai nodrošinātu netraucētu un drošu lietotāja pieredzi.
+
+    2. Preferences sīkdatnes:
+
+- Mērķis: Lai atcerētos jūsu izvēlētās valodas un tēmas preferences.
+- Detaļas: Šīs sīkdatnes palīdz mums personalizēt jūsu pieredzi, saglabājot jūsu valodas izvēli un tēmas iestatījumus.
+
+    3. Nav izsekošanas vai trešās puses sīkdatņu
+
+Mēs neizmantojam izsekošanas sīkdatnes vai līdzīgas tehnoloģijas reklāmai, analītikai vai jebkādam citam mērķim. Visas izmantotās sīkdatnes ir noteikti nepieciešamas mūsu lietojumprogrammas funkcionalitātei un netiek koplietotas ar trešajām personām.
+
+    4. Sīkdatņu pārvaldība
+
+Jūs varat pārvaldīt vai dzēst sīkdatnes, izmantojot jūsu pārlūkprogrammas iestatījumus. Lūdzu, ņemiet vērā, ka sīkdatņu atspējošana var ietekmēt mūsu lietotnes funkcionalitāti, tostarp pieteikšanās un personalizācijas funkcijas.
+
+    5. Izmaiņas šajā politikā par sīkdatnēm
+
+Mēs varam atjaunināt šo Sīkdatņu politiku laiku pa laikam. Jebkuras izmaiņas būs spēkā nekavējoties norīkojot atjaunināto politiku. Mēs aicinām Jūs periodiski pārskatīt šo politiku, lai informētu par to, kā mēs izmantojam sīkdatnes.
+
+    6. Sazinieties ar mums
+
+Ja Jums ir kādi jautājumi vai bažas par šo Sīkdatņu politiku, lūdzu, sazinieties ar mums:
+
+E-pasts: info@afrowave.ltd
+
+
+  Šī sīkdatņu politika ir spēkā no 2025. gada 27. janvāra.
+
+
