@@ -1,1 +1,1 @@
-﻿
+﻿const startup = async () => console.log("Startuji vnitřek");
