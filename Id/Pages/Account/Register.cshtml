@@ -3,11 +3,26 @@
 @{
 	ViewData["Title"] = Model.t["Register"];
 }
-section Scripts {
+@section Scripts {
 	<script src="~/js/api.js"></script>
 	<script src="~/js/account.js"></script>
-	<script src="~/js/validations.js"></script>
+	<script src="~/js/validations_register_user.js"></script>
 }
+
+<div class="row">
+	<div class="col-md-12">
+		<h2>@Model.t["Register"]</h2>
+		<hr />
+	</div>
+	<div class="col-md-7">
+
+	</div>
+	<div class="col-md-5">
+		<div id="div_help" class="helper" style="display:none">
+
+		</div>
+	</div>
+</div>
 
 <script language="javascript">
 	let active_page = "register";
