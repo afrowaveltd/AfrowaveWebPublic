@@ -1,8 +1,9 @@
 ﻿namespace Id.Services
 {
-	public class ErrorResponseService(IStringLocalizer<ErrorResponseService> _t) : IErrorResponseService
+	public class ErrorResponseService(IStringLocalizer<ErrorResponseService> _t, ILogger<ErrorResponseService> logger) : IErrorResponseService
 	{
 		private readonly IStringLocalizer<ErrorResponseService> t = _t;
+		private readonly ILogger<ErrorResponseService> _logger = logger;
 
 		public async Task HandleErrorResponse(HttpContext context, int errorCode)
 		{
@@ -44,8 +45,15 @@
 			}
 			else
 			{
-				context.Response.ContentType = "text/plain";
-				await context.Response.WriteAsync($"Error {errorCode}: {errorMessage}");
+				try
+				{
+					context.Response.ContentType = "text/plain";
+					await context.Response.WriteAsync($"Error {errorCode}: {errorMessage}");
+				}
+				catch(Exception ex)
+				{
+					_logger.LogWarning("Navigation error {error}", ex.Message);
+				}
 			}
 		}
 	}

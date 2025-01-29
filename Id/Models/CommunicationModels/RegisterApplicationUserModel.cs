@@ -22,6 +22,7 @@ namespace Id.Models.CommunicationModels
 		public string LastName { get; set; } = string.Empty;
 		public string DisplayedName { get; set; } = string.Empty;
 		public string? PhoneNumber { get; set; } = string.Empty;
+		public IFormFile? ProfilePicture { get; set; }
 
 		[Required]
 		public bool AcceptTerms { get; set; } = false;
