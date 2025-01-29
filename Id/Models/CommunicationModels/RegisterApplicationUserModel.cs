@@ -21,13 +21,14 @@ namespace Id.Models.CommunicationModels
 		public string FirstName { get; set; } = string.Empty;
 		public string LastName { get; set; } = string.Empty;
 		public string DisplayedName { get; set; } = string.Empty;
-		public string? PhoneNumber { get; set; } = string.Empty;
 		public IFormFile? ProfilePicture { get; set; }
 
 		[Required]
 		public bool AcceptTerms { get; set; } = false;
+
 		[Required]
 		public bool AcceptPrivacyPolicy { get; set; } = false;
+
 		[Required]
 		public bool AcceptCookiePolicy { get; set; } = false;
 	}

@@ -3,12 +3,14 @@
 	public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 	{
 		public DbSet<Application> Applications { get; set; } = null!;
+		public DbSet<ApplicationPolicy> ApplicationPolicies { get; set; } = null!;
 		public DbSet<ApplicationRole> ApplicationRoles { get; set; } = null!;
 		public DbSet<ApplicationSmtpSettings> ApplicationSmtpSettings { get; set; } = null!;
 		public DbSet<ApplicationUser> ApplicationUsers { get; set; } = null!;
 		public DbSet<Brand> Brands { get; set; } = null!;
 		public DbSet<Country> Countries { get; set; } = null!;
 		public DbSet<Language> Languages { get; set; } = null!;
+		public DbSet<PolicyTranslation> PolicyTranslations { get; set; } = null!;
 		public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 		public DbSet<UiTranslatorLog> UiTranslatorLogs { get; set; } = null!;
 		public DbSet<User> Users { get; set; } = null!;
@@ -33,6 +35,13 @@
 
 			_ = builder.Entity<ApplicationRole>()
 				 .HasKey(a => a.Id);
+
+			_ = builder.Entity<ApplicationPolicy>()
+				.HasKey(ap => ap.Id);
+			_ = builder.Entity<ApplicationPolicy>()
+				.HasOne(ap => ap.Application)
+				.WithMany(a => a.Policies)
+				.HasForeignKey(ap => ap.ApplicationId);
 
 			_ = builder.Entity<ApplicationRole>()
 				 .HasOne(ar => ar.Application)
@@ -65,6 +74,17 @@
 
 			_ = builder.Entity<Language>()
 				 .HasKey(l => l.Id);
+
+			_ = builder.Entity<PolicyTranslation>()
+				.HasKey(pt => pt.Id);
+			_ = builder.Entity<PolicyTranslation>()
+				.HasOne(pt => pt.Policy)
+				.WithMany(p => p.Translations)
+				.HasForeignKey(pt => pt.PolicyId);
+			_ = builder.Entity<PolicyTranslation>()
+				.HasOne(pt => pt.Language)
+				.WithMany(pt => pt.PolicyTranslations)
+				.HasForeignKey(pt => pt.LanguageId);
 
 			_ = builder.Entity<RefreshToken>()
 				 .HasKey(rt => rt.Id);

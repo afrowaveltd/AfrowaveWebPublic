@@ -16,7 +16,9 @@
 		public string? RedirectUri { get; set; }
 		public string? PostLogoutRedirectUri { get; set; }
 		public string? ClientSecret { get; set; }
-		public bool RequireConsent { get; set; } = false;
+		public bool RequireTerms { get; set; } = false;
+		public bool RequirePrivacyPolicy { get; set; } = false;
+		public bool RequireCookiePolicy { get; set; } = false;
 		public bool AllowRememberConsent { get; set; } = true;
 		public bool IsEnabled { get; set; } = true;
 
@@ -24,7 +26,7 @@
 		public Brand? Brand { get; set; }
 		public ApplicationSmtpSettings? SmtpSettings { get; set; }
 		public List<ApplicationRole> Roles { get; set; } = [];
-
+		public List<ApplicationPolicy> Policies { get; set; } = [];
 		public List<ApplicationUser> Users { get; set; } = [];
 	}
 }

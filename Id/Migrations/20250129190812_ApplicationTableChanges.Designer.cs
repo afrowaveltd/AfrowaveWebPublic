@@ -4,6 +4,7 @@ using Id.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Id.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250129190812_ApplicationTableChanges")]
+    partial class ApplicationTableChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,32 +94,6 @@ namespace Id.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Applications");
-                });
-
-            modelBuilder.Entity("Id.Models.DatabaseModels.ApplicationPolicy", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("OriginalLanguage")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PolicyType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationId");
-
-                    b.ToTable("ApplicationPolicies");
                 });
 
             modelBuilder.Entity("Id.Models.DatabaseModels.ApplicationRole", b =>
@@ -367,44 +344,6 @@ namespace Id.Migrations
                     b.ToTable("Languages");
                 });
 
-            modelBuilder.Entity("Id.Models.DatabaseModels.PolicyTranslation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("OldContent")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PolicyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UnapprovedContent")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.HasIndex("PolicyId");
-
-                    b.ToTable("PolicyTranslations");
-                });
-
             modelBuilder.Entity("Id.Models.DatabaseModels.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
@@ -644,17 +583,6 @@ namespace Id.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("Id.Models.DatabaseModels.ApplicationPolicy", b =>
-                {
-                    b.HasOne("Id.Models.DatabaseModels.Application", "Application")
-                        .WithMany("Policies")
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Application");
-                });
-
             modelBuilder.Entity("Id.Models.DatabaseModels.ApplicationRole", b =>
                 {
                     b.HasOne("Id.Models.DatabaseModels.Application", "Application")
@@ -707,25 +635,6 @@ namespace Id.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("Id.Models.DatabaseModels.PolicyTranslation", b =>
-                {
-                    b.HasOne("Id.Models.DatabaseModels.Language", "Language")
-                        .WithMany("PolicyTranslations")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Id.Models.DatabaseModels.ApplicationPolicy", "Policy")
-                        .WithMany("Translations")
-                        .HasForeignKey("PolicyId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-
-                    b.Navigation("Policy");
-                });
-
             modelBuilder.Entity("Id.Models.DatabaseModels.RefreshToken", b =>
                 {
                     b.HasOne("Id.Models.DatabaseModels.User", "User")
@@ -776,18 +685,11 @@ namespace Id.Migrations
 
             modelBuilder.Entity("Id.Models.DatabaseModels.Application", b =>
                 {
-                    b.Navigation("Policies");
-
                     b.Navigation("Roles");
 
                     b.Navigation("SmtpSettings");
 
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Id.Models.DatabaseModels.ApplicationPolicy", b =>
-                {
-                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("Id.Models.DatabaseModels.ApplicationRole", b =>
@@ -803,11 +705,6 @@ namespace Id.Migrations
             modelBuilder.Entity("Id.Models.DatabaseModels.Country", b =>
                 {
                     b.Navigation("Addresses");
-                });
-
-            modelBuilder.Entity("Id.Models.DatabaseModels.Language", b =>
-                {
-                    b.Navigation("PolicyTranslations");
                 });
 
             modelBuilder.Entity("Id.Models.DatabaseModels.User", b =>

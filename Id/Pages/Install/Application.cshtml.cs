@@ -125,7 +125,10 @@ namespace Id.Pages.Install
 				Website = Input.ApplicationWebsite,
 				Icon = Input.ApplicationIcon,
 				OwnerId = Input.OwnerId,
-				BrandId = Input.BrandId
+				BrandId = Input.BrandId,
+				RequireTerms = true,
+				RequirePrivacyPolicy = true,
+				RequireCookiePolicy = true
 			};
 
 			RegisterApplicationResult response = await _applicationService.RegisterApplicationAsync(newApplication);

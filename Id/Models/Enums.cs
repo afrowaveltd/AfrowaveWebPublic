@@ -7,16 +7,6 @@
 		Other
 	}
 
-	public enum LogoSize
-	{
-		png16px,
-		png32px,
-		png76px,
-		png152px,
-		png120px,
-		pngOriginal
-	}
-
 	public enum InstalationSteps
 	{
 		Administrator,
@@ -32,5 +22,48 @@
 		CorsSettings,
 		Result,
 		Finish
+	}
+
+	public enum LogoSize
+	{
+		png16px,
+		png32px,
+		png76px,
+		png152px,
+		png120px,
+		pngOriginal
+	}
+
+	public enum RegistrationStep
+	{
+		User,
+		Application,
+		MailVerification,
+		Finish
+	}
+
+	public enum PolicyType
+	{
+		Terms,
+		Privacy,
+		Cookie
+	}
+
+	public enum RegistrationResult
+	{
+		None,
+		Success,
+		Failed,
+		AllreadyRegistered
+	}
+
+	public enum TranslationStatus
+	{
+		Untranslated,
+		Translating,
+		Translated,
+		Ignored,
+		Approved,
+		Default
 	}
 }

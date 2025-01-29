@@ -126,8 +126,9 @@ namespace Id.Services
 					OwnerId = input.OwnerId,
 					BrandId = input.BrandId,
 					IsEnabled = true,
-					RequireConsent = input.RequireConsent,
-					AllowRememberConsent = input.AllowRememberConsent,
+					RequireTerms = input.RequireTerms,
+					RequireCookiePolicy = input.RequireCookiePolicy,
+					RequirePrivacyPolicy = input.RequirePrivacyPolicy,
 					Logo = _imageService.IsImage(input.Icon)
 				};
 				application.ClientSecret = _encryptionService.GenerateApplicationSecret();
