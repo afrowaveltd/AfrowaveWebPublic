@@ -21,7 +21,7 @@
 				<img class="centered" style="width: 32px; height: 32px; margin: 3px;" src="@Model.ApplicationInfo.ApplicationLogoUrl" />
 			</div>
 			<div class="col-md-10">
-				<h4>@Model.ApplicationInfo.BrandName : @Model.ApplicationInfo.ApplicationName</h4>
+				<h4>@Model.ApplicationInfo.BrandName | @Model.ApplicationInfo.ApplicationName</h4>
 				<div class="text-center"><i><span id="description"></span></i></div>
 			</div>
 		</div>
@@ -30,19 +30,23 @@
 
 		<hr />
 		<form method="post" id="registerUser" enctype="multipart/form-data">
-			<input asp-for="Input.ApplicationId" type="hidden" value="@Model.Input.ApplicationId" />
+			<input asp-for="Input.ApplicationId" type="hidden" value="@Model.Input.ApplicationId"  />
 			<div class="form-group">
 				<div id="email_err" class="text-danger p-2 pb-0"></div>
 				<label style="font-weight: bold">@Model.t["Email address"]</label>
-				<input asp-for="Input.Email" type="email" class="form-control" autocomplete="new-email" value="" required
-					   onfocus="loadHelp('Install_Email')" onchange="checkEmail();" />
+				<input asp-for="Input.Email" 
+				type="email" class="form-control" 
+				autocomplete="new-email" 
+				required
+				onfocus="loadHelp('Install_Email')" 
+				oninput="debounce(checkForm())" />
 			</div>
 
 			<div class="form-group">
 				<div id="password_err" class="text-danger p-2 pb-0"></div>
 				<label style="font-weight: bold">@Model.t["Password"]</label>
 				<input asp-for="Input.Password" type="password" class="form-control" autocomplete="" required
-					   onfocus="loadHelp('Account_Password')" onchange="checkPassword();" />
+						   onfocus="loadHelp('Account_Password')" onchange="checkForm()" />
 
 			</div>
 
@@ -50,46 +54,78 @@
 				<div id="password_confirm_err" class="text-danger p-2 pb-0"></div>
 				<label style="font-weight: bold">@Model.t["Confirm password"]</label>
 				<input asp-for="Input.PasswordConfirm" type="password" class="form-control" autocomplete="off" required
-					   onfocus="loadHelp('Account_ConfirmPassword')" onchange="checkPassword();" />
+						   onfocus="loadHelp('Account_ConfirmPassword')" onchange="checkForm()" />
 				</div>
 			<div class="form-group">
 				<div id="firstname_err" class="text-danger p-2 pb-0"></div>
 				<label style="font-weight: bold">@Model.t["First name"]</label>
 				<input asp-for="Input.FirstName" type="text" class="form-control" autocomplete="off" required
-					   onfocus="loadHelp('Account_FirstName')" onchange="checkFirstName();" />
+						   onfocus="loadHelp('Account_FirstName')" onchange="checkForm()" />
 			</div>
 
 			<div class="form-group">
 				<div id="lastname_err" class="text-danger p-2 pb-0"></div>
 				<label style="font-weight: bold">@Model.t["Last name"]</label>
 				<input asp-for="Input.LastName" type="text" class="form-control" autocomplete="off" required
-					   onfocus="loadHelp('Account_LastName')" onchange="checkLastName();" />
+						   onfocus="loadHelp('Account_LastName')" onchange="checkForm()" />
 			</div>
 
 			<div class="form-group">
 				<div id="displayedname_err" class="text-danger p-2 pb-0"></div>
 				<label>@Model.t["Displayed name"]</label>
 				<input asp-for="Input.DisplayedName" type="text" class="form-control" autocomplete="off" 
-					   onfocus="loadHelp('Account_DisplayedName')" onchange="checkDisplayedName();" />
+						   onfocus="loadHelp('Account_DisplayedName')" onchange="checkForm()" />
 			</div>
 			<div class="row">
 				<div class="col-10">
 					<div class="form-group">
 							<div id="icon_err" class="text-danger p-2 pb-0"></div>
-							<label style="font-weight: bold">@Model.t["Profile picture"]</label>
+							<label>@Model.t["Profile picture"]</label>
 							<input asp-for="Input.ProfilePicture" 
 								type="file" 
 								class="form-control" 
 								autocomplete="off" 
 								accept=".jpg,.jpeg,.png,.bmp"
 								required
-								onfocus="loadHelp('Account_UserPicture')" onchange="checkIcon();" />
+								onfocus="loadHelp('Account_UserPicture')"
+								   onchange="checkIcon();checkForm()" />
 					</div>
 				</div>
 				<div class="col-2">
 					<span id="icon_preview" class="centered"></span>
 				</div>
 			</div>
+				<div class="form-group">
+					<div id="terms_err" class="text-danger p-2 pb0"></div>
+					<label style="font-weight: bold">@Model.t["Agree to terms"]</label>
+					<select asp-for="Input.AcceptTerms"
+							class="form-control"
+							onclick="loadHelp('Account_Terms')"
+							onchange="checkForm()"
+							asp-items="@Model.TermsOptions">
+					</select>
+				</div>
+				<div class="form-group">
+					<div id="cookies_err" class="text-danger p-2 pb0"></div>
+					<label style="font-weight: bold">@Model.t["Agree to cookies"]</label>
+					<select asp-for="Input.AcceptCookiePolicy"
+							class="form-control"
+							onclick="loadHelp('Account_Cookies')"
+							onchange="checkForm()"
+							asp-items="@Model.CookieOptions">
+					</select>
+				</div>
+				<div class="form-group">
+					<div id="datashare_err" class="text-danger p-2 pb0"></div>
+					<label style="font-weight: bold">@Model.t["Agree to share user details"]</label>
+					<select asp-for="Input.AcceptPrivacyPolicy"
+							class="form-control"
+							onclick="loadHelp('Account_DataShare')"
+							onchange="checkForm()"
+							asp-items="@Model.PrivacyOptions">
+					</select>
+				</div>
+				<div class="m-3">@Model.t["Values with bold names are required"]</div>
 				<button type="submit"
 						id="submit"
 						class="btn btn-primary btn-block mt-3"

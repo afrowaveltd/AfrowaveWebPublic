@@ -38,3 +38,29 @@ const setTheme = (theme) => {
 	setCookie('theme', theme); // Use consistent cookie naming
 	applyTheme(theme);
 };
+
+// Debounce function to limit the number of API requests
+const debounce = (func, onError) => {
+	console.log("Debouncing");
+	const delay = 800; // 0.8 second
+	let timeoutId; // Stores the timer ID
+
+	return function (...args) {
+		// Clear the previous timer if it exists
+		clearTimeout(timeoutId);
+
+		// Set a new timer
+		timeoutId = setTimeout(async () => {
+			try {
+				await func.apply(this, args);
+				console.log("triggering function");
+			} catch (error) {
+				if (onError && typeof onError === 'function') {
+					onError(error);
+				} else {
+					console.error('Error in debounced function:', error);
+				}
+			}
+		}, delay);
+	};
+};

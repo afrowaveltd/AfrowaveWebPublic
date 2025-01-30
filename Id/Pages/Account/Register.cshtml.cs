@@ -1,4 +1,5 @@
 using Id.Models.CommunicationModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 
 namespace Id.Pages.Account
@@ -9,6 +10,7 @@ namespace Id.Pages.Account
 		 IApplicationService applicationService,
 		 IEncryptionService encryptionService,
 		 IRoleService roleService,
+		 ISelectOptionsServices selectOptionsService,
 		 IStringLocalizer<RegisterUserModel> _t) : PageModel
 	{
 		private readonly ILogger<RegisterUserModel> _logger = logger;
@@ -16,19 +18,20 @@ namespace Id.Pages.Account
 		private readonly IApplicationService _applicationService = applicationService;
 		private readonly IEncryptionService _encryptionService = encryptionService;
 		private readonly IRoleService _roleService = roleService;
+		private readonly ISelectOptionsServices _selectOptionsService = selectOptionsService;
 		public IStringLocalizer<RegisterUserModel> t = _t;
 
 		public ApplicationPublicInfo? ApplicationInfo { get; set; } = null;
-		public bool DisplayAuthenticatorTerms { get; set; } = true;
-		public bool DisplayAuthenticatorPrivacyPolicy { get; set; } = true;
-		public bool DisplayAuthenticatorCookiePolicy { get; set; } = true;
 		public bool DisplayApplicationTerms { get; set; } = false;
 		public bool DisplayApplicationPrivacyPolicy { get; set; } = false;
 		public bool DisplayApplicationCookiePolicy { get; set; } = false;
-		public string ApplicationTermsUrl { get; set; } = string.Empty;
-		public string ApplicationPrivacyPolicyUrl { get; set; } = string.Empty;
-		public string ApplicationCookiePolicyUrl { get; set; } = string.Empty;
+		public string ApplicationTerms { get; set; } = string.Empty;
+		public string ApplicationPrivacyPolicy { get; set; } = string.Empty;
+		public string ApplicationCookiePolicy { get; set; } = string.Empty;
 		public string AuthenticatorId { get; set; } = string.Empty;
+		public List<SelectListItem> PrivacyOptions { get; set; } = new();
+		public List<SelectListItem> TermsOptions { get; set; } = new();
+		public List<SelectListItem> CookieOptions { get; set; } = new();
 		public RegistrationResult RegistrationResult { get; set; } = RegistrationResult.None;
 
 		[BindProperty]
@@ -65,7 +68,7 @@ namespace Id.Pages.Account
 			}
 			if(User.Identity?.IsAuthenticated ?? false)
 			{
-				string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+				string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 				if(!string.IsNullOrEmpty(userId))
 				{
 					if(ApplicationId == AuthenticatorId)
@@ -85,6 +88,9 @@ namespace Id.Pages.Account
 					_logger.LogError("ApplicationInfo is null");
 					return RedirectToPage("/Error/404");
 				}
+				TermsOptions = await _selectOptionsService.GetBinaryOptionsAsync(false);
+				PrivacyOptions = await _selectOptionsService.GetBinaryOptionsAsync(true);
+				CookieOptions = await _selectOptionsService.GetBinaryOptionsAsync(false);
 
 				return Page();
 			}

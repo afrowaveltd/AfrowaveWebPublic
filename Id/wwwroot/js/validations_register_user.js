@@ -1,4 +1,10 @@
-﻿const startup = async () => {
+﻿// important elements
+
+const checkForm = async () => {
+	console.log("checking form");
+}
+
+const startup = async () => {
 	let translation = await localize(description);
 	document.getElementById("description").innerHTML = translation;
 }
