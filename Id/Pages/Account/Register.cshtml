@@ -15,6 +15,7 @@
 		<hr />
 	</div>
 	<div class="col-md-7">
+
 		<div class="row"> 
 			<div class="col-md-2">
 				<img class="centered" style="width: 32px; height: 32px; margin: 3px;" src="@Model.ApplicationInfo.ApplicationLogoUrl" />
@@ -24,6 +25,9 @@
 				<div class="text-center"><i><span id="description"></span></i></div>
 			</div>
 		</div>
+		@if(Model.RegistrationStep == RegistrationStep.User) 
+		{
+
 		<hr />
 		<form method="post" id="registerUser" enctype="multipart/form-data">
 			<input asp-for="Input.ApplicationId" type="hidden" value="@Model.Input.ApplicationId" />
@@ -68,9 +72,46 @@
 				<input asp-for="Input.DisplayedName" type="text" class="form-control" autocomplete="off" 
 					   onfocus="loadHelp('Account_DisplayedName')" onchange="checkDisplayedName();" />
 			</div>
-
-
+			<div class="row">
+				<div class="col-10">
+					<div class="form-group">
+							<div id="icon_err" class="text-danger p-2 pb-0"></div>
+							<label style="font-weight: bold">@Model.t["Profile picture"]</label>
+							<input asp-for="Input.ProfilePicture" 
+								type="file" 
+								class="form-control" 
+								autocomplete="off" 
+								accept=".jpg,.jpeg,.png,.bmp"
+								required
+								onfocus="loadHelp('Account_UserPicture')" onchange="checkIcon();" />
+					</div>
+				</div>
+				<div class="col-2">
+					<span id="icon_preview" class="centered"></span>
+				</div>
+			</div>
+				<button type="submit"
+						id="submit"
+						class="btn btn-primary btn-block mt-3"
+						disabled>
+					@Model.t["Next"]
 		</form>
+		}
+		else if (Model.RegistrationStep == RegistrationStep.Application)
+		{
+			<div class="alert alert-success" role="alert">
+				@Model.t["User registered successfully to the Authenticator"]
+				<br />
+				@Model.t["Now we have to agree on the terms and conditions of the Application"]
+			</div>
+		}
+		else if (Model.RegistrationStep == RegistrationStep.MailVerification)
+		{
+
+		}
+		else if (Model.RegistrationStep == RegistrationStep.Finish) {
+
+		}
 
 	</div>
 	<div class="col-md-5">

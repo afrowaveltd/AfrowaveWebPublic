@@ -29,11 +29,16 @@ namespace Id.Pages.Account
 		public string ApplicationPrivacyPolicyUrl { get; set; } = string.Empty;
 		public string ApplicationCookiePolicyUrl { get; set; } = string.Empty;
 		public string AuthenticatorId { get; set; } = string.Empty;
-		public RegistrationStep RegistrationStep { get; set; } = RegistrationStep.User;
 		public RegistrationResult RegistrationResult { get; set; } = RegistrationResult.None;
 
 		[BindProperty]
+		public RegistrationStep RegistrationStep { get; set; } = RegistrationStep.User;
+
+		[BindProperty]
 		public RegisterApplicationUserModel Input { get; set; } = new();
+
+		[BindProperty]
+		public ApplicationPolicyModel Agreement { get; set; } = new();
 
 		[FromRoute]
 		public string? ApplicationId { get; set; }
@@ -69,7 +74,8 @@ namespace Id.Pages.Account
 						RegistrationResult = RegistrationResult.AllreadyRegistered;
 					}
 				}
-				return RedirectToPage("./QuickRegistration/" + ApplicationId);
+				RegistrationStep = RegistrationStep.Application;
+				return Page();
 			}
 			else
 			{
@@ -82,6 +88,18 @@ namespace Id.Pages.Account
 
 				return Page();
 			}
+		}
+
+		public async Task<IActionResult> OnPostRegisterApplicationUserAsync()
+		{
+			_logger.LogInformation("Registering user");
+			return Page();
+		}
+
+		public async Task<IActionResult> OnPostRegisterApplicationPolicyAsync()
+		{
+			_logger.LogInformation("Registering policy");
+			return Page();
 		}
 
 		private async Task<string> GetDefaultApplicationId()
