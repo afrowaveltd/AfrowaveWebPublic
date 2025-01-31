@@ -37,45 +37,81 @@
 				<input asp-for="Input.Email" 
 				type="email" class="form-control" 
 				autocomplete="new-email" 
+				id="email_input"
 				required
-				onfocus="loadHelp('Install_Email')" 
-				oninput="debounce(checkForm())" />
+				onfocus="loadHelp('Install_Email')" />
 			</div>
 
 			<div class="form-group">
 				<div id="password_err" class="text-danger p-2 pb-0"></div>
 				<label style="font-weight: bold">@Model.t["Password"]</label>
-				<input asp-for="Input.Password" type="password" class="form-control" autocomplete="" required
-						   onfocus="loadHelp('Account_Password')" onchange="checkForm()" />
+				<input asp-for="Input.Password" 
+					id="password_input"
+					type="password" 
+					class="form-control" 
+					autocomplete="off"
+					required
+					onfocus="loadHelp('Account_Password')"  />
 
 			</div>
 
 			<div class="form-group">
 				<div id="password_confirm_err" class="text-danger p-2 pb-0"></div>
 				<label style="font-weight: bold">@Model.t["Confirm password"]</label>
-				<input asp-for="Input.PasswordConfirm" type="password" class="form-control" autocomplete="off" required
-						   onfocus="loadHelp('Account_ConfirmPassword')" onchange="checkForm()" />
+				<input asp-for="Input.PasswordConfirm"
+					type="password" 
+					id="password_confirm_input"
+					class="form-control" 
+					autocomplete="off" required
+					onfocus="loadHelp('Account_ConfirmPassword')" />
 				</div>
 			<div class="form-group">
 				<div id="firstname_err" class="text-danger p-2 pb-0"></div>
 				<label style="font-weight: bold">@Model.t["First name"]</label>
-				<input asp-for="Input.FirstName" type="text" class="form-control" autocomplete="off" required
-						   onfocus="loadHelp('Account_FirstName')" onchange="checkForm()" />
+				<input asp-for="Input.FirstName" type="text" 
+					class="form-control" 
+					id="first_name_input"
+					autocomplete="off" 
+					required
+					onfocus="loadHelp('Account_FirstName')" />
 			</div>
 
 			<div class="form-group">
-				<div id="lastname_err" class="text-danger p-2 pb-0"></div>
+				<div id="lastname_err" class="text-warning p-2 pb-0"></div>
 				<label style="font-weight: bold">@Model.t["Last name"]</label>
-				<input asp-for="Input.LastName" type="text" class="form-control" autocomplete="off" required
-						   onfocus="loadHelp('Account_LastName')" onchange="checkForm()" />
+				<input asp-for="Input.LastName" type="text" 
+					class="form-control"
+					id="last_name_input"
+					autocomplete="off" 
+					required
+					onfocus="loadHelp('Account_LastName')" />
 			</div>
 
 			<div class="form-group">
 				<div id="displayedname_err" class="text-danger p-2 pb-0"></div>
 				<label>@Model.t["Displayed name"]</label>
-				<input asp-for="Input.DisplayedName" type="text" class="form-control" autocomplete="off" 
-						   onfocus="loadHelp('Account_DisplayedName')" onchange="checkForm()" />
+				<input asp-for="Input.DisplayedName" type="text" 
+					class="form-control"
+					id="displayed_name_input"
+					autocomplete="off" 
+					onfocus="loadHelp('Account_DisplayedName')" />
 			</div>
+
+			<div class="form-group">
+				<div id="birthdate_err" class="text-danger p-2 pb-0">
+
+				</div>
+					<label style="font-weight: bold">@Model.t["Birthdate"]</label>
+					<input asp-for="Input.Birthdate"
+						   type="date"
+						   class="form-control"
+						   id="birthdate_input"
+						   autocomplete="off"
+						   min="1935-01-01"
+						   required
+						   onfocus="loadHelp('Account_Birthdate')" />
+			</div>
+
 			<div class="row">
 				<div class="col-10">
 					<div class="form-group">
@@ -87,8 +123,8 @@
 								autocomplete="off" 
 								accept=".jpg,.jpeg,.png,.bmp"
 								required
-								onfocus="loadHelp('Account_UserPicture')"
-								   onchange="checkIcon();checkForm()" />
+								id="profile_picture_input"
+								onfocus="loadHelp('Account_UserPicture')" />
 					</div>
 				</div>
 				<div class="col-2">
@@ -100,8 +136,8 @@
 					<label style="font-weight: bold">@Model.t["Agree to terms"]</label>
 					<select asp-for="Input.AcceptTerms"
 							class="form-control"
+							id="accept_terms_input"
 							onclick="loadHelp('Account_Terms')"
-							onchange="checkForm()"
 							asp-items="@Model.TermsOptions">
 					</select>
 				</div>
@@ -110,8 +146,8 @@
 					<label style="font-weight: bold">@Model.t["Agree to cookies"]</label>
 					<select asp-for="Input.AcceptCookiePolicy"
 							class="form-control"
+							id="accept_cookies_input"
 							onclick="loadHelp('Account_Cookies')"
-							onchange="checkForm()"
 							asp-items="@Model.CookieOptions">
 					</select>
 				</div>
@@ -121,13 +157,13 @@
 					<select asp-for="Input.AcceptPrivacyPolicy"
 							class="form-control"
 							onclick="loadHelp('Account_DataShare')"
-							onchange="checkForm()"
+							id="accept_data_share"
 							asp-items="@Model.PrivacyOptions">
 					</select>
 				</div>
 				<div class="m-3">@Model.t["Values with bold names are required"]</div>
 				<button type="submit"
-						id="submit"
+						id="submit_button"
 						class="btn btn-primary btn-block mt-3"
 						disabled>
 					@Model.t["Next"]

@@ -21,6 +21,7 @@ namespace Id.Models.CommunicationModels
 		public string FirstName { get; set; } = string.Empty;
 		public string LastName { get; set; } = string.Empty;
 		public string DisplayedName { get; set; } = string.Empty;
+		public DateTime? Birthdate { get; set; } = DateTime.UtcNow;
 		public IFormFile? ProfilePicture { get; set; }
 
 		[Required]
