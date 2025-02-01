@@ -95,7 +95,11 @@ const validateEmail = async (element) => {
 		}
 	}
 }
-
+const validatePassword = async (element) => {
+	if (passwordRules == null) {
+		let message = await localize("Password rules are not available");
+	}
+}
 const startup = async () => {
 	let translation = await localize(description);
 	passwordRules = await getPasswordRules();
