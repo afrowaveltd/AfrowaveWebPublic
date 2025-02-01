@@ -1,4 +1,5 @@
 using Id.Models.CommunicationModels;
+using Id.Models.SettingsModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 
@@ -11,10 +12,12 @@ namespace Id.Pages.Account
 		 IEncryptionService encryptionService,
 		 IRoleService roleService,
 		 ISelectOptionsServices selectOptionsService,
+		 ISettingsService settingsService,
 		 IStringLocalizer<RegisterUserModel> _t) : PageModel
 	{
 		private readonly ILogger<RegisterUserModel> _logger = logger;
 		private readonly IUserService _userService = userService;
+		private readonly ISettingsService _settingsService = settingsService;
 		private readonly IApplicationService _applicationService = applicationService;
 		private readonly IEncryptionService _encryptionService = encryptionService;
 		private readonly IRoleService _roleService = roleService;
@@ -43,6 +46,9 @@ namespace Id.Pages.Account
 		[BindProperty]
 		public ApplicationPolicyModel Agreement { get; set; } = new();
 
+		[BindProperty]
+		public PasswordRules PasswordRules { get; set; } = new();
+
 		[FromRoute]
 		public string? ApplicationId { get; set; }
 
@@ -66,6 +72,7 @@ namespace Id.Pages.Account
 				_logger.LogError("ApplicationId is invalid");
 				_ = RedirectToPage("/Error/404");
 			}
+
 			if(User.Identity?.IsAuthenticated ?? false)
 			{
 				string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -91,7 +98,7 @@ namespace Id.Pages.Account
 				TermsOptions = await _selectOptionsService.GetBinaryOptionsAsync(false);
 				PrivacyOptions = await _selectOptionsService.GetBinaryOptionsAsync(true);
 				CookieOptions = await _selectOptionsService.GetBinaryOptionsAsync(false);
-
+				PasswordRules = await _settingsService.GetPasswordRulesAsync();
 				return Page();
 			}
 		}

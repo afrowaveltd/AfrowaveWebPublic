@@ -25,6 +25,36 @@ namespace Id.Services
 
 		public Task<IdentificatorSettings> GetSettingsAsync() => _lazySettings.Value;
 
+		public async Task<LoginRules> GetLoginRulesAsync()
+		{
+			var settings = await GetSettingsAsync();
+			return settings.LoginRules;
+		}
+
+		public async Task<PasswordRules> GetPasswordRulesAsync()
+		{
+			var settings = await GetSettingsAsync();
+			return settings.PasswordRules;
+		}
+
+		public async Task<CookieSettings> GetCookieSettingsAsync()
+		{
+			var settings = await GetSettingsAsync();
+			return settings.CookieSettings;
+		}
+
+		public async Task<JwtSettings> GetJwtSettingsAsync()
+		{
+			var settings = await GetSettingsAsync();
+			return settings.JwtSettings;
+		}
+
+		public async Task<CorsSettings> GetCorsSettingsAsync()
+		{
+			var settings = await GetSettingsAsync();
+			return settings.CorsSettings;
+		}
+
 		private async Task<IdentificatorSettings> LoadSettingsAsync()
 		{
 			IdentificatorSettings settings = new();

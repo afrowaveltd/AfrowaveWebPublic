@@ -4,9 +4,9 @@
 	ViewData["Title"] = Model.t["Register"];
 }
 @section Scripts {
-	<script src="~/js/api.js"></script>
-	<script src="~/js/account.js"></script>
-	<script src="~/js/validations_register_user.js"></script>
+<script src="~/js/api.js"></script>
+<script src="~/js/account.js"></script>
+<script src="~/js/validations_register_user.js"></script>
 }
 
 <div class="row">
@@ -28,24 +28,24 @@
 		@if(Model.RegistrationStep == RegistrationStep.User) 
 		{
 
-		<hr />
-		<form method="post" id="registerUser" enctype="multipart/form-data">
-			<input asp-for="Input.ApplicationId" type="hidden" value="@Model.Input.ApplicationId"  />
-			<div class="form-group">
-				<div id="email_err" class="text-danger p-2 pb-0"></div>
-				<label style="font-weight: bold">@Model.t["Email address"]</label>
-				<input asp-for="Input.Email" 
-				type="email" class="form-control" 
-				autocomplete="new-email" 
-				id="email_input"
-				required
-				onfocus="loadHelp('Install_Email')" />
-			</div>
+			<hr />
+			<form method="post" id="registerUser" enctype="multipart/form-data">
+				<input asp-for="Input.ApplicationId" type="hidden" value="@Model.Input.ApplicationId"  />
+				<div class="form-group">
+					<div id="email_err" class="text-danger p-2 pb-0"></div>
+					<label style="font-weight: bold">@Model.t["Email address"]</label>
+					<input asp-for="Input.Email" 
+					type="email" class="form-control" 
+					autocomplete="new-email" 
+					id="email_input"
+					required
+					onfocus="loadHelp('Install_Email')" />
+				</div>
 
-			<div class="form-group">
-				<div id="password_err" class="text-danger p-2 pb-0"></div>
-				<label style="font-weight: bold">@Model.t["Password"]</label>
-				<input asp-for="Input.Password" 
+				<div class="form-group">
+					<div id="password_err" class="text-danger p-2 pb-0"></div>
+					<label style="font-weight: bold">@Model.t["Password"]</label>
+					<input asp-for="Input.Password" 
 					id="password_input"
 					type="password" 
 					class="form-control" 
@@ -53,121 +53,121 @@
 					required
 					onfocus="loadHelp('Account_Password')"  />
 
-			</div>
+				</div>
 
-			<div class="form-group">
-				<div id="password_confirm_err" class="text-danger p-2 pb-0"></div>
-				<label style="font-weight: bold">@Model.t["Confirm password"]</label>
-				<input asp-for="Input.PasswordConfirm"
+				<div class="form-group">
+					<div id="password_confirm_err" class="text-danger p-2 pb-0"></div>
+					<label style="font-weight: bold">@Model.t["Confirm password"]</label>
+					<input asp-for="Input.PasswordConfirm"
 					type="password" 
 					id="password_confirm_input"
 					class="form-control" 
 					autocomplete="off" required
 					onfocus="loadHelp('Account_ConfirmPassword')" />
 				</div>
-			<div class="form-group">
-				<div id="firstname_err" class="text-danger p-2 pb-0"></div>
-				<label style="font-weight: bold">@Model.t["First name"]</label>
-				<input asp-for="Input.FirstName" type="text" 
+				<div class="form-group">
+					<div id="firstname_err" class="text-danger p-2 pb-0"></div>
+					<label style="font-weight: bold">@Model.t["First name"]</label>
+					<input asp-for="Input.FirstName" type="text" 
 					class="form-control" 
 					id="first_name_input"
 					autocomplete="off" 
 					required
 					onfocus="loadHelp('Account_FirstName')" />
-			</div>
+				</div>
 
-			<div class="form-group">
-				<div id="lastname_err" class="text-warning p-2 pb-0"></div>
-				<label style="font-weight: bold">@Model.t["Last name"]</label>
-				<input asp-for="Input.LastName" type="text" 
+				<div class="form-group">
+					<div id="lastname_err" class="text-warning p-2 pb-0"></div>
+					<label style="font-weight: bold">@Model.t["Last name"]</label>
+					<input asp-for="Input.LastName" type="text" 
 					class="form-control"
 					id="last_name_input"
 					autocomplete="off" 
 					required
 					onfocus="loadHelp('Account_LastName')" />
-			</div>
+				</div>
 
-			<div class="form-group">
-				<div id="displayedname_err" class="text-danger p-2 pb-0"></div>
-				<label>@Model.t["Displayed name"]</label>
-				<input asp-for="Input.DisplayedName" type="text" 
+				<div class="form-group">
+					<div id="displayedname_err" class="text-danger p-2 pb-0"></div>
+					<label>@Model.t["Displayed name"]</label>
+					<input asp-for="Input.DisplayedName" type="text" 
 					class="form-control"
 					id="displayed_name_input"
 					autocomplete="off" 
 					onfocus="loadHelp('Account_DisplayedName')" />
-			</div>
-
-			<div class="form-group">
-				<div id="birthdate_err" class="text-danger p-2 pb-0">
-
 				</div>
+
+				<div class="form-group">
+					<div id="birthdate_err" class="text-danger p-2 pb-0">
+
+					</div>
 					<label style="font-weight: bold">@Model.t["Birthdate"]</label>
 					<input asp-for="Input.Birthdate"
-						   type="date"
-						   class="form-control"
-						   id="birthdate_input"
-						   autocomplete="off"
-						   min="1935-01-01"
-						   required
-						   onfocus="loadHelp('Account_Birthdate')" />
-			</div>
+					type="date"
+					class="form-control"
+					id="birthdate_input"
+					autocomplete="off"
+					min="1935-01-01"
+					required
+					onfocus="loadHelp('Account_Birthdate')" />
+				</div>
 
-			<div class="row">
-				<div class="col-10">
-					<div class="form-group">
+				<div class="row">
+					<div class="col-10">
+						<div class="form-group">
 							<div id="icon_err" class="text-danger p-2 pb-0"></div>
 							<label>@Model.t["Profile picture"]</label>
 							<input asp-for="Input.ProfilePicture" 
-								type="file" 
-								class="form-control" 
-								autocomplete="off" 
-								accept=".jpg,.jpeg,.png,.bmp"
-								required
-								id="profile_picture_input"
-								onfocus="loadHelp('Account_UserPicture')" />
+							type="file" 
+							class="form-control" 
+							autocomplete="off" 
+							accept=".jpg,.jpeg,.png,.bmp"
+							required
+							id="profile_picture_input"
+							onfocus="loadHelp('Account_UserPicture')" />
+						</div>
+					</div>
+					<div class="col-2">
+						<span id="icon_preview" class="centered"></span>
 					</div>
 				</div>
-				<div class="col-2">
-					<span id="icon_preview" class="centered"></span>
-				</div>
-			</div>
 				<div class="form-group">
 					<div id="terms_err" class="text-danger p-2 pb0"></div>
 					<label style="font-weight: bold">@Model.t["Agree to terms"]</label>
 					<select asp-for="Input.AcceptTerms"
-							class="form-control"
-							id="accept_terms_input"
-							onclick="loadHelp('Account_Terms')"
-							asp-items="@Model.TermsOptions">
+					class="form-control"
+					id="accept_terms_input"
+					onclick="loadHelp('Account_Terms')"
+					asp-items="@Model.TermsOptions">
 					</select>
 				</div>
 				<div class="form-group">
 					<div id="cookies_err" class="text-danger p-2 pb0"></div>
 					<label style="font-weight: bold">@Model.t["Agree to cookies"]</label>
 					<select asp-for="Input.AcceptCookiePolicy"
-							class="form-control"
-							id="accept_cookies_input"
-							onclick="loadHelp('Account_Cookies')"
-							asp-items="@Model.CookieOptions">
+					class="form-control"
+					id="accept_cookies_input"
+					onclick="loadHelp('Account_Cookies')"
+					asp-items="@Model.CookieOptions">
 					</select>
 				</div>
 				<div class="form-group">
-					<div id="datashare_err" class="text-danger p-2 pb0"></div>
+					<div id="privacy_err" class="text-danger p-2 pb0"></div>
 					<label style="font-weight: bold">@Model.t["Agree to share user details"]</label>
 					<select asp-for="Input.AcceptPrivacyPolicy"
-							class="form-control"
-							onclick="loadHelp('Account_DataShare')"
-							id="accept_data_share"
-							asp-items="@Model.PrivacyOptions">
+					class="form-control"
+					onclick="loadHelp('Account_DataShare')"
+					id="accept_data_share"
+					asp-items="@Model.PrivacyOptions">
 					</select>
 				</div>
 				<div class="m-3">@Model.t["Values with bold names are required"]</div>
 				<button type="submit"
-						id="submit_button"
-						class="btn btn-primary btn-block mt-3"
-						disabled>
+				id="submit_button"
+				class="btn btn-primary btn-block mt-3"
+				disabled>
 					@Model.t["Next"]
-		</form>
+			</form>
 		}
 		else if (Model.RegistrationStep == RegistrationStep.Application)
 		{
@@ -190,6 +190,32 @@
 		<div id="div_help" class="helper" style="display:none">
 
 		</div>
+	@if (Model.RegistrationStep == RegistrationStep.User)
+	{	
+		<div id="div_help_password" class="helper mt-3" style="display:block; border-color: forestgreen;">
+			<h3>@Model.t["Password checks"]</h3>
+			<ul id="password_checks">
+					<li id="password_checks_minlength">@Model.t["Minimal password length"]: <b>@Model.PasswordRules.MinimumLength </b> @Model.t["characters"]</li>
+					<li id="password_checks_maxlength">@Model.t["Maximal password length"]: <b>@Model.PasswordRules.MaximumLength </b> @Model.t["characters"]</li>
+					@if(Model.PasswordRules.RequireUppercase)
+					{
+						<li id="password_checks_uppercase">@Model.t["Password must contain at least one uppercase letter"]</li>
+					}
+					@if(Model.PasswordRules.RequireLowercase)
+					{
+						<li id="password_checks_lowercase">@Model.t["Password must contain at least one lowercase letter"]</li>
+					}
+					@if(Model.PasswordRules.RequireDigit)
+					{
+						<li id="password_checks_digit">@Model.t["Password must contain at least one number"]</li>
+					}
+					@if(Model.PasswordRules.RequireNonAlphanumeric)
+					{
+						<li id="password_checks_special">@Model.t["Password must contain at least one special character"]</li>
+					}
+			</ul>
+		</div>
+	}
 	</div>
 </div>
 
