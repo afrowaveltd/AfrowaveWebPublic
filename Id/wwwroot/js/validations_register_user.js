@@ -13,6 +13,7 @@ const acceptTerms = document.getElementById("accept_terms_input");
 const acceptPrivacy = document.getElementById("accept_data_share");
 const acceptCookies = document.getElementById("accept_cookies_input");
 const submit = document.getElementById("submit_button");
+const iconPreview = document.getElementById("icon_preview");
 
 // error elements
 const emailError = document.getElementById("email_err");
@@ -92,6 +93,16 @@ const validateEmail = async (element) => {
 				emailOk = true;
 				checkForm();
 			}
+			else {
+				setInvalid(element, emailError, await localize("Email address is already registered"));
+				emailOk = false;
+				checkForm();
+			}
+		}
+		else {
+			setInvalid(element, emailError, await localize("Error checking email address"));
+			emailOk = true;
+			checkForm();
 		}
 	}
 }
@@ -118,7 +129,7 @@ const validatePassword = async (element) => {
 		passwordOk = true;
 		// check minimal length
 		if (password.length < minChars) {
-			let message = await localize("Password must be at least") + " " + minChars + " " + await localize("characters long");
+			let message = await localize("Minimal password length") + ": " + minChars + " " + await localize("characters");
 			setInvalid(element, passwordError, message);
 			passChecker = document.getElementById('password_checks_minlength');
 			passChecker.classList.remove("success");
@@ -134,7 +145,7 @@ const validatePassword = async (element) => {
 
 		// check maximal length
 		if (password.length > maxChars) {
-			let message = await localize("Password must be at most") + " " + maxChars + " " + await localize("characters long");
+			let message = await localize("Maximal password length") + ": " + minChars + " " + await localize("characters");
 			setInvalid(element, passwordError, message);
 			passChecker = document.getElementById('password_checks_maxlength');
 			passChecker.classList.remove("success");
@@ -186,7 +197,7 @@ const validatePassword = async (element) => {
 
 		// check digit
 		if (requireDigit && !/[0-9]/.test(password)) {
-			let message = await localize("Password must contain at least one digit");
+			let message = await localize("Password must contain at least one number");
 			setInvalid(element, passwordError, message);
 			passChecker = document.getElementById('password_checks_digit');
 			passChecker.classList.remove("success");
@@ -269,8 +280,9 @@ const validateLastName = async (element) => {
 const validateDisplayedName = async (element) => {
 	const displayedName = element.value;
 	if (displayedName.length < 2) {
-		setInvalid(element, displayednameError, await localize("Displayed name must be at least 2 characters long"));
-		displayNameOk = false;
+		element.value = firstName.value + " " + lastName.value;
+		setInvalid(element, displayednameError, await localize("If empty, your real name will be used"));
+		displayNameOk = true;
 	}
 	else {
 		setValid(element, displayednameError);
@@ -282,8 +294,19 @@ const validateDisplayedName = async (element) => {
 // birthdate validation
 const validateBirthdate = async (element) => {
 	const birthdate = element.value;
+	// check if birthdate is empty
 	if (birthdate === "") {
 		setInvalid(element, birthdateError, await localize("Birthdate is required"));
+		birthdateOk = false;
+	}
+	// check if birthdate is in the past
+	else if (new Date(birthdate) > new Date()) {
+		setInvalid(element, birthdateError, await localize("Birthdate must be in the past"));
+		birthdateOk = false;
+	}
+	// check if user is too young (less than 8 years old))
+	else if (new Date(birthdate) > new Date(new Date().getFullYear() - 8, new Date().getMonth(), new Date().getDate())) {
+		setInvalid(element, birthdateError, await localize("You must be at least 8 years old"));
 		birthdateOk = false;
 	}
 	else {
@@ -295,21 +318,80 @@ const validateBirthdate = async (element) => {
 
 // profile picture validation
 const validateProfilePicture = async (element) => {
-	const profilePicture = element.value;
-	if (profilePicture === "") {
-		setInvalid(element, iconError, await localize("Profile picture is required"));
-		profilePictureOk = false;
-	}
-	else {
+	const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+	const file = element.files[0];
+	if (!file) {
 		setValid(element, iconError);
 		profilePictureOk = true;
+		return;
 	}
-	checkForm();
+	else if (!validTypes.includes(file.type)) {
+		setInvalid(element, iconError, await localize("Invalid file type.Please upload an image file"));
+		profilePictureOk = false;
+		return;
+	}
+	try {
+		const isValidImage = await checkIfRealImage(file);
+		console.log(isValidImage);
+		if (!isValidImage) {
+			setInvalid(element, iconError, await localize("The file is not a valid image."));
+			profilePictureOk = false;
+			checkForm();
+		} else {
+			showImagePreview(file); // Display the image preview
+			setValid(element, iconError);
+			applicationIconOk = true;
+			checkForm();
+		}
+	} catch (error) {
+		setInvalid(element, iconError, await localize("An error occurred while validating the file."));
+		profilePictureOk = false;
+		checkForm();
+	}
+
+	/**
+	* Check if a file is a real image
+	* @param {File} file
+	* @returns {Promise<boolean>}
+	*/
+	async function checkIfRealImage(file) {
+		const reader = new FileReader();
+
+		return new Promise((resolve, reject) => {
+			reader.onload = (e) => {
+				const img = new Image();
+				img.onload = () => resolve(true); // Real image
+				img.onerror = () => resolve(false); // Invalid image
+				img.src = e.target.result; // Load the image
+			};
+
+			reader.onerror = () => reject("Error reading the file");
+			reader.readAsDataURL(file); // Read file content as Data URL
+		});
+	}
+	/**
+	 * Show a 32x32px preview of the uploaded image
+	 * @param {File} file
+	 */
+	async function showImagePreview(file) {
+		const reader = new FileReader();
+
+		reader.onload = (e) => {
+			const img = document.createElement("img");
+			img.src = e.target.result; // Set the source to the file's data URL
+			img.alt = "Image Preview";
+			iconPreview.innerHTML = "";
+			iconPreview.appendChild(img);
+		};
+
+		reader.readAsDataURL(file); // Read file content as Data URL
+	}
 }
+
 
 // terms validation
 const validateTerms = async (element) => {
-	if (!element.value == "true") {
+	if (element.value != "true") {
 		setInvalid(element, termsError, await localize("You must accept the terms"));
 		acceptTermsOk = false;
 	}
@@ -322,7 +404,7 @@ const validateTerms = async (element) => {
 
 // privacy validation
 const validatePrivacy = async (element) => {
-	if (!element.value == "true") {
+	if (element.value != "true") {
 		setInvalid(element, privacyError, await localize("You must accept the privacy policy"));
 		acceptPrivacyOk = false;
 	}
@@ -335,7 +417,7 @@ const validatePrivacy = async (element) => {
 
 // cookies validation
 const validateCookies = async (element) => {
-	if (!element.value == "true") {
+	if (element.value != "true") {
 		setInvalid(element, cookiesError, await localize("You must accept the cookies policy"));
 		acceptCookiesOk = false;
 	}
@@ -363,3 +445,50 @@ const startup = async () => {
 	await validateCookies(acceptCookies);
 	checkForm();
 }
+
+email.addEventListener('input', async () => {
+	await validateEmail(email);
+});
+
+password.addEventListener('input', async () => {
+	await validatePassword(password);
+	await validatePasswordConfirm(passwordConfirm);
+});
+
+passwordConfirm.addEventListener('input', async () => {
+	await validatePasswordConfirm(passwordConfirm);
+});
+
+firstName.addEventListener('change', async () => {
+	await validateFirstName(firstName);
+	await validateDisplayedName(displayName);
+});
+
+lastName.addEventListener('change', async () => {
+	await validateLastName(lastName);
+	await validateDisplayedName(displayName);
+});
+
+displayName.addEventListener('change', async () => {
+	await validateDisplayedName(displayName);
+});
+
+birthdate.addEventListener('input', async () => {
+	await validateBirthdate(birthdate);
+});
+
+profilePicture.addEventListener('change', async () => {
+	await validateProfilePicture(profilePicture);
+});
+
+acceptTerms.addEventListener('input', async () => {
+	await validateTerms(acceptTerms);
+});
+
+acceptPrivacy.addEventListener('input', async () => {
+	await validatePrivacy(acceptPrivacy);
+});
+
+acceptCookies.addEventListener('input', async () => {
+	await validateCookies(acceptCookies);
+});
