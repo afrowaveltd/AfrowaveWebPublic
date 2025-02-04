@@ -1,7 +1,8 @@
 ﻿@page "{applicationId?}"
+@inject IStringLocalizer<RegisterUserModel> t;
 @model Id.Pages.Account.RegisterUserModel
 @{
-	ViewData["Title"] = Model.t["Register"];
+	//ViewData["Title"] = t["Register"] ?? "";
 }
 @section Scripts {
 <script src="~/js/api.js"></script>
@@ -21,7 +22,7 @@
 
 <div class="row">
 	<div class="col-md-12">
-		<h2>@Model.t["Register"]</h2>
+		<h2>@t["Register"]</h2>
 		<hr />
 	</div>
 	<div class="col-md-7">
@@ -43,7 +44,7 @@
 				<input asp-for="Input.ApplicationId" type="hidden" value="@Model.Input.ApplicationId"  />
 				<div class="form-group">
 					<div id="email_err" class="text-danger p-2 pb-0"></div>
-					<label style="font-weight: bold">@Model.t["Email address"]</label>
+					<label style="font-weight: bold">@t["Email address"]</label>
 					<input asp-for="Input.Email" 
 					type="email" class="form-control" 
 					autocomplete="new-email" 
@@ -54,7 +55,7 @@
 
 				<div class="form-group">
 					<div id="password_err" class="text-danger p-2 pb-0"></div>
-					<label style="font-weight: bold">@Model.t["Password"]</label>
+					<label style="font-weight: bold">@t["Password"]</label>
 					<input asp-for="Input.Password" 
 					id="password_input"
 					type="password" 
@@ -67,7 +68,7 @@
 
 				<div class="form-group">
 					<div id="password_confirm_err" class="text-danger p-2 pb-0"></div>
-					<label style="font-weight: bold">@Model.t["Confirm password"]</label>
+					<label style="font-weight: bold">@t["Confirm password"]</label>
 					<input asp-for="Input.PasswordConfirm"
 					type="password" 
 					id="password_confirm_input"
@@ -77,7 +78,7 @@
 				</div>
 				<div class="form-group">
 					<div id="firstname_err" class="text-danger p-2 pb-0"></div>
-					<label style="font-weight: bold">@Model.t["First name"]</label>
+					<label style="font-weight: bold">@t["First name"]</label>
 					<input asp-for="Input.FirstName" type="text" 
 					class="form-control" 
 					id="first_name_input"
@@ -88,7 +89,7 @@
 
 				<div class="form-group">
 					<div id="lastname_err" class="text-danger p-2 pb-0"></div>
-					<label style="font-weight: bold">@Model.t["Last name"]</label>
+					<label style="font-weight: bold">@t["Last name"]</label>
 					<input asp-for="Input.LastName" type="text" 
 					class="form-control"
 					id="last_name_input"
@@ -99,7 +100,7 @@
 
 				<div class="form-group">
 					<div id="displayedname_err" class="text-danger p-2 pb-0"></div>
-					<label>@Model.t["Displayed name"]</label>
+					<label>@t["Displayed name"]</label>
 					<input asp-for="Input.DisplayedName" type="text" 
 					class="form-control"
 					id="displayed_name_input"
@@ -111,7 +112,7 @@
 					<div id="birthdate_err" class="text-danger p-2 pb-0">
 
 					</div>
-					<label style="font-weight: bold">@Model.t["Birthdate"]</label>
+					<label style="font-weight: bold">@t["Birthdate"]</label>
 					<input asp-for="Input.Birthdate"
 					type="date"
 					class="form-control"
@@ -126,7 +127,7 @@
 					<div class="col-10">
 						<div class="form-group">
 							<div id="icon_err" class="text-danger p-2 pb-0"></div>
-							<label>@Model.t["Profile picture"]</label>
+							<label>@t["Profile picture"]</label>
 							<input asp-for="Input.ProfilePicture" 
 							type="file" 
 							class="form-control" 
@@ -143,7 +144,7 @@
 				</div>
 				<div class="form-group">
 					<div id="terms_err" class="text-danger p-2 pb0"></div>
-					<label style="font-weight: bold">@Model.t["Agree to terms"] <a href="/Privacy" target="_blank" style="margin-left: auto;"><i class="bi bi-info-circle" style="margin-left: auto;"></i></a></label>
+					<label style="font-weight: bold">@t["Agree to terms"] <a href="/Privacy" target="_blank" style="margin-left: auto;"><i class="bi bi-info-circle" style="margin-left: auto;"></i></a></label>
 					<select asp-for="Input.AcceptTerms"
 					class="form-control"
 					id="accept_terms_input"
@@ -154,7 +155,7 @@
 
 				<div class="form-group">
 					<div id="cookies_err" class="text-danger p-2 pb0"></div>
-					<label style="font-weight: bold">@Model.t["Agree to cookies"] <a href="/Cookies" target="_blank" style="margin-left: auto;"><i class="bi bi-cookie" style="margin-left: auto;"></i></a></label>
+					<label style="font-weight: bold">@t["Agree to cookies"] <a href="/Cookies" target="_blank" style="margin-left: auto;"><i class="bi bi-cookie" style="margin-left: auto;"></i></a></label>
 					<select asp-for="Input.AcceptCookiePolicy"
 					class="form-control"
 					id="accept_cookies_input"
@@ -164,7 +165,7 @@
 				</div>
 				<div class="form-group">
 					<div id="privacy_err" class="text-danger p-2 pb0"></div>
-					<label style="font-weight: bold">@Model.t["Agree to share user details"] <a href="/Privacy" target="_blank" style="margin-left: auto;"><i class="bi bi-info-circle" style="margin-left: auto;"></i></a></label>
+					<label style="font-weight: bold">@t["Agree to share user details"] <a href="/Privacy" target="_blank" style="margin-left: auto;"><i class="bi bi-info-circle" style="margin-left: auto;"></i></a></label>
 					<select asp-for="Input.AcceptPrivacyPolicy"
 					class="form-control"
 					onclick="loadHelp('Account_DataShare')"
@@ -172,20 +173,20 @@
 					asp-items="@Model.PrivacyOptions">
 					</select>
 				</div>
-				<div class="m-3">@Model.t["Values with bold names are required"]</div>
+				<div class="m-3">@t["Values with bold names are required"]</div>
 				<button type="submit"
 				id="submit_button"
 				class="btn btn-primary btn-block mt-3"
 				disabled>
-					@Model.t["Next"]
+					@t["Next"]
 			</form>
 		}
 		else if (Model.RegistrationStep == RegistrationStep.Application)
 		{
 			<div class="alert alert-success" role="alert">
-				@Model.t["User registered successfully to the Authenticator"]
+				@t["User registered successfully to the Authenticator"]
 				<br />
-				@Model.t["Now we have to agree on the terms and conditions of the Application"]
+				@t["Now we have to agree on the terms and conditions of the Application"]
 			</div>
 		}
 		else if (Model.RegistrationStep == RegistrationStep.MailVerification)
@@ -204,25 +205,25 @@
 	@if (Model.RegistrationStep == RegistrationStep.User)
 	{	
 		<div id="div_help_password" class="helper mt-3" style="display:block; border-color: forestgreen;">
-			<h3>@Model.t["Password checks"]</h3>
+			<h3>@t["Password checks"]</h3>
 			<ul id="password_checks">
-					<li id="password_checks_minlength">@Model.t["Minimal password length"]: <b>@Model.PasswordRules.MinimumLength </b> @Model.t["characters"]</li>
-					<li id="password_checks_maxlength">@Model.t["Maximal password length"]: <b>@Model.PasswordRules.MaximumLength </b> @Model.t["characters"]</li>
+					<li id="password_checks_minlength">@t["Minimal password length"]: <b>@Model.PasswordRules.MinimumLength </b> @t["characters"]</li>
+					<li id="password_checks_maxlength">@t["Maximal password length"]: <b>@Model.PasswordRules.MaximumLength </b> @t["characters"]</li>
 					@if(Model.PasswordRules.RequireUppercase)
 					{
-						<li id="password_checks_uppercase">@Model.t["Password must contain at least one uppercase letter"]</li>
+						<li id="password_checks_uppercase">@t["Password must contain at least one uppercase letter"]</li>
 					}
 					@if(Model.PasswordRules.RequireLowercase)
 					{
-						<li id="password_checks_lowercase">@Model.t["Password must contain at least one lowercase letter"]</li>
+						<li id="password_checks_lowercase">@t["Password must contain at least one lowercase letter"]</li>
 					}
 					@if(Model.PasswordRules.RequireDigit)
 					{
-						<li id="password_checks_digit">@Model.t["Password must contain at least one number"]</li>
+						<li id="password_checks_digit">@t["Password must contain at least one number"]</li>
 					}
 					@if(Model.PasswordRules.RequireNonAlphanumeric)
 					{
-						<li id="password_checks_special">@Model.t["Password must contain at least one special character"]</li>
+						<li id="password_checks_special">@t["Password must contain at least one special character"]</li>
 					}
 			</ul>
 		</div>

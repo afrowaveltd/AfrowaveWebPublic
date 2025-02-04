@@ -7,4 +7,7 @@
 
 <h1>@Model.t["Error"]: @Model.ErrorCode</h1>
 <h3>@errorMessage</h3>
-
+@if (Model.RequestId != null)
+{
+	<p>ID požadavku: <code>@Model.RequestId</code></p>
+}

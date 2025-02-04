@@ -22,7 +22,7 @@ namespace Id.Pages.Account
 		private readonly IEncryptionService _encryptionService = encryptionService;
 		private readonly IRoleService _roleService = roleService;
 		private readonly ISelectOptionsServices _selectOptionsService = selectOptionsService;
-		public IStringLocalizer<RegisterUserModel> t = _t;
+		private readonly IStringLocalizer<RegisterUserModel> t = _t;
 
 		public ApplicationPublicInfo? ApplicationInfo { get; set; } = null;
 		public bool DisplayApplicationTerms { get; set; } = false;
@@ -103,15 +103,82 @@ namespace Id.Pages.Account
 			}
 		}
 
-		public async Task<IActionResult> OnPostRegisterApplicationUserAsync()
+		public async Task<IActionResult> OnPostRegisterUserAsync()
 		{
+			if(ModelState.IsValid)
+			{
+			}
+			else
+			{
+				return Page();
+			}
 			_logger.LogInformation("Registering user");
+
+			// Inicializace vlastností modelu, jako v OnGetAsync
+			AuthenticatorId = await GetDefaultApplicationId();
+			if(string.IsNullOrEmpty(ApplicationId))
+			{
+				ApplicationId = AuthenticatorId;
+			}
+			else
+			{
+				ApplicationId = await CheckApplicationId(ApplicationId);
+			}
+
+			if(string.IsNullOrEmpty(ApplicationId))
+			{
+				_logger.LogError("ApplicationId is invalid");
+				return RedirectToPage("/Error/404");
+			}
+
+			ApplicationInfo = await _applicationService.GetPublicInfoAsync(ApplicationId);
+			if(ApplicationInfo == null)
+			{
+				_logger.LogError("ApplicationInfo is null");
+				return RedirectToPage("/Error/404");
+			}
+
+			TermsOptions = await _selectOptionsService.GetBinaryOptionsAsync(false);
+			PrivacyOptions = await _selectOptionsService.GetBinaryOptionsAsync(true);
+			CookieOptions = await _selectOptionsService.GetBinaryOptionsAsync(false);
+			PasswordRules = await _settingsService.GetPasswordRulesAsync();
+
 			return Page();
 		}
 
 		public async Task<IActionResult> OnPostRegisterApplicationPolicyAsync()
 		{
-			_logger.LogInformation("Registering policy");
+			_logger.LogInformation("Registering user");
+
+			// Inicializace vlastností modelu, jako v OnGetAsync
+			AuthenticatorId = await GetDefaultApplicationId();
+			if(string.IsNullOrEmpty(ApplicationId))
+			{
+				ApplicationId = AuthenticatorId;
+			}
+			else
+			{
+				ApplicationId = await CheckApplicationId(ApplicationId);
+			}
+
+			if(string.IsNullOrEmpty(ApplicationId))
+			{
+				_logger.LogError("ApplicationId is invalid");
+				return RedirectToPage("/Error/404");
+			}
+
+			ApplicationInfo = await _applicationService.GetPublicInfoAsync(ApplicationId);
+			if(ApplicationInfo == null)
+			{
+				_logger.LogError("ApplicationInfo is null");
+				return RedirectToPage("/Error/404");
+			}
+
+			TermsOptions = await _selectOptionsService.GetBinaryOptionsAsync(false);
+			PrivacyOptions = await _selectOptionsService.GetBinaryOptionsAsync(true);
+			CookieOptions = await _selectOptionsService.GetBinaryOptionsAsync(false);
+			PasswordRules = await _settingsService.GetPasswordRulesAsync();
+
 			return Page();
 		}
 

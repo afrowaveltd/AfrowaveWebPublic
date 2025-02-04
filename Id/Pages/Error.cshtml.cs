@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Id.Pages
 {
 	public class ErrorModel(IStringLocalizer<ErrorModel> _t) : PageModel
@@ -7,10 +9,14 @@ namespace Id.Pages
 		[BindProperty(SupportsGet = true)]
 		public int? ErrorCode { get; set; }
 
+		public string? RequestId { get; private set; }
+
 		public void OnGet(int? code)
 		{
 			ErrorCode = code;
+			RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
 		}
+
 		public string GetErrorMessage()
 		{
 			return ErrorCode switch
