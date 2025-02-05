@@ -114,7 +114,7 @@ namespace Id.Pages.Account
 			}
 			_logger.LogInformation("Registering user");
 
-			// Inicializace vlastností modelu, jako v OnGetAsync
+			// Inicializace vlastnostï¿½ modelu, jako v OnGetAsync
 			AuthenticatorId = await GetDefaultApplicationId();
 			if(string.IsNullOrEmpty(ApplicationId))
 			{
@@ -150,7 +150,7 @@ namespace Id.Pages.Account
 		{
 			_logger.LogInformation("Registering user");
 
-			// Inicializace vlastností modelu, jako v OnGetAsync
+			// Inicializace vlastnostï¿½ modelu, jako v OnGetAsync
 			AuthenticatorId = await GetDefaultApplicationId();
 			if(string.IsNullOrEmpty(ApplicationId))
 			{
