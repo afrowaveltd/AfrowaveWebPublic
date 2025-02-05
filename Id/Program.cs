@@ -79,11 +79,9 @@ builder.Services.AddControllers()
 		 options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
 	 });
 
-// Add own services
-
 // Middleware
 builder.Services.AddTransient<I18nMiddleware>();
-builder.Services.AddTransient<ErrorMiddleware>();
+// builder.Services.AddTransient<ErrorMiddleware>();
 
 // Scoped slu�by (HTTP request-based)
 builder.Services.AddScoped<ICookieService, CookieService>();
@@ -106,7 +104,7 @@ builder.Services.AddTransient<IEncryptionService, EncryptionService>();
 builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddTransient<IThemeService, ThemeService>();
 builder.Services.AddTransient<IUiTranslatorService, UiTranslatorService>();
-builder.Services.AddTransient<IErrorResponseService, ErrorResponseService>();
+//builder.Services.AddTransient<IErrorResponseService, ErrorResponseService>();
 
 // Singleton slu�by (glob�ln�, thread-safe)
 builder.Services.AddSingleton<ISettingsService, SettingsService>();
@@ -147,7 +145,7 @@ foreach(ApiResponse<List<string>> result in assetTranslationResults)
 string[] supportedCultures = loader.GetSupportedCultures();
 
 app.UseMiddleware<I18nMiddleware>();
-app.UseMiddleware<ErrorMiddleware>();
+//app.UseMiddleware<ErrorMiddleware>();
 
 app.UseRequestLocalization(options =>
 {

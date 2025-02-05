@@ -2,32 +2,24 @@ using System.Diagnostics;
 
 namespace Id.Pages
 {
-	public class ErrorModel(IStringLocalizer<ErrorModel> _t) : PageModel
+	[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+	[IgnoreAntiforgeryToken]
+	public class ErrorModel : PageModel
 	{
-		public IStringLocalizer<ErrorModel> t = _t;
+		public string? RequestId { get; set; }
 
-		[BindProperty(SupportsGet = true)]
-		public int? ErrorCode { get; set; }
+		public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
-		public string? RequestId { get; private set; }
+		private readonly ILogger<ErrorModel> _logger;
 
-		public void OnGet(int? code)
+		public ErrorModel(ILogger<ErrorModel> logger)
 		{
-			ErrorCode = code;
-			RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+			_logger = logger;
 		}
 
-		public string GetErrorMessage()
+		public void OnGet()
 		{
-			return ErrorCode switch
-			{
-				400 => t["Bad Request"],
-				401 => t["Unauthorized"],
-				403 => t["Forbidden"],
-				404 => t["Not Found"],
-				500 => t["Internal Server Error"],
-				_ => t["An unknown error occurred."]
-			};
+			RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
 		}
 	}
 }
