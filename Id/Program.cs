@@ -186,5 +186,24 @@ app.MapControllers();
 app.MapStaticAssets();
 app.MapRazorPages()
 	.WithStaticAssets();
+app.Use(async (context, next) =>
+{
+	await next();
 
+	if(context.Response.StatusCode == 404) // Detects 404 responses
+	{
+		var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+		logger.LogWarning("404 Not Found: {Path}", context.Request.Path);
+
+		// Clear the response and reprocess it through the custom middleware
+		context.Response.Clear();
+		context.Response.StatusCode = 404;
+
+		var middleware = new CustomErrorHandlingMiddleware(_ => Task.CompletedTask,
+	 context.RequestServices.GetRequiredService<IWebHostEnvironment>(),
+	 context.RequestServices.GetRequiredService<ILogger<CustomErrorHandlingMiddleware>>());
+
+		await middleware.InvokeAsync(context);
+	}
+});
 app.Run();

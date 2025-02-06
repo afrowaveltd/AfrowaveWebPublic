@@ -27,8 +27,8 @@ public class CustomErrorHandlingMiddleware
 
 			await _next(context);
 
-			_ = responseBody.Seek(0, SeekOrigin.Begin);
-			if(IsErrorStatusCode(context.Response.StatusCode))
+			responseBody.Seek(0, SeekOrigin.Begin);
+			if(IsErrorStatusCode(context.Response.StatusCode) || context.Response.StatusCode == 404)
 			{
 				await HandleErrorResponse(context, responseBody, originalBodyStream);
 			}
@@ -62,7 +62,13 @@ public class CustomErrorHandlingMiddleware
 		{
 			int statusCode = context.Response.StatusCode;
 			ResponseFormat formatter = GetResponseFormatter(context.Request);
-			ErrorDetails errorDetails = CreateErrorDetails(statusCode, exception);
+			ErrorDetails errorDetails = CreateErrorDetails(statusCode, exception, context);
+
+			if(formatter == ResponseFormat.Html)
+			{
+				context.Response.Redirect($"/Error?statusCode={statusCode}");
+				return;
+			}
 
 			if(statusCode == 500 && !_env.IsDevelopment())
 			{
@@ -73,7 +79,6 @@ public class CustomErrorHandlingMiddleware
 			{
 				ResponseFormat.Json => FormatJson(errorDetails),
 				ResponseFormat.Xml => FormatXml(errorDetails),
-				ResponseFormat.Html => await FormatHtml(context, errorDetails),
 				_ => FormatText(errorDetails)
 			};
 
@@ -86,18 +91,6 @@ public class CustomErrorHandlingMiddleware
 		{
 			_logger.LogError(ex, "Error handling failed");
 		}
-	}
-
-	private ErrorDetails CreateErrorDetails(int statusCode, Exception exception)
-	{
-		return new ErrorDetails
-		{
-			StatusCode = statusCode,
-			Title = $"Error {statusCode}",
-			Message = exception?.Message ?? "An error occurred.",
-			Details = _env.IsDevelopment() ? exception?.ToString() : null,
-			Timestamp = DateTime.UtcNow
-		};
 	}
 
 	private string FormatJson(ErrorDetails details) =>
@@ -114,9 +107,27 @@ public class CustomErrorHandlingMiddleware
 	private string FormatText(ErrorDetails details) =>
 		 $"{details.Title} ({details.StatusCode})\n{details.Message}\n{details.Details}";
 
-	private async Task<string> FormatHtml(HttpContext context, ErrorDetails details)
+	private ErrorDetails CreateErrorDetails(int statusCode, Exception exception, HttpContext context)
 	{
-		return $"<html><body><h1>{details.StatusCode} - {details.Title}</h1><p>{details.Message}</p></body></html>";
+		var localizer = context.RequestServices.GetRequiredService<IStringLocalizer<CustomErrorHandlingMiddleware>>();
+		return new ErrorDetails
+		{
+			StatusCode = statusCode,
+			Title = GetLocalizedTitle(statusCode, localizer),
+			Message = exception?.Message ?? GetLocalizedMessage(statusCode, localizer),
+			Details = _env.IsDevelopment() ? exception?.ToString() : null,
+			Timestamp = DateTime.UtcNow
+		};
+	}
+
+	private string GetLocalizedTitle(int statusCode, IStringLocalizer<CustomErrorHandlingMiddleware> localizer)
+	{
+		return localizer[$"Error_{statusCode}_Title"] ?? localizer["Error_Generic_Title"];
+	}
+
+	private string GetLocalizedMessage(int statusCode, IStringLocalizer<CustomErrorHandlingMiddleware> localizer)
+	{
+		return localizer[$"Error_{statusCode}_Message"] ?? localizer["Error_Generic_Message"];
 	}
 
 	private ResponseFormat GetResponseFormatter(HttpRequest request)
