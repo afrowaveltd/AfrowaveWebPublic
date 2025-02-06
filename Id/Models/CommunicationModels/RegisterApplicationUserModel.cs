@@ -4,7 +4,7 @@ namespace Id.Models.CommunicationModels
 {
 	public class RegisterApplicationUserModel
 	{
-		public string ApplicationId { get; set; } = string.Empty;
+		public string? ApplicationId { get; set; }
 
 		[Required]
 		[EmailAddress]

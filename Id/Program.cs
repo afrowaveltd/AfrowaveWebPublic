@@ -61,11 +61,15 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 	// Customize any other settings as needed (e.g., number or date handling)
 });
 
-builder.Services.AddLocalization();
+builder.Services
+	 .AddLocalization();
+
 builder.Services.AddOpenApi("AfrowaveId");
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages()
+	.AddViewLocalization();
+
 builder.Services.AddControllers()
 	 .AddJsonOptions(options =>
 	 {
@@ -151,17 +155,15 @@ app.UseRequestLocalization(options =>
 {
 	_ = options.AddSupportedCultures(supportedCultures)
 			 .AddSupportedUICultures(supportedCultures)
-			 .SetDefaultCulture(supportedCultures[0]);
+			 .SetDefaultCulture(supportedCultures[0])
+			 .ApplyCurrentCultureToResponseHeaders = true;
 });
-app.UseExceptionHandler("/Error");
 
 if(!app.Environment.IsDevelopment())
 {
 	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 	_ = app.UseHsts();
 }
-
-app.UseStatusCodePagesWithReExecute("/Error/{0}");
 app.UseHttpsRedirection();
 
 app.UseForwardedHeaders();
@@ -177,6 +179,7 @@ app.MapScalarApiReference(options =>
 });
 
 app.UseRouting();
+app.UseMiddleware<CustomErrorHandlingMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();

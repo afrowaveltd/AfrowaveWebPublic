@@ -26,19 +26,17 @@ namespace Id.Pages.Account
 		public string AuthenticatorId => _applicationService.GetDefaultApplicationId().Result;
 		public ApplicationPublicInfo? ApplicationInfo => _applicationService.GetPublicInfoAsync(AuthenticatorId).Result;
 
-		public List<SelectListItem> PrivacyOptions { get; set; } = new();
-		public List<SelectListItem> TermsOptions { get; set; } = new();
-		public List<SelectListItem> CookieOptions { get; set; } = new();
+		public List<SelectListItem> PrivacyOptions => _selectOptionsService.GetBinaryOptionsAsync(true).Result;
+		public List<SelectListItem> TermsOptions => _selectOptionsService.GetBinaryOptionsAsync(false).Result;
+		public List<SelectListItem> CookieOptions => _selectOptionsService.GetBinaryOptionsAsync(false).Result;
 		public RegistrationResult RegistrationResult { get; set; } = RegistrationResult.None;
+		public PasswordRules PasswordRules => _settingsService.GetPasswordRulesAsync().Result;
 
 		[BindProperty]
 		public RegisterApplicationUserModel Input { get; set; } = new();
 
-		[BindProperty]
-		public PasswordRules PasswordRules { get; set; } = new();
-
 		[FromRoute]
-		public string ApplicationId { get; set; } = string.Empty;
+		public string? ApplicationId { get; set; }
 
 		public async Task<IActionResult> OnGetAsync()
 		{
@@ -51,7 +49,7 @@ namespace Id.Pages.Account
 			else
 			{
 				// Check if the ApplicationId is valid
-				ApplicationId = await CheckApplicationId(ApplicationId);
+				ApplicationId = await _applicationService.CheckApplicationId(ApplicationId);
 			}
 			if(string.IsNullOrEmpty(ApplicationId))
 			{
@@ -71,38 +69,22 @@ namespace Id.Pages.Account
 					_logger.LogError("ApplicationInfo is null");
 					return RedirectToPage("/Error/404");
 				}
-				TermsOptions = await _selectOptionsService.GetBinaryOptionsAsync(false);
-				PrivacyOptions = await _selectOptionsService.GetBinaryOptionsAsync(true);
-				CookieOptions = await _selectOptionsService.GetBinaryOptionsAsync(false);
-				PasswordRules = await _settingsService.GetPasswordRulesAsync();
+
 				return Page();
 			}
 		}
 
-		public async Task<IActionResult> OnPostRegisterUserAsync()
+		public async Task<IActionResult> OnPostAsync()
 		{
+			_logger.LogInformation("Registering user");
 			if(ModelState.IsValid)
 			{
+				return RedirectToPage("/Account/Index");
 			}
 			else
 			{
 				return Page();
 			}
-			_logger.LogInformation("Registering user");
-
-			return Page();
-		}
-
-		private async Task<string> GetDefaultApplicationId()
-		{
-			// Retrieve the default application ID (e.g., from your service or configuration)
-			return await _applicationService.GetDefaultApplicationId();
-		}
-
-		private async Task<string> CheckApplicationId(string applicationId)
-		{
-			// Check if the application ID is valid (e.g., from your service)
-			return await _applicationService.CheckApplicationId(applicationId);
 		}
 	}
 }
