@@ -1,25 +1,44 @@
 ﻿using Id.Models.CommunicationModels;
+using Id.Models.SettingsModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace Id.Services
 {
-	public class UserService : IUserService
+	public class UserService(ApplicationDbContext context, ISettingsService settingsService, IEncryptionService encryption) : IUserService
 	{
-		private readonly ApplicationDbContext _context;
-
-		public UserService(ApplicationDbContext context)
-		{
-			_context = context;
-		}
+		private readonly ApplicationDbContext _context = context;
+		private readonly ISettingsService _settingsService = settingsService;
+		private readonly IEncryptionService _encryption = encryption;
 
 		public async Task<bool> IsEmailUnique(string email)
 		{
 			return (!await _context.Users.Where(s => s.Email == email.ToLower().Trim()).AnyAsync());
 		}
 
-		// ToDo: Implement CreateUserAsync
-		public async Task<ApiResponse<string>> CreateUserAsync(RegisterApplicationUserModel user)
+		public async Task<ApiResponse<List<string>>> CreateUserAsync(RegisterApplicationUserModel user)
 		{
-			ApiResponse<string> response = new ApiResponse<string>();
+			ApiResponse<List<string>> response = new ApiResponse<List<string>>();
+			ApiResponse<List<string>> formCheck = await CheckForm(user);
+			if(!formCheck.Successful)
+			{
+				response = formCheck;
+				return response;
+			}
+			var User = new User
+			{
+				Email = user.Email.ToLowerInvariant().Trim(),
+				Firstname = user.FirstName.Trim(),
+				Lastname = user.LastName.Trim(),
+				DisplayName = user.DisplayedName == null ? user.FirstName.Trim() : user.DisplayedName.Trim(),
+				Password = await _encryption.HashPasswordAsync(user.Password),
+				BirthDate = DateOnly.FromDateTime(user.Birthdate)
+				AccessFailedCount = 0
+			};
+			_ = await _context.Users.AddAsync(User);
+			_ = await _context.SaveChangesAsync();
+			// Now we have the User - remains to check if we need to store profile picture and if we need to send email confirmation
+
+			///Todo: Implement profile picture storage
 
 			return response;
 		}
@@ -181,6 +200,96 @@ namespace Id.Services
 				responses.Add(await AsignUserToRoleAsync(userId, role.Id));
 			}
 			return responses;
+		}
+
+		private async Task<ApiResponse<List<String>>> CheckForm(RegisterApplicationUserModel user)
+		{
+			ApiResponse<List<String>> response = new ApiResponse<List<String>>();
+			List<String> errors = new List<String>();
+
+			// Check if email is valid
+			if(!new EmailAddressAttribute().IsValid(user.Email))
+			{
+				errors.Add("Invalid email");
+				response.Successful = false;
+			}
+
+			// Check if email is unique
+			if(!await IsEmailUnique(user.Email))
+			{
+				errors.Add("Email already exists");
+				response.Successful = false;
+			}
+			// Check if passwords match
+			if(user.Password != user.PasswordConfirm)
+			{
+				errors.Add("Passwords do not match");
+				response.Successful = false;
+			}
+			// Password checks
+			PasswordRules rules = await _settingsService.GetPasswordRulesAsync();
+
+			// Check if password is not too short
+			if(user.Password.Length < rules.MinimumLength)
+			{
+				errors.Add("Password is too short");
+				response.Successful = false;
+			}
+			// Check if password is not too long
+			if(user.Password.Length > rules.MaximumLength)
+			{
+				errors.Add("Password is too long");
+				response.Successful = false;
+			}
+			// Check if password contains a number
+			if(rules.RequireDigit && !user.Password.Any(char.IsDigit))
+			{
+				errors.Add("Password must contain a number");
+				response.Successful = false;
+			}
+			// Check if password contains a lowercase letter
+			if(rules.RequireLowercase && !user.Password.Any(char.IsLower))
+			{
+				errors.Add("Password must contain a lowercase letter");
+				response.Successful = false;
+			}
+			// Check if password contains an uppercase letter
+			if(rules.RequireUppercase && !user.Password.Any(char.IsUpper))
+			{
+				errors.Add("Password must contain an uppercase letter");
+				response.Successful = false;
+			}
+			// Check if password contains a special character
+			if(rules.RequireNonAlphanumeric && user.Password.All(char.IsLetterOrDigit))
+			{
+				errors.Add("Password must contain a special character");
+				response.Successful = false;
+			}
+
+			// Check if user has accepted terms
+			if(!user.AcceptTerms)
+			{
+				errors.Add("You must accept the terms");
+				response.Successful = false;
+			}
+			// Check if user has accepted privacy policy
+			if(!user.AcceptPrivacyPolicy)
+			{
+				errors.Add("You must accept the privacy policy");
+				response.Successful = false;
+			}
+			// Check if user has accepted cookie policy
+			if(!user.AcceptCookiePolicy)
+			{
+				errors.Add("You must accept the cookie policy");
+				response.Successful = false;
+			}
+			if(errors.Count > 0)
+			{
+				response.Message = "Errors found";
+				response.Data = errors;
+			}
+			return response;
 		}
 	}
 }

@@ -4,6 +4,7 @@ using SharedTools.Models;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using System.Security.Cryptography;
 
 namespace SharedTools.Services
 {
@@ -17,6 +18,7 @@ namespace SharedTools.Services
 			 .Substring(0, AppDomain.CurrentDomain.BaseDirectory
 			 .IndexOf("bin")), "wwwroot");
 
+		// Resize and save an image
 		public async Task<ApiResponse<string>> ResizeAndSaveAsync(Image img, string targetPath, int width, int height)
 		{
 			ApiResponse<string> returnValue = new ApiResponse<string>();
@@ -60,25 +62,59 @@ namespace SharedTools.Services
 			return returnValue;
 		}
 
+		// Create icons for a brand
 		public async Task<List<ApiResponse<string>>> CreateBrandIcons(IFormFile img, int brandId)
 		{
 			string targetPath = Path.Combine(baseDirectory, "brands", brandId.ToString(), "icons");
 			return await CreateIcons(img, targetPath);
 		}
 
+		// Create icons for an application
 		public async Task<List<ApiResponse<string>>> CreateApplicationIcons(IFormFile img, string applicationId)
 		{
 			string targetPath = Path.Combine(baseDirectory, "applications", applicationId, "icons");
 			return await CreateIcons(img, targetPath);
 		}
 
+		// Create profile images for a user
 		public async Task<ApiResponse<string>> CreateUserProfileImages(IFormFile img, string userId)
 		{
 			ApiResponse<string> result = new();
-
+			// check if the file is an image
+			if(!IsImage(img))
+			{
+				result.Successful = false;
+				result.Message = "The file is not an image";
+				return result;
+			}
+			// Save the profile image
+			string fileName = await SaveProfileImage(img, userId);
+			string filePath = Path.Combine(baseDirectory, "users", userId, "profile-images", fileName);
+			// Check if the image is a duplicate
+			var userFolder = Path.Combine(baseDirectory, "users", userId, "profile-images");
+			if(IsDuplicateImage(userFolder, filePath))
+			{
+				result.Successful = false;
+				result.Message = "The image is a duplicate";
+				return result;
+			}
+			// Resize the image
+			ResizeImage(filePath, Path.Combine(userFolder, fileName.Replace(".", "-32x32.")), 32, 32);
+			ResizeImage(filePath, Path.Combine(userFolder, fileName.Replace(".", "-50x50.")), 50, 50);
+			ResizeImage(filePath, Path.Combine(userFolder, fileName.Replace(".", "-200x200.")), 200, 200);
+			result.Successful = true;
+			result.Data = fileName;
 			return result;
 		}
 
+		// Check if a file is an image
+		public bool IsImage(IFormFile img)
+		{
+			string fileExtension = Path.GetExtension(img.FileName).ToLower();
+			return permittedExtensions.Contains(fileExtension);
+		}
+
+		// Create icons for an image
 		private async Task<List<ApiResponse<string>>> CreateIcons(IFormFile img, string targetPath)
 		{
 			List<ApiResponse<string>> response = new();
@@ -183,6 +219,7 @@ namespace SharedTools.Services
 			return response;
 		}
 
+		// Create an .ico file
 		private void CreateIcoFile(Image<Rgba32> image, Stream outputStream)
 		{
 			using BinaryWriter writer = new BinaryWriter(outputStream);
@@ -211,17 +248,67 @@ namespace SharedTools.Services
 			writer.Write(pngBytes);
 		}
 
-		public bool IsImage(IFormFile img)
-		{
-			string fileExtension = Path.GetExtension(img.FileName).ToLower();
-			return permittedExtensions.Contains(fileExtension);
-		}
-
+		// Load an image from a file
 		private async Task<Image> GetImage(IFormFile img)
 		{
 			using MemoryStream ms = new();
 			await img.CopyToAsync(ms);
 			return Image.Load(ms.ToArray());
+		}
+
+		// Save a profile image
+		private async Task<string> SaveProfileImage(IFormFile file, string userId)
+		{
+			// Create the user folder if it doesn't exist
+			var userFolder = Path.Combine(baseDirectory, "users", userId, "profile-images");
+			if(!Directory.Exists(userFolder))
+			{
+				Directory.CreateDirectory(userFolder);
+			}
+			// Generate a unique file name
+			var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+			var filePath = Path.Combine(userFolder, fileName);
+
+			// Save the file
+			using(var stream = new FileStream(filePath, FileMode.Create))
+			{
+				await file.CopyToAsync(stream);
+			}
+			return fileName;
+		}
+
+		// Compute file hash to compare files
+		private string ComputeFileHash(string filePath)
+		{
+			using var md5 = MD5.Create();
+			using var stream = File.OpenRead(filePath);
+			return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLowerInvariant();
+		}
+
+		// Compare files, to avoid duplicates
+		private bool IsDuplicateImage(string userFolder, string newFilePath)
+		{
+			var newFileHash = ComputeFileHash(newFilePath);
+			foreach(var file in Directory.GetFiles(userFolder))
+			{
+				if(ComputeFileHash(file) == newFileHash)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// ResizeImage
+		private void ResizeImage(string sourcePath, string targetPath, int width, int height)
+		{
+			using Image image = Image.Load(sourcePath);
+			image.Mutate(x => x.Resize(new ResizeOptions
+			{
+				Size = new Size(width, height),
+				Mode = ResizeMode.Max
+			}));
+			image.Save(targetPath);
 		}
 	}
 }

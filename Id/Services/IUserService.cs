@@ -12,7 +12,7 @@ namespace Id.Services
 
 		Task<ApiResponse<int>> CreateApplicationUserAsync(CreateApplicationUserModel user);
 
-		Task<ApiResponse<string>> CreateUserAsync(RegisterApplicationUserModel user);
+		Task<ApiResponse<List<string>>> CreateUserAsync(RegisterApplicationUserModel user);
 
 		Task<ApiResponse<bool>> DeleteApplicationUserAsync(int id);
 
