@@ -31,7 +31,7 @@ namespace Id.Services
 				Lastname = user.LastName.Trim(),
 				DisplayName = user.DisplayedName == null ? user.FirstName.Trim() : user.DisplayedName.Trim(),
 				Password = await _encryption.HashPasswordAsync(user.Password),
-				BirthDate = DateOnly.FromDateTime(user.Birthdate)
+				BirthDate = DateOnly.FromDateTime(user.Birthdate ?? DateTime.UtcNow),
 				AccessFailedCount = 0
 			};
 			_ = await _context.Users.AddAsync(User);
