@@ -15,15 +15,19 @@ namespace Id.Services
 			return (!await _context.Users.Where(s => s.Email == email.ToLower().Trim()).AnyAsync());
 		}
 
-		public async Task<ApiResponse<List<string>>> CreateUserAsync(RegisterApplicationUserModel user)
+		public async Task<UserRegistrationResult> CreateUserAsync(RegisterApplicationUserModel user)
 		{
-			ApiResponse<List<string>> response = new ApiResponse<List<string>>();
+			UserRegistrationResult result = new();
+
+			// Check if form is valid
 			ApiResponse<List<string>> formCheck = await CheckForm(user);
 			if(!formCheck.Successful)
 			{
-				response = formCheck;
-				return response;
+				result.Success = false;
+				result.Errors = formCheck.Data ?? [];
+				return result;
 			}
+			// first create the User account
 			var User = new User
 			{
 				Email = user.Email.ToLowerInvariant().Trim(),
@@ -36,11 +40,22 @@ namespace Id.Services
 			};
 			_ = await _context.Users.AddAsync(User);
 			_ = await _context.SaveChangesAsync();
+			result.UserId = User.Id;
+
 			// Now we have the User - remains to check if we need to store profile picture and if we need to send email confirmation
+			///ToDo: Implement email confirmation
+			LoginRules loginRules = await _settingsService.GetLoginRulesAsync();
+			if(loginRules.RequireConfirmedEmail)
+			{
+				User.EmailConfirmed = false;
+				User.OTPToken = Guid.NewGuid().ToString();
+				User.OTPTokenExpiration = DateTime.UtcNow.AddMinutes(loginRules.OTPTokenExpiration);
+				_ = await _context.SaveChangesAsync();
+			}
 
 			///Todo: Implement profile picture storage
 
-			return response;
+			return result;
 		}
 
 		public async Task<ApiResponse<int>> CreateApplicationUserAsync(CreateApplicationUserModel user)

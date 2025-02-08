@@ -24,8 +24,8 @@ namespace Id.Pages.Helps
 				$"{data.LoginRules.MaxFailedLoginAttempts}");
 			loginRules.LiElements.Add("4. " + t["Password reset token expiration"],
 				$"{data.LoginRules.PasswordResetTokenExpiration} {t["minutes"]}");
-			loginRules.LiElements.Add("5. " + t["Email confirmation token expiration"],
-				$"{data.LoginRules.EmailConfirmationTokenExpiration} {t["minutes"]}");
+			loginRules.LiElements.Add("5. " + t["OTP token expiration"],
+				$"{data.LoginRules.OTPTokenExpiration} {t["minutes"]}");
 			ElementLines.Add(loginRules);
 
 			TextBlock passwordRules = new();

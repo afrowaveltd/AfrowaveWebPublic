@@ -3,6 +3,7 @@ using MailKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
+using RazorLight;
 using System.Text;
 
 namespace Id.Services
@@ -10,12 +11,70 @@ namespace Id.Services
 	public class EmailService(IStringLocalizer<EmailService> _t,
 		ILogger<EmailService> logger,
 		ApplicationDbContext context,
-		ISettingsService settings) : IEmailService
+		ISettingsService settings,
+		IApplicationService applicationService) : IEmailService
+
 	{
 		private readonly IStringLocalizer<EmailService> t = _t;
 		private readonly ILogger<EmailService> _logger = logger;
 		private readonly ApplicationDbContext _context = context;
 		private readonly ISettingsService _settings = settings;
+		private readonly IApplicationService _applicationService = applicationService;
+
+		private readonly RazorLightEngine _razorEngine = new RazorLightEngineBuilder()
+			.UseEmbeddedResourcesProject(typeof(EmailService))
+			.UseMemoryCachingProvider()
+			.Build();
+
+		public async Task<ApiResponse<string>> SendTemplatedEmailAsync(string targetEmail, string templateName, object model, string applicationId)
+		{
+			var smtpSettings = await _context.ApplicationSmtpSettings
+				.Where(s => s.ApplicationId == applicationId)
+				.FirstOrDefaultAsync();
+
+			if(smtpSettings == null)
+			{
+				return new ApiResponse<string>
+				{
+					Successful = false,
+					Message = "SMTP settings not found for the application."
+				};
+			}
+			string emailBody = await _razorEngine.CompileRenderAsync($"Templates.{templateName}", model);
+
+			var message = new MimeMessage();
+			message.From.Add(new MailboxAddress(smtpSettings.SenderName, smtpSettings.SenderEmail));
+			message.To.Add(MailboxAddress.Parse(targetEmail));
+			message.Subject = model.GetType().GetProperty("Subject")?.GetValue(model)?.ToString() ?? "Notification";
+			message.Body = new TextPart("html")
+			{
+				Text = emailBody
+			};
+
+			try
+			{
+				using var client = new SmtpClient();
+				await client.ConnectAsync(smtpSettings.Host, smtpSettings.Port, smtpSettings.Secure);
+				if(smtpSettings.AuthorizationRequired)
+					await client.AuthenticateAsync(smtpSettings.Username, smtpSettings.Password);
+
+				await client.SendAsync(message);
+				await client.DisconnectAsync(true);
+
+				return new ApiResponse<string> { Successful = true, Message = "Email sent successfully." };
+			}
+			catch(Exception ex)
+			{
+				_logger.LogError(ex, "Failed to send email.");
+				return new ApiResponse<string> { Successful = false, Message = $"Error sending email: {ex.Message}" };
+			}
+		}
+
+		public async Task<ApiResponse<string>> SendTemplatedEmailAsync(string targetEmail, string templateName, object model)
+		{
+			string applicationId = await _applicationService.GetDefaultApplicationId();
+			return await SendTemplatedEmailAsync(targetEmail, templateName, model, applicationId);
+		}
 
 		public async Task<ApiResponse<SmtpTestResponse>> TestSmtpConnectionAsync(SmtpSenderModel smtpModel)
 		{

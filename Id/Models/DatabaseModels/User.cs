@@ -26,19 +26,18 @@ namespace Id.Models.DatabaseModels
 
 		public string? ProfilePicture { get; set; }
 
-
 		[Required]
 		[JsonIgnore]
 		public string Password { get; set; } = string.Empty;
 
 		public DateOnly? BirthDate { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
 		public Gender Gender { get; set; } = Gender.Other;
-		public string? EmailConfirmationToken { get; set; } = string.Empty;
+		public string? OTPToken { get; set; } = string.Empty;
 
 		public bool? EmailConfirmed { get; set; } = false;
 		public string? PasswordResetToken { get; set; } = string.Empty;
 		public DateTime? PasswordResetTokenExpiration { get; set; }
-		public DateTime? EmailConfirmationTokenExpiration { get; set; }
+		public DateTime? OTPTokenExpiration { get; set; }
 
 		public int AccessFailedCount { get; set; } = 0;
 		public List<Application> OwnedApplications { get; set; } = new();

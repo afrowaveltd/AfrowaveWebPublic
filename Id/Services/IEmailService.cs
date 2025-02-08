@@ -13,7 +13,7 @@ namespace Id.Services
 		Task<ApiResponse<Dictionary<string, bool>>> SendEmailsAsync(List<string> targetEmails, string subject, string htmlBody, string textBody, SmtpSenderModel smtpModel);
 
 		Task<ApiResponse<Dictionary<string, bool>>> SendEmailsAsync(string applicationId, List<string> targetEmails, string subject, string htmlBody, string textBody);
-
+		Task<ApiResponse<string>> SendTemplatedEmailAsync(string targetEmail, string templateName, object model);
 		Task<ApiResponse<SmtpTestResponse>> TestSmtpConnectionAsync(SmtpSenderModel smtpModel);
 	}
 }

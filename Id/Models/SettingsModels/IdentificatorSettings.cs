@@ -16,7 +16,7 @@
 		public int MaxFailedLoginAttempts { get; set; } = 5;
 		public int LockoutTime { get; set; } = 15; // in minutes
 		public int PasswordResetTokenExpiration { get; set; } = 30; // in minutes
-		public int EmailConfirmationTokenExpiration { get; set; } = 60; // in minutes
+		public int OTPTokenExpiration { get; set; } = 60; // in minutes
 		public bool RequireConfirmedEmail { get; set; } = true;
 	}
 

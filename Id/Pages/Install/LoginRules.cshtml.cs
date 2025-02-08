@@ -40,7 +40,7 @@ namespace Id.Pages.Install
 			settings.LoginRules.MaxFailedLoginAttempts = Input.MaxFailedLoginAttempts;
 			settings.LoginRules.LockoutTime = Input.LockoutTime;
 			settings.LoginRules.PasswordResetTokenExpiration = Input.PasswordResetTokenExpiration;
-			settings.LoginRules.EmailConfirmationTokenExpiration = Input.EmailConfirmationTokenExpiration;
+			settings.LoginRules.OTPTokenExpiration = Input.OTPTokenExpiration;
 			settings.LoginRules.RequireConfirmedEmail = Input.RequireConfirmedEmail;
 			await _settings.SetSettingsAsync(settings);
 			return RedirectToPage("/Install/PasswordRules");
@@ -51,7 +51,7 @@ namespace Id.Pages.Install
 			public int MaxFailedLoginAttempts { get; set; } = 5;
 			public int LockoutTime { get; set; } = 15;
 			public int PasswordResetTokenExpiration { get; set; } = 15;
-			public int EmailConfirmationTokenExpiration { get; set; } = 15;
+			public int OTPTokenExpiration { get; set; } = 15;
 			public bool RequireConfirmedEmail { get; set; } = true;
 			public string ApplicationId { get; set; } = string.Empty;
 		}

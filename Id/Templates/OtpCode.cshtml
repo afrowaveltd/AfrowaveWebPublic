@@ -1,0 +1,29 @@
+﻿@model EmailTemplateModel
+@inject IStringLocalizer<EmailTemplateModel> t;
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .otp {
+            font-size: 24px;
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>@Model.HeaderText</h2>
+        <p>@t["Your onetime password":]</p>
+        <p> class="otp">@Model.OtpCode</p>
+    </div>
+</body>
+</html>

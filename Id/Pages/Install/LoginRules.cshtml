@@ -49,7 +49,7 @@
 				<div class="form-group">
 					<div id="login_rules_err_email_token_expiration" class="text-warning p-2 pb-0"></div>
 					<label for="login_rules">@Model.t["Email confirmation token expiration time (in minutes)"]</label>
-					<input asp-for="Input.EmailConfirmationTokenExpiration" type="number" class="form-control" id="email_token"
+					<input asp-for="Input.OTPTokenExpiration" type="number" class="form-control" id="email_token"
 						onfocus="loadHelp('Install_LoginRules_EmailConfirmationTokenExpiration')" 
 						onkeydown="checkEmailTokenExpiration(this)"
 						onchange="checkEmailTokenExpiration(this)" />
