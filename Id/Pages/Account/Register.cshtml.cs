@@ -103,7 +103,7 @@ namespace Id.Pages.Account
 					if(!applicationUserResult.Successful)
 					{
 						_logger.LogError("Application user creation failed");
-						RegistrationErrors.Add(t["Application user creation failed"]);
+						RegistrationErrors.Add("Application user creation failed");
 						return Page();
 					}
 					var applicationUserId = applicationUserResult.Data;
@@ -116,7 +116,7 @@ namespace Id.Pages.Account
 					else
 					{
 						_logger.LogError("All roles not assigned to user");
-						RegistrationErrors.Add(t["All roles not assigned to user"]);
+						RegistrationErrors.Add("All roles not assigned to user");
 						return Page();
 					}
 				}
