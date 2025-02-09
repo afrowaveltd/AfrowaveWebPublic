@@ -4,7 +4,8 @@ namespace Id.Services
 {
     public interface IRoleService
     {
-        Task<ApiResponse<int>> CreateApplicationRole(CreateApplicationRoleModel role);
+		Task<bool> AssignDefaultRolesToNewUserAsync(string applicationId, string userId);
+		Task<ApiResponse<int>> CreateApplicationRole(CreateApplicationRoleModel role);
 
         Task<ApiResponse<List<ApplicationRole>>> CreateDefaultRoles(string applicationId);
 

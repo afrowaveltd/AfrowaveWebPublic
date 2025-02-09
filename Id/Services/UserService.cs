@@ -1,14 +1,25 @@
 ﻿using Id.Models.CommunicationModels;
 using Id.Models.SettingsModels;
+using SharedTools.Services;
 using System.ComponentModel.DataAnnotations;
 
 namespace Id.Services
 {
-	public class UserService(ApplicationDbContext context, ISettingsService settingsService, IEncryptionService encryption) : IUserService
+	public class UserService(ApplicationDbContext context,
+		ISettingsService settingsService,
+		IEncryptionService encryption,
+		IEmailService emailService,
+		ILogger<UserService> logger,
+		IImageService imageService,
+		IStringLocalizer<UserService> t) : IUserService
 	{
+		private readonly ILogger<UserService> _logger = logger;
 		private readonly ApplicationDbContext _context = context;
 		private readonly ISettingsService _settingsService = settingsService;
 		private readonly IEncryptionService _encryption = encryption;
+		private readonly IEmailService _emailService = emailService;
+		private readonly IImageService _imageService = imageService;
+		private readonly IStringLocalizer<UserService> _t = t;
 
 		public async Task<bool> IsEmailUnique(string email)
 		{
@@ -41,21 +52,86 @@ namespace Id.Services
 			_ = await _context.Users.AddAsync(User);
 			_ = await _context.SaveChangesAsync();
 			result.UserId = User.Id;
+			_logger.LogInformation("User {email} created with user Id {id}", User.Email, User.Id);
 
 			// Now we have the User - remains to check if we need to store profile picture and if we need to send email confirmation
-			///ToDo: Implement email confirmation
+
 			LoginRules loginRules = await _settingsService.GetLoginRulesAsync();
 			if(loginRules.RequireConfirmedEmail)
 			{
 				User.EmailConfirmed = false;
-				User.OTPToken = Guid.NewGuid().ToString();
-				User.OTPTokenExpiration = DateTime.UtcNow.AddMinutes(loginRules.OTPTokenExpiration);
-				_ = await _context.SaveChangesAsync();
+				var otpResult = await SendOtpAsync(user.Email);
+				if(otpResult.Success)
+				{
+					result.EmailSent = true;
+					User.OTPToken = otpResult.OtpCode;
+					User.OTPTokenExpiration = DateTime.UtcNow.AddMinutes(loginRules.OTPTokenExpiration);
+					User.EmailConfirmed = false;
+					await _context.SaveChangesAsync();
+				}
+				else
+				{
+					result.Errors.Add("Email sending failed");
+					result.EmailSent = false;
+				}
+			}
+			else
+			{
+				result.EmailSent = false;
+				User.EmailConfirmed = true;
+				await _context.SaveChangesAsync();
 			}
 
-			///Todo: Implement profile picture storage
-
+			if(user.ProfilePicture != null)
+			{
+				var imageResult = await _imageService.CreateUserProfileImages(user.ProfilePicture, User.Id);
+				if(imageResult.Successful)
+				{
+					result.PictureUploaded = true;
+				}
+				else
+				{
+					result.PictureUploaded = false;
+					result.Errors.Add("Profile picture upload failed");
+				}
+			}
 			return result;
+		}
+
+		public async Task<SendOtpResult> SendOtpAsync(string email)
+		{
+			SendOtpResult response = new();
+			User? user = await _context.Users.Where(s => s.Email == email).FirstOrDefaultAsync();
+			if(user == null)
+			{
+				response.Success = false;
+				return response;
+			}
+			LoginRules loginRules = await _settingsService.GetLoginRulesAsync();
+			string otpCode = GenerateOtpCode();
+			response.OtpCode = otpCode;
+			string otpCodeHash = await GenerateOtpCodeHash(otpCode);
+			user.OTPToken = otpCodeHash;
+			user.OTPTokenExpiration = DateTime.UtcNow.AddMinutes(loginRules.OTPTokenExpiration);
+			_ = await _context.SaveChangesAsync();
+			var emailModel = new EmailTemplateModel
+			{
+				HeaderText = _t["One time password"],
+				OtpCode = otpCode,
+				Subject = _t["Your one time password"]
+			};
+			var result = await _emailService.SendTemplatedEmailAsync(email, "OtpCode", emailModel);
+			if(result.Successful)
+			{
+				response.Success = true;
+				_logger.LogInformation("OTP sent to {email}", email);
+			}
+			else
+			{
+				_logger.LogError("OTP sending failed to {email}, because of {error}", email, result.Message);
+				response.Success = false;
+			}
+			return response;
 		}
 
 		public async Task<ApiResponse<int>> CreateApplicationUserAsync(CreateApplicationUserModel user)
@@ -305,6 +381,20 @@ namespace Id.Services
 				response.Data = errors;
 			}
 			return response;
+		}
+
+		private string GenerateOtpCode()
+		{
+			// OTP code will be 12 characters long including small letters and digits only
+			string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+			Random random = new Random();
+			return new string(Enumerable.Repeat(chars, 12).Select(s => s[random.Next(s.Length)]).ToArray());
+		}
+
+		private async Task<string> GenerateOtpCodeHash(string otpCode)
+		{
+			string result = await _encryption.HashPasswordAsync(otpCode);
+			return result;
 		}
 	}
 }

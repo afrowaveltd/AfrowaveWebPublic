@@ -1,4 +1,5 @@
-﻿@model EmailTemplateModel
+﻿@using Id.Models.CommunicationModels
+@model EmailTemplateModel
 @inject IStringLocalizer<EmailTemplateModel> t;
 <!DOCTYPE html>
 <html>
@@ -22,7 +23,7 @@
 <body>
     <div class="container">
         <h2>@Model.HeaderText</h2>
-        <p>@t["Your onetime password":]</p>
+        <p>@t["Your onetime password"]:</p>
         <p> class="otp">@Model.OtpCode</p>
     </div>
 </body>
