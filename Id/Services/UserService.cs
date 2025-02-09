@@ -301,14 +301,14 @@ namespace Id.Services
 			// Check if email is valid
 			if(!new EmailAddressAttribute().IsValid(user.Email))
 			{
-				errors.Add("Invalid email");
+				errors.Add("Invalid email address");
 				response.Successful = false;
 			}
 
 			// Check if email is unique
 			if(!await IsEmailUnique(user.Email))
 			{
-				errors.Add("Email already exists");
+				errors.Add("Email address is already registered");
 				response.Successful = false;
 			}
 			// Check if passwords match
@@ -335,25 +335,25 @@ namespace Id.Services
 			// Check if password contains a number
 			if(rules.RequireDigit && !user.Password.Any(char.IsDigit))
 			{
-				errors.Add("Password must contain a number");
+				errors.Add("Password must contain at least one number");
 				response.Successful = false;
 			}
 			// Check if password contains a lowercase letter
 			if(rules.RequireLowercase && !user.Password.Any(char.IsLower))
 			{
-				errors.Add("Password must contain a lowercase letter");
+				errors.Add("Password must contain at least one lowercase letter");
 				response.Successful = false;
 			}
 			// Check if password contains an uppercase letter
 			if(rules.RequireUppercase && !user.Password.Any(char.IsUpper))
 			{
-				errors.Add("Password must contain an uppercase letter");
+				errors.Add("Password must contain at least one uppercase letter");
 				response.Successful = false;
 			}
 			// Check if password contains a special character
 			if(rules.RequireNonAlphanumeric && user.Password.All(char.IsLetterOrDigit))
 			{
-				errors.Add("Password must contain a special character");
+				errors.Add("Password must contain at least one special character");
 				response.Successful = false;
 			}
 
