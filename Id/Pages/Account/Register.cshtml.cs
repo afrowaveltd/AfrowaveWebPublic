@@ -81,7 +81,7 @@ namespace Id.Pages.Account
 			_logger.LogInformation("Registering user");
 			if(ModelState.IsValid)
 			{
-				var userRegistrationResult = await _userService.CreateUserAsync(Input);
+				UserRegistrationResult userRegistrationResult = await _userService.CreateUserAsync(Input);
 				if(!userRegistrationResult.Success)
 				{
 					RegistrationErrors = userRegistrationResult.Errors;
@@ -99,14 +99,14 @@ namespace Id.Pages.Account
 						AgreedToCookies = Input.AcceptCookiePolicy,
 						AgreedSharingUserDetails = Input.AcceptPrivacyPolicy
 					};
-					var applicationUserResult = await _userService.CreateApplicationUserAsync(applicationUser);
+					ApiResponse<int> applicationUserResult = await _userService.CreateApplicationUserAsync(applicationUser);
 					if(!applicationUserResult.Successful)
 					{
 						_logger.LogError("Application user creation failed");
 						RegistrationErrors.Add("Application user creation failed");
 						return Page();
 					}
-					var applicationUserId = applicationUserResult.Data;
+					int applicationUserId = applicationUserResult.Data;
 					_logger.LogInformation("Application user created with Id {id}", applicationUserId);
 					// assign role to the application user
 					if(await _roleService.AssignDefaultRolesToNewUserAsync(userRegistrationResult.UserId, ApplicationId))
@@ -131,6 +131,10 @@ namespace Id.Pages.Account
 				{
 					_logger.LogInformation("Email confirmation required");
 					return RedirectToPage("/Account/OtpLogin/" + Input.Email);
+				}
+				if(Input.ApplicationId != AuthenticatorId)
+				{
+					object applicationRegistrationResult =
 				}
 				return RedirectToPage("/Account/Login");
 				/// ToDo - if email confirmation is not required, log the user in

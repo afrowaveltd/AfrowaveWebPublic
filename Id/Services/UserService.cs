@@ -8,6 +8,7 @@ namespace Id.Services
 	public class UserService(ApplicationDbContext context,
 		ISettingsService settingsService,
 		IEncryptionService encryption,
+		IRoleService roleService,
 		IEmailService emailService,
 		ILogger<UserService> logger,
 		IImageService imageService,
@@ -18,6 +19,7 @@ namespace Id.Services
 		private readonly ISettingsService _settingsService = settingsService;
 		private readonly IEncryptionService _encryption = encryption;
 		private readonly IEmailService _emailService = emailService;
+		private readonly IRoleService _roleService = roleService;
 		private readonly IImageService _imageService = imageService;
 		private readonly IStringLocalizer<UserService> _t = t;
 
@@ -39,7 +41,7 @@ namespace Id.Services
 				return result;
 			}
 			// first create the User account
-			var User = new User
+			User User = new User
 			{
 				Email = user.Email.ToLowerInvariant().Trim(),
 				Firstname = user.FirstName.Trim(),
@@ -60,14 +62,14 @@ namespace Id.Services
 			if(loginRules.RequireConfirmedEmail)
 			{
 				User.EmailConfirmed = false;
-				var otpResult = await SendOtpAsync(user.Email);
+				SendOtpResult otpResult = await SendOtpAsync(user.Email);
 				if(otpResult.Success)
 				{
 					result.EmailSent = true;
 					User.OTPToken = otpResult.OtpCode;
 					User.OTPTokenExpiration = DateTime.UtcNow.AddMinutes(loginRules.OTPTokenExpiration);
 					User.EmailConfirmed = false;
-					await _context.SaveChangesAsync();
+					_ = await _context.SaveChangesAsync();
 				}
 				else
 				{
@@ -79,12 +81,12 @@ namespace Id.Services
 			{
 				result.EmailSent = false;
 				User.EmailConfirmed = true;
-				await _context.SaveChangesAsync();
+				_ = await _context.SaveChangesAsync();
 			}
 
 			if(user.ProfilePicture != null)
 			{
-				var imageResult = await _imageService.CreateUserProfileImages(user.ProfilePicture, User.Id);
+				ApiResponse<string> imageResult = await _imageService.CreateUserProfileImages(user.ProfilePicture, User.Id);
 				if(imageResult.Successful)
 				{
 					result.PictureUploaded = true;
@@ -114,13 +116,13 @@ namespace Id.Services
 			user.OTPToken = otpCodeHash;
 			user.OTPTokenExpiration = DateTime.UtcNow.AddMinutes(loginRules.OTPTokenExpiration);
 			_ = await _context.SaveChangesAsync();
-			var emailModel = new EmailTemplateModel
+			EmailTemplateModel emailModel = new EmailTemplateModel
 			{
 				HeaderText = _t["One time password"],
 				OtpCode = otpCode,
 				Subject = _t["Your one time password"]
 			};
-			var result = await _emailService.SendTemplatedEmailAsync(email, "OtpCode", emailModel);
+			ApiResponse<string> result = await _emailService.SendTemplatedEmailAsync(email, "OtpCode", emailModel);
 			if(result.Successful)
 			{
 				response.Success = true;
@@ -131,6 +133,12 @@ namespace Id.Services
 				_logger.LogError("OTP sending failed to {email}, because of {error}", email, result.Message);
 				response.Success = false;
 			}
+			return response;
+		}
+
+		public async Task<ApiResponse<ApplicationUserDetails>> CreateApplicationUserWithDefaultRoles(string userId, string applicationId)
+		{
+			ApiResponse<ApplicationUserDetails> response = new();
 			return response;
 		}
 
@@ -293,10 +301,10 @@ namespace Id.Services
 			return responses;
 		}
 
-		private async Task<ApiResponse<List<String>>> CheckForm(RegisterApplicationUserModel user)
+		private async Task<ApiResponse<List<string>>> CheckForm(RegisterApplicationUserModel user)
 		{
-			ApiResponse<List<String>> response = new ApiResponse<List<String>>();
-			List<String> errors = new List<String>();
+			ApiResponse<List<string>> response = new ApiResponse<List<string>>();
+			List<string> errors = new List<string>();
 
 			// Check if email is valid
 			if(!new EmailAddressAttribute().IsValid(user.Email))
