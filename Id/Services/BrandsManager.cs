@@ -129,8 +129,7 @@ namespace Id.Services
 		}
 
 		// private functions
-
-		private async Task<CheckInputResult> CheckBrandInputAsync(RegisterBrandInput input)
+		private async Task<CheckInputResult> CheckBrandInputAsync<T>(T input) where T : IBrandInput
 		{
 			CheckInputResult result = new();
 			if(input == null)
