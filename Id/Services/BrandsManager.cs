@@ -20,11 +20,11 @@ namespace Id.Services
 		// Private variables
 		private readonly string[] permittedExtensions = { ".jpeg", ".jpg", ".gif", ".png" };
 
-		private bool uploadIcons = true;
-
 		private string appImgDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory
 			.Substring(0, AppDomain.CurrentDomain.BaseDirectory
 			.IndexOf("bin")), "wwwroot", "brands");
+
+		private string noLogo = "/img/no-icon.png";
 
 		// Public functions
 		public async Task<bool> IsNameUnique(string name)
@@ -56,12 +56,79 @@ namespace Id.Services
 			}
 			else
 			{
+				Brand brand = new()
+				{
+					Name = input.Name,
+					Description = input.Description,
+					Website = input.Website,
+					Email = input.Email,
+					OwnerId = input.OwnerId
+				};
+				await _context.Brands.AddAsync(brand);
+				await _context.SaveChangesAsync();
+				result.BrandId = brand.Id;
+				if(input.Icon != null)
+				{
+					List<ApiResponse<string>> iconResponse = await _imageService.CreateBrandIcons(input.Icon, brand.Id);
+					if(iconResponse.Any(r => r.Successful == false))
+					{
+						_logger.LogError("RegisterBrandAsync: icon upload failed");
+						result.LogoUploaded = false;
+						result.ErrorMessage = _t["Logo upload failed"];
+						return result;
+					}
+					else
+					{
+						result.LogoUploaded = true;
+					}
+				}
 			}
-
 			return result;
 		}
 
-		// private fuctions
+		public string GetLogoPath(int brandId, LogoSize size)
+		{
+			string logoPath = size switch
+			{
+				LogoSize.png16px =>
+					File.Exists(Path.Combine(appImgDirectory, brandId.ToString(), "icon-16x16.png"))
+					? Path.Combine(appImgDirectory, brandId.ToString(), "icon-16x16.png")
+					: "/img/no-icon_16.png",
+				LogoSize.png32px =>
+				File.Exists(Path.Combine(appImgDirectory, brandId.ToString(), "icon-32x32.png"))
+					? Path.Combine(appImgDirectory, brandId.ToString(), "icon-32x32.png")
+					: "/img/no-icon_32.png",
+				LogoSize.png76px =>
+				File.Exists(Path.Combine(appImgDirectory, brandId.ToString(), "icon-76x76.png"))
+					? Path.Combine(appImgDirectory, brandId.ToString(), "icon-76x76.png")
+					: "/img/no-icon_76.png",
+				LogoSize.png120px =>
+				File.Exists(Path.Combine(appImgDirectory, brandId.ToString(), "icon-120x120.png"))
+					? Path.Combine(appImgDirectory, brandId.ToString(), "icon-120x120.png")
+					: "/img/no-icon_120.png",
+				LogoSize.png152px =>
+				File.Exists(Path.Combine(appImgDirectory, brandId.ToString(), "icon-152x152.png"))
+					? Path.Combine(appImgDirectory, brandId.ToString(), "icon-152x152.png")
+					: "/img/no-icon_152.png",
+				_ =>
+				File.Exists(Path.Combine(appImgDirectory, brandId.ToString(), "original-icon*.png"))
+					? Path.Combine(appImgDirectory, brandId.ToString(), "original-icon*.png")
+					: "/img/no-icon.png"
+			};
+			return logoPath;
+		}
+
+		public string GetFullsizeLogoPath(int brandId)
+		{
+			return GetLogoPath(brandId, LogoSize.pngOriginal);
+		}
+
+		public string GetIconPath(int brandId)
+		{
+			return GetLogoPath(brandId, LogoSize.png32px);
+		}
+
+		// private functions
 
 		private async Task<CheckInputResult> CheckBrandInputAsync(RegisterBrandInput input)
 		{
