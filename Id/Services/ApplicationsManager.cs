@@ -117,6 +117,85 @@ namespace Id.Services
 				result.Success = false;
 				result.Errors.Add(_t["Missing owner"]);
 			}
+
+			if(string.IsNullOrEmpty(input.Name))
+			{
+				_logger.LogError("CheckRegistration: Name is null");
+				result.Success = false;
+				result.Errors.Add(_t["Missing application name"]);
+			}
+
+			if(string.IsNullOrEmpty(input.BrandId))
+			{
+				_logger.LogError("CheckRegistration: BrandId is null");
+				result.Success = false;
+				result.Errors.Add(_t["Missing brand"]);
+			}
+
+			if(input.Name.Length < 2)
+			{
+				_logger.LogError("CheckRegistration: Name is too short");
+				result.Success = false;
+				result.Errors.Add(_t["Application name is too short"]);
+			}
+
+			if(input.Name.Length > 100)
+			{
+				_logger.LogError("CheckRegistration: Name is too long");
+				result.Success = false;
+				result.Errors.Add(_t["Application name is too long"]);
+			}
+
+			if(input.Description != null && input.Description.Length > 500)
+			{
+				_logger.LogError("CheckRegistration: Description is too long");
+				result.Success = false;
+				result.Errors.Add(_t["Description is too long"]);
+			}
+
+			if(input.Email != null && !Tools.IsEmailValid(input.Email))
+			{
+				_logger.LogError("CheckRegistration: Email is not valid");
+				result.Success = false;
+				result.Errors.Add(_t["Invalid email address"]);
+			}
+
+			if(input.Website != null && !Tools.IsValidUrl(input.Website))
+			{
+				_logger.LogError("CheckRegistration: Website is not valid");
+				result.Success = false;
+				result.Errors.Add(_t["Invalid website"]);
+			}
+
+			if(input.Icon != null && !Tools.IsImage(input.Icon))
+			{
+				_logger.LogError("CheckRegistration: Icon is not valid");
+				result.Success = false;
+				result.Errors.Add(_t["Invalid icon"]);
+			}
+
+			if(input.PrivacyUrl != null && !Tools.IsValidUrl(input.PrivacyUrl))
+			{
+				_logger.LogError("CheckRegistration: PrivacyUrl is not valid");
+				result.Success = false;
+				result.Errors.Add(_t["Invalid privacy policy URL"]);
+			}
+
+			if(input.TermsUrl != null && !Tools.IsValidUrl(input.TermsUrl))
+			{
+				_logger.LogError("CheckRegistration: TermsUrl is not valid");
+				result.Success = false;
+				result.Errors.Add(_t["Invalid terms URL"]);
+			}
+
+			if(input.CookiesUrl != null && !Tools.IsValidUrl(input.CookiesUrl))
+			{
+				_logger.LogError("CheckRegistration: CookiesUrl is not valid");
+				result.Success = false;
+				result.Errors.Add(_t["Invalid cookies URL"]);
+			}
+
+			return result.Success = true;
 			return result;
 		}
 	}

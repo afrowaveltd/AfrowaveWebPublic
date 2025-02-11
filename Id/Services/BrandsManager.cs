@@ -72,6 +72,13 @@ namespace Id.Services
 				.AnyAsync());
 		}
 
+		public async Task<bool> ValidBrandAndOwner(int brandId, string ownerId)
+		{
+			return await _context.Brands
+				.Where(b => b.Id == brandId && b.OwnerId == ownerId)
+				.AnyAsync();
+		}
+
 		public async Task<RegisterBrandResult> RegisterBrandAsync(RegisterBrandInput input)
 		{
 			RegisterBrandResult result = new();
