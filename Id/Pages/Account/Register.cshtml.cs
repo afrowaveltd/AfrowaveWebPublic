@@ -134,7 +134,6 @@ namespace Id.Pages.Account
 				}
 				if(Input.ApplicationId != AuthenticatorId)
 				{
-					object applicationRegistrationResult =
 				}
 				return RedirectToPage("/Account/Login");
 				/// ToDo - if email confirmation is not required, log the user in

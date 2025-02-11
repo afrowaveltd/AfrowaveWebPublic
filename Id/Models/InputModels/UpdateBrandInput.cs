@@ -2,7 +2,7 @@
 {
 	public class UpdateBrandInput : IBrandInput
 	{
-		public string BrandId { get; set; } = string.Empty;
+		public int BrandId { get; set; } = 0;
 		public string Name { get; set; } = string.Empty;
 
 		public string? Description { get; set; }
