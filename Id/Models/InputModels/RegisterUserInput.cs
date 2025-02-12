@@ -1,0 +1,37 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Id.Models.InputModels
+{
+	public class RegisterUserInput : IUserInput
+	{
+		public string? ApplicationId { get; set; }
+
+		[Required]
+		[EmailAddress]
+		public string Email { get; set; } = string.Empty;
+
+		[Required]
+		[DataType(DataType.Password)]
+		public string Password { get; set; } = string.Empty;
+
+		[Required]
+		[DataType(DataType.Password)]
+		public string PasswordConfirm { get; set; } = string.Empty;
+
+		public Gender Gender { get; set; } = Gender.Other;
+		public string FirstName { get; set; } = string.Empty;
+		public string LastName { get; set; } = string.Empty;
+		public string DisplayedName { get; set; } = string.Empty;
+		public DateTime? Birthdate { get; set; } = DateTime.UtcNow;
+		public IFormFile? ProfilePicture { get; set; }
+
+		[Required]
+		public bool AcceptTerms { get; set; } = false;
+
+		[Required]
+		public bool AcceptPrivacyPolicy { get; set; } = false;
+
+		[Required]
+		public bool AcceptCookiePolicy { get; set; } = false;
+	}
+}
