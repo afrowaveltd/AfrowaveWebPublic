@@ -8,7 +8,7 @@ namespace Id.Services
 		ApplicationDbContext context,
 		IImageService imageService,
 		ILogger<BrandsManager> logger,
-		IStringLocalizer<BrandsManager> t)
+		IStringLocalizer<BrandsManager> t) : IBrandsManager
 	{
 		// Initialization
 		private readonly ApplicationDbContext _context = context;
@@ -141,9 +141,9 @@ namespace Id.Services
 			return result;
 		}
 
-		public async Task<UpdateBrandResult> UpdateBrandAsync(UpdateBrandInput input)
+		public async Task<UpdateResult> UpdateBrandAsync(UpdateBrandInput input)
 		{
-			UpdateBrandResult result = new();
+			UpdateResult result = new();
 			if(input == null)
 			{
 				_logger.LogError("UpdateBrandAsync: input is null");

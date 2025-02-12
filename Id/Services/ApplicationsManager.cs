@@ -7,14 +7,16 @@ namespace Id.Services
 {
 	public class ApplicationsManager(ApplicationDbContext context,
 		IImageService imageService,
+		IBrandsManager brandsManager,
 		ISettingsService settings,
 		IStringLocalizer<ApplicationsManager> t,
 		ILogger<ApplicationsManager> logger,
-		IEncryptionService encryptionService)
+		IEncryptionService encryptionService) : IApplicationsManager
 	{
 		// Initialization
 		private readonly ApplicationDbContext _context = context;
 
+		private readonly IBrandsManager _brandsManager = brandsManager;
 		private readonly IImageService _imageService = imageService;
 		private readonly ILogger<ApplicationsManager> _logger = logger;
 		private readonly ISettingsService _settings = settings;
@@ -100,6 +102,199 @@ namespace Id.Services
 				.AnyAsync());
 		}
 
+		public async Task<RegisterApplicationResult> RegisterApplicationAsync(RegisterApplicationInput input)
+		{
+			RegisterApplicationResult result = new();
+			CheckInputResult formCheck = CheckApplicationInput(input);
+			if(!formCheck.Success)
+			{
+				result.ApplicationCreated = false;
+				result.LogoUploaded = false;
+				result.ErrorMessage = string.Join(", ", formCheck.Errors);
+				return result;
+			}
+			if(!await IsNameUnique(input.Name))
+			{
+				result.ApplicationCreated = false;
+				result.LogoUploaded = false;
+				result.ErrorMessage = _t["Application name is already in use"];
+				return result;
+			}
+			if(!await _brandsManager.ValidBrandAndOwner(input.BrandId, input.OwnerId))
+			{
+				result.ApplicationCreated = false;
+				result.LogoUploaded = false;
+				result.ErrorMessage = _t["Invalid brand"];
+				return result;
+			}
+			Application application = new();
+			application.Id = Guid.NewGuid().ToString();
+			application.Name = input.Name;
+			application.Description = input.Description ?? string.Empty;
+			application.ApplicationEmail = input.Email;
+			application.ApplicationWebsite = input.Website;
+			application.OwnerId = input.OwnerId;
+			application.BrandId = input.BrandId;
+			application.ApplicationPrivacyPolicy = input.PrivacyUrl ?? string.Empty;
+			application.ApplicationTermsAndConditions = input.TermsUrl ?? string.Empty;
+			application.ApplicationCookiesPolicy = input.CookiesUrl ?? string.Empty;
+			application.RequireTerms = input.RequireTerms;
+			application.RequirePrivacyPolicy = input.RequirePrivacyPolicy;
+			application.RequireCookiePolicy = input.RequireCookiePolicy;
+			application.Published = DateTime.UtcNow;
+			application.IsEnabled = true;
+			application.IsDeleted = false;
+			application.Suspended = false;
+			application.SuspendedById = string.Empty;
+			application.ReasonForSuspension = string.Empty;
+
+			_ = await _context.Applications.AddAsync(application);
+			_ = await _context.SaveChangesAsync();
+			result.ApplicationId = application.Id;
+			result.ApplicationCreated = true;
+
+			if(input.Icon != null)
+			{
+				List<ApiResponse<string>> resultUpload = await _imageService.CreateApplicationIcons(input.Icon, application.Id);
+				if(resultUpload.Where(s => s.Successful == false).Any())
+				{
+					result.LogoUploaded = false;
+					result.ErrorMessage = _t["Logo upload failed"];
+				}
+				else
+				{
+					result.LogoUploaded = true;
+				}
+			}
+			return result;
+		}
+
+		public async Task<UpdateResult> UpdateApplicationAsync(UpdateApplicationInput input)
+		{
+			UpdateResult result = new();
+			if(input == null)
+			{
+				_logger.LogError("UpdateApplicationAsync: input is null");
+				result.Success = false;
+				result.Errors.Add(_t["Missing application data"]);
+				return result;
+			}
+			CheckInputResult checkInput = CheckApplicationInput(input);
+			if(!checkInput.Success)
+			{
+				_logger.LogError("UpdateApplicationAsync: input is invalid");
+				result.Errors.AddRange(checkInput.Errors);
+				result.Success = false;
+				return result;
+			}
+			if(!await ApplicationExistsAsync(input.ApplicationId))
+			{
+				_logger.LogError("UpdateApplicationAsync: application does not exist");
+				result.Success = false;
+				result.Errors.Add(_t["Application does not exist"]);
+				return result;
+			}
+
+			if(!await _brandsManager.ValidBrandAndOwner(input.BrandId, input.OwnerId))
+			{
+				_logger.LogError("UpdateApplicationAsync: invalid brand");
+				result.Success = false;
+				result.Errors.Add(_t["Invalid brand"]);
+				return result;
+			}
+
+			Application? application = await _context.Applications
+				.Where(s => s.Id == input.ApplicationId)
+				.FirstOrDefaultAsync();
+
+			if(application == null)
+			{
+				_logger.LogError("UpdateApplicationAsync: application not found");
+				result.Success = false;
+				result.Errors.Add(_t["Application not found"]);
+				return result;
+			}
+
+			if(application.OwnerId != input.OwnerId)
+			{
+				_logger.LogError("UpdateApplicationAsync: owner does not match");
+				result.Success = false;
+				result.Errors.Add(_t["Owner does not match"]);
+				return result;
+			}
+
+			if(application.Name != input.Name)
+			{
+				if(!await IsNameUnique(input.Name))
+				{
+					_logger.LogError("UpdateApplicationAsync: name is not unique");
+					result.Success = false;
+					result.Errors.Add(_t["Application name is already in use"]);
+					return result;
+				}
+				application.Name = input.Name;
+				result.UpdatedValues.Add("Name", input.Name);
+			}
+
+			if(application.Description != input.Description)
+			{
+				application.Description = input.Description ?? string.Empty;
+				result.UpdatedValues.Add("Description", input.Description ?? string.Empty);
+			}
+			if(application.ApplicationEmail != input.Email)
+			{
+				application.ApplicationEmail = input.Email;
+				result.UpdatedValues.Add("Email", input.Email ?? string.Empty);
+			}
+			if(application.ApplicationWebsite != input.Website)
+			{
+				application.ApplicationWebsite = input.Website;
+				result.UpdatedValues.Add("Website", input.Website ?? string.Empty);
+			}
+			if(application.ApplicationPrivacyPolicy != input.PrivacyUrl)
+			{
+				application.ApplicationPrivacyPolicy = input.PrivacyUrl ?? string.Empty;
+				result.UpdatedValues.Add("PrivacyUrl", input.PrivacyUrl ?? string.Empty);
+			}
+			if(application.ApplicationTermsAndConditions != input.TermsUrl)
+			{
+				application.ApplicationTermsAndConditions = input.TermsUrl ?? string.Empty;
+				result.UpdatedValues.Add("TermsUrl", input.TermsUrl ?? string.Empty);
+			}
+			if(application.ApplicationCookiesPolicy != input.CookiesUrl)
+			{
+				application.ApplicationCookiesPolicy = input.CookiesUrl ?? string.Empty;
+				result.UpdatedValues.Add("CookiesUrl", input.CookiesUrl ?? string.Empty);
+			}
+			if(application.RequireTerms != input.RequireTerms)
+			{
+				application.RequireTerms = input.RequireTerms;
+				result.UpdatedValues.Add("RequireTerms", input.RequireTerms.ToString());
+			}
+			if(application.RequirePrivacyPolicy != input.RequirePrivacyPolicy)
+			{
+				application.RequirePrivacyPolicy = input.RequirePrivacyPolicy;
+				result.UpdatedValues.Add("RequirePrivacyPolicy", input.RequirePrivacyPolicy.ToString());
+			}
+			if(application.RequireCookiePolicy != input.RequireCookiePolicy)
+			{
+				application.RequireCookiePolicy = input.RequireCookiePolicy;
+				result.UpdatedValues.Add("RequireCookiePolicy", input.RequireCookiePolicy.ToString());
+			}
+			try
+			{
+				_ = await _context.SaveChangesAsync();
+				result.Success = true;
+			}
+			catch(Exception ex)
+			{
+				_logger.LogError(ex, "UpdateApplicationAsync: error saving changes");
+				result.Success = false;
+				result.Errors.Add(_t["Error saving changes"]);
+			}
+			return result;
+		}
+
 		// Private functions
 		private CheckInputResult CheckApplicationInput<T>(T input) where T : IApplicationInput
 		{
@@ -125,7 +320,7 @@ namespace Id.Services
 				result.Errors.Add(_t["Missing application name"]);
 			}
 
-			if(string.IsNullOrEmpty(input.BrandId))
+			if(input.BrandId == 0)
 			{
 				_logger.LogError("CheckRegistration: BrandId is null");
 				result.Success = false;
@@ -195,7 +390,7 @@ namespace Id.Services
 				result.Errors.Add(_t["Invalid cookies URL"]);
 			}
 
-			return result.Success = true;
+			result.Success = true;
 			return result;
 		}
 	}
