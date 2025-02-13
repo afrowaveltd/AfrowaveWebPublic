@@ -2,11 +2,11 @@
 {
 	public interface IBrandInput
 	{
-		string Name { get; set; } = string.Empty;
+		string Name { get; set; }
 		string? Description { get; set; }
 		IFormFile? Icon { get; set; }
 		string? Website { get; set; }
 		string? Email { get; set; }
-		string OwnerId { get; set; } = string.Empty;
+		string OwnerId { get; set; }
 	}
 }

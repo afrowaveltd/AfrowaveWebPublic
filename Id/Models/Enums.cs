@@ -34,6 +34,14 @@
 		pngOriginal
 	}
 
+	public enum ProfilePictureSize
+	{
+		icon,
+		small,
+		big,
+		original
+	}
+
 	public enum RegistrationStep
 	{
 		User,

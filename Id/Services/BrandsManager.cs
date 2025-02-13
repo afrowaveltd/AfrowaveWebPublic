@@ -18,9 +18,11 @@ namespace Id.Services
 		private readonly IStringLocalizer<BrandsManager> _t = t;
 
 		// Private variables
-		private string appImgDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory
+		private readonly string appImgDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory
 			.Substring(0, AppDomain.CurrentDomain.BaseDirectory
 			.IndexOf("bin")), "wwwroot", "brands");
+
+		private readonly string webImgDirectory = "/brands";
 
 		// Public functions
 		public string GetFullsizeLogoPath(int brandId)
@@ -39,27 +41,27 @@ namespace Id.Services
 			{
 				LogoSize.png16px =>
 					File.Exists(Path.Combine(appImgDirectory, brandId.ToString(), "icons", "icon-16x16.png"))
-					? Path.Combine(appImgDirectory, brandId.ToString(), "icons", "icon-16x16.png")
+					? $"{webImgDirectory}/{brandId}/icons/icon-16x16.png"
 					: "/img/no-icon_16.png",
 				LogoSize.png32px =>
 				File.Exists(Path.Combine(appImgDirectory, brandId.ToString(), "icons", "icon-32x32.png"))
-					? Path.Combine(appImgDirectory, brandId.ToString(), "icons", "icon-32x32.png")
+					? $"{webImgDirectory}/{brandId}/icons/icon-32x32.png"
 					: "/img/no-icon_32.png",
 				LogoSize.png76px =>
 				File.Exists(Path.Combine(appImgDirectory, brandId.ToString(), "icons", "icon-76x76.png"))
-					? Path.Combine(appImgDirectory, brandId.ToString(), "icons", "icon-76x76.png")
+					? $"{webImgDirectory}/{brandId}/icons/icon-76x76.png"
 					: "/img/no-icon_76.png",
 				LogoSize.png120px =>
 				File.Exists(Path.Combine(appImgDirectory, brandId.ToString(), "icons", "icon-120x120.png"))
-					? Path.Combine(appImgDirectory, brandId.ToString(), "icons", "icon-120x120.png")
+					? $"{webImgDirectory}/{brandId}/icons/icon-120x120.png"
 					: "/img/no-icon_120.png",
 				LogoSize.png152px =>
 				File.Exists(Path.Combine(appImgDirectory, brandId.ToString(), "icons", "icon-152x152.png"))
-					? Path.Combine(appImgDirectory, brandId.ToString(), "icons", "icon-152x152.png")
+					? $"{webImgDirectory}/{brandId}/icons/icon-152x152.png"
 					: "/img/no-icon_152.png",
 				_ =>
 				File.Exists(Path.Combine(appImgDirectory, brandId.ToString(), "icons", "original-icon*.png"))
-					? Path.Combine(appImgDirectory, brandId.ToString(), "icons", "original-icon*.png")
+					? $"{webImgDirectory}/{brandId}/icons/original-icon*.png"
 					: "/img/no-icon.png"
 			};
 			return logoPath;
@@ -70,13 +72,6 @@ namespace Id.Services
 			return (!await _context.Brands
 				.Where(s => s.Name.ToLower().Trim() == name.ToLower().Trim())
 				.AnyAsync());
-		}
-
-		public async Task<bool> ValidBrandAndOwner(int brandId, string ownerId)
-		{
-			return await _context.Brands
-				.Where(b => b.Id == brandId && b.OwnerId == ownerId)
-				.AnyAsync();
 		}
 
 		public async Task<RegisterBrandResult> RegisterBrandAsync(RegisterBrandInput input)
@@ -224,6 +219,13 @@ namespace Id.Services
 				_ = await _context.SaveChangesAsync();
 				return result;
 			}
+		}
+
+		public async Task<bool> ValidBrandAndOwner(int brandId, string ownerId)
+		{
+			return await _context.Brands
+				.Where(b => b.Id == brandId && b.OwnerId == ownerId)
+				.AnyAsync();
 		}
 
 		// private functions

@@ -24,9 +24,11 @@ namespace Id.Services
 		private readonly IEncryptionService _encryptionService = encryptionService;
 
 		// Private variables
-		private string appImgDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory
+		private readonly string appImgDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory
 			.Substring(0, AppDomain.CurrentDomain.BaseDirectory
 			.IndexOf("bin")), "wwwroot", "applications");
+
+		private readonly string webImgDirectory = "/applications";
 
 		// Public functions
 		public async Task<bool> ApplicationExistsAsync(string applicationId)
@@ -69,27 +71,27 @@ namespace Id.Services
 			{
 				LogoSize.png16px =>
 					File.Exists(Path.Combine(appImgDirectory, applicationId, "icons", "icon-16x16.png"))
-					? Path.Combine(appImgDirectory, applicationId, "icons", "icon-16x16.png")
+					? $"{webImgDirectory}/{applicationId}/icons/icon-16x16.png"
 					: "/img/no-icon_16.png",
 				LogoSize.png32px =>
 				File.Exists(Path.Combine(appImgDirectory, applicationId, "icons", "icon-32x32.png"))
-					? Path.Combine(appImgDirectory, applicationId, "icons", "icon-32x32.png")
+					? $"{webImgDirectory}/{applicationId}/icons/icon-32x32.png"
 					: "/img/no-icon_32.png",
 				LogoSize.png76px =>
 				File.Exists(Path.Combine(appImgDirectory, applicationId, "icons", "icon-76x76.png"))
-					? Path.Combine(appImgDirectory, applicationId, "icons", "icon-76x76.png")
+					? $"{webImgDirectory}/{applicationId}/icons/icon-76x76.png"
 					: "/img/no-icon_76.png",
 				LogoSize.png120px =>
 				File.Exists(Path.Combine(appImgDirectory, applicationId, "icons", "icon-120x120.png"))
-					? Path.Combine(appImgDirectory, applicationId, "icons", "icon-120x120.png")
+					? $"{webImgDirectory}/{applicationId}/icons/icon-120x120.png"
 					: "/img/no-icon_120.png",
 				LogoSize.png152px =>
 				File.Exists(Path.Combine(appImgDirectory, applicationId, "icons", "icon-152x152.png"))
-					? Path.Combine(appImgDirectory, applicationId, "icons", "icon-152x152.png")
+					? $"{webImgDirectory}/{applicationId}/icons/icon-152x152.png"
 					: "/img/no-icon_152.png",
 				_ =>
 				File.Exists(Path.Combine(appImgDirectory, applicationId, "icons", "original-icon*.png"))
-					? Path.Combine(appImgDirectory, applicationId, "icons", "original-icon*.png")
+					? $"{webImgDirectory}/{applicationId}/icons/original-icon*.png"
 					: "/img/no-icon.png"
 			};
 			return logoPath;

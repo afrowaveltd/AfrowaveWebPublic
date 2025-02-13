@@ -23,7 +23,7 @@ namespace Id.Api
 		[AllowAnonymous]
 		[HttpPost]
 		[Route("autodetect")]
-		public async Task<ApiResponse<SmtpSenderModel>> AutodetectSettings([System.Web.Http.FromBody] InputModel model)
+		public async Task<ApiResponse<SmtpSenderModel>> AutodetectSettings([FromBody] InputModel model)
 		{
 			if(string.IsNullOrWhiteSpace(model.Host))
 			{
@@ -36,7 +36,7 @@ namespace Id.Api
 		[AllowAnonymous]
 		[HttpPost]
 		[Route("test")]
-		public async Task<ApiResponse<SmtpTestResponse>> TestSettings([System.Web.Http.FromBody] SmtpSenderModel model)
+		public async Task<ApiResponse<SmtpTestResponse>> TestSettings([FromBody] SmtpSenderModel model)
 		{
 			// Test settings
 			return await _email.TestSmtpConnectionAsync(model);

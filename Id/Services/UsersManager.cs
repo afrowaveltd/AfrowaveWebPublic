@@ -1,5 +1,6 @@
 ﻿using Id.Models.InputModels;
 using Id.Models.ResultModels;
+using Id.Models.SettingsModels;
 using SharedTools.Services;
 using System.ComponentModel.DataAnnotations;
 
@@ -24,7 +25,9 @@ namespace Id.Services
 		private readonly IStringLocalizer<UsersManager> _t = t;
 
 		// Private variables
-		private string userImgDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot", "users");
+		private readonly string userImgDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot", "users");
+
+		private readonly string webImgDirectory = "/users";
 
 		// Public functions
 		public async Task<bool> IsEmailFreeAsync(string email)
@@ -34,16 +37,176 @@ namespace Id.Services
 
 		public async Task<RegisterUserResult> RegisterUserAsync(RegisterUserInput input)
 		{
-			var result = new RegisterUserResult();
+			LoginRules loginRules = await _settingsService.GetLoginRulesAsync();
+
+			RegisterUserResult result = new RegisterUserResult();
+			// Check input
+			if(input == null)
+			{
+				_logger.LogWarning("Input is null");
+				result.UserCreated = false;
+				result.ProfilePictureUploaded = false;
+				result.Errors.Add(_t["Input is null"]);
+				return result;
+			}
+			CheckInputResult checkInput = await CheckUserInputAsync(input);
+			if(!checkInput.Success)
+			{
+				_logger.LogWarning("Input is not valid");
+				result.UserCreated = false;
+				result.ProfilePictureUploaded = false;
+				result.Errors.AddRange(checkInput.Errors);
+				return result;
+			}
+			CheckInputResult emailCheck = await CheckEmailAsync(input.Email);
+			if(!emailCheck.Success)
+			{
+				_logger.LogWarning("Email is not valid");
+				result.UserCreated = false;
+				result.ProfilePictureUploaded = false;
+				result.Errors.AddRange(emailCheck.Errors);
+				return result;
+			}
+			CheckInputResult passwordCheck = await CheckPasswordsAsync(input.Password, input.PasswordConfirm);
+			if(!passwordCheck.Success)
+			{
+				_logger.LogWarning("Password is not valid");
+				result.UserCreated = false;
+				result.ProfilePictureUploaded = false;
+				result.Errors.AddRange(passwordCheck.Errors);
+				return result;
+			}
+			// Create user
+			User user = new User
+			{
+				Email = input.Email,
+				Password = await _encryptionService.HashPasswordAsync(input.Password),
+				Gender = input.Gender,
+				Firstname = input.FirstName,
+				Lastname = input.LastName,
+				DisplayName = input.DisplayedName,
+				BirthDate = DateOnly.FromDateTime(input.Birthdate ?? DateTime.UtcNow),
+				EmailConfirmed = !loginRules.RequireConfirmedEmail
+			};
+			// Save user
+			try
+			{
+				_ = await _dbContext.Users.AddAsync(user);
+				_ = await _dbContext.SaveChangesAsync();
+				result.UserCreated = true;
+				result.UserId = user.Id;
+			}
+			catch(Exception ex)
+			{
+				_logger.LogError(ex, "Error while saving user");
+				result.UserCreated = false;
+				result.ProfilePictureUploaded = false;
+				result.Errors.Add(_t["Error while saving user"]);
+				return result;
+			}
+
+			// Upload profile picture
+			if(input.ProfilePicture != null)
+			{
+				ApiResponse<string> uploadResult = await _imageService.CreateUserProfileImages(input.ProfilePicture, user.Id);
+				if(uploadResult.Successful)
+				{
+					user.ProfilePicture = uploadResult.Data;
+					_ = await _dbContext.SaveChangesAsync();
+					result.ProfilePictureUploaded = true;
+				}
+				else
+				{
+					result.ProfilePictureUploaded = false;
+				}
+			}
+
+			Console.WriteLine(user.ToString());
+			return result;
+		}
+
+		public async Task<UpdateResult> UpdateUserAsync(UpdateUserInput input)
+		{
+			UpdateResult result = new();
+			// Check input
+			if(input == null)
+			{
+				_logger.LogWarning("Input is null");
+				result.Success = false;
+				result.Errors.Add(_t["Input is null"]);
+				return result;
+			}
+			// Get user
+			User user = await _dbContext.Users.FindAsync(input.UserId);
+			if(user == null)
+			{
+				_logger.LogWarning("User not found");
+				result.Success = false;
+				result.Errors.Add(_t["User not found"]);
+				return result;
+			}
+
+			if(user.Email != input.Email)
+			{
+				_logger.LogWarning("Email is not valid");
+				result.Success = false;
+				result.Errors.AddRange("Email doesn't belong to the user");
+				return result;
+			}
+			CheckInputResult checkInput = await CheckUserInputAsync(input);
+			if(!checkInput.Success)
+			{
+				_logger.LogWarning("Input is not valid");
+				result.Success = false;
+				result.Errors.AddRange(checkInput.Errors);
+				return result;
+			}
+			// Update user
+			if(input.FirstName != user.Firstname)
+			{
+				user.Firstname = input.FirstName;
+				result.UpdatedValues["First name"] = input.FirstName;
+			}
+			if(input.LastName != user.Lastname)
+			{
+				user.Lastname = input.LastName;
+				result.UpdatedValues["Last name"] = input.LastName;
+			}
+			if(input.DisplayedName != user.DisplayName)
+			{
+				user.DisplayName = input.DisplayedName;
+				result.UpdatedValues["Displayed name"] = input.DisplayedName;
+			}
+			if(DateOnly.FromDateTime(input.Birthdate ?? DateTime.UtcNow) != user.BirthDate)
+			{
+				user.BirthDate = DateOnly.FromDateTime(input.Birthdate ?? DateTime.UtcNow);
+				result.UpdatedValues["Birthdate"] = input.Birthdate.ToString();
+			}
+			if(input.ProfilePicture != null)
+			{
+				ApiResponse<string> uploadResult = await _imageService.CreateUserProfileImages(input.ProfilePicture, user.Id);
+				if(uploadResult.Successful)
+				{
+					user.ProfilePicture = uploadResult.Data;
+					_ = await _dbContext.SaveChangesAsync();
+					result.UpdatedValues["Profile picture"] = uploadResult.Data;
+				}
+				else
+				{
+					result.Errors.Add(uploadResult.Message);
+				}
+			}
+			result.Success = true;
+			_ = await _dbContext.SaveChangesAsync();
 			return result;
 		}
 
 		// Private functions
 		private async Task<CheckInputResult> CheckPasswordsAsync(string password, string confirmPassword)
 		{
-			var checkResult = new CheckInputResult();
+			CheckInputResult checkResult = new();
 			// Get password rules
-			var rules = await _settingsService.GetPasswordRulesAsync();
+			PasswordRules rules = await _settingsService.GetPasswordRulesAsync();
 
 			// Check if password is null or empty
 			if(string.IsNullOrEmpty(password))
@@ -108,7 +271,7 @@ namespace Id.Services
 
 		private async Task<CheckInputResult> CheckEmailAsync(string email)
 		{
-			var checkResult = new CheckInputResult();
+			CheckInputResult checkResult = new CheckInputResult();
 			// Check if email is null or empty
 			if(string.IsNullOrEmpty(email))
 			{
@@ -134,45 +297,125 @@ namespace Id.Services
 			return checkResult;
 		}
 
-		private async Task<CheckInputResult> CheckUserInputAsync(RegisterUserInput input)
+		private async Task<CheckInputResult> CheckUserInputAsync<T>(T input) where T : IUserInput
 		{
-			var checkResult = new CheckInputResult();
+			CheckInputResult checkResult = new CheckInputResult();
 			// Check email
-			var emailCheck = await CheckEmailAsync(input.Email);
+			CheckInputResult emailCheck = await CheckEmailAsync(input.Email);
 			if(!emailCheck.Success)
 			{
 				checkResult.Success = false;
 				checkResult.Errors.AddRange(emailCheck.Errors);
 			}
-			// Check passwords
-			var passwordCheck = await CheckPasswordsAsync(input.Password, input.PasswordConfirm);
-			if(!passwordCheck.Success)
+			// Check names
+			if(string.IsNullOrEmpty(input.FirstName))
 			{
+				_logger.LogWarning("First name is null or empty");
 				checkResult.Success = false;
-				checkResult.Errors.AddRange(passwordCheck.Errors);
+				checkResult.Errors.Add(_t["First name is null or empty"]);
 			}
-			// Check if user accepted terms
+			if(string.IsNullOrEmpty(input.LastName))
+			{
+				_logger.LogWarning("Last name is null or empty");
+				checkResult.Success = false;
+				checkResult.Errors.Add(_t["Last name is null or empty"]);
+			}
+			if(input.FirstName.Length < 2)
+			{
+				_logger.LogWarning("First name is too short");
+				checkResult.Success = false;
+				checkResult.Errors.Add(_t["First name is too short"]);
+			}
+			if(input.LastName.Length < 2)
+			{
+				_logger.LogWarning("Last name is too short");
+				checkResult.Success = false;
+				checkResult.Errors.Add(_t["Last name is too short"]);
+			}
+			if(input.FirstName.Length > 50)
+			{
+				_logger.LogWarning("First name is too long");
+				checkResult.Success = false;
+				checkResult.Errors.Add(_t["First name is too long"]);
+			}
+			if(input.LastName.Length > 50)
+			{
+				_logger.LogWarning("Last name is too long");
+				checkResult.Success = false;
+				checkResult.Errors.Add(_t["Last name is too long"]);
+			}
+			// Check display name
+			if(string.IsNullOrEmpty(input.DisplayedName))
+			{
+				input.DisplayedName = input.FirstName;
+			}
+			// Check if birthday is not empty
+			if(input.Birthdate == null)
+			{
+				_logger.LogWarning("Birthdate is null");
+				checkResult.Success = false;
+				checkResult.Errors.Add(_t["Birthdate is null"]);
+			}
+			// Check if birthdate is in the future
+			if(input.Birthdate.HasValue && input.Birthdate.Value > DateTime.UtcNow)
+			{
+				_logger.LogWarning("Birthdate is in the future");
+				checkResult.Success = false;
+				checkResult.Errors.Add(_t["Birthdate is in the future"]);
+			}
+
+			// Check birthdate for minimal age of 7 years
+			if(input.Birthdate.HasValue && input.Birthdate.Value.AddYears(7) > DateTime.UtcNow)
+			{
+				_logger.LogWarning("User is too young");
+				checkResult.Success = false;
+				checkResult.Errors.Add(_t["User is too young"]);
+			}
+
+			return checkResult;
+		}
+
+		private CheckInputResult CheckTermsAndConditions(RegisterUserInput input)
+		{
+			CheckInputResult checkResult = new CheckInputResult();
+			// Check if terms and conditions are accepted
 			if(!input.AcceptTerms)
 			{
-				_logger.LogWarning("User did not accept terms");
+				_logger.LogWarning("Terms and conditions are not accepted");
 				checkResult.Success = false;
-				checkResult.Errors.Add(_t["User did not accept terms"]);
+				checkResult.Errors.Add(_t["Terms and conditions are not accepted"]);
 			}
-			// Check if user accepted privacy policy
+			// Check if privacy policy is accepted
 			if(!input.AcceptPrivacyPolicy)
 			{
-				_logger.LogWarning("User did not accept privacy policy");
+				_logger.LogWarning("Privacy policy is not accepted");
 				checkResult.Success = false;
-				checkResult.Errors.Add(_t["User did not accept privacy policy"]);
+				checkResult.Errors.Add(_t["Privacy policy is not accepted"]);
 			}
-			// Check if user accepted cookie policy
+			// Check if cookie policy is accepted
 			if(!input.AcceptCookiePolicy)
 			{
-				_logger.LogWarning("User did not accept cookie policy");
+				_logger.LogWarning("Cookie policy is not accepted");
 				checkResult.Success = false;
-				checkResult.Errors.Add(_t["User did not accept cookie policy"]);
+				checkResult.Errors.Add(_t["Cookie policy is not accepted"]);
 			}
 			return checkResult;
+		}
+
+		private async Task<string> GetImagePath(string userId, ProfilePictureSize size)
+		{
+			string pictureName = await _dbContext.Users.Where(s => s.Id == userId).FirstOrDefaultAsync(s => s.ProfilePicture);
+			if(pictureName == null)
+			{
+				pictureName = "";
+			}
+
+			string path = size switch
+			{
+				ProfilePictureSize.icon =>
+
+				File.Exists
+			}
 		}
 	}
 }

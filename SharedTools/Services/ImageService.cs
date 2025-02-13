@@ -100,8 +100,8 @@ namespace SharedTools.Services
 			}
 			// Resize the image
 			ResizeImage(filePath, Path.Combine(userFolder, fileName.Replace(".", "-32x32.")), 32, 32);
-			ResizeImage(filePath, Path.Combine(userFolder, fileName.Replace(".", "-50x50.")), 50, 50);
-			ResizeImage(filePath, Path.Combine(userFolder, fileName.Replace(".", "-200x200.")), 200, 200);
+			ResizeImage(filePath, Path.Combine(userFolder, fileName.Replace(".", "-52x52.")), 52, 52);
+			ResizeImage(filePath, Path.Combine(userFolder, fileName.Replace(".", "-1920x192.")), 192, 192);
 			result.Successful = true;
 			result.Data = fileName;
 			return result;
