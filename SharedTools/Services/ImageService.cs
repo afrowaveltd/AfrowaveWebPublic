@@ -89,9 +89,9 @@ namespace SharedTools.Services
 			}
 			// Save the profile image
 			string fileName = await SaveProfileImage(img, userId);
-			string filePath = Path.Combine(baseDirectory, "users", userId, "profile-images", fileName);
+			string filePath = Path.Combine(baseDirectory, "users", userId, "profile-picture", fileName);
 			// Check if the image is a duplicate
-			var userFolder = Path.Combine(baseDirectory, "users", userId, "profile-images");
+			string userFolder = Path.Combine(baseDirectory, "users", userId, "profile-images");
 			if(IsDuplicateImage(userFolder, filePath))
 			{
 				result.Successful = false;
@@ -260,17 +260,17 @@ namespace SharedTools.Services
 		private async Task<string> SaveProfileImage(IFormFile file, string userId)
 		{
 			// Create the user folder if it doesn't exist
-			var userFolder = Path.Combine(baseDirectory, "users", userId, "profile-images");
+			string userFolder = Path.Combine(baseDirectory, "users", userId, "profile-images");
 			if(!Directory.Exists(userFolder))
 			{
-				Directory.CreateDirectory(userFolder);
+				_ = Directory.CreateDirectory(userFolder);
 			}
 			// Generate a unique file name
-			var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-			var filePath = Path.Combine(userFolder, fileName);
+			string fileName = Guid.NewGuid().ToString().ToLowerInvariant() + Path.GetExtension(file.FileName).ToLowerInvariant();
+			string filePath = Path.Combine(userFolder, fileName);
 
 			// Save the file
-			using(var stream = new FileStream(filePath, FileMode.Create))
+			using(FileStream stream = new FileStream(filePath, FileMode.Create))
 			{
 				await file.CopyToAsync(stream);
 			}
@@ -280,16 +280,16 @@ namespace SharedTools.Services
 		// Compute file hash to compare files
 		private string ComputeFileHash(string filePath)
 		{
-			using var md5 = MD5.Create();
-			using var stream = File.OpenRead(filePath);
+			using MD5 md5 = MD5.Create();
+			using FileStream stream = File.OpenRead(filePath);
 			return BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLowerInvariant();
 		}
 
 		// Compare files, to avoid duplicates
 		private bool IsDuplicateImage(string userFolder, string newFilePath)
 		{
-			var newFileHash = ComputeFileHash(newFilePath);
-			foreach(var file in Directory.GetFiles(userFolder))
+			string newFileHash = ComputeFileHash(newFilePath);
+			foreach(string file in Directory.GetFiles(userFolder))
 			{
 				if(ComputeFileHash(file) == newFileHash)
 				{

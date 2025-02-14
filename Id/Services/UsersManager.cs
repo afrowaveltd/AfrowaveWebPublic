@@ -30,6 +30,26 @@ namespace Id.Services
 		private readonly string webImgDirectory = "/users";
 
 		// Public functions
+		public async Task<string> GetIconPath(string userId)
+		{
+			return await GetImagePath(userId, ProfilePictureSize.icon);
+		}
+
+		public async Task<string> GetMediumImagePath(string userId)
+		{
+			return await GetImagePath(userId, ProfilePictureSize.small);
+		}
+
+		public async Task<string> GetBigImagePath(string userId)
+		{
+			return await GetImagePath(userId, ProfilePictureSize.big);
+		}
+
+		public async Task<string> GetOriginalImagePath(string userId)
+		{
+			return await GetImagePath(userId, ProfilePictureSize.original);
+		}
+
 		public async Task<bool> IsEmailFreeAsync(string email)
 		{
 			return !await _dbContext.Users.AnyAsync(u => u.Email == email);
@@ -404,18 +424,40 @@ namespace Id.Services
 
 		private async Task<string> GetImagePath(string userId, ProfilePictureSize size)
 		{
-			string pictureName = await _dbContext.Users.Where(s => s.Id == userId).FirstOrDefaultAsync(s => s.ProfilePicture);
-			if(pictureName == null)
+			string pictureName = await _dbContext.Users.Where(s => s.Id == userId).Select(s => s.ProfilePicture).FirstOrDefaultAsync() ?? string.Empty;
+			string nameWithoutEtension = string.Empty;
+			string extension = string.Empty;
+			bool nameExists = false;
+			if(pictureName != string.Empty)
 			{
-				pictureName = "";
+				nameExists = true;
+				nameWithoutEtension = Path.GetFileNameWithoutExtension(pictureName);
+				extension = Path.GetExtension(pictureName).TrimStart('.').ToLower();
 			}
 
 			string path = size switch
 			{
 				ProfilePictureSize.icon =>
+				(nameExists && File.Exists(Path.Combine(userImgDirectory, userId, "profile-picture", $"{pictureName}-32x32.{extension}")))
+				? $"{webImgDirectory}/{userId}/profile-picture/{nameWithoutEtension}-32x32.{extension}"
+				: "/img/no-icon_32.png",
 
-				File.Exists
-			}
+				ProfilePictureSize.small =>
+				(nameExists && File.Exists(Path.Combine(userImgDirectory, userId, "profile-picture", $"{pictureName}-52x52.{extension}")))
+				? $"{webImgDirectory}/{userId}/profile-picture/{nameWithoutEtension}-52x52.{extension}"
+				: "/img/no-icon_52.png",
+
+				ProfilePictureSize.big =>
+				(nameExists && File.Exists(Path.Combine(userImgDirectory, userId, "profile-picture", $"{pictureName}-192x192.{extension}")))
+				? $"{webImgDirectory}/{userId}/profile-picture/{nameWithoutEtension}-192x192.{extension}"
+				: "/img/no-icon_192.png",
+
+				_ =>
+				(nameExists && File.Exists(Path.Combine(userImgDirectory, userId, "profile-picture", $"{pictureName}.{extension}")))
+				? $"{webImgDirectory}/{userId}/profile-picture/{nameWithoutEtension}.{extension}"
+				: "/img/no-icon.png"
+			};
+			return path;
 		}
 	}
 }
