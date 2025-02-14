@@ -12,7 +12,7 @@ namespace Id.Services
 		IEncryptionService encryptionService,
 		IEmailService emailService,
 		IImageService imageService,
-		IStringLocalizer<UsersManager> t)
+		IStringLocalizer<UsersManager> t) : IUsersManager
 	{
 		// Initialization
 		private readonly ILogger<UsersManager> _logger = logger;

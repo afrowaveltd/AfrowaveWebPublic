@@ -6,9 +6,8 @@
 		public string ApplicationId { get; set; } = string.Empty;
 		public string Name { get; set; } = string.Empty;
 		public string NormalizedName { get; set; } = string.Empty;
-		public bool DefaultForNewUsers { get; set; } = false;
-		public bool CanAsignOrRemoveRoles { get; set; } = false;
-		public bool IsEnabled { get; set; } = true;
+		public bool AllignToAll { get; set; } = false;
+		public bool CanAdministerRoles { get; set; } = false;
 
 		public Application? Application { get; set; }
 		public List<UserRole> Roles { get; set; } = [];
