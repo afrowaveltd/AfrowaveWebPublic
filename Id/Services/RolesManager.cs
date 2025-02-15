@@ -56,6 +56,42 @@ namespace Id.Services
 
 		public async Task<DeleteResult> DeleteApplicationRoleAsync(int roleId)
 		{
+			if(roleId == 0)
+			{
+				return new DeleteResult
+				{
+					Success = false,
+					ErrorMessage = _t["Role ID is required"]
+				};
+			}
+			ApplicationRole? role = await _context.ApplicationRoles.FirstOrDefaultAsync(x => x.Id == roleId);
+			if(role == null)
+			{
+				return new DeleteResult
+				{
+					Success = false,
+					ErrorMessage = _t["Role not found"]
+				};
+			}
+			try
+			{
+				_context.ApplicationRoles.Remove(role);
+				_ = await _context.SaveChangesAsync();
+				return new DeleteResult
+				{
+					Success = true,
+					RoleId = roleId
+				};
+			}
+			catch(Exception ex)
+			{
+				_logger.LogError(ex, "Error deleting role");
+				return new DeleteResult
+				{
+					Success = false,
+					ErrorMessage = _t["Error deleting role"]
+				};
+			}
 		}
 
 		public async Task<UpdateResult> UpdateApplicationRoleAsync(UpdateRoleInput input)
