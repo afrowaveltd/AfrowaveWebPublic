@@ -54,7 +54,7 @@ namespace Id.Services
 			return result;
 		}
 
-		public async Task<DeleteResult> DeleteApplicationRoleAsync(int roleId)
+		public async Task<DeleteResult<int>> DeleteApplicationRoleAsync(int roleId)
 		{
 			if(roleId == 0)
 			{
@@ -80,7 +80,7 @@ namespace Id.Services
 				return new DeleteResult
 				{
 					Success = true,
-					RoleId = roleId
+					DeletedId = roleId
 				};
 			}
 			catch(Exception ex)
