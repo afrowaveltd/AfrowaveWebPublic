@@ -41,6 +41,12 @@ namespace Id.Services
 			return user?.UserDescription ?? string.Empty;
 		}
 
+		public async Task<string> GetUserIdByApplicationUserIdAsync(int applicationUserId)
+		{
+			ApplicationUser? user = await _context.ApplicationUsers.FindAsync(applicationUserId);
+			return user?.UserId ?? string.Empty;
+		}
+
 		public async Task<RegisterApplicationUserResult> RegisterApplicationUserAsync(RegisterApplicationUserInput input)
 		{
 			var result = new RegisterApplicationUserResult();
