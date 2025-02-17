@@ -4,6 +4,7 @@ namespace Id.Services
 {
 	public interface ISettingsService
 	{
+		Task<string> GetApplicationIdAsync();
 		Task<CookieSettings> GetCookieSettingsAsync();
 		Task<CorsSettings> GetCorsSettingsAsync();
 		Task<JwtSettings> GetJwtSettingsAsync();

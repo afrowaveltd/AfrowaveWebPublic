@@ -23,35 +23,41 @@ namespace Id.Services
 			settingsPath = Path.Combine(projectPath, "Settings", "settings.json");
 		}
 
+		public async Task<string> GetApplicationIdAsync()
+		{
+			IdentificatorSettings settings = await GetSettingsAsync();
+			return settings.ApplicationId;
+		}
+
 		public Task<IdentificatorSettings> GetSettingsAsync() => _lazySettings.Value;
 
 		public async Task<LoginRules> GetLoginRulesAsync()
 		{
-			var settings = await GetSettingsAsync();
+			IdentificatorSettings settings = await GetSettingsAsync();
 			return settings.LoginRules;
 		}
 
 		public async Task<PasswordRules> GetPasswordRulesAsync()
 		{
-			var settings = await GetSettingsAsync();
+			IdentificatorSettings settings = await GetSettingsAsync();
 			return settings.PasswordRules;
 		}
 
 		public async Task<CookieSettings> GetCookieSettingsAsync()
 		{
-			var settings = await GetSettingsAsync();
+			IdentificatorSettings settings = await GetSettingsAsync();
 			return settings.CookieSettings;
 		}
 
 		public async Task<JwtSettings> GetJwtSettingsAsync()
 		{
-			var settings = await GetSettingsAsync();
+			IdentificatorSettings settings = await GetSettingsAsync();
 			return settings.JwtSettings;
 		}
 
 		public async Task<CorsSettings> GetCorsSettingsAsync()
 		{
-			var settings = await GetSettingsAsync();
+			IdentificatorSettings settings = await GetSettingsAsync();
 			return settings.CorsSettings;
 		}
 
@@ -60,7 +66,7 @@ namespace Id.Services
 			IdentificatorSettings settings = new();
 			if(File.Exists(settingsPath))
 			{
-				var settingsJson = await File.ReadAllTextAsync(settingsPath);
+				string settingsJson = await File.ReadAllTextAsync(settingsPath);
 				try
 				{
 					settings = JsonSerializer.Deserialize<IdentificatorSettings>(settingsJson) ?? new();
@@ -79,7 +85,7 @@ namespace Id.Services
 		{
 			try
 			{
-				var settings = await GetSettingsAsync();
+				IdentificatorSettings settings = await GetSettingsAsync();
 				settings.ApplicationId = id;
 				await SetSettingsAsync(settings);
 			}

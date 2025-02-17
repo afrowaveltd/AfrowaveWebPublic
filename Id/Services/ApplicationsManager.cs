@@ -1,4 +1,6 @@
-﻿using Id.Models.DataViews;
+﻿/* ApplicationsManager.cs */
+
+using Id.Models.DataViews;
 using Id.Models.InputModels;
 using Id.Models.ResultModels;
 using SharedTools.Services;
@@ -9,6 +11,7 @@ namespace Id.Services
 		IImageService imageService,
 		IBrandsManager brandsManager,
 		ISettingsService settings,
+		IEmailService emailService,
 		IStringLocalizer<ApplicationsManager> t,
 		ILogger<ApplicationsManager> logger,
 		IEncryptionService encryptionService) : IApplicationsManager
@@ -16,6 +19,7 @@ namespace Id.Services
 		// Initialization
 		private readonly ApplicationDbContext _context = context;
 
+		private readonly IEmailService _emailService = emailService;
 		private readonly IBrandsManager _brandsManager = brandsManager;
 		private readonly IImageService _imageService = imageService;
 		private readonly ILogger<ApplicationsManager> _logger = logger;
@@ -34,6 +38,13 @@ namespace Id.Services
 		public async Task<bool> ApplicationExistsAsync(string applicationId)
 		{
 			return await _context.Applications.AnyAsync(s => s.Id == applicationId);
+		}
+
+		public async Task<ApplicationSmtpSettings?> GetApplicationSmtpSettingsAsync(string applicationId)
+		{
+			return await _context.ApplicationSmtpSettings
+				.Where(s => s.ApplicationId == applicationId)
+				.FirstOrDefaultAsync();
 		}
 
 		public async Task<ApplicationView?> GetInfoAsync(string applicationId)
@@ -171,6 +182,53 @@ namespace Id.Services
 			return result;
 		}
 
+		public async Task<RegisterSmtpResult> RegisterApplicatioSmtpSettingsAsync(RegisterSmtpInput input)
+		{
+			RegisterSmtpResult result = new();
+			CheckInputResult checkInput = CheckSmtpInput(input);
+			if(!checkInput.Success)
+			{
+				result.Success = false;
+				result.Errors.AddRange(checkInput.Errors);
+				return result;
+			}
+			Application? application = await _context.Applications
+				.Where(s => s.Id == input.AppliationId)
+				.FirstOrDefaultAsync();
+			if(application == null)
+			{
+				result.Success = false;
+				result.Errors.Add(_t["Application not found"]);
+				return result;
+			}
+			ApplicationSmtpSettings applicationSmtpSettings = new();
+			applicationSmtpSettings.ApplicationId = input.AppliationId;
+			applicationSmtpSettings.Host = input.Host;
+			applicationSmtpSettings.Port = input.Port;
+			applicationSmtpSettings.Username = input.Username;
+			applicationSmtpSettings.Password = input.Password;
+			applicationSmtpSettings.SenderEmail = input.SenderEmail;
+			applicationSmtpSettings.SenderName = input.SenderName;
+			applicationSmtpSettings.Secure = input.Secure;
+			applicationSmtpSettings.AuthorizationRequired = input.AuthorizationRequired;
+
+			try
+			{
+				_ = await _context.ApplicationSmtpSettings.AddAsync(applicationSmtpSettings);
+				_ = await _context.SaveChangesAsync();
+				result.Success = true;
+				result.ApplicationSmtpSettingsId = applicationSmtpSettings.Id;
+				return result;
+			}
+			catch(Exception ex)
+			{
+				_logger.LogError(ex, "RegisterApplicatioSmtpSettingsAsync: error saving changes");
+				result.Success = false;
+				result.Errors.Add(_t["Error saving changes"]);
+				return result;
+			}
+		}
+
 		public async Task<UpdateResult> UpdateApplicationAsync(UpdateApplicationInput input)
 		{
 			UpdateResult result = new();
@@ -297,6 +355,94 @@ namespace Id.Services
 			return result;
 		}
 
+		public async Task<UpdateResult> UpdateApplicationSmtpSettingsAsync(UpdateSmtpInput input)
+		{
+			UpdateResult result = new UpdateResult();
+			if(input == null)
+			{
+				_logger.LogError("UpdateApplicationSmtpSettingsAsync: input is null");
+				result.Success = false;
+				result.Errors.Add(_t["Missing SMTP data"]);
+				return result;
+			}
+			if(input.Id == 0)
+			{
+				_logger.LogError("UpdateApplicationSmtpSettingsAsync: Id is null");
+				result.Success = false;
+				result.Errors.Add(_t["Missing SMTP Id"]);
+				return result;
+			}
+			ApplicationSmtpSettings? applicationSmtpSettings = await _context.ApplicationSmtpSettings
+				.Where(s => s.Id == input.Id)
+				.FirstOrDefaultAsync();
+			if(applicationSmtpSettings == null)
+			{
+				_logger.LogError("UpdateApplicationSmtpSettingsAsync: SMTP settings not found");
+				result.Success = false;
+				result.Errors.Add(_t["SMTP settings not found"]);
+				return result;
+			}
+			CheckInputResult checkInput = CheckSmtpInput(input);
+			if(!checkInput.Success)
+			{
+				result.Success = false;
+				result.Errors.AddRange(checkInput.Errors);
+				return result;
+			}
+			if(applicationSmtpSettings.Host != input.Host)
+			{
+				applicationSmtpSettings.Host = input.Host;
+				result.UpdatedValues.Add("Host", input.Host);
+			}
+			if(applicationSmtpSettings.Port != input.Port)
+			{
+				applicationSmtpSettings.Port = input.Port;
+				result.UpdatedValues.Add("Port", input.Port.ToString());
+			}
+			if(applicationSmtpSettings.Username != input.Username)
+			{
+				applicationSmtpSettings.Username = input.Username;
+				result.UpdatedValues.Add("Username", input.Username ?? string.Empty);
+			}
+			if(applicationSmtpSettings.Password != input.Password)
+			{
+				applicationSmtpSettings.Password = input.Password;
+				result.UpdatedValues.Add("Password", input.Password ?? string.Empty);
+			}
+			if(applicationSmtpSettings.SenderEmail != input.SenderEmail)
+			{
+				applicationSmtpSettings.SenderEmail = input.SenderEmail;
+				result.UpdatedValues.Add("SenderEmail", input.SenderEmail ?? string.Empty);
+			}
+			if(applicationSmtpSettings.SenderName != input.SenderName)
+			{
+				applicationSmtpSettings.SenderName = input.SenderName;
+				result.UpdatedValues.Add("SenderName", input.SenderName ?? string.Empty);
+			}
+			if(applicationSmtpSettings.Secure != input.Secure)
+			{
+				applicationSmtpSettings.Secure = input.Secure;
+				result.UpdatedValues.Add("Secure", input.Secure.ToString());
+			}
+			if(applicationSmtpSettings.AuthorizationRequired != input.AuthorizationRequired)
+			{
+				applicationSmtpSettings.AuthorizationRequired = input.AuthorizationRequired;
+				result.UpdatedValues.Add("AuthorizationRequired", input.AuthorizationRequired.ToString());
+			}
+			try
+			{
+				_ = await _context.SaveChangesAsync();
+				result.Success = true;
+			}
+			catch(Exception ex)
+			{
+				_logger.LogError(ex, "UpdateApplicationSmtpSettingsAsync: error saving changes");
+				result.Success = false;
+				result.Errors.Add(_t["Error saving changes"]);
+			}
+			return result;
+		}
+
 		// Private functions
 		private CheckInputResult CheckApplicationInput<T>(T input) where T : IApplicationInput
 		{
@@ -393,6 +539,56 @@ namespace Id.Services
 			}
 
 			result.Success = true;
+			return result;
+		}
+
+		private CheckInputResult CheckSmtpInput<T>(T input) where T : ISmtpInput
+		{
+			CheckInputResult result = new CheckInputResult();
+			result.Success = true;
+			if(input == null)
+			{
+				_logger.LogError("CheckSmtpInput: input is null");
+				result.Success = false;
+				result.Errors.Add(_t["Missing SMTP data"]);
+				return result;
+			}
+			if(string.IsNullOrEmpty(input.Host))
+			{
+				_logger.LogError("CheckSmtpInput: Host is null");
+				result.Success = false;
+				result.Errors.Add(_t["Missing SMTP host"]);
+			}
+			if(input.Port == 0)
+			{
+				_logger.LogError("CheckSmtpInput: Port is null");
+				result.Success = false;
+				result.Errors.Add(_t["Missing SMTP port"]);
+			}
+			if(input.AuthorizationRequired && string.IsNullOrEmpty(input.Username))
+			{
+				_logger.LogError("CheckSmtpInput: Username is null");
+				result.Success = false;
+				result.Errors.Add(_t["Missing SMTP username"]);
+			}
+			if(input.AuthorizationRequired && string.IsNullOrEmpty(input.Password))
+			{
+				_logger.LogError("CheckSmtpInput: Password is null");
+				result.Success = false;
+				result.Errors.Add(_t["Missing SMTP password"]);
+			}
+			if(string.IsNullOrEmpty(input.SenderEmail))
+			{
+				_logger.LogError("CheckSmtpInput: SenderEmail is null");
+				result.Success = false;
+				result.Errors.Add(_t["Missing SMTP sender email"]);
+			}
+			if(string.IsNullOrEmpty(input.SenderName))
+			{
+				_logger.LogError("CheckSmtpInput: SenderName is null");
+				result.Success = false;
+				result.Errors.Add(_t["Missing SMTP sender name"]);
+			}
 			return result;
 		}
 	}

@@ -28,7 +28,7 @@ namespace Id.Services
 
 		public async Task<ApiResponse<string>> SendTemplatedEmailAsync(string targetEmail, string templateName, object model, string applicationId)
 		{
-			var smtpSettings = await _context.ApplicationSmtpSettings
+			ApplicationSmtpSettings? smtpSettings = await _context.ApplicationSmtpSettings
 				.Where(s => s.ApplicationId == applicationId)
 				.FirstOrDefaultAsync();
 
@@ -42,7 +42,7 @@ namespace Id.Services
 			}
 			string emailBody = await _razorEngine.CompileRenderAsync($"Templates.{templateName}", model);
 
-			var message = new MimeMessage();
+			MimeMessage message = new MimeMessage();
 			message.From.Add(new MailboxAddress(smtpSettings.SenderName, smtpSettings.SenderEmail));
 			message.To.Add(MailboxAddress.Parse(targetEmail));
 			message.Subject = model.GetType().GetProperty("Subject")?.GetValue(model)?.ToString() ?? "Notification";
@@ -53,12 +53,14 @@ namespace Id.Services
 
 			try
 			{
-				using var client = new SmtpClient();
+				using SmtpClient client = new SmtpClient();
 				await client.ConnectAsync(smtpSettings.Host, smtpSettings.Port, smtpSettings.Secure);
 				if(smtpSettings.AuthorizationRequired)
+				{
 					await client.AuthenticateAsync(smtpSettings.Username, smtpSettings.Password);
+				}
 
-				await client.SendAsync(message);
+				_ = await client.SendAsync(message);
 				await client.DisconnectAsync(true);
 
 				return new ApiResponse<string> { Successful = true, Message = "Email sent successfully." };
