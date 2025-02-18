@@ -1,13 +1,15 @@
 ﻿using Id.Models.ResultModels;
+using MailKit.Net.Smtp;
 using MimeKit;
 using RazorLight;
+using System.ComponentModel.DataAnnotations;
 
 namespace Id.Services
 {
 	public class EmailManager(IStringLocalizer<EmailManager> t,
 		ILogger<EmailManager> logger,
 		ISettingsService settings,
-		IApplicationsManager applicationService)
+		IApplicationsManager applicationManager)
 	{
 		// Initialize
 		private readonly IStringLocalizer<EmailManager> _t = t;
@@ -71,8 +73,8 @@ namespace Id.Services
 				};
 			}
 			MimeMessage message = new();
-			message.From.Add(new MailboxAddress(smtpSettings.FromName, smtpSettings.FromEmail));
-			message.To.Add(new MailboxAddress(targetEmail));
+			message.From.Add(new MailboxAddress(smtpSettings.SenderName, smtpSettings.SenderEmail));
+			message.To.Add(new MailboxAddress("", targetEmail));
 			message.Subject = subject;
 			message.Body = new TextPart(MimeKit.Text.TextFormat.Html)
 			{
@@ -93,12 +95,12 @@ namespace Id.Services
 					if(!string.IsNullOrEmpty(recepient) && new EmailAddressAttribute().IsValid(recepient))
 					{
 						EmailResult emailResult = await SendEmailAsync(recepient, subject, body, applicationId);
-						result.EmailResults.Add(emailResult);
+						result.Results.Add(emailResult);
 					}
 					else
 					{
 						_logger.LogError("Invalid email address: {recepient}", recepient);
-						result.EmailResults.Add(new EmailResult
+						result.Results.Add(new EmailResult
 						{
 							TargetEmail = recepient,
 							Subject = subject,
@@ -107,6 +109,32 @@ namespace Id.Services
 						});
 					}
 				}
+				return result;
+			}
+			else
+				if(targetEmails == null)
+			{
+				_logger.LogError("Target email list is null");
+				result.Results.Add(new EmailResult
+				{
+					TargetEmail = "",
+					Subject = subject,
+					Success = false,
+					ErrorMessage = _t["Target email list is null"]
+				});
+				return result;
+			}
+			else
+			{
+				_logger.LogError("Target email list is empty");
+				result.Results.Add(new EmailResult
+				{
+					TargetEmail = "",
+					Subject = subject,
+					Success = false,
+					ErrorMessage = _t["Target email list is empty"]
+				});
+				return result;
 			}
 		}
 
