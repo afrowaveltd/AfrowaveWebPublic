@@ -81,6 +81,35 @@ namespace Id.Services
 			return await SendEmailAsync(message, smtpSettings);
 		}
 
+		public async Task<SendEmailsResult> SendGroupEmailAsync(List<string> targetEmails, string subject, string body, string applicationId)
+		{
+			SendEmailsResult result = new();
+			result.Subject = subject;
+			// do checks if address list is not empty, and in each loop check if the recepient address is valid
+			if(targetEmails != null && targetEmails.Count > 0)
+			{
+				foreach(string recepient in targetEmails)
+				{
+					if(!string.IsNullOrEmpty(recepient) && new EmailAddressAttribute().IsValid(recepient))
+					{
+						EmailResult emailResult = await SendEmailAsync(recepient, subject, body, applicationId);
+						result.EmailResults.Add(emailResult);
+					}
+					else
+					{
+						_logger.LogError("Invalid email address: {recepient}", recepient);
+						result.EmailResults.Add(new EmailResult
+						{
+							TargetEmail = recepient,
+							Subject = subject,
+							Success = false,
+							ErrorMessage = _t["Invalid email address"]
+						});
+					}
+				}
+			}
+		}
+
 		// private methods
 		private async Task<EmailResult> SendEmailAsync(MimeMessage message, ApplicationSmtpSettings settings)
 		{
