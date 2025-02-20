@@ -1,7 +1,6 @@
 ﻿using Id.Models.CommunicationModels;
 using Id.Models.InputModels;
 using Id.Models.ResultModels;
-using Id.Pages.Install;
 using MailKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
@@ -15,7 +14,7 @@ namespace Id.Services
 	public class EmailManager(IStringLocalizer<EmailManager> t,
 		ILogger<EmailManager> logger,
 		ISettingsService settings,
-		IApplicationsManager applicationManager)
+		IApplicationsManager applicationManager) : IEmailManager
 	{
 		// Initialize
 		private readonly IStringLocalizer<EmailManager> _t = t;
@@ -31,7 +30,7 @@ namespace Id.Services
 			.Build();
 
 		// public methods
-		public async Task<ApiResponse<SmtpSettingsModel>> AutodetectSmtpSettingsAsync(DetectSmtpSettingsInput input)
+		public async Task<ApiResponse<SmtpSenderModel>> AutodetectSmtpSettingsAsync(DetectSmtpSettingsInput input)
 		{
 			// Common SMTP ports
 			List<(int Port, SecureSocketOptions Security)> portSecurityCombinations = new List<(int Port, SecureSocketOptions Security)>()
@@ -45,8 +44,8 @@ namespace Id.Services
 				(2525, SecureSocketOptions.Auto) // failback
 			};
 
-			ApiResponse<SmtpSettingsModel> response = new();
-			response.Data = new SmtpSettingsModel();
+			ApiResponse<SmtpSenderModel> response = new();
+			response.Data = new SmtpSenderModel();
 			foreach((int port, SecureSocketOptions security) in portSecurityCombinations)
 			{
 				try
@@ -61,7 +60,7 @@ namespace Id.Services
 						response.Data.AuthorizationRequired = true;
 						if(string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
 						{
-							response.Success = false;
+							response.Successful = false;
 							response.Message = _t["Server requires authentication, but no credentials provided"];
 							return response;
 						}
@@ -79,7 +78,7 @@ namespace Id.Services
 					response.Message = _t["SMTP settings successfully detected"];
 					return response;
 				}
-				catch()
+				catch
 				{
 					continue;
 				}
@@ -322,7 +321,7 @@ namespace Id.Services
 
 		public async Task<SmtpTestResult> TestSmtpSettingsAsync(SmtpSenderModel input)
 		{
-			string targetEmail = input.TargetAddress ?? input.SenderEmail;
+			string targetEmail = input.TargetForTesting ?? input.SenderEmail;
 			SmtpTestResult result = new();
 			StringBuilder logBuilder = new StringBuilder();
 			if(string.IsNullOrEmpty(input.Host))
@@ -348,7 +347,7 @@ namespace Id.Services
 			{
 				using MemoryStream memoryStream = new();
 				using SmtpClient client = new(new ProtocolLogger(memoryStream));
-				await client.ConnectAsync(input.Host, input.Port, input.Secure);
+				await client.ConnectAsync(input.Host, input.Port ?? 25, input.Secure);
 
 				if(input.AuthorizationRequired)
 				{
@@ -371,20 +370,20 @@ namespace Id.Services
 				await client.SendAsync(message);
 				await client.DisconnectAsync(true);
 				result.Success = true;
-				result.Log = memoryStream.ToString();
+				result.Log = memoryStream.ToString() ?? string.Empty;
 				return result;
 			}
 			catch(Exception ex)
 			{
-				result.Successful = false;
+				result.Success = false;
 				result.Error = ex.Message;
 			}
 			finally
 			{
 				// Ensure the log is attached even if there's an error
-				response.Log ??= logBuilder.ToString();
+				result.Log ??= logBuilder.ToString();
 			}
-			result.Data = response;
+
 			return result;
 		}
 
