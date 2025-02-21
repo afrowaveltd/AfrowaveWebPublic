@@ -1,4 +1,5 @@
 ﻿using Id.Models.CommunicationModels;
+using Id.Models.ResultModels;
 using Id.Models.SettingsModels;
 using SharedTools.Services;
 using System.ComponentModel.DataAnnotations;

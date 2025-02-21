@@ -1,4 +1,5 @@
 ﻿using Id.Models.CommunicationModels;
+using Id.Models.ResultModels;
 
 namespace Id.Services
 {

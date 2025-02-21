@@ -47,6 +47,11 @@ namespace Id.Services
 				.FirstOrDefaultAsync();
 		}
 
+		public async Task<string> GetAuthenticatorIdAsync()
+		{
+			return await _settings.GetApplicationIdAsync() ?? string.Empty;
+		}
+
 		public async Task<ApplicationView?> GetInfoAsync(string applicationId)
 		{
 			Application? application = await _context.Applications

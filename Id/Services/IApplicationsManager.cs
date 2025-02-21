@@ -10,6 +10,8 @@ namespace Id.Services
 
 		Task<ApplicationSmtpSettings?> GetApplicationSmtpSettingsAsync(string applicationId);
 
+		Task<string> GetAuthenticatorIdAsync();
+
 		string GetFullsizeLogoPath(string applicationId);
 
 		string GetIconPath(string applicationId);

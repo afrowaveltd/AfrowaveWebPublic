@@ -27,5 +27,6 @@
 
 		public Application? Application { get; set; }
 		public User? User { get; set; }
+		public List<UserRole> UserRoles { get; set; } = [];
 	}
 }

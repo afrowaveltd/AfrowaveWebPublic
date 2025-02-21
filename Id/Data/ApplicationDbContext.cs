@@ -116,7 +116,7 @@
 			_ = builder.Entity<UserRole>()
 				 .HasOne(ur => ur.User)
 				 .WithMany(a => a.UserRoles)
-				 .HasForeignKey(ur => ur.UserId);
+				 .HasForeignKey(ur => ur.ApplicationUserId);
 
 			foreach(Microsoft.EntityFrameworkCore.Metadata.IMutableForeignKey? relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
 			{

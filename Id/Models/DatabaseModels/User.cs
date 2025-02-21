@@ -42,7 +42,6 @@ namespace Id.Models.DatabaseModels
 		public int AccessFailedCount { get; set; } = 0;
 		public List<Application> OwnedApplications { get; set; } = new();
 		public List<UserAddress> UserAddresses { get; set; } = new();
-		public List<UserRole> UserRoles { get; set; } = new();
 		public List<RefreshToken> RefreshTokens { get; set; } = new();
 		public List<ApplicationUser> ApplicationUsers { get; set; } = new();
 		public List<Brand> Brands { get; set; } = new();
