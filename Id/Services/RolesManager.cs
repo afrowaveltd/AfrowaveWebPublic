@@ -14,6 +14,28 @@ namespace Id.Services
 		private readonly IStringLocalizer<RolesManager> _t = t;
 
 		// Public functions
+
+		/// <summary>
+		/// Creates a new role for a specific application.
+		/// </summary>
+		/// <param name="input">The role details including application ID, name, and permissions.</param>
+		/// <returns>A result indicating success or failure, including error messages if applicable.</returns>
+		/// <exception cref="Exception">Thrown if an error occurs while saving the role to the database.</exception>
+		/// <example>
+		/// Example request:
+		/// {
+		///     "ApplicationId": "123e4567-e89b-12d3-a456-426614174000",
+		///     "Name": "Admin",
+		///     "AllignToAll": false,
+		///     "CanAdministerRoles": true
+		/// }
+		/// Example response:
+		/// {
+		///     "Success": true,
+		///     "RoleId": "987e6543-e21b-34d5-a678-526614174999",
+		///     "Errors": []
+		/// }
+		/// </example>
 		public async Task<CreateRoleResult> CreateApplicationRoleAsync(CreateRoleInput input)
 		{
 			CreateRoleResult result = new CreateRoleResult();
@@ -54,6 +76,21 @@ namespace Id.Services
 			return result;
 		}
 
+		/// <summary>
+		/// Deletes a role from an application.
+		/// </summary>
+		/// <param name="roleId">The role ID to be deleted.</param>
+		/// <returns>The result indicating success or failure, including error messages.</returns>
+		/// <example>
+		/// Example request:
+		/// DELETE /api/roles/5
+		/// Example response:
+		/// {
+		///     "Success": true,
+		///     "DeletedId": 5
+		/// }
+		/// </example>
+		/// <exception cref="Exception">Thrown if an error occurs while deleting the role.</exception>
 		public async Task<DeleteResult<int>> DeleteApplicationRoleAsync(int roleId)
 		{
 			if(roleId == 0)
@@ -94,6 +131,267 @@ namespace Id.Services
 			}
 		}
 
+		/// <summary>
+		/// Gets all user roles for a specific application user.
+		/// </summary>
+		/// <param name="applicationUserId"></param>
+		/// <returns>List of RoleAssignResults</returns>
+		/// <example>
+		/// Request example:
+		/// await GetApplicationUserRolesAsync(12);
+		/// Response example:
+		/// [
+		///   {
+		///			"RoleId": 1,
+		///			"UserId": "abc123",
+		///			"ApplicationUserId": 12,
+		///			"ApplicationId": "123e4567-e89b-12d3-a456-426614174000",
+		///			"RoleName": "User",
+		///			"NormalizedName": "USER",
+		///			"Successful": true,
+		///			"Message": "Role assigned"
+		///   }
+		/// ]
+		/// </example>
+		public async Task<List<RoleAssignResult>> GetApplicationUserRolesAsync(int applicationUserId)
+		{
+			if(applicationUserId == 0) { return new List<RoleAssignResult>(); }
+			List<RoleAssignResult> results = new();
+			List<UserRole> userRoles = await _context.UserRoles.Where(x => x.ApplicationUserId == applicationUserId).ToListAsync();
+			foreach(UserRole userRole in userRoles)
+			{
+				ApplicationRole? role = await _context.ApplicationRoles.FirstOrDefaultAsync(x => x.Id == userRole.ApplicationRoleId);
+				if(role != null)
+				{
+					ApplicationUser? user = await _context.ApplicationUsers.FirstOrDefaultAsync(x => x.Id == applicationUserId);
+					if(user != null)
+					{
+						results.Add(new RoleAssignResult
+						{
+							ApplicationId = role.ApplicationId,
+							ApplicationUserId = applicationUserId,
+							NormalizedName = role.NormalizedName,
+							RoleId = role.Id,
+							RoleName = role.Name,
+							UserId = user.UserId
+						});
+					}
+				}
+			}
+			return results;
+		}
+
+		/// <summary>
+		/// Assigns all roles of an application to a specific user.
+		/// </summary>
+		/// <param name="applicationId">The ID of the application.</param>
+		/// <param name="userId">The user ID to which roles will be assigned.</param>
+		/// <returns>A list of role assignment results.</returns>
+		/// <example>
+		/// Example request:
+		/// {
+		///     "ApplicationId": 1,
+		///     "UserId": "abc123"
+		/// }
+		/// Example response:
+		/// [
+		///     {
+		///         "Successful": true,
+		///         "Message": "Role assigned",
+		///         "RoleId": 3
+		///     }
+		/// ]
+		/// </example>
+		public async Task<List<RoleAssignResult>> SetAllRolesToOwner(string applicationId, string userId)
+		{
+			List<RoleAssignResult> results = new();
+			ApplicationUser? user = await _context.ApplicationUsers
+				.FirstOrDefaultAsync(x => x.ApplicationId == applicationId && x.UserId == userId);
+			if(user == null)
+			{
+				results.Add(new RoleAssignResult
+				{
+					Successful = false,
+					Message = _t["User not found"]
+				});
+				return results;
+			}
+			List<ApplicationRole> roles = await _context.ApplicationRoles
+				.Where(x => x.ApplicationId == applicationId)
+				.Where(x => x.AllignToAll)
+				.ToListAsync();
+			foreach(ApplicationRole role in roles)
+			{
+				UserRole? userRole = await _context.UserRoles
+					.FirstOrDefaultAsync(x => x.ApplicationUserId == user.Id && x.ApplicationRoleId == role.Id);
+				if(userRole != null)
+				{
+					results.Add(new RoleAssignResult
+					{
+						Successful = true,
+						Message = _t["User already has the role"],
+						ApplicationId = role.ApplicationId,
+						ApplicationUserId = user.Id,
+						NormalizedName = role.NormalizedName,
+						RoleId = role.Id,
+						RoleName = role.Name,
+						UserId = user.UserId
+					});
+				}
+				else
+				{
+					UserRole newUserRole = new()
+					{
+						ApplicationRoleId = role.Id,
+						ApplicationUserId = user.Id,
+						AddedToRole = DateTime.Now
+					};
+					try
+					{
+						_ = _context.UserRoles.Add(newUserRole);
+						_ = await _context.SaveChangesAsync();
+						results.Add(new RoleAssignResult
+						{
+							Successful = true,
+							Message = _t["Role assigned"],
+							ApplicationId = role.ApplicationId,
+							ApplicationUserId = user.Id,
+							NormalizedName = role.NormalizedName,
+							RoleId = role.Id,
+							RoleName = role.Name,
+							UserId = user.UserId
+						});
+					}
+					catch(Exception ex)
+					{
+						_logger.LogError(ex, "Error assigning role");
+						results.Add(new RoleAssignResult
+						{
+							Successful = false,
+							Message = _t["Error assigning role"]
+						});
+					}
+				}
+			}
+			return results;
+		}
+
+		/// <summary>
+		/// Assign default roles to newly created user.
+		/// </summary>
+		/// <param name="applicationUserId"></param>
+		/// <returns>List of RoleAssignResult records</returns>
+		/// <example>
+		/// Example request:
+		/// await SetApplicationUserDefaultRolesAsync(12);
+		/// Example response:
+		/// [
+		///   {
+		///			"RoleId": 1,
+		///			"UserId": "abc123",
+		///			"ApplicationUserId": 12,
+		///			"ApplicationId": "123e4567-e89b-12d3-a456-426614174000",
+		///			"RoleName": "User",
+		///			"NormalizedName": "USER",
+		///			"Successful": true,
+		///			"Message": "Role assigned"
+		///   }
+		/// ]
+		/// </example>
+		public async Task<List<RoleAssignResult>> SetApplicationUserDefaultRolesAsync(int applicationUserId)
+		{
+			List<RoleAssignResult> results = new();
+			ApplicationUser? user = await _context.ApplicationUsers
+				.FirstOrDefaultAsync(x => x.Id == applicationUserId);
+			if(user == null)
+			{
+				results.Add(new RoleAssignResult
+				{
+					Successful = false,
+					Message = _t["User not found"]
+				});
+				return results;
+			}
+			List<ApplicationRole> roles = await _context.ApplicationRoles
+				.Where(x => x.ApplicationId == user.ApplicationId)
+				.Where(x => x.AllignToAll)
+				.ToListAsync();
+
+			foreach(ApplicationRole role in roles)
+			{
+				UserRole? userRole = await _context.UserRoles
+					.FirstOrDefaultAsync(x => x.ApplicationUserId == applicationUserId && x.ApplicationRoleId == role.Id);
+				if(userRole != null)
+				{
+					results.Add(new RoleAssignResult
+					{
+						Successful = true,
+						Message = _t["User already has the role"],
+						ApplicationId = role.ApplicationId,
+						ApplicationUserId = applicationUserId,
+						NormalizedName = role.NormalizedName,
+						RoleId = role.Id,
+						RoleName = role.Name,
+						UserId = user.UserId
+					});
+				}
+				else
+				{
+					UserRole newUserRole = new()
+					{
+						ApplicationRoleId = role.Id,
+						ApplicationUserId = applicationUserId,
+						AddedToRole = DateTime.Now
+					};
+					try
+					{
+						_ = _context.UserRoles.Add(newUserRole);
+						_ = await _context.SaveChangesAsync();
+						results.Add(new RoleAssignResult
+						{
+							Successful = true,
+							Message = _t["Role assigned"],
+							ApplicationId = role.ApplicationId,
+							ApplicationUserId = applicationUserId,
+							NormalizedName = role.NormalizedName,
+							RoleId = role.Id,
+							RoleName = role.Name,
+							UserId = user.UserId
+						});
+					}
+					catch(Exception ex)
+					{
+						_logger.LogError(ex, "Error assigning role");
+						results.Add(new RoleAssignResult
+						{
+							Successful = false,
+							Message = _t["Error assigning role"]
+						});
+					}
+				}
+			}
+			return results;
+		}
+
+		/// <summary>
+		/// Assigns a role to a user by role ID.
+		/// </summary>
+		/// <param name="applicationUserId">The ID of the application user.</param>
+		/// <param name="roleId">The ID of the role to assign.</param>
+		/// <returns>A result indicating whether the assignment was successful.</returns>
+		/// <example>
+		/// Example request:
+		/// POST /api/roles/assign
+		/// {
+		///     "ApplicationUserId": 12,
+		///     "RoleId": 5
+		/// }
+		/// Example response:
+		/// {
+		///     "Successful": true,
+		///     "Message": "Role assigned"
+		/// }
+		/// </example>
 		public async Task<RoleAssignResult> SetApplicationUserRoleAsync(int applicationUserId, int roleId)
 		{
 			RoleAssignResult result = new RoleAssignResult();
@@ -160,6 +458,21 @@ namespace Id.Services
 			return result;
 		}
 
+		/// <summary>
+		/// Assigns a role to a user by role name.
+		/// </summary>
+		/// <param name="applicationUserId">The ID of the application user.</param>
+		/// <param name="roleName">The name of the role to assign.</param>
+		/// <returns>A result indicating whether the assignment was successful.</returns>
+		/// <example>
+		/// Example request:
+		/// await SetApplicationUserRoleByNameAsync(12, "User");
+		/// Example response:
+		/// {
+		///     "Successful": true,
+		///     "Message": "Role assigned"
+		/// }
+		/// </example>
 		public async Task<RoleAssignResult> SetApplicationUserRoleByNameAsync(int applicationUserId, string roleName)
 		{
 			RoleAssignResult result = new RoleAssignResult();
@@ -226,6 +539,22 @@ namespace Id.Services
 			return result;
 		}
 
+		/// <summary>
+		/// Assigns a role to a user by role name.
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <param name="applicationId"></param>
+		/// <param name="rolename"></param>
+		/// <returns>RoleAssignResult instance.</returns>
+		/// <example>
+		/// Example request:
+		/// await SetUserRoleByNameAsync("abc123", "123e4567-e89b-12d3-a456-426614174000", "User");
+		/// Example response:
+		/// {
+		///		"Successful": true,
+		///		"Message": "Role assigned"
+		/// }
+		/// </example>
 		public async Task<RoleAssignResult> SetUserRoleByNameAsync(string userId, string applicationId, string rolename)
 		{
 			RoleAssignResult result = new RoleAssignResult();
@@ -296,6 +625,21 @@ namespace Id.Services
 			return result;
 		}
 
+		/// <summary>
+		/// Assigns a role to a user by rolename
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <param name="roleId"></param>
+		/// <returns>RoleAssignResult instance</returns>
+		/// <example>
+		/// Example request:
+		/// await SetUserRoleByNameAsync("123", "User");
+		/// Example response:
+		/// {
+		///		"Successful": true,
+		///		"Message": "Role assigned"
+		///	 }
+		///	 </example>
 		public async Task<RoleAssignResult> SetUserRoleAsync(string userId, int roleId)
 		{
 			RoleAssignResult result = new RoleAssignResult();
@@ -362,6 +706,24 @@ namespace Id.Services
 			return result;
 		}
 
+		/// <summary>
+		/// Updates application role
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns>UpdateResult instance</returns>
+		/// <example>
+		/// Example request:
+		/// await UpdateApplicationRoleAsync(new UpdateRoleInput { RoleId = 1, ApplicationId = "123", Name = "User", CanAdministerRoles = true, AllignToAll = false });
+		/// Example response:
+		/// {
+		///		"Success": true,
+		///		"UpdatedValues": {
+		///		"Name": "User",
+		///		},
+		///		"Errors": []
+		///		}
+		///	 }
+		/// </example>
 		public async Task<UpdateResult> UpdateApplicationRoleAsync(UpdateRoleInput input)
 		{
 			UpdateResult result = new()

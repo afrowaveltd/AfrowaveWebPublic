@@ -390,9 +390,11 @@ namespace Id.Services
 		// private methods
 		private async Task<EmailResult> SendEmailAsync(MimeMessage message, ApplicationSmtpSettings settings)
 		{
-			EmailResult result = new();
-			result.Subject = message.Subject;
-			result.TargetEmail = message.To.ToString();
+			EmailResult result = new()
+			{
+				Subject = message.Subject,
+				TargetEmail = message.To.ToString()
+			};
 			try
 			{
 				using SmtpClient client = new();
