@@ -29,17 +29,50 @@ namespace Id.Services
 
 		// Private variables
 		private readonly string appImgDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory
-			.Substring(0, AppDomain.CurrentDomain.BaseDirectory
-			.IndexOf("bin")), "wwwroot", "applications");
+			[..AppDomain.CurrentDomain.BaseDirectory.IndexOf("bin")], "wwwroot", "applications");
 
 		private readonly string webImgDirectory = "/applications";
 
 		// Public functions
+
+		/// <summary>
+		/// Check if application exists
+		/// </summary>
+		/// <param name="applicationId"></param>
+		/// <returns>boolean result</returns>
+		/// <exception cref="ArgumentNullException"></exception>
+		/// <example>
+		/// Request example
+		/// await ApplicationExistsAsync("applicationId");
+		/// Response example
+		/// true
+		/// </example>
 		public async Task<bool> ApplicationExistsAsync(string applicationId)
 		{
 			return await _context.Applications.AnyAsync(s => s.Id == applicationId);
 		}
 
+		/// <summary>
+		/// Returns ApplicationSmtpSettings by applicationId
+		/// </summary>
+		/// <param name="applicationId">Application ID</param>
+		/// <example>
+		/// Example request
+		/// await GetApplicationSmtpSettingsAsync("applicationId");
+		/// Example response
+		/// {
+		///   Id: 1,
+		///   ApplicationId: "applicationId",
+		///   Host: "smtp.example.com",
+		///   Port: 587,
+		///   Username: "username",
+		///   Password: "password",
+		///   SenderEmail: "something@email.com",
+		///   SenderName: "Sender Name",
+		///   Secure: 1,
+		///   AuthorizationRequired: true
+		/// }
+		/// </example>
 		public async Task<ApplicationSmtpSettings?> GetApplicationSmtpSettingsAsync(string applicationId)
 		{
 			return await _context.ApplicationSmtpSettings
@@ -47,11 +80,42 @@ namespace Id.Services
 				.FirstOrDefaultAsync();
 		}
 
+		/// <summary> Get authenticator ID </summary>
+		/// <example>
+		/// await GetAuthenticatorIdAsync();
+		/// </example>
+		/// <exception cref="ArgumentNullException"></exception>
+		/// <exception cref="Exception"></exception>
+		/// <remarks> This method is used to get the authenticator ID </remarks>
+		/// <example>
+		/// example request
+		/// await GetAuthenticatorIdAsync();
+		/// example response
+		/// "applicationId"
+		/// </example>
 		public async Task<string> GetAuthenticatorIdAsync()
 		{
 			return await _settings.GetApplicationIdAsync() ?? string.Empty;
 		}
 
+		/// <summary> Get application info </summary>
+		/// <remarks> This method is used to get the application info </remarks>
+		/// <param name="applicationId">Application ID</param>
+		/// <exception cref="ArgumentNullException"></exception>
+		/// <returns>ApplicationView</returns>
+		/// <example>
+		/// Example request
+		/// await GetInfoAsync("applicationId");
+		/// Example response
+		/// {
+		///		ApplicationId: "applicationId",
+		///		ApplicationName: "Application Name",
+		///		ApplicationDescription: "Application Description",
+		///		ApplicationWebsite: "https://example.com",
+		///		ApplicationEmail: "example@email.com",
+		///		BrandName: "Brand Name"
+		///	 }
+		/// </example>
 		public async Task<ApplicationView?> GetInfoAsync(string applicationId)
 		{
 			Application? application = await _context.Applications
@@ -71,16 +135,39 @@ namespace Id.Services
 			return result;
 		}
 
+		/// <summary>
+		/// Get full size logo path
+		/// </summary>
+		/// <param name="applicationId"></param>
+		/// <returns>URL path for the logo or placeholder if not available</returns>
+		///
 		public string GetFullsizeLogoPath(string applicationId)
 		{
 			return GetLogoPath(applicationId, LogoSize.pngOriginal);
 		}
 
+		/// <summary>
+		/// Get icon path
+		/// </summary>
+		/// <param name="applicationId"></param>
+		/// <returns>Url path for the Application icon 32x32px</returns>
 		public string GetIconPath(string applicationId)
 		{
 			return GetLogoPath(applicationId, LogoSize.png32px);
 		}
 
+		/// <summary>
+		/// Get logo path
+		/// </summary>
+		/// <param name="applicationId"></param>
+		/// <param name="size"></param>
+		/// <returns>Returns url for the logo with specified size or placeholder if logo is not presented</returns>
+		/// <example>
+		/// Example request
+		/// await GetLogoPath("applicationId", LogoSize.png32px);
+		/// Example response
+		/// "/applications/applicationId/icons/icon-32x32.png"
+		/// </example>
 		public string GetLogoPath(string applicationId, LogoSize size)
 		{
 			string logoPath = size switch
@@ -113,6 +200,11 @@ namespace Id.Services
 			return logoPath;
 		}
 
+		/// <summary>
+		/// Decides if the application name is unique
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns>True if the application name is unique</returns>
 		public async Task<bool> IsNameUnique(string name)
 		{
 			return (!await _context.Applications

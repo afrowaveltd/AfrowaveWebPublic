@@ -5,7 +5,7 @@ namespace Id.Services
 {
 	public class RolesManager(IStringLocalizer<RolesManager> t,
 		ILogger<RolesManager> logger,
-		ApplicationDbContext context)
+		ApplicationDbContext context) : IRolesManager
 	{
 		// Initialization
 		private readonly ApplicationDbContext _context = context;
@@ -129,6 +129,39 @@ namespace Id.Services
 					ErrorMessage = _t["Error deleting role"]
 				};
 			}
+		}
+
+		/// <summary>
+		/// Gets all roles for a specific application.
+		/// </summary>
+		/// <param name="applicationId"></param>
+		/// <returns>List of application roles and empty list if no roles were set</returns>
+		/// <example>
+		/// Request example:
+		/// await GetAllApplicationRolesAsync("123e4567-e89b-12d3-a456-426614174000");
+		/// Response example:
+		/// [
+		///		{
+		///			Id: 1,
+		///			ApplicationId: "123e4567-e89b-12d3-a456-426614174000",
+		///			Name: "User",
+		///			NormalizedName: "USER",
+		///	      AllignToAll: true,
+		///	      CanAdministerRoles: false
+		///	    },
+		///	    {
+		///			Id: 2,
+		///			ApplicationId: "123e4567-e89b-12d3-a456-426614174575",
+		///			Name: "Admin",
+		///			NormalizedName: "ADMIN",
+		///			AllignToAll: false,
+		///			CanAdministerRoles: true
+		///		}
+		///	 ]
+		///	 </example>
+		public async Task<List<ApplicationRole>> GetAllApplicationRolesAsync(string applicationId)
+		{
+			return await _context.ApplicationRoles.Where(x => x.ApplicationId == applicationId).ToListAsync();
 		}
 
 		/// <summary>
@@ -713,7 +746,14 @@ namespace Id.Services
 		/// <returns>UpdateResult instance</returns>
 		/// <example>
 		/// Example request:
-		/// await UpdateApplicationRoleAsync(new UpdateRoleInput { RoleId = 1, ApplicationId = "123", Name = "User", CanAdministerRoles = true, AllignToAll = false });
+		/// await UpdateApplicationRoleAsync(new UpdateRoleInput
+		/// {
+		///		RoleId = 1,
+		///		ApplicationId = "123",
+		///		Name = "User",
+		///		CanAdministerRoles = true,
+		///		AllignToAll = false
+		///	 });
 		/// Example response:
 		/// {
 		///		"Success": true,
@@ -796,6 +836,44 @@ namespace Id.Services
 				result.Errors.Add(_t["Error updating role"]);
 				result.Success = false;
 				return result;
+			}
+		}
+
+		/// <summary>
+		/// Removes a user from a role by role name
+		/// </summary>
+		/// <param name="applicationUserId"></param>
+		/// <param name="roleName"></param>
+		/// <returns>true if role was removed, false in case of failure</returns>
+		/// <example>
+		/// Request example:
+		/// await RemoveApplicationUserFromRoleAsync(12, "User");
+		/// Response example:
+		/// true
+		/// </example>
+
+		public async Task<bool> RemoveApplicationUserFromRoleAsync(int applicationUserId, string roleName)
+		{
+			ApplicationRole? role = await _context.ApplicationRoles.FirstOrDefaultAsync(x => x.NormalizedName == roleName.Trim().ToUpperInvariant());
+			if(role == null)
+			{
+				return false;
+			}
+			UserRole? userRole = await _context.UserRoles.FirstOrDefaultAsync(x => x.ApplicationUserId == applicationUserId && x.ApplicationRoleId == role.Id);
+			if(userRole == null)
+			{
+				return false;
+			}
+			try
+			{
+				_ = _context.UserRoles.Remove(userRole);
+				_ = await _context.SaveChangesAsync();
+				return true;
+			}
+			catch(Exception ex)
+			{
+				_logger.LogError(ex, "Error removing user from role");
+				return false;
 			}
 		}
 

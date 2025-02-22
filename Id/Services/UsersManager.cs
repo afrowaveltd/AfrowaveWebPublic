@@ -30,11 +30,32 @@ namespace Id.Services
 		private readonly string webImgDirectory = "/users";
 
 		// Public functions
+
+		/// <summary>
+		/// Get the path to the icon profile picture of the user
+		/// </summary>
+		/// <param name="userId">User ID</param>
+		/// <returns>Path pointing to the user picture in size 32x32px, or place holder if picture is not presented with the same size</returns>
+		/// <example>
+		/// Request
+		/// await GetIconPath("1234567890")
+		/// Response
+		/// "/users/1234567890/profile-picture/1234567890-32x32.jpg"
+		/// </example>
 		public async Task<string> GetIconPath(string userId)
 		{
 			return await GetImagePath(userId, ProfilePictureSize.icon);
 		}
 
+		/// <summary> Get the path to the medium profile picture of the user </summary>
+		/// <param name="userId">User ID</param>
+		/// <returns>Path pointing to the user picture in size 52x52px, or place holder if picture is not presented with the same size</returns>
+		/// <example>
+		/// request
+		/// await GetMediumImagePath("1234567890")
+		/// response
+		/// "/users/1234567890/profile-picture/1234567890-52x52.jpg"
+		/// </example>
 		public async Task<string> GetMediumImagePath(string userId)
 		{
 			return await GetImagePath(userId, ProfilePictureSize.small);

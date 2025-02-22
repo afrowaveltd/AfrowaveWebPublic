@@ -1,37 +1,36 @@
-﻿using SharedTools.Services;
+﻿/*
+ * This class is responsible for loading the application with the necessary data.
+ * It seeds the database with languages and countries, translates the names of the countries to the supported languages,
+ * and translates the static assets in the docs folder.
+ * It also gets the supported languages from the TranslatorService and the supported cultures from the Locales folder.
+ */
+
+using SharedTools.Services;
 
 namespace Id.Services
 {
-	public class ApplicationLoader : IApplicationLoader
-	{
-		private readonly ApplicationDbContext _context;
-		private readonly ILogger<ApplicationLoader> _logger;
-		private readonly ITranslatorService _translator;
-		private readonly ITextTranslationService _textTranslationService;
-		private readonly string jsonsPath;
-		private readonly string localesPath;
-		private readonly string staticAssetsPath;
-
-		public ApplicationLoader(ApplicationDbContext context,
+	public class ApplicationLoader(ApplicationDbContext context,
 												ILogger<ApplicationLoader> logger,
 												IWebHostEnvironment environment,
 												ITranslatorService translator,
-												ITextTranslationService textTranslationService)
-		{
-			_context = context;
-			_logger = logger;
-			_translator = translator;
-			_textTranslationService = textTranslationService;
-			staticAssetsPath = Path.Combine(environment.WebRootPath, "docs");
+												ITextTranslationService textTranslationService) : IApplicationLoader
+	{
+		// inject the necessary services and set the paths for the jsons, locales, and static assets
+		private readonly ApplicationDbContext _context = context,
+		private readonly ILogger<ApplicationLoader> _logger;
 
-			_ = AppDomain.CurrentDomain.BaseDirectory;
-			string projectPath = AppDomain.CurrentDomain.BaseDirectory
+		private readonly ITranslatorService _translator;
+		private readonly ITextTranslationService _textTranslationService;
+
+		private readonly string projectPath = AppDomain.CurrentDomain.BaseDirectory
 									  .Substring(0, AppDomain.CurrentDomain.BaseDirectory
 									  .IndexOf("bin"));
-			jsonsPath = Path.Combine(projectPath, "Jsons");
-			localesPath = Path.Combine(projectPath, "Locales");
-		}
 
+		private readonly string jsonsPath = Path.Combine(projectPath, "Jsons");
+		private readonly string localesPath = Path.Combine(projectPath, "Locales");
+		private readonly string staticAssetsPath = Path.Combine(environment.WebRootPath, "docs");
+
+		// set the options for the JsonSerializer
 		private JsonSerializerOptions options = new JsonSerializerOptions
 		{
 			PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -39,6 +38,10 @@ namespace Id.Services
 			ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles
 		};
 
+		/// <summary>
+		/// Applies the migrations to the database
+		/// </summary>
+		/// <returns>void</returns>
 		public async Task ApplyMigrations()
 		{
 			try
@@ -52,6 +55,10 @@ namespace Id.Services
 			}
 		}
 
+		/// <summary>
+		/// Seeds the database with languages
+		/// </summary>
+		/// <returns>void</returns>
 		public async Task SeedLanguagesAsync()
 		{
 			try
@@ -79,6 +86,13 @@ namespace Id.Services
 			}
 		}
 
+		/// <summary>
+		/// Gets the supported cultures from the Locales folder
+		/// </summary>
+		/// <returns>Returns ["en", "es", "fr"] if the Locales folder contains en.json, es.json, and fr.json</returns>
+		/// <example>
+		///  ["en", "es", "fr"]
+		/// </example>
 		public string[] GetSupportedCultures()
 		{
 			try
@@ -101,11 +115,16 @@ namespace Id.Services
 			}
 		}
 
+		/// <summary>
+		/// Seeds the database with countries
+		/// </summary>
+		/// <returns>void</returns>
+		/// <exception cref="Exception">Error seeding countries</exception>
 		public async Task SeedCountriesAsync()
 		{
 			if(await _context.Countries.AnyAsync())
 			{
-				_logger.LogInformation("Countries already seeded");
+				_logger.LogDebug("Countries already seeded");
 				return;
 			}
 			try
@@ -127,6 +146,10 @@ namespace Id.Services
 			}
 		}
 
+		/// <summary> Translates the names of the countries to the supported languages </summary>
+		/// <exception cref="Exception">Error reading or writing json files</exception>
+		/// <exception cref="Exception">Error deserializing json files</exception>
+		///	 <exception cref="Exception">Error translating country names</exception>
 		public async Task TranslateLanguageNamesAsync()
 		{
 			string[] supportedLanguages = await _translator.GetSupportedLanguagesAsync();
@@ -151,11 +174,11 @@ namespace Id.Services
 				}
 				catch(Exception e)
 				{
-					_logger.LogError(e, "Error reading {language}.json", language);
+					_logger.LogInformation(e, "Error reading {language}.json", language);
 				}
 				if(json == null && json == "")
 				{
-					_logger.LogError("Error reading {language} json", language);
+					_logger.Log("Error reading {language} json", language);
 				}
 				Dictionary<string, string> translations = new();
 				try
@@ -165,6 +188,19 @@ namespace Id.Services
 				catch(Exception e)
 				{
 					_logger.LogError(e, "Error deserializing {language}.json", language);
+					// If the file is empty or not a valid json, create a new dictionary
+					// but backup the file first
+					string backupPath = Path.Combine(localesPath, language + ".json.bak");
+					try
+					{
+						await File.MoveAsync(Path.Combine(localesPath, language + ".json"), backupPath);
+						_logger.LogWarning("Backed up {language}.json to {backup}", language, backupPath);
+					}
+					catch(Exception ex)
+					{
+						_logger.LogError(ex, "Error backing up {language}.json", language);
+					}
+
 					translations = new();
 				}
 				List<Country> countries = await _context.Countries.ToListAsync();
@@ -205,8 +241,8 @@ namespace Id.Services
 							else
 							{
 								countFail++;
-								_logger.LogWarning("Error translating {country} to {language}. Retrying in 2 seconds", country.Name, language);
-								Task.Delay(2000).Wait();
+								_logger.LogWarning("Error translating {country} to {language}. Retrying in 3 seconds", country.Name, language);
+								Task.Delay(3000).Wait();
 							}
 						}
 					}
@@ -242,6 +278,11 @@ namespace Id.Services
 			(int)((end - start)).TotalMilliseconds / countToTranslate);
 		}
 
+		/// <summary> Translates the static assets in the docs folder </summary>
+		/// <exception cref="Exception">Error getting folders in staticAssetsPath</exception>
+		/// <exception cref="Exception">Error translating folders</exception>
+		/// <returns>ApiResponse with list of the translated files</returns>
+		/// <remarks>Uses TranslateFolder from the service</remarks>
 		public async Task<List<ApiResponse<List<string>>>> TranslateStaticAssetsAsync()
 		{
 			List<ApiResponse<List<string>>> results = new();

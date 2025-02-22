@@ -2,6 +2,7 @@
 
 using Id.I18n;
 using Id.Middlewares;
+using Id.Models.SettingsModels;
 using Microsoft.AspNetCore.HttpOverrides;
 using Scalar.AspNetCore;
 using Serilog;
@@ -88,19 +89,19 @@ builder.Services.AddTransient<I18nMiddleware>();
 // builder.Services.AddTransient<ErrorMiddleware>();
 
 // Scoped slu�by (HTTP request-based)
-builder.Services.AddScoped<ICookieService, CookieService>();
-builder.Services.AddScoped<ITranslatorService, TranslatorService>();
 builder.Services.AddScoped<IApplicationLoader, ApplicationLoader>();
-builder.Services.AddScoped<ISelectOptionsServices, SelectOptionsServices>();
+builder.Services.AddScoped<IApplicationsManager, ApplicationsManager>();
+builder.Services.AddScoped<IBrandsManager, IBrandsManager>();
+builder.Services.AddScoped<ICookieService, CookieService>();
 builder.Services.AddScoped<IInstallationStatusService, InstallationStatusService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IApplicationService, ApplicationService>();
-builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<IBrandService, BrandService>();
-builder.Services.AddScoped<ITextTranslationService, TextTranslationService>();
-builder.Services.AddScoped<ITextToHtmlService, TextToHtmlService>();
+builder.Services.AddScoped<IRolesManager, IRolesManager>();
+builder.Services.AddScoped<ISelectOptionsServices, SelectOptionsServices>();
 builder.Services.AddScoped<ITermsService, TermsService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<ITextToHtmlService, TextToHtmlService>();
+builder.Services.AddScoped<ITextTranslationService, TextTranslationService>();
+builder.Services.AddScoped<ITranslatorService, TranslatorService>();
+builder.Services.AddScoped<IUsersManager, UsersManager>();
+builder.Services.AddScoped<IEmailManager, EmailManager>();
 
 // Transient slu�by (stateless)
 builder.Services.AddTransient<IStringLocalizerFactory, JsonStringLocalizerFactory>();
@@ -108,18 +109,22 @@ builder.Services.AddTransient<IEncryptionService, EncryptionService>();
 builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddTransient<IThemeService, ThemeService>();
 builder.Services.AddTransient<IUiTranslatorService, UiTranslatorService>();
-//builder.Services.AddTransient<IErrorResponseService, ErrorResponseService>();
 
 // Singleton slu�by (glob�ln�, thread-safe)
 builder.Services.AddSingleton<ISettingsService, SettingsService>();
-// I need to use the settings service and load the settings to use them for cookies and JWT configuration
-ISettingsService settingsService = builder.Services.BuildServiceProvider().GetRequiredService<ISettingsService>();
-Id.Models.SettingsModels.IdentificatorSettings Settings = await settingsService.GetSettingsAsync();
 
 // Hosted services
 builder.Services.AddHostedService<ScssCompilerService>();
 builder.Services.AddHostedService<UiTranslatorHostedService>();
-//builder.Services.AddHostedService<ThemeManagementService>();
+
+// I need to use the settings service and load the settings to use them for cookies and JWT configuration
+IdentificatorSettings Settings;
+builder.Services.AddSingleton<ISettingsService>(sp =>
+{
+	var settingsService = sp.GetRequiredService<ISettingsService>();
+	Settings = settingsService.GetSettingsAsync().GetAwaiter().GetResult();
+	return settingsService;
+});
 
 WebApplication app = builder.Build();
 
