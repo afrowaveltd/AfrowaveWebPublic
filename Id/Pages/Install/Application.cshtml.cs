@@ -1,4 +1,5 @@
-using Id.Models.CommunicationModels;
+using Id.Models.InputModels;
+using Id.Models.ResultModels;
 using SharedTools.Services;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,7 +10,7 @@ namespace Id.Pages.Install
 								  IInstallationStatusService installationStatus,
 								  IEncryptionService encryptionService,
 								  ISettingsService settingsService,
-								  IApplicationService applicationService,
+								  IApplicationsManager applicationService,
 								  IImageService imageService,
 								  IStringLocalizer<ApplicationModel> _t) : PageModel
 	{
@@ -18,7 +19,7 @@ namespace Id.Pages.Install
 		private readonly IInstallationStatusService _installationStatus = installationStatus;
 		private readonly IEncryptionService _encryptionService = encryptionService;
 		private readonly ISettingsService _settingsService = settingsService;
-		private readonly IApplicationService _applicationService = applicationService;
+		private readonly IApplicationsManager _applicationService = applicationService;
 		private readonly IImageService _imageService = imageService;
 		public IStringLocalizer<ApplicationModel> t = _t;
 
@@ -117,7 +118,7 @@ namespace Id.Pages.Install
 			}
 			// checks done - rest should be the work of the service
 
-			RegisterApplicationModel newApplication = new()
+			RegisterApplicationInput newApplication = new()
 			{
 				Name = Input.ApplicationName,
 				Description = Input.ApplicationDescription,
@@ -133,14 +134,14 @@ namespace Id.Pages.Install
 
 			RegisterApplicationResult response = await _applicationService.RegisterApplicationAsync(newApplication);
 
-			if(!response.Success)
+			if(!response.ApplicationCreated)
 			{
-				ErrorMessage = response.Error.FirstOrDefault() ?? "Unknown error";
+				ErrorMessage = response.ErrorMessage ?? "Unknown error";
 				return Page();
 			}
 			// now we need to work on ApplicationId and Settings
-
-			return RedirectToPage("/Index");
+			await _settingsService.SetApplicationId(response.ApplicationId);
+			return RedirectToPage("/ApplicationRoles");
 		}
 	}
 }

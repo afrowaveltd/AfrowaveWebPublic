@@ -2,115 +2,84 @@
 
 namespace Id.Services
 {
-	public class InstallationStatusService : IInstallationStatusService
-	{
-		private readonly ISettingsService _settingsService;
-		private readonly ApplicationDbContext _context;
-		private readonly ILogger<InstallationStatusService> _logger;
-
-		public InstallationStatusService(ISettingsService settingsService,
+	/// <summary>
+	/// Provides methods to check and manage the installation status of the application.
+	/// </summary>
+	/// <remarks>
+	/// Initializes a new instance of the <see cref="InstallationStatusService"/> class.
+	/// </remarks>
+	/// <param name="settingsService">The settings service to manage application settings.</param>
+	/// <param name="logger">The logger instance for logging information.</param>
+	/// <param name="context">The database context.</param>
+	public class InstallationStatusService(
+			 ISettingsService settingsService,
 			 ILogger<InstallationStatusService> logger,
-			 ApplicationDbContext context)
-		{
-			_logger = logger;
-			_settingsService = settingsService;
-			_context = context;
-		}
+			 ApplicationDbContext context) : IInstallationStatusService
+	{
+		private readonly ISettingsService _settingsService = settingsService;
+		private readonly ApplicationDbContext _context = context;
+		private readonly ILogger<InstallationStatusService> _logger = logger;
 
+		/// <summary>
+		/// Determines the next installation step based on the application's current state.
+		/// </summary>
+		/// <returns>The next required installation step.</returns>
 		public async Task<InstalationSteps> GetInstallationStepAsync()
 		{
-			if(await _context.Users.AnyAsync() == false)
-			{
-				return InstalationSteps.Administrator;
-			}
-			if(await _context.Brands.AnyAsync() == false)
-			{
-				return InstalationSteps.Brand;
-			}
-			if(await _context.Applications.AnyAsync() == false)
-			{
-				return InstalationSteps.Application;
-			}
+			if(!await _context.Users.AnyAsync()) return InstalationSteps.Administrator;
+			if(!await _context.Brands.AnyAsync()) return InstalationSteps.Brand;
+			if(!await _context.Applications.AnyAsync()) return InstalationSteps.Application;
+
 			IdentificatorSettings settings = await _settingsService.GetSettingsAsync();
-			bool rolesExit = await _context.ApplicationRoles.AnyAsync();
-			if(!rolesExit)
-			{
-				return InstalationSteps.ApplicationRoles;
-			}
+			if(!await _context.ApplicationRoles.AnyAsync()) return InstalationSteps.ApplicationRoles;
+
 			ApplicationSmtpSettings? smtpSettings = await _context.ApplicationSmtpSettings.FirstOrDefaultAsync();
-			if(smtpSettings == null || string.IsNullOrEmpty(smtpSettings.Host))
-			{
-				return InstalationSteps.SmtpSettings;
-			}
-			if(settings.LoginRules == null || settings.LoginRules.MaxFailedLoginAttempts == 0)
-			{
-				return InstalationSteps.LoginRules;
-			}
-			if(settings.PasswordRules == null || settings.PasswordRules.MinimumLength == 0)
-			{
-				return InstalationSteps.PasswordRules;
-			}
-			if(settings.CookieSettings == null || string.IsNullOrEmpty(settings.CookieSettings.Domain))
-			{
-				return InstalationSteps.CookieSettings;
-			}
-			if(settings.JwtSettings == null || string.IsNullOrEmpty(settings.JwtSettings.Issuer))
-			{
-				return InstalationSteps.JwtSettings;
-			}
-			if(settings.CorsSettings == null || !settings.CorsSettings.CorsConfigured)
-			{
-				return InstalationSteps.CorsSettings;
-			}
-			if(settings.InstallationFinished == false)
-			{
-				return InstalationSteps.Result;
-			}
+			if(smtpSettings == null || string.IsNullOrEmpty(smtpSettings.Host)) return InstalationSteps.SmtpSettings;
+
+			if(settings.LoginRules == null || !settings.LoginRules.IsConfigured) return InstalationSteps.LoginRules;
+			if(settings.PasswordRules == null || !settings.PasswordRules.IsConfigured) return InstalationSteps.PasswordRules;
+			if(settings.CookieSettings == null || !settings.CookieSettings.IsConfigured) return InstalationSteps.CookieSettings;
+			if(settings.JwtSettings == null || !settings.JwtSettings.IsConfigured) return InstalationSteps.JwtSettings;
+			if(settings.CorsSettings == null || !settings.CorsSettings.IsConfigured) return InstalationSteps.CorsSettings;
+			if(!settings.InstallationFinished) return InstalationSteps.Result;
+
 			return InstalationSteps.Finish;
 		}
 
+		/// <summary>
+		/// Validates whether the current installation state matches the expected step.
+		/// </summary>
+		/// <param name="actualStep">The expected installation step.</param>
+		/// <returns>True if the installation state is correct; otherwise, false.</returns>
 		public async Task<bool> ProperInstallState(InstalationSteps actualStep)
 		{
-			if(actualStep != InstalationSteps.Administrator && actualStep != InstalationSteps.Brand && actualStep != InstalationSteps.Application)
+			if(actualStep != InstalationSteps.Administrator &&
+				 actualStep != InstalationSteps.Brand &&
+				 actualStep != InstalationSteps.Application)
 			{
 				await CheckAndFixApplicationId();
 			}
+
 			return await GetInstallationStepAsync() == actualStep;
 		}
 
+		/// <summary>
+		/// Ensures the application ID is correctly set in the database and settings.
+		/// </summary>
 		private async Task CheckAndFixApplicationId()
 		{
-			string settingsApplicationId = string.Empty;
 			IdentificatorSettings settings = await _settingsService.GetSettingsAsync();
-			if(settings is null)
-			{
-				return;
-			}
-			else
-			{
-				settingsApplicationId = settings.ApplicationId;
-				if(settingsApplicationId == null)
-				{
-					return;
-				}
-			}
-			// check if there is only one application - if not, throw exception;
+			if(settings == null || string.IsNullOrEmpty(settings.ApplicationId)) return;
+
 			List<Application> applications = await _context.Applications.ToListAsync();
-			string dbApplicationId;
 			if(applications.Count != 1)
 			{
-				if(applications.Count == 0)
-				{
-					return;
-				}
-
+				if(applications.Count == 0) return;
 				throw new InvalidOperationException("There should be only one application in the database.");
 			}
-			else
-			{
-				dbApplicationId = applications.First().Id;
-			}
-			if(dbApplicationId != settingsApplicationId)
+
+			string dbApplicationId = applications.First().Id;
+			if(dbApplicationId != settings.ApplicationId)
 			{
 				settings.ApplicationId = dbApplicationId;
 				await _settingsService.SetSettingsAsync(settings);

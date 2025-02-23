@@ -1,4 +1,11 @@
-﻿using Id.Models.DataViews;
+﻿/*
+ *  The BrandsManager class is responsible for managing the brands in the application.
+ *  It provides methods to get information about a brand, get the applications of a brand,
+ *  Register a new brand, update a brand, check if a brand name is unique, get the path to the logo of a brand,
+ *  Get the path to the icon of a brand, get the path to the full size logo of a brand, and check if a user is the owner of a brand.
+ */
+
+using Id.Models.DataViews;
 using Id.Models.InputModels;
 using Id.Models.ResultModels;
 using SharedTools.Services;
@@ -109,6 +116,25 @@ namespace Id.Services
 				})
 				.FirstOrDefaultAsync();
 			return brandView;
+		}
+
+		/// <summary>
+		/// Gets the owner id of a brand
+		/// </summary>
+		/// <param name="brandId"></param>
+		/// <returns>string representing UserId of the brand owner or null</returns>
+		/// <example>
+		/// <!-- Example of how to use the GetBrandOwnerId method. -->
+		/// await GetBrandOwnerId(1);
+		/// <!-- This will return the owner id of the brand with the given id. -->
+		/// Returns: "ownerId"
+		/// </example>
+		public async Task<string?> GetBrandOwnerId(int brandId)
+		{
+			return await _context.Brands
+				.Where(b => b.Id == brandId)
+				.Select(b => b.OwnerId)
+				.FirstOrDefaultAsync();
 		}
 
 		/// <summary>

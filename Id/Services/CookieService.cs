@@ -1,15 +1,10 @@
 ﻿namespace Id.Services
 {
-    public class CookieService : ICookieService
+    public class CookieService(IHttpContextAccessor httpContextAccessor) : ICookieService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-        public CookieService(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
-
-        public void SetCookie(string key, string value, int expireTime = 0)
+		public void SetCookie(string key, string value, int expireTime = 0)
         {
             CookieOptions options = new CookieOptions
             {

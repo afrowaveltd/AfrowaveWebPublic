@@ -2,16 +2,11 @@
 
 namespace Id.I18n
 {
-    public class JsonStringLocalizerFactory : IStringLocalizerFactory
+    public class JsonStringLocalizerFactory(IDistributedCache cache) : IStringLocalizerFactory
     {
-        private readonly IDistributedCache _cache;
+        private readonly IDistributedCache _cache = cache;
 
-        public JsonStringLocalizerFactory(IDistributedCache cache)
-        {
-            _cache = cache;
-        }
-
-        public IStringLocalizer Create(Type resourceSource)
+		public IStringLocalizer Create(Type resourceSource)
         {
             return new JsonStringLocalizer(_cache);
         }

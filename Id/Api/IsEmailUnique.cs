@@ -2,19 +2,13 @@
 {
    [Route("api/[controller]")]
    [ApiController]
-   public class IsEmailUnique : ControllerBase
+   public class IsEmailUnique(IUserService userService,
+		 IStringLocalizer<IsEmailUnique> _t) : ControllerBase
    {
-      private readonly IUserService _userService;
-      private readonly IStringLocalizer<IsEmailUnique> t;
+      private readonly IUserService _userService = userService;
+      private readonly IStringLocalizer<IsEmailUnique> t = _t;
 
-      public IsEmailUnique(IUserService userService,
-          IStringLocalizer<IsEmailUnique> _t)
-      {
-         _userService = userService;
-         t = _t;
-      }
-
-      [HttpGet]
+		[HttpGet]
 
       [Route("{email}")]
       public async Task<IActionResult> OnGetAsync(string email)

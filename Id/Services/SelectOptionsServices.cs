@@ -3,27 +3,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Id.Services
 {
-	public class SelectOptionsServices : ISelectOptionsServices
+	public class SelectOptionsServices(ApplicationDbContext context, IApplicationLoader loader, IStringLocalizer<SelectOptionsServices> _t) : ISelectOptionsServices
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly IApplicationLoader _loader;
-		private readonly IStringLocalizer<SelectOptionsServices> t;
+		private readonly ApplicationDbContext _context = context;
+		private readonly IApplicationLoader _loader = loader;
+		private readonly IStringLocalizer<SelectOptionsServices> t = _t;
 
 		private readonly string _cssFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory
 									  .Substring(0, AppDomain.CurrentDomain.BaseDirectory
 									  .IndexOf("bin")), "wwwroot", "css");
 
-		public SelectOptionsServices(ApplicationDbContext context, IApplicationLoader loader, IStringLocalizer<SelectOptionsServices> _t)
-		{
-			_context = context;
-			_loader = loader;
-			t = _t;
-		}
-
 		public async Task<List<SelectListItem>> GetBinaryOptionsAsync(bool selected = true)
 		{
-			List<SelectListItem> items = new()
-			{
+			List<SelectListItem> items =
+			[
 				new SelectListItem
 				{
 					Value = "true",
@@ -36,7 +29,7 @@ namespace Id.Services
 					Text = t["No"],
 					Selected = !selected
 				}
-			};
+			];
 			return await Task.FromResult(items);
 		}
 
@@ -52,8 +45,8 @@ namespace Id.Services
 
 		public async Task<List<SelectListItem>> GetHttpHeadersAsync(List<string> selected)
 		{
-			List<string> headers = new()
-			{
+			List<string> headers =
+			[
 				"Accept",
 				"Accept-Encoding",
 				"Accept-Language",
@@ -87,26 +80,26 @@ namespace Id.Services
 				"X-API-Key",
 				"X-Auth-Token",
 				"X-Correlation-ID"
-			};
+			];
 
-			List<SelectListItem> items = headers.Select(header => new SelectListItem
+			List<SelectListItem> items = [.. headers.Select(header => new SelectListItem
 			{
 				Value = header,
 				Text = header,
 				Selected = selected.Contains(header)
-			}).ToList();
+			})];
 			return await Task.FromResult(items);
 		}
 
 		public async Task<List<SelectListItem>> GetHttpMethodsAsync(List<string> selected)
 		{
 			string[] methods = new[] { "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD" };
-			List<SelectListItem> items = methods.Select(method => new SelectListItem
+			List<SelectListItem> items = [.. methods.Select(method => new SelectListItem
 			{
 				Value = method,
 				Text = method,
 				Selected = selected.Contains(method) || selected.Contains("all")
-			}).ToList();
+			})];
 			return await Task.FromResult(items);
 		}
 
@@ -134,7 +127,7 @@ namespace Id.Services
 				}
 			}
 
-			languages = languages.OrderBy(l => l.Text).ToList();
+			languages = [.. languages.OrderBy(l => l.Text)];
 
 			return languages;
 		}
@@ -142,12 +135,12 @@ namespace Id.Services
 		public async Task<List<SelectListItem>> GetSameSiteModeOptionsAsync(SameSiteMode selected = SameSiteMode.Lax)
 		{
 			SameSiteMode[] options = Enum.GetValues<SameSiteMode>();
-			List<SelectListItem> items = options.Select(option => new SelectListItem
+			List<SelectListItem> items = [.. options.Select(option => new SelectListItem
 			{
 				Value = ((int)option).ToString(),
 				Text = option.ToString(),
 				Selected = option == selected
-			}).ToList();
+			})];
 			return await Task.FromResult(items);
 		}
 
@@ -155,12 +148,12 @@ namespace Id.Services
 		{
 			SecureSocketOptions[] options = Enum.GetValues<SecureSocketOptions>();
 
-			List<SelectListItem> items = options.Select(option => new SelectListItem
+			List<SelectListItem> items = [.. options.Select(option => new SelectListItem
 			{
 				Value = ((int)option).ToString(),
 				Text = option.ToString(),
 				Selected = option == selected
-			}).ToList();
+			})];
 
 			return await Task.FromResult(items);
 		}
@@ -176,7 +169,7 @@ namespace Id.Services
 			{
 				string[] themeFiles = Directory.GetFiles(_cssFolderPath, "*-theme.css", SearchOption.TopDirectoryOnly);
 
-				List<string> themeNames = themeFiles
+				List<string> themeNames = [.. themeFiles
 					 .Select(file => Path.GetFileNameWithoutExtension(file)) // Extract file name without extension
 					 .Select(fileName =>
 					 {
@@ -184,8 +177,7 @@ namespace Id.Services
 						 return parts.Length == 2 ? (parts[0], parts[1]) : ("public", fileName); // Extract UserId or mark as public
 					 })
 					 .Where(theme => theme.Item1 == "public" || theme.Item1 == userId) // Filter by UserId or public
-					 .Select(theme => theme.Item2.Replace("-theme", "")) // Remove "-theme" part
-					 .ToList();
+					 .Select(theme => theme.Item2.Replace("-theme", ""))];
 
 				return themeNames;
 			});

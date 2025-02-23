@@ -1,4 +1,4 @@
-﻿namespace Id.Models.CommunicationModels
+﻿namespace Id.Models.ResultModels
 {
 	public class UserRegistrationResult
 	{

@@ -1,15 +1,10 @@
 namespace Id.Pages.Helps
 {
-    public class Install_EmailModel : PageModel
+    public class Install_EmailModel(IStringLocalizer<Install_EmailModel> _t) : PageModel
     {
-        private readonly IStringLocalizer<Install_EmailModel> t;
+        private readonly IStringLocalizer<Install_EmailModel> t = _t;
 
-        public Install_EmailModel(IStringLocalizer<Install_EmailModel> _t)
-        {
-            t = _t;
-        }
-
-        public string Title1 { get; set; } = "";
+		public string Title1 { get; set; } = "";
         public string Title2 { get; set; } = "";
         public List<string> Lines = new List<string>();
 

@@ -1,15 +1,10 @@
 namespace Id.Pages.Helps
 {
-    public class Install_ApplicationNameModel : PageModel
+    public class Install_ApplicationNameModel(IStringLocalizer<Install_ApplicationNameModel> _t) : PageModel
     {
-        private readonly IStringLocalizer<Install_ApplicationNameModel> t;
+        private readonly IStringLocalizer<Install_ApplicationNameModel> t = _t;
 
-        public Install_ApplicationNameModel(IStringLocalizer<Install_ApplicationNameModel> _t)
-        {
-            t = _t;
-        }
-
-        public string Title { get; set; } = "";
+		public string Title { get; set; } = "";
         public List<string> Lines = new List<string>();
 
         public void OnGet()

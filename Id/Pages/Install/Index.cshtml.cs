@@ -2,13 +2,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Id.Pages.Install
 {
-	public class IndexModel : PageModel
+	public class IndexModel(ILogger<IndexModel> logger,
+							  ApplicationDbContext context,
+							  IStringLocalizer<IndexModel> t,
+							  IInstallationStatusService installationStatus,
+							  IEncryptionService encryptionService) : PageModel
 	{
-		private readonly ILogger<IndexModel> _logger;
-		private readonly ApplicationDbContext _context;
-		private readonly IInstallationStatusService _installationStatus;
-		private readonly IEncryptionService _encryptionService;
-		public IStringLocalizer<IndexModel> t;
+		private readonly ILogger<IndexModel> _logger = logger;
+		private readonly ApplicationDbContext _context = context;
+		private readonly IInstallationStatusService _installationStatus = installationStatus;
+		private readonly IEncryptionService _encryptionService = encryptionService;
+		public IStringLocalizer<IndexModel> t = t;
 
 		[BindProperty]
 		public InputModel Input { get; set; } = new();
@@ -26,20 +30,6 @@ namespace Id.Pages.Install
 			[Required]
 			[DataType(DataType.Password)]
 			public string PasswordConfirm { get; set; } = string.Empty;
-		}
-
-		public IndexModel(ILogger<IndexModel> logger,
-							  ApplicationDbContext context,
-							  IStringLocalizer<IndexModel> t,
-							  IInstallationStatusService installationStatus,
-							  ISettingsService settingsService,
-							  IEncryptionService encryptionService)
-		{
-			_context = context;
-			_logger = logger;
-			this.t = t;
-			_installationStatus = installationStatus;
-			_encryptionService = encryptionService;
 		}
 
 		public async Task<IActionResult> OnGetAsync()
@@ -61,13 +51,15 @@ namespace Id.Pages.Install
 			}
 			if(ModelState.IsValid)
 			{
-				User admin = new();
-				admin.Email = Input.Email;
-				admin.Password = await _encryptionService.HashPasswordAsync(Input.Password);
-				admin.DisplayName = "Administrator";
-				admin.Firstname = "System";
-				admin.Lastname = "Administrator";
-				admin.EmailConfirmed = true;
+				User admin = new()
+				{
+					Email = Input.Email,
+					Password = await _encryptionService.HashPasswordAsync(Input.Password),
+					DisplayName = "Administrator",
+					Firstname = "System",
+					Lastname = "Administrator",
+					EmailConfirmed = true
+				};
 
 				_ = await _context.Users.AddAsync(admin);
 				_ = await _context.SaveChangesAsync();

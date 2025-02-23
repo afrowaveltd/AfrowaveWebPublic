@@ -2,18 +2,12 @@
 
 namespace Id.Middlewares
 {
-    public class I18nMiddleware : IMiddleware
+    public class I18nMiddleware(ICookieService cookieService, ILogger<I18nMiddleware> logger) : IMiddleware
     {
-        private readonly ICookieService _cookieService;
-        private readonly ILogger<I18nMiddleware> _logger;
+        private readonly ICookieService _cookieService = cookieService;
+        private readonly ILogger<I18nMiddleware> _logger = logger;
 
-        public I18nMiddleware(ICookieService cookieService, ILogger<I18nMiddleware> logger)
-        {
-            _logger = logger;
-            _cookieService = cookieService;
-        }
-
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+		public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             // Check cookie or header for language
             string cultureKey;

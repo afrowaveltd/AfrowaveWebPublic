@@ -10,7 +10,7 @@ namespace Id.Services
 		ApplicationDbContext dbContext,
 		ISettingsService settingsService,
 		IEncryptionService encryptionService,
-		IEmailService emailService,
+		IEmailManager emailService,
 		IImageService imageService,
 		IStringLocalizer<UsersManager> t) : IUsersManager
 	{
@@ -20,7 +20,7 @@ namespace Id.Services
 		private readonly ApplicationDbContext _dbContext = dbContext;
 		private readonly ISettingsService _settingsService = settingsService;
 		private readonly IEncryptionService _encryptionService = encryptionService;
-		private readonly IEmailService _emailService = emailService;
+		private readonly IEmailManager _emailService = emailService;
 		private readonly IImageService _imageService = imageService;
 		private readonly IStringLocalizer<UsersManager> _t = t;
 
@@ -80,7 +80,7 @@ namespace Id.Services
 		{
 			LoginRules loginRules = await _settingsService.GetLoginRulesAsync();
 
-			RegisterUserResult result = new RegisterUserResult();
+			RegisterUserResult result = new();
 			// Check input
 			if(input == null)
 			{
@@ -115,6 +115,15 @@ namespace Id.Services
 				result.UserCreated = false;
 				result.ProfilePictureUploaded = false;
 				result.Errors.AddRange(passwordCheck.Errors);
+				return result;
+			}
+			CheckInputResult termsCheck = CheckTermsAndConditions(input);
+			if(!termsCheck.Success)
+			{
+				_logger.LogWarning("Terms and conditions are not accepted");
+				result.UserCreated = false;
+				result.ProfilePictureUploaded = false;
+				result.Errors.AddRange(termsCheck.Errors);
 				return result;
 			}
 			// Create user

@@ -1,18 +1,13 @@
 namespace Id.Pages.Helps
 {
-    public class Install_PasswordModel : PageModel
+    public class Install_PasswordModel(IStringLocalizer<Install_PasswordModel> _t) : PageModel
     {
-        private readonly IStringLocalizer<Install_PasswordModel> t;
+        private readonly IStringLocalizer<Install_PasswordModel> t = _t;
 
         public string Title { get; set; } = "";
         public List<string> Lines = new List<string>();
 
-        public Install_PasswordModel(IStringLocalizer<Install_PasswordModel> _t)
-        {
-            t = _t;
-        }
-
-        public IActionResult OnGet()
+		public IActionResult OnGet()
         {
             Title = t["Set the password"];
 

@@ -1,18 +1,13 @@
 namespace Id.Pages.Helps
 {
-    public class Install_ApplicationModel : PageModel
+    public class Install_ApplicationModel(IStringLocalizer<Install_ApplicationModel> _t) : PageModel
     {
-        private readonly IStringLocalizer<Install_ApplicationModel> t;
+        private readonly IStringLocalizer<Install_ApplicationModel> t = _t;
 
         public string Title { get; set; } = "";
         public List<string> Lines = new List<string>();
 
-        public Install_ApplicationModel(IStringLocalizer<Install_ApplicationModel> _t)
-        {
-            t = _t;
-        }
-
-        public void OnGet()
+		public void OnGet()
         {
             Title = t["Create Authenticator Application"];
 

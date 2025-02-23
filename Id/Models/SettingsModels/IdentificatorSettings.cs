@@ -18,6 +18,7 @@
 		public int PasswordResetTokenExpiration { get; set; } = 30; // in minutes
 		public int OTPTokenExpiration { get; set; } = 60; // in minutes
 		public bool RequireConfirmedEmail { get; set; } = true;
+		public bool IsConfigured { get; set; } = false;
 	}
 
 	public class PasswordRules
@@ -28,6 +29,7 @@
 		public bool RequireLowercase { get; set; } = true;
 		public bool RequireUppercase { get; set; } = true;
 		public bool RequireDigit { get; set; } = true;
+		public bool IsConfigured { get; set; } = false;
 	}
 
 	public class CookieSettings
@@ -39,6 +41,7 @@
 		public SameSiteMode SameSite { get; set; } = SameSiteMode.Lax;
 		public bool HttpOnly { get; set; } = true;
 		public int Expiration { get; set; } = 60; // in minutes
+		public bool IsConfigured { get; set; } = false;
 	}
 
 	public class JwtSettings
@@ -47,6 +50,7 @@
 		public string Audience { get; set; } = string.Empty;
 		public int AccessTokenExpiration { get; set; } = 30; // in minutes
 		public int RefreshTokenExpiration { get; set; } = 7; // in days
+		public bool IsConfigured { get; set; } = false;
 	}
 
 	public class CorsSettings
@@ -59,7 +63,7 @@
 		public bool AllowAnyHeader { get; set; } = false;
 		public List<string> AllowedHeaders { get; set; } = [];
 		public bool AllowCredentials { get; set; } = false;
-		public bool CorsConfigured { get; set; } = false;
+		public bool IsConfigured { get; set; } = false;
 	}
 
 	public enum CorsPolicyMode

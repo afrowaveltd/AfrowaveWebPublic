@@ -1,20 +1,13 @@
 ﻿using System.Xml.Serialization;
 
-public class CustomErrorHandlingMiddleware
-{
-	private readonly RequestDelegate _next;
-	private readonly IWebHostEnvironment _env;
-	private readonly ILogger<CustomErrorHandlingMiddleware> _logger;
-
-	public CustomErrorHandlingMiddleware(
+public class CustomErrorHandlingMiddleware(
 		 RequestDelegate next,
 		 IWebHostEnvironment env,
 		 ILogger<CustomErrorHandlingMiddleware> logger)
-	{
-		_next = next;
-		_env = env;
-		_logger = logger;
-	}
+{
+	private readonly RequestDelegate _next = next;
+	private readonly IWebHostEnvironment _env = env;
+	private readonly ILogger<CustomErrorHandlingMiddleware> _logger = logger;
 
 	public async Task InvokeAsync(HttpContext context)
 	{

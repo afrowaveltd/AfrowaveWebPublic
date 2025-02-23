@@ -1,4 +1,10 @@
-﻿using Id.Models.CommunicationModels;
+﻿/*
+ *  Class: EmailManager implements IEmailManager interface,
+ *  is used to manage email sending and SMTP settings autodetection and testing,
+ *  Sends emails using the provided SMTP settings and a template.
+ */
+
+using Id.Models.CommunicationModels;
 using Id.Models.InputModels;
 using Id.Models.ResultModels;
 using MailKit;
@@ -30,6 +36,30 @@ namespace Id.Services
 			.Build();
 
 		// public methods
+
+		/// <summary>
+		/// Autodetects SMTP settings based on the provided input
+		/// </summary>
+		/// <param name="input">Basic model including sender name, email, host server and its login data</param>
+		/// <returns>SmtpSenderModel class with values going from the autodetection</returns>
+		/// <example>
+		///  Example usage:
+		///  await AutodetectSmtpSettingsAsync(new DetectSmtpSettingsInput { Host = "smtp.example.com", SenderEmail = "example@example.com", Username = "example", Password = "password" });
+		///  Example response:
+		///  {
+		///		Successful : true,
+		///		Data: {
+		///		  Host: "smtp.example.com",
+		///		  Port: 587,
+		///		  Secure: 2,
+		///		  Username: "example",
+		///		  Password: "password",
+		///		  SenderEmail: "example@example.com",
+		///		  SenderName: "example"
+		///		  },
+		///		Message = "SMTP settings successfully detected"
+		///	 }
+		///	 </example>
 		public async Task<ApiResponse<SmtpSenderModel>> AutodetectSmtpSettingsAsync(DetectSmtpSettingsInput input)
 		{
 			// Common SMTP ports
@@ -90,6 +120,32 @@ namespace Id.Services
 			return response;
 		}
 
+		/// <summary>
+		/// Sends an email using the provided SMTP settings
+		/// </summary>
+		/// <param name="targetEmail">Recipient email address</param>
+		/// <param name="subject">Email subject</param>
+		/// <param name="body">HTML email body</param>
+		/// <param name="applicationId">Application ID to load SMTP settings</param>
+		/// <returns>EmailResult</returns>
+		/// <example>
+		/// <!-- Example usage: -->
+		/// await SendEmailAsync("test@somedomain.com", "Test email", "This is a test email", "applicationId");
+		/// <!-- Example response: -->
+		/// {
+		///		TargerEmail: "test@somedomain.com",
+		///		Sucess: true,
+		///		Suject: "Test email",
+		///		ErrorMesssage: null
+		///	 }
+		///	 <!-- Example error response: -->
+		///	 {
+		///	   TargetEmail: "test@somedomain.com",
+		///	   Subject: "Test email",
+		///	   Success: false,
+		///	   ErrorMessage: "SMTP settings not found"
+		///	 {
+		///	</example>
 		public async Task<EmailResult> SendEmailAsync(string targetEmail, string subject, string body, string applicationId)
 		{
 			ApplicationSmtpSettings? smtpSettings = await _applicationManager.GetApplicationSmtpSettingsAsync(applicationId);
@@ -148,11 +204,55 @@ namespace Id.Services
 			return await SendEmailAsync(message, smtpSettings);
 		}
 
+		/// <summary>
+		/// Sends an email using the provided SMTP settings
+		/// </summary>
+		/// <param name="targetEmail" > Recipient email address</param>
+		/// <param name="subject">Email subject</param>
+		/// <param name="body">HTML email body</param>
+		/// <returns>EmailResult</returns>
+		/// <example>
+		/// <!-- Example usage: -->
+		/// await SendEmailAsync("test@somedomain.com", "Test email", "This is a test email", "applicationId");
+		/// <!-- Example response: -->
+		/// {
+		///		TargerEmail: "test@somedomain.com",
+		///		Sucess: true,
+		///		Suject: "Test email",
+		///		ErrorMesssage: null
+		///	 }
+		///	 <!-- Example error response: -->
+		///	 {
+		///	   TargetEmail: "test@somedomain.com",
+		///	   Subject: "Test email",
+		///	   Success: false,
+		///	   ErrorMessage: "SMTP settings not found"
+		///	 {
+		///	</example>
 		public async Task<EmailResult> SendEmailAsync(string targetEmail, string subject, string body)
 		{
 			return await SendEmailAsync(targetEmail, subject, body, _authenticatorId);
 		}
 
+		/// <summary> Sends an email using the provided SMTP settings and a template </summary>
+		/// <param name="applicationId">ID aplikace</param>
+		/// <param name="model">Model object for the razor template</param>
+		/// <param name="targetEmail">Recipient email address</param>
+		/// <param name="templateName">Name of the razor template</param>
+		/// <permission cref="EmailManager">Requires permission to send emails</permission>
+		/// <returns>Result of the email sending</returns>
+		/// <example>
+		/// <!-- Example usage: -->
+		/// await SendEmailFromTemplateAsync("some@somedomain.com", "TemplateName", new { Subject = "Test email", Body = "This is a test email" }, "applicationId");
+		/// <!-- Example response: -->
+		/// new EmailResult()
+		/// {
+		///   TargetEmail: "some@somedomain.com",
+		///   Subject: "TemplateName",
+		///   Success: true,
+		///   ErrorMessage: null
+		/// }
+		/// </example>
 		public async Task<EmailResult> SendEmailFromTemplateAsync(string targetEmail, string templateName, object model, string applicationId)
 		{
 			ApplicationSmtpSettings? smtpSettings = await _applicationManager.GetApplicationSmtpSettingsAsync(applicationId);
@@ -194,11 +294,71 @@ namespace Id.Services
 			return await SendEmailAsync(targetEmail, subject, body, applicationId);
 		}
 
+		/// <summary> Sends an email using the provided SMTP settings and a template </summary>
+		/// <param name="model">Model object for the razor template</param>
+		/// <param name="targetEmail">Recipient email address</param>
+		/// <param name="templateName">Name of the razor template</param>
+		/// <permission cref="EmailManager">Requires permission to send emails</permission>
+		/// <returns>Result of the email sending</returns>
+		/// <example>
+		/// <!-- Example usage: -->
+		/// await SendEmailFromTemplateAsync("some@somedomain.com", "TemplateName", new { Subject = "Test email", Body = "This is a test email" }, "applicationId");
+		/// <!-- Example response: -->
+		/// new EmailResult()
+		/// {
+		///   TargetEmail: "some@somedomain.com",
+		///   Subject: "TemplateName",
+		///   Success: true,
+		///   ErrorMessage: null
+		/// }
+		/// </example>
 		public async Task<EmailResult> SendEmailFromTemplateAsync(string targetEmail, string templateName, object model)
 		{
 			return await SendEmailFromTemplateAsync(targetEmail, templateName, model, _authenticatorId);
 		}
 
+		/// <summary> Sends an email to a group of recipients using the provided SMTP settings </summary>
+		/// <permission cref="EmailManager">Requires permission to send emails</permission>
+		/// <param name="targetEmails">List of recipient email addresses</param>
+		/// <param name="templateName">Name of the razor template</param>
+		/// <param name="model">Model object for the razor template</param>
+		/// <param name="applicationId">ID of the application</param>
+		/// <returns>Result of the email sending</returns>
+		/// <example>
+		/// <!-- Example usage: -->
+		/// await SendGroupEmailFromTemplateAsync(new List<string>
+		///		{
+		///			"email1@somedomain.com",
+		///			"email2@otherdomain.com"
+		///		},
+		///		"TemplateName",
+		///		new
+		///			{
+		///				Subject = "Test email",
+		///				Body = "This is a test email"
+		///			},
+		///		"applicationId");
+		///	 <!-- Example response: -->
+		///	  new SendEmailsResult()
+		///	  {
+		///			SenderApplicationId: 0,
+		///			Subject: "TemplateName",
+		///			Result: new List<EmailResult>() {
+		///			  new EmailResult() {
+		///					TargerEmail: "email1@somedomain.com",
+		///					Sucess: true,
+		///					Suject: "TemplateName",
+		///					ErrorMesssage: null
+		///			  },
+		///			  new EmailResult() {
+		///					TargerEmail: "email2@otherdomain.com",
+		///					Sucess: true,
+		///					Suject: "TemplateName",
+		///					ErrorMesssage: null
+		///				}
+		///			}
+		///	 }
+		/// </example>
 		public async Task<SendEmailsResult> SendGroupEmailFromTemplateAsync(List<string> targetEmails, string templateName, object model, string applicationId)
 		{
 			SendEmailsResult result = new();
@@ -254,11 +414,92 @@ namespace Id.Services
 			}
 		}
 
+		/// <summary> Sends an email to a group of recipients using the provided SMTP settings </summary>
+		/// <permission cref="EmailManager">Requires permission to send emails</permission>
+		/// <param name="targetEmails">List of recipient email addresses</param>
+		/// <param name="templateName">Name of the razor template</param>
+		/// <param name="model">Model object for the razor template</param>
+		/// <returns>Result of the email sending</returns>
+		/// <example>
+		/// <!-- Example usage: -->
+		/// await SendGroupEmailFromTemplateAsync(new List<string>
+		///		{
+		///			"email1@somedomain.com",
+		///			"email2@otherdomain.com"
+		///		},
+		///		"TemplateName",
+		///		new
+		///			{
+		///				Subject = "Test email",
+		///				Body = "This is a test email"
+		///			},
+		///		"applicationId");
+		///	 <!-- Example response: -->
+		///	  new SendEmailsResult()
+		///	  {
+		///			SenderApplicationId: 0,
+		///			Subject: "TemplateName",
+		///			Result: new List<EmailResult>() {
+		///			  new EmailResult() {
+		///					TargerEmail: "email1@somedomain.com",
+		///					Sucess: true,
+		///					Suject: "TemplateName",
+		///					ErrorMesssage: null
+		///			  },
+		///			  new EmailResult() {
+		///					TargerEmail: "email2@otherdomain.com",
+		///					Sucess: true,
+		///					Suject: "TemplateName",
+		///					ErrorMesssage: null
+		///				}
+		///			}
+		///	 }
+		/// </example>
 		public async Task<SendEmailsResult> SendGroupEmailFromTemplateAsync(List<string> targetEmails, string templateName, object model)
 		{
 			return await SendGroupEmailFromTemplateAsync(targetEmails, templateName, model, _authenticatorId);
 		}
 
+		/// <summary> Sends an email to a group of recipients using the provided SMTP settings </summary>
+		/// <param name="applicationId">ID aplikace</param>
+		/// <param name="body">HTML email body</param>
+		/// <param name="subject">Email subject</param>
+		/// <param name="targetEmails">List of recipient email addresses</param>
+		/// <returns>Result of the email sending</returns>
+		/// <example>
+		/// <!-- Example usage: -->
+		/// await SendGroupEmailAsync(new List<string>
+		/// {
+		///		"email1@somedomain.com",
+		///		"email2@somedomain.com"
+		///	 },
+		///	 "Test email",
+		///	 "This is a test email",
+		///	 "applicationId");
+		///	 <!-- Example response: -->
+		///	 SendEmailsResult()
+		///	 {
+		///	   SenderApplicationId: 0,
+		///	   Subject: "Test email",
+		///	   Result: new List<EmailResult>()
+		///	   {
+		///			new()
+		///			{
+		///				TargetEmail: "email1@somedomain.com",
+		///				Success: true,
+		///				Subject: "Test email",
+		///				ErrorMessage: null
+		///			},
+		///			new()
+		///			{
+		///				TargerEmail: "email2@somedomain.com,
+		///				Sucess: true,
+		///				Subject: "Test email",
+		///				ErrorMesssage: null
+		///			}
+		///	   }
+		///	 }
+		///	 </example>
 		public async Task<SendEmailsResult> SendGroupEmailAsync(List<string> targetEmails, string subject, string body, string applicationId)
 		{
 			SendEmailsResult result = new();
@@ -314,11 +555,74 @@ namespace Id.Services
 			}
 		}
 
+		/// <summary> Sends an email to a group of recipients using the provided SMTP settings </summary>
+		/// <param name="body">HTML email body</param>
+		/// <param name="subject">Email subject</param>
+		/// <param name="targetEmails">List of recipient email addresses</param>
+		/// <returns>Result of the email sending</returns>
+		/// <example>
+		/// <!-- Example usage: -->
+		/// await SendGroupEmailAsync(new List<string>
+		/// {
+		///		"email1@somedomain.com",
+		///		"email2@somedomain.com"
+		///	 },
+		///	 "Test email",
+		///	 "This is a test email",
+		///	 "applicationId");
+		///	 <!-- Example response: -->
+		///	 SendEmailsResult()
+		///	 {
+		///	   SenderApplicationId: 0,
+		///	   Subject: "Test email",
+		///	   Result: new List<EmailResult>()
+		///	   {
+		///			new()
+		///			{
+		///				TargetEmail: "email1@somedomain.com",
+		///				Success: true,
+		///				Subject: "Test email",
+		///				ErrorMessage: null
+		///			},
+		///			new()
+		///			{
+		///				TargerEmail: "email2@somedomain.com,
+		///				Sucess: true,
+		///				Subject: "Test email",
+		///				ErrorMesssage: null
+		///			}
+		///	   }
+		///	 }
+		///	 </example>
 		public async Task<SendEmailsResult> SendGroupEmailAsync(List<string> targetEmails, string subject, string body)
 		{
 			return await SendGroupEmailAsync(targetEmails, subject, body, _authenticatorId);
 		}
 
+		/// <summary> Tests the SMTP settings </summary>
+		/// <param name="input">SMTP settings to test</param>
+		/// <returns>Result of the SMTP settings test</returns>
+		/// <example>
+		/// <!-- Example usage: -->
+		/// await TestSmtpSettingsAsync(new SmtpSenderModel()
+		/// {
+		///		Host = "smtp.example.com",
+		///		Port = 587,
+		///		Secure = SecureSocketOptions.StartTls,
+		///		SenderEmail = "someone@example.com",
+		///		SenderName = "Someone",
+		///		AuthorizationRequired = true,
+		///		Username = "someone",
+		///		Password = "password"
+		///	 });
+		/// <!-- Example response: -->
+		/// SmtpTestResult()
+		/// {
+		///		Sucess: true,
+		///		Error: null,
+		///		Log: "SMTP log"
+		/// }
+		/// </example>
 		public async Task<SmtpTestResult> TestSmtpSettingsAsync(SmtpSenderModel input)
 		{
 			string targetEmail = input.TargetForTesting ?? input.SenderEmail;

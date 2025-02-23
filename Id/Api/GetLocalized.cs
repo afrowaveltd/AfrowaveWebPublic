@@ -4,25 +4,17 @@ namespace Id.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GetLocalized : ControllerBase
+    public class GetLocalized(IStringLocalizer<GetLocalized> localizer,
+									 ITranslatorService translator,
+									 ILogger<GetLocalized> logger,
+									 IHttpContextAccessor httpContextAccessor) : ControllerBase
     {
-        private readonly IStringLocalizer<GetLocalized> _localizer;
-        private readonly ITranslatorService _translator;
-        private readonly ILogger<GetLocalized> _logger;
-        private IHttpContextAccessor _httpContextAccessor;
+        private readonly IStringLocalizer<GetLocalized> _localizer = localizer;
+        private readonly ITranslatorService _translator = translator;
+        private readonly ILogger<GetLocalized> _logger = logger;
+        private IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-        public GetLocalized(IStringLocalizer<GetLocalized> localizer,
-                                ITranslatorService translator,
-                                ILogger<GetLocalized> logger,
-                                IHttpContextAccessor httpContextAccessor)
-        {
-            _localizer = localizer;
-            _translator = translator;
-            _logger = logger;
-            _httpContextAccessor = httpContextAccessor;
-        }
-
-        [Route("{toTranslate}/{target?}")]
+		[Route("{toTranslate}/{target?}")]
         [HttpGet]
         public async Task<IActionResult> OnGetAsync(string toTranslate, string? target)
         {

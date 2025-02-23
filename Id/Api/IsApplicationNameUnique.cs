@@ -2,19 +2,13 @@
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class IsApplicationNameUnique : ControllerBase
+    public class IsApplicationNameUnique(IApplicationService applicationService,
+		  IStringLocalizer<IsApplicationNameUnique> _t) : ControllerBase
     {
-        private readonly IApplicationService _applicationService;
-        private readonly IStringLocalizer<IsApplicationNameUnique> t;
+        private readonly IApplicationService _applicationService = applicationService;
+        private readonly IStringLocalizer<IsApplicationNameUnique> t = _t;
 
-        public IsApplicationNameUnique(IApplicationService applicationService,
-            IStringLocalizer<IsApplicationNameUnique> _t)
-        {
-            _applicationService = applicationService;
-            t = _t;
-        }
-
-        [HttpGet]
+		[HttpGet]
         [Route("{name}")]
         public async Task<IActionResult> OnGetAsync(string name)
         {
