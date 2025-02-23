@@ -212,6 +212,38 @@ namespace Id.Services
 				.AnyAsync());
 		}
 
+		/// <summary>
+		///	 Register application
+		/// </summary>
+		/// <param name="input">Input class to register the application</param>
+		/// <returns>RegisterApplicationResult class instance</returns>
+		/// <exception cref="ArgumentNullException"></exception>
+		/// <example>
+		/// Example request:
+		/// await RegisterApplicationAsync(new (){
+		///   OwnerId = "ownerId",
+		///   BrandId = 1,
+		///   Name = "Application Name",
+		///   Description = "Application Description",
+		///   Email = "some@email.com",
+		///   Website = "https://example.com",
+		///   RedirectUri = "https://example.com",
+		///   Icon = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("file")), 0, 0, "icon", "icon.png"),
+		///   RequireTerms = true,
+		///   RequirePrivacyPolicy = true,
+		///   RequireCookiePolicy = true,
+		///   PrivacyUrl = "https://example.com/privacy",
+		///   TermsUrl = "https://example.com/terms",
+		///   CookiesUrl = "https://example.com/cookies"
+		/// });
+		/// Example response:
+		/// {
+		///		ApplicationId: "applicationId",
+		///		ApplicationCreated: true,
+		///		LogoUploaded: true,
+		///		ErrorMessages: ""
+		///	 }
+		///	 </example>
 		public async Task<RegisterApplicationResult> RegisterApplicationAsync(RegisterApplicationInput input)
 		{
 			RegisterApplicationResult result = new();
@@ -279,7 +311,24 @@ namespace Id.Services
 			return result;
 		}
 
-		public async Task<RegisterSmtpResult> RegisterApplicatioSmtpSettingsAsync(RegisterSmtpInput input)
+		/// <summary> Register application SMTP settings </summary>
+		/// <param name="input">Input class to register the application SMTP settings</param>
+		/// <returns>RegisterSmtpResult class instance</returns>
+		/// <example>
+		/// Example request:
+		/// await RegisterApplicationSmtpSettingsAsync(new (){
+		///    ApplicationId = "applicationId",
+		///    Host = "smtp.example.com",
+		///    Port = 587,
+		///    AuthorizationRequired = true,
+		///    Username = "username",
+		///    Password = "password",
+		///    SenderEmail = "sender@example.com",
+		///    SenderName = "Sender Name",
+		///    Secure = 1
+		/// });
+		/// </example>
+		public async Task<RegisterSmtpResult> RegisterApplicationSmtpSettingsAsync(RegisterSmtpInput input)
 		{
 			RegisterSmtpResult result = new();
 			CheckInputResult checkInput = CheckSmtpInput(input);
@@ -290,7 +339,7 @@ namespace Id.Services
 				return result;
 			}
 			Application? application = await _context.Applications
-				.Where(s => s.Id == input.AppliationId)
+				.Where(s => s.Id == input.ApplicationId)
 				.FirstOrDefaultAsync();
 			if(application == null)
 			{
@@ -299,7 +348,7 @@ namespace Id.Services
 				return result;
 			}
 			ApplicationSmtpSettings applicationSmtpSettings = new();
-			applicationSmtpSettings.ApplicationId = input.AppliationId;
+			applicationSmtpSettings.ApplicationId = input.ApplicationId;
 			applicationSmtpSettings.Host = input.Host;
 			applicationSmtpSettings.Port = input.Port;
 			applicationSmtpSettings.Username = input.Username;
@@ -326,6 +375,37 @@ namespace Id.Services
 			}
 		}
 
+		/// <summary>	 Update application </summary>
+		/// <param name="input">Input class to update the application</param>
+		/// <returns>UpdateResult class instance</returns>
+		/// <example>
+		/// Example request:
+		/// await UpdateApplicationAsync(new (){
+		///		ApplicationId = "applicationId",
+		///		OwnerId = "ownerId",
+		///		BrandId = 1,
+		///		Name = "Application Name - changed",
+		///		Description = "Application Description",
+		///		Email = "some@example.com",
+		///		Website = "https://example.com",
+		///		RequestUri = "https://example.com",
+		///		Image = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("file")), 0, 0, "icon", "icon.png"),
+		///		RequireTerms = true,
+		///		RequirePrivacyPolicy = true,
+		///		RequireCookiePolicy = true,
+		///		PrivacyUrl = "https://example.com/privacy",
+		///		TermsUrl = "https://example.com/terms",
+		///		CookiesUrl = "https://example.com/cookies"
+		/// });
+		/// Example response:
+		/// {
+		///		Success: true,
+		///		UpdateValues: {
+		///			"Name": "Application Name - changed",
+		///		},
+		///		Errors: []
+		/// }
+		/// </example>
 		public async Task<UpdateResult> UpdateApplicationAsync(UpdateApplicationInput input)
 		{
 			UpdateResult result = new();
@@ -452,6 +532,34 @@ namespace Id.Services
 			return result;
 		}
 
+		/// <summary>
+		/// Update application SMTP settings
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns> UpdateResult class instance </returns>
+		/// <example>
+		/// Example request:
+		/// await UpdateApplicationSmtpSettingsAsync(new (){
+		///		Id = 1,
+		///		ApplicationId = "applicationId",
+		///		Host = "mail.example.com",
+		///		Port = 587,
+		///		AuthorizationRequired = true,
+		///		Username = "username",
+		///		Password = "password",
+		///		SenderEmail = "some@example.com",
+		///		SenderName = "Sender Name",
+		///		Secure = 1
+		///	 });
+		///	 Example response:
+		///	 {
+		///		Success: true,
+		///		UpdateValues: {
+		///		"Host": "mail.example.com",
+		///  },
+		///  Errors: []
+		///	 }
+		/// </example>
 		public async Task<UpdateResult> UpdateApplicationSmtpSettingsAsync(UpdateSmtpInput input)
 		{
 			UpdateResult result = new UpdateResult();

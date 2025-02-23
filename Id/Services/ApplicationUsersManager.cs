@@ -1,4 +1,9 @@
-﻿using Id.Models.InputModels;
+﻿/* This file contains the ApplicationUsersManager class. This class is responsible for managing the application users. It contains functions for deleting, updating, and registering application users.
+ * It also contains functions for getting the user description by user id and getting the user id by application user id.
+ * The class is used by the ApplicationUsersController.
+ */
+
+using Id.Models.InputModels;
 using Id.Models.ResultModels;
 
 namespace Id.Services
@@ -12,6 +17,22 @@ namespace Id.Services
 		private readonly IStringLocalizer<ApplicationUsersManager> _t = t;
 
 		// Public functions
+
+		/// <summary>
+		/// Deletes an application user by id.
+		/// </summary>
+		/// <param name="applicationUserId">The applicationUserId of user to be deleted</param>
+		/// <returns>DeleteResult with Id of deleted user</returns>
+		/// <example>
+		/// Request:
+		/// await DeleteApplicationUserAsync(1);
+		/// Response:
+		/// {
+		///		Success: true,
+		///		DeletedId: 1,
+		///		ErrorMessage: null
+		///	 }
+		///	 </example>
 		public async Task<DeleteResult<int>> DeleteApplicationUserAsync(int applicationUserId)
 		{
 			DeleteResult<int> result = new();
@@ -35,18 +56,55 @@ namespace Id.Services
 			return result;
 		}
 
+		/// <summary> Gets the user description by user id. </summary>
+		/// <param name="applicationId">The applicationId of the user</param>
+		/// <param name="userId">The userId of the user</param>
+		/// <returns>The user description</returns>
+		/// <example>
+		/// Request:
+		/// await GetApplicationUserDescriptionByUserIdAsync("123", "456");
+		/// Response: "User description"
+		/// </example>
 		public async Task<string> GetApplicationUserDescriptionByUserIdAsync(string userId, string applicationId)
 		{
 			ApplicationUser? user = await _context.ApplicationUsers.FirstOrDefaultAsync(u => u.UserId == userId && u.ApplicationId == applicationId);
 			return user?.UserDescription ?? string.Empty;
 		}
 
+		/// <summary> Gets the user id by application user id. </summary>
+		/// <param name="applicationUserId">The applicationUserId of the user</param>
+		/// <returns>The userId of the user</returns>
+		/// <example>
+		/// Request:
+		/// await GetUserIdByApplicationUserIdAsync(1);
+		/// Response: "123"
+		/// </example>
 		public async Task<string> GetUserIdByApplicationUserIdAsync(int applicationUserId)
 		{
 			ApplicationUser? user = await _context.ApplicationUsers.FindAsync(applicationUserId);
 			return user?.UserId ?? string.Empty;
 		}
 
+		/// <summary> Registers an application user. </summary>
+		/// <param name="input">The input for registering an application user</param>
+		/// <example>
+		/// <!-- Request example -->
+		/// await RegisterApplicationUserAsync(new RegisterApplicationUserInput { UserId = "123", ApplicationId = "456" });
+		/// <!-- Response example -->
+		/// {
+		///		Success: true,
+		///		ErrorMessage: null,
+		///		UserId: "123",
+		///		ApplicationUserId: 1
+		///	 }
+		///	 <!-- Error response example -->
+		///	 {
+		///		Success: false,
+		///		ErrorMessage: "User already exists",
+		///		UserId: null,
+		///		ApplicationUserId: 0
+		///	 }
+		///	 </example>
 		public async Task<RegisterApplicationUserResult> RegisterApplicationUserAsync(RegisterApplicationUserInput input)
 		{
 			var result = new RegisterApplicationUserResult();
@@ -60,6 +118,27 @@ namespace Id.Services
 			return result;
 		}
 
+		/// <summary>
+		/// Updates an application user.
+		/// </summary>
+		/// <param name="input">UpdateApplicationUserInput</param>
+		/// <returns>UpdateResult </returns>
+		/// <example>
+		/// <!-- Request example -->
+		/// await UpdateApplicationUserAsync(new UpdateApplicationUserInput { Id = 1, UserDescription = "User description updated" });
+		/// <!-- Response example -->
+		/// {
+		///   Success: true,
+		///   UpdatedValues: { "UserDescription": "User description updated" },
+		///   Errors: []
+		/// }
+		/// <!-- Error response example -->
+		/// {
+		///		Success: false,
+		///		UpdateValues: {},
+		///		Error: ["User not found"]
+		///	 }
+		///	 </example>
 		public async Task<UpdateResult> UpdateApplicationUserAsync(UpdateApplicationUserInput input)
 		{
 			var result = new UpdateResult();

@@ -5,7 +5,7 @@ namespace Id.Models.InputModels
 	public class RegisterSmtpInput : ISmtpInput
 	{
 		[Required]
-		public string AppliationId { get; set; } = string.Empty;
+		public string ApplicationId { get; set; } = string.Empty;
 
 		[Required]
 		public string Host { get; set; } = string.Empty;

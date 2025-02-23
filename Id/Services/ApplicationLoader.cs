@@ -16,18 +16,25 @@ namespace Id.Services
 												ITextTranslationService textTranslationService) : IApplicationLoader
 	{
 		// inject the necessary services and set the paths for the jsons, locales, and static assets
-		private readonly ApplicationDbContext _context = context,
-		private readonly ILogger<ApplicationLoader> _logger;
+		private readonly ApplicationDbContext _context = context;
 
-		private readonly ITranslatorService _translator;
-		private readonly ITextTranslationService _textTranslationService;
+		private readonly ILogger<ApplicationLoader> _logger = logger;
 
-		private readonly string projectPath = AppDomain.CurrentDomain.BaseDirectory
+		private readonly ITranslatorService _translator = translator;
+		private readonly ITextTranslationService _textTranslationService = textTranslationService;
+
+		private string projectPath = AppDomain.CurrentDomain.BaseDirectory
 									  .Substring(0, AppDomain.CurrentDomain.BaseDirectory
 									  .IndexOf("bin"));
 
-		private readonly string jsonsPath = Path.Combine(projectPath, "Jsons");
-		private readonly string localesPath = Path.Combine(projectPath, "Locales");
+		private readonly string jsonsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory
+									  .Substring(0, AppDomain.CurrentDomain.BaseDirectory
+									  .IndexOf("bin")), "Jsons");
+
+		private readonly string localesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory
+									  .Substring(0, AppDomain.CurrentDomain.BaseDirectory
+									  .IndexOf("bin")), "Locales");
+
 		private readonly string staticAssetsPath = Path.Combine(environment.WebRootPath, "docs");
 
 		// set the options for the JsonSerializer
@@ -178,7 +185,7 @@ namespace Id.Services
 				}
 				if(json == null && json == "")
 				{
-					_logger.Log("Error reading {language} json", language);
+					_logger.LogError("Error reading {language} json", language);
 				}
 				Dictionary<string, string> translations = new();
 				try
@@ -193,7 +200,8 @@ namespace Id.Services
 					string backupPath = Path.Combine(localesPath, language + ".json.bak");
 					try
 					{
-						await File.MoveAsync(Path.Combine(localesPath, language + ".json"), backupPath);
+						// Replace the line with File.MoveAsync with the synchronous version File.Move
+						await Task.Run(() => File.Move(Path.Combine(localesPath, language + ".json"), backupPath));
 						_logger.LogWarning("Backed up {language}.json to {backup}", language, backupPath);
 					}
 					catch(Exception ex)

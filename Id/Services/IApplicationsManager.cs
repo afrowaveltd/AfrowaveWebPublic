@@ -24,7 +24,7 @@ namespace Id.Services
 
 		Task<RegisterApplicationResult> RegisterApplicationAsync(RegisterApplicationInput input);
 
-		Task<RegisterSmtpResult> RegisterApplicatioSmtpSettingsAsync(RegisterSmtpInput input);
+		Task<RegisterSmtpResult> RegisterApplicationSmtpSettingsAsync(RegisterSmtpInput input);
 
 		Task<UpdateResult> UpdateApplicationAsync(UpdateApplicationInput input);
 

@@ -8,7 +8,7 @@ namespace Id.Models.InputModels
 		public int Id { get; set; }
 
 		[Required]
-		public string AppliationId { get; set; } = string.Empty;
+		public string ApplicationId { get; set; } = string.Empty;
 
 		[Required]
 		public string Host { get; set; } = string.Empty;

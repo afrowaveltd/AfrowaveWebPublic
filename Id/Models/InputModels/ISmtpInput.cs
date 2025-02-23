@@ -2,7 +2,7 @@
 {
 	public interface ISmtpInput
 	{
-		string AppliationId { get; set; }
+		string ApplicationId { get; set; }
 		string Host { get; set; }
 		int Port { get; set; }
 		bool AuthorizationRequired { get; set; }

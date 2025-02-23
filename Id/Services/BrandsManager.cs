@@ -1,4 +1,5 @@
-﻿using Id.Models.InputModels;
+﻿using Id.Models.DataViews;
+using Id.Models.InputModels;
 using Id.Models.ResultModels;
 using SharedTools.Services;
 
@@ -25,16 +26,132 @@ namespace Id.Services
 		private readonly string webImgDirectory = "/brands";
 
 		// Public functions
+
+		/// <summary> Gets the applications of a brand </summary>
+		/// <param name="brandId">brandId</param>
+		/// <remarks>Gets the applications of a brand</remarks>
+		/// <returns>List of ApplicationView</returns>
+		/// <example>
+		/// <!-- This will return the applications of the brand with the given id. -->
+		/// var applications = await GetBrandApplications(1);
+		/// <!-- Example returns: -->
+		/// [
+		///		{
+		///			"ApplicationId": 1,
+		///			"ApplicationName": "name",
+		///			"ApplicationDescription": "description",
+		///			"ApplicationWebsite": "https://example.com",
+		///			"ApplicationEmail": "email@example.com",
+		///			"BrandName": "brandName"
+		///		},
+		///		{
+		///			"ApplicationId": 2,
+		///			"ApplicationName": "name",
+		///			"ApplicationDescription": "description",
+		///			"ApplicationWebsite": "https://example.com",
+		///			"ApplicationEmail": "other@example.com",
+		///			"BrandName": "brandName"
+		///		}
+		///	 ]
+		///	</example>
+		public async Task<List<ApplicationView>> GetBrandApplicationsAsync(int brandId)
+		{
+			List<ApplicationView> applications = await _context.Applications
+				.Include(a => a.Brand)
+				.Include(a => a.Owner)
+				.Where(a => a.BrandId == brandId)
+				.Select(a => new ApplicationView
+				{
+					ApplicationId = a.Id,
+					ApplicationName = a.Name,
+					ApplicationDescription = a.Description,
+					ApplicationWebsite = a.ApplicationWebsite,
+					ApplicationEmail = a.ApplicationEmail,
+					BrandName = a.Brand.Name ?? string.Empty
+				})
+				.ToListAsync();
+			return applications ?? new();
+		}
+
+		/// <summary>
+		/// Gets the information of a brand
+		/// </summary>
+		/// <param name="brandId"></param>
+		/// <returns>BrandView class instance if brand is found or null</returns>
+		/// <example>
+		/// <!-- This is an example of how to use the GetBrandInfoAsync method. -->
+		/// await GetBrandInfoAsync(1);
+		/// <!-- This will return the information of the brand with the given id. -->
+		/// new BrandView {
+		///		BranId = 1,
+		///		Name = "name",
+		///		Description = "description",
+		///		LogoPath = "/brands/brandId/icons/icon-32x32.png",
+		///		Website = "https://example.com",
+		///		Email = "some@example.com",
+		///		OwnerName = "ownerName"
+		///	 };
+		///	 </example>
+		public async Task<BrandView?> GetBrandInfoAsync(int brandId)
+		{
+			BrandView? brandView = await _context.Brands
+				.Include(b => b.Owner)
+				.Where(b => b.Id == brandId)
+				.Select(b => new BrandView
+				{
+					Id = b.Id,
+					Name = b.Name,
+					Description = b.Description,
+					LogoPath = GetIconPath(b.Id),
+					Website = b.Website,
+					Email = b.Email,
+					OwnerName = b.Owner.DisplayName
+				})
+				.FirstOrDefaultAsync();
+			return brandView;
+		}
+
+		/// <summary>
+		///  Gets the path to the fullsize logo of a brand
+		/// </summary>
+		/// <param name="brandId">brandId</param>
+		/// <returns> url for a logo or placeholder if logo is not available</returns>
+		/// <example>
+		/// <!-- This is an example of how to use the GetFullsizeLogoPath method. -->
+		/// await GetFullsizeLogoPath("brandId");
+		/// <!-- This will return the url for the logo of the brand with the given id. -->
+		/// Returns: "/brands/brandId/icons/original-icon*.png"
+		/// </example>
 		public string GetFullsizeLogoPath(int brandId)
 		{
 			return GetLogoPath(brandId, LogoSize.pngOriginal);
 		}
 
+		/// <summary>
+		/// Gets the path to the icon of a brand
+		/// </summary>
+		/// <param name="brandId">brandId</param>
+		/// <returns>The url for a logo or placeholder if logo is not available</returns>
+		/// <example>
+		/// <!-- This is an example of how to use the GetIconPath method. -->
+		/// await GetIconPath("brandId");
+		/// <!-- This will return the url for the icon of the brand with the given id. -->
+		/// Returns: "/brands/brandId/icons/icon-32x32.png"
+		/// </example>
 		public string GetIconPath(int brandId)
 		{
 			return GetLogoPath(brandId, LogoSize.png32px);
 		}
 
+		/// <summary> Gets the path to the logo of a brand </summary>
+		/// <param name="brandId">brandId</param>
+		/// <param name="size">size</param>
+		/// <returns>The url for a logo or placeholder if logo is not available</returns>
+		/// <example>
+		/// <!-- This is an example of how to use the GetLogoPath method. -->
+		/// await GetLogoPath("brandId", LogoSize.png16px);
+		/// Returns: "/brands/brandId/icons/icon-16x16.png"
+		/// </example>
 		public string GetLogoPath(int brandId, LogoSize size)
 		{
 			string logoPath = size switch
@@ -67,6 +184,14 @@ namespace Id.Services
 			return logoPath;
 		}
 
+		/// <summary> Checks if a brand name is unique </summary>
+		/// <param name="name">name</param>
+		/// <returns>True if the name is unique, false otherwise</returns>
+		/// <example>
+		/// <!-- This is an example of how to use the IsNameUnique method. -->
+		/// await IsNameUnique("name");
+		/// Returns: true
+		/// </example>
 		public async Task<bool> IsNameUnique(string name)
 		{
 			return (!await _context.Brands
@@ -74,6 +199,27 @@ namespace Id.Services
 				.AnyAsync());
 		}
 
+		/// <summary> Registers a new brand </summary>
+		/// <param name="input">input class</param>
+		/// <returns>RegisterBrandResult</returns>
+		/// <example>
+		/// <!-- This is an example of how to use the RegisterBrandAsync method. -->
+		/// await RegisterBrandAsync(new RegisterBrandInput(){
+		///		Name = "name",
+		///		Description = "description",
+		///		Icon = new IFormFile(),
+		///		Website = "https://example.com",
+		///		Email = "some@example.com",
+		///		OnwerId = "ownerId"
+		/// });
+		/// <!-- Example returns: -->
+		/// {
+		///		BrandCreated = true,
+		///		BrandId = 1,
+		///		LogoUploaded = true,
+		///		ErrorMessages = ""
+		///	 }
+		/// </example>
 		public async Task<RegisterBrandResult> RegisterBrandAsync(RegisterBrandInput input)
 		{
 			RegisterBrandResult result = new();
@@ -136,6 +282,30 @@ namespace Id.Services
 			return result;
 		}
 
+		/// <summary> Updates a brand </summary>
+		/// <param name="input">input class</param>
+		/// <returns>UpdateResult</returns>
+		/// <example>
+		/// <!-- This is an example of how to use the UpdateBrandAsync method. -->
+		/// RegisterBrandResult result = await UpdateBrandAsync(new UpdateBrandInput(){
+		///   BrandId = 1,
+		///   Name = "New name",
+		///   Description = "New description",
+		///   Icon = new IFormFile(),
+		///   Website = "https://example.com",
+		///   Email = "some@example.com",
+		///   OwnerId = "ownerId"
+		/// });
+		/// <!-- Example returns: -->
+		/// {
+		///		success = true,
+		///		UpdateValues = {
+		///		"Name": "New name",
+		///		"Description": "New description",
+		///		},
+		///		Errors = []
+		///	 }
+		///	 </example>
 		public async Task<UpdateResult> UpdateBrandAsync(UpdateBrandInput input)
 		{
 			UpdateResult result = new();
@@ -221,6 +391,17 @@ namespace Id.Services
 			}
 		}
 
+		/// <summary>
+		/// Checks if a user is the owner of a brand
+		/// </summary>
+		/// <param name="brandId"></param>
+		/// <param name="ownerId"></param>
+		/// <returns>A boolean if the user is owner of the brand</returns>
+		/// <example>
+		/// <!-- This is an example of how to use the ValidBrandAndOwner method. -->
+		/// await ValidBrandAndOwner(1, "ownerId");
+		/// returns: true
+		/// </example>
 		public async Task<bool> ValidBrandAndOwner(int brandId, string ownerId)
 		{
 			return await _context.Brands
