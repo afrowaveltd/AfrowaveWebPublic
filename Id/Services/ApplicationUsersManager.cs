@@ -9,7 +9,7 @@ using Id.Models.ResultModels;
 namespace Id.Services
 {
 	public class ApplicationUsersManager(IStringLocalizer<ApplicationUsersManager> t,
-		ApplicationDbContext context)
+		ApplicationDbContext context) : IApplicationUsersManager
 	{
 		// Initialization
 

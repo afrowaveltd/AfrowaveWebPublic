@@ -1,6 +1,5 @@
-using Id.Models.CommunicationModels;
+using Id.Models.InputModels;
 using Id.Models.ResultModels;
-using Id.Models.SettingsModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Id.Pages.Install
@@ -9,19 +8,21 @@ namespace Id.Pages.Install
 		IStringLocalizer<ApplicationRolesModel> _t,
 		ILogger<ApplicationRolesModel> logger,
 		IInstallationStatusService installationStatus,
-		IUserService userService,
-		IApplicationService applicationService,
+		IUsersManager userService,
+		IApplicationsManager applicationService,
+		IApplicationUsersManager applicationUsersManager,
 		ISettingsService settingsService,
 		IEncryptionService encryptionService,
-		IRoleService roleService,
+		IRolesManager roleService,
 		ApplicationDbContext context) : PageModel
 	{
 		private readonly ILogger<ApplicationRolesModel> _logger = logger;
 		private readonly IInstallationStatusService _installationStatus = installationStatus;
-		private readonly IUserService _userService = userService;
-		private readonly IApplicationService _applicationService = applicationService;
+		private readonly IUsersManager _userService = userService;
+		private readonly IApplicationsManager _applicationService = applicationService;
+		private readonly IApplicationUsersManager _applicationUsersManager = applicationUsersManager;
 		private readonly ISettingsService _settingsService = settingsService;
-		private readonly IRoleService _roleService = roleService;
+		private readonly IRolesManager _roleService = roleService;
 		private readonly ApplicationDbContext _context = context;
 		private readonly IEncryptionService _encryptionService = encryptionService;
 		private readonly string successMessage = "<span class='text-center success'><i class='bi bi-check-lg'></i></span>";
@@ -34,8 +35,7 @@ namespace Id.Pages.Install
 		public string CreateRoles { get; set; } = string.Empty;
 		public bool UserIdFound { get; set; } = false;
 		public bool ApplicationIdFound { get; set; } = false;
-		public ApiResponse<List<ApplicationRole>> RoleCreatingResult { get; set; } = new();
-		public List<RoleAssignResult> RoleAssigningResult { get; set; } = new();
+
 		public List<SelectListItem> TermsAgreement = [];
 		public List<SelectListItem> CookiesAgreement = [];
 		public List<SelectListItem> SharingUserDetailsAgreement = [];
@@ -107,19 +107,19 @@ namespace Id.Pages.Install
 
 			// create default roles for the application
 
-			RoleCreatingResult = await _roleService.CreateDefaultRoles(application.Id);
+			var roleCreatingResult = await CreateDefaultRolesAsync(application.Id);
 
-			if(RoleCreatingResult.Successful)
+			if(!roleCreatingResult.Where(x => x.Success == false).Any())
 			{
 				CreateRoles = t["Creating default application roles"];
 
-				RoleAssigningResult = await _userService.AssignAllRolesToOwner(user.Id, application.Id);
+				var RoleAssigningResult = await _roleService.SetAllRolesToOwner(user.Id, application.Id);
 
 				return Page();
 			}
 			else
 			{
-				ErrorMessage = RoleCreatingResult.Message ?? string.Empty;
+				ErrorMessage = string.Join(", ", roleCreatingResult.Where(s => s.Success == false).Select(s => s.Errors.FirstOrDefault()).ToList()) ?? string.Empty;
 				return Page();
 			}
 		}
@@ -148,7 +148,7 @@ namespace Id.Pages.Install
 
 			if(Input.AgreedToTerms && Input.AgreedToCookies && Input.AgreedSharingUserDetails)
 			{
-				CreateApplicationUserModel applicationUser = new()
+				RegisterApplicationUserInput applicationUser = new()
 				{
 					ApplicationId = application.Id,
 					UserId = user.Id,
@@ -157,23 +157,17 @@ namespace Id.Pages.Install
 					AgreedSharingUserDetails = Input.AgreedSharingUserDetails,
 				};
 
-				ApiResponse<int> result = await _userService.CreateApplicationUserAsync(applicationUser) ?? new();
+				var result = await _applicationUsersManager.RegisterApplicationUserAsync(applicationUser);
 
-				if(!result.Successful)
+				if(!result.Success)
 				{
-					ErrorMessage = result.Message ?? string.Empty;
+					ErrorMessage = result.ErrorMessage ?? string.Empty;
 
 					return Page();
 				}
 				else
 				{
-					IdentificatorSettings settings = await _settingsService.GetSettingsAsync();
-
-					settings.ApplicationId = application.Id;
-
-					await _settingsService.SetSettingsAsync(settings);
-
-					return RedirectToPage("/Install/Index");
+					return RedirectToPage("/Install/SmtpSettings");
 				}
 			}
 			else
@@ -181,6 +175,25 @@ namespace Id.Pages.Install
 				ErrorMessage = t["You must agree to terms, cookies and sharing user details"];
 				return Page();
 			}
+		}
+
+		private async Task<List<CreateRoleResult>> CreateDefaultRolesAsync(string applicationId)
+		{
+			List<CreateRoleResult> results = [];
+			List<CreateRoleInput> inputs =
+			[
+				new CreateRoleInput { ApplicationId = applicationId, Name = "Owner", AllignToAll = false, CanAdministerRoles = true },
+				new CreateRoleInput { ApplicationId = applicationId, Name = "Administrator", AllignToAll = false, CanAdministerRoles = true },
+				new CreateRoleInput { ApplicationId = applicationId, Name = "Moderator", AllignToAll = false, CanAdministerRoles = false },
+				new CreateRoleInput { ApplicationId = applicationId, Name = "Translator", AllignToAll = false, CanAdministerRoles = false },
+				new CreateRoleInput { ApplicationId = applicationId, Name = "User", AllignToAll = true, CanAdministerRoles = false }
+
+			];
+			foreach(CreateRoleInput input in inputs)
+			{
+				results.Add(await _roleService.CreateApplicationRoleAsync(input));
+			}
+			return results;
 		}
 	}
 }
