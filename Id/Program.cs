@@ -91,10 +91,10 @@ builder.Services.AddTransient<I18nMiddleware>();
 // Scoped slu�by (HTTP request-based)
 builder.Services.AddScoped<IApplicationLoader, ApplicationLoader>();
 builder.Services.AddScoped<IApplicationsManager, ApplicationsManager>();
-builder.Services.AddScoped<IBrandsManager, IBrandsManager>();
+builder.Services.AddScoped<IBrandsManager, BrandsManager>();
 builder.Services.AddScoped<ICookieService, CookieService>();
 builder.Services.AddScoped<IInstallationStatusService, InstallationStatusService>();
-builder.Services.AddScoped<IRolesManager, IRolesManager>();
+builder.Services.AddScoped<IRolesManager, RolesManager>();
 builder.Services.AddScoped<ISelectOptionsServices, SelectOptionsServices>();
 builder.Services.AddScoped<ITermsService, TermsService>();
 builder.Services.AddScoped<ITextToHtmlService, TextToHtmlService>();
@@ -121,7 +121,7 @@ builder.Services.AddHostedService<UiTranslatorHostedService>();
 IdentificatorSettings Settings;
 builder.Services.AddSingleton<ISettingsService>(sp =>
 {
-	var settingsService = sp.GetRequiredService<ISettingsService>();
+	ISettingsService settingsService = sp.GetRequiredService<ISettingsService>();
 	Settings = settingsService.GetSettingsAsync().GetAwaiter().GetResult();
 	return settingsService;
 });
@@ -197,14 +197,14 @@ app.Use(async (context, next) =>
 
 	if(context.Response.StatusCode == 404) // Detects 404 responses
 	{
-		var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+		ILogger<Program> logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
 		logger.LogWarning("404 Not Found: {Path}", context.Request.Path);
 
 		// Clear the response and reprocess it through the custom middleware
 		context.Response.Clear();
 		context.Response.StatusCode = 404;
 
-		var middleware = new CustomErrorHandlingMiddleware(_ => Task.CompletedTask,
+		CustomErrorHandlingMiddleware middleware = new CustomErrorHandlingMiddleware(_ => Task.CompletedTask,
 	 context.RequestServices.GetRequiredService<IWebHostEnvironment>(),
 	 context.RequestServices.GetRequiredService<ILogger<CustomErrorHandlingMiddleware>>());
 

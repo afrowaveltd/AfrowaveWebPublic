@@ -11,7 +11,6 @@ namespace Id.Services
 		IImageService imageService,
 		IBrandsManager brandsManager,
 		ISettingsService settings,
-		IEmailManager emailService,
 		IStringLocalizer<ApplicationsManager> t,
 		ILogger<ApplicationsManager> logger,
 		IEncryptionService encryptionService) : IApplicationsManager
@@ -19,7 +18,6 @@ namespace Id.Services
 		// Initialization
 		private readonly ApplicationDbContext _context = context;
 
-		private readonly IEmailManager _emailService = emailService;
 		private readonly IBrandsManager _brandsManager = brandsManager;
 		private readonly IImageService _imageService = imageService;
 		private readonly ILogger<ApplicationsManager> _logger = logger;

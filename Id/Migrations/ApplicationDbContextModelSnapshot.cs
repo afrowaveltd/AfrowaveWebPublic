@@ -17,7 +17,7 @@ namespace Id.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -26,9 +26,6 @@ namespace Id.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("AllowRememberConsent")
-                        .HasColumnType("bit");
 
                     b.Property<string>("ApplicationCookiesPolicy")
                         .HasColumnType("nvarchar(max)");
@@ -55,6 +52,9 @@ namespace Id.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("bit");
 
@@ -72,6 +72,12 @@ namespace Id.Migrations
                     b.Property<string>("PostLogoutRedirectUri")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("Published")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReasonForSuspension")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RedirectUri")
                         .HasColumnType("nvarchar(max)");
 
@@ -84,11 +90,19 @@ namespace Id.Migrations
                     b.Property<bool>("RequireTerms")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("Suspended")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SuspendedById")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
 
                     b.HasIndex("OwnerId");
+
+                    b.HasIndex("SuspendedById");
 
                     b.ToTable("Applications");
                 });
@@ -127,17 +141,14 @@ namespace Id.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("AllignToAll")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ApplicationId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("CanAsignOrRemoveRoles")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("DefaultForNewUsers")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsEnabled")
+                    b.Property<bool>("CanAdministerRoles")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -175,7 +186,6 @@ namespace Id.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Port")
@@ -193,7 +203,6 @@ namespace Id.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -261,6 +270,9 @@ namespace Id.Migrations
 
                     b.Property<bool>("ShowProfilePicture")
                         .HasColumnType("bit");
+
+                    b.Property<string>("UserDescription")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -612,15 +624,14 @@ namespace Id.Migrations
                     b.Property<int>("ApplicationRoleId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationRoleId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("UserRoles");
                 });
@@ -639,9 +650,16 @@ namespace Id.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("Id.Models.DatabaseModels.User", "SuspendedBy")
+                        .WithMany()
+                        .HasForeignKey("SuspendedById")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.Navigation("Brand");
 
                     b.Navigation("Owner");
+
+                    b.Navigation("SuspendedBy");
                 });
 
             modelBuilder.Entity("Id.Models.DatabaseModels.ApplicationPolicy", b =>
@@ -763,9 +781,9 @@ namespace Id.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Id.Models.DatabaseModels.User", "User")
+                    b.HasOne("Id.Models.DatabaseModels.ApplicationUser", "User")
                         .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -795,6 +813,11 @@ namespace Id.Migrations
                     b.Navigation("Roles");
                 });
 
+            modelBuilder.Entity("Id.Models.DatabaseModels.ApplicationUser", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
             modelBuilder.Entity("Id.Models.DatabaseModels.Brand", b =>
                 {
                     b.Navigation("Applications");
@@ -821,8 +844,6 @@ namespace Id.Migrations
                     b.Navigation("RefreshTokens");
 
                     b.Navigation("UserAddresses");
-
-                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }
