@@ -17,13 +17,26 @@ namespace Id.Pages.Install
 		private readonly ISettingsService _settingsService = settingsService;
 		public readonly IStringLocalizer<SmtpSettingsModel> t = _t;
 		private readonly ISelectOptionsServices _selectOptions = selectOptions;
-		public List<SelectListItem> options;
+		public List<SelectListItem> options = new();
 
 		[BindProperty]
-		public InputModel? Input { get; set; } = new();
+		public InputModel Input { get; set; } = new();
 
 		public string ErrorMessage { get; set; } = string.Empty;
 
+		/// <summary>
+		/// The input model for the smtp settings
+		/// </summary>
+		/// <permission cref="ApplicationId">The application id</permission>
+		/// <permission cref="Host">The host of the smtp server</permission>
+		/// <permission cref="Port">The port of the smtp server</permission>
+		/// <permission cref="SmtpUsername">The username for the smtp server</permission>
+		/// <permission cref="SmtpPassword">The password for the smtp server</permission>
+		/// <permission cref="SenderEmail">The email of the sender</permission>
+		/// <permission cref="SenderName">The name of the sender</permission>
+		/// <permission cref="Secure">The secure socket options</permission>
+		/// <permission cref="AuthorizationRequired">If authorization is required</permission>
+		/// <remarks> The input model for the smtp settings</remarks>
 		public class InputModel
 		{
 			[Required]
@@ -54,6 +67,10 @@ namespace Id.Pages.Install
 			public bool AuthorizationRequired { get; set; } = true;
 		}
 
+		/// <summary>
+		/// Get the page
+		/// </summary>
+		/// <returns>The Application SMTP Settings creation page</returns>
 		public async Task<IActionResult> OnGetAsync()
 		{
 			if(!await _installationStatus.ProperInstallState(InstalationSteps.SmtpSettings))
@@ -71,12 +88,20 @@ namespace Id.Pages.Install
 				_logger.LogError("No application found to be the owner of the smtp settings");
 				return RedirectToPage("/Error");
 			}
-			Input.SenderEmail = app.ApplicationEmail;
+			Input.SenderEmail = app.ApplicationEmail ?? string.Empty;
 			Input.SenderName = app.Name;
 
 			return Page();
 		}
 
+		/// <summary>
+		/// Post the Administrator creation
+		/// </summary>
+		/// <remarks>Post the SMTP Settings creation</remarks>
+		/// <permission cref="Input">The input model for the smtp settings</permission>
+		/// <param name="Input">The input model for the smtp settings</param>
+		/// <response>Redirection to the next page (Login rules)</response>
+		/// <returns></returns>
 		public async Task<IActionResult> OnPostAsync()
 		{
 			if(!await _installationStatus.ProperInstallState(InstalationSteps.SmtpSettings))
@@ -113,8 +138,8 @@ namespace Id.Pages.Install
 
 			try
 			{
-				await _context.ApplicationSmtpSettings.AddAsync(settings);
-				await _context.SaveChangesAsync();
+				_ = await _context.ApplicationSmtpSettings.AddAsync(settings);
+				_ = await _context.SaveChangesAsync();
 				return RedirectToPage("/Install/LoginRules");
 			}
 			catch(Exception ex)

@@ -8,15 +8,26 @@ namespace Id.Pages.Install
 							  IInstallationStatusService installationStatus,
 							  IEncryptionService encryptionService) : PageModel
 	{
+		// Dependency injection
 		private readonly ILogger<IndexModel> _logger = logger;
+
 		private readonly ApplicationDbContext _context = context;
 		private readonly IInstallationStatusService _installationStatus = installationStatus;
 		private readonly IEncryptionService _encryptionService = encryptionService;
-		public IStringLocalizer<IndexModel> t = t;
 
+		// Localization
+		public readonly IStringLocalizer<IndexModel> t = t;
+
+		// Model binding
 		[BindProperty]
 		public InputModel Input { get; set; } = new();
 
+		/// <summary>
+		/// Model for the input form
+		/// </summary>
+		/// <permission cref="Email">Email used for the registration and as the login</permission>
+		/// <permission cref="Password">Password used for the registration and as the login</permission>
+		/// <permission cref="PasswordConfirm">Password confirmation</permission>
 		public class InputModel
 		{
 			[Required]
@@ -32,6 +43,10 @@ namespace Id.Pages.Install
 			public string PasswordConfirm { get; set; } = string.Empty;
 		}
 
+		/// <summary>
+		/// Get request for the page
+		/// </summary>
+		/// <returns>Administrator registration page</returns>
 		public async Task<IActionResult> OnGetAsync()
 		{
 			if(!await _installationStatus.ProperInstallState(InstalationSteps.Administrator))
@@ -42,6 +57,10 @@ namespace Id.Pages.Install
 			return Page();
 		}
 
+		/// <summary>
+		/// Post request for the page
+		/// </summary>
+		/// <returns>Redirection to the Brand creation</returns>
 		public async Task<IActionResult> OnPostAsync()
 		{
 			if(!await _installationStatus.ProperInstallState(InstalationSteps.Administrator))

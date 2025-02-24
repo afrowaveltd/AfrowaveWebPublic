@@ -11,7 +11,7 @@ namespace Id.Services
 		IImageService imageService,
 		IBrandsManager brandsManager,
 		ISettingsService settings,
-		IEmailService emailService,
+		IEmailManager emailService,
 		IStringLocalizer<ApplicationsManager> t,
 		ILogger<ApplicationsManager> logger,
 		IEncryptionService encryptionService) : IApplicationsManager
@@ -19,7 +19,7 @@ namespace Id.Services
 		// Initialization
 		private readonly ApplicationDbContext _context = context;
 
-		private readonly IEmailService _emailService = emailService;
+		private readonly IEmailManager _emailService = emailService;
 		private readonly IBrandsManager _brandsManager = brandsManager;
 		private readonly IImageService _imageService = imageService;
 		private readonly ILogger<ApplicationsManager> _logger = logger;
@@ -129,6 +129,7 @@ namespace Id.Services
 			ApplicationView result = new();
 			result.ApplicationId = application.Id;
 			result.ApplicationName = application.Name;
+			result.ApplicationLogoUrl = GetIconPath(applicationId);
 			result.ApplicationDescription = application.Description ?? string.Empty;
 			result.ApplicationWebsite = application.ApplicationWebsite ?? string.Empty;
 			result.BrandName = application.Brand?.Name ?? string.Empty;

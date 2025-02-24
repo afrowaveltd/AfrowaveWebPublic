@@ -671,7 +671,7 @@ namespace Id.Services
 				{
 					Text = _t["SMTP test email"]
 				};
-				await client.SendAsync(message);
+				_ = await client.SendAsync(message);
 				await client.DisconnectAsync(true);
 				result.Success = true;
 				result.Log = memoryStream.ToString() ?? string.Empty;

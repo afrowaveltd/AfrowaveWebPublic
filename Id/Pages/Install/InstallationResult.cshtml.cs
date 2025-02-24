@@ -6,8 +6,8 @@ namespace Id.Pages.Install
 {
 	public class InstallationResultModel(IStringLocalizer<InstallationResultModel> _t,
 		ApplicationDbContext context,
-		IApplicationService applicationService,
-		IBrandService brandService,
+		IApplicationsManager applicationService,
+		IBrandsManager brandService,
 		ISettingsService settingsService,
 		IInstallationStatusService installationStatus,
 		ITranslatorService translatorService,
@@ -15,8 +15,8 @@ namespace Id.Pages.Install
 	{
 		public readonly IStringLocalizer<InstallationResultModel> t = _t;
 		private readonly ApplicationDbContext _context = context;
-		private readonly IApplicationService _applicationService = applicationService;
-		private readonly IBrandService _brandService = brandService;
+		private readonly IApplicationsManager _applicationService = applicationService;
+		private readonly IBrandsManager _brandService = brandService;
 		private readonly ISettingsService _settingsService = settingsService;
 		private readonly IInstallationStatusService _statusService = installationStatus;
 		private readonly ILogger<InstallationResultModel> _logger = logger;
@@ -71,14 +71,14 @@ namespace Id.Pages.Install
 			IdentificatorSettings = await _settingsService.GetSettingsAsync();
 			Application application = await _context.Applications.Include(s => s.SmtpSettings).FirstOrDefaultAsync(s => s.Id == IdentificatorSettings.ApplicationId) ?? new();
 			ApplicationId = application.Id;
-			ApplicationLogoLink = _applicationService.GetApplicationIconPath(application.Id);
+			ApplicationLogoLink = _applicationService.GetIconPath(application.Id);
 			User admin = await _context.Users.FirstOrDefaultAsync(s => s.Id == application.OwnerId) ?? new();
 			AdminName = admin.DisplayName;
 			ApplicationSmtpSettings smtpSettings = application.SmtpSettings ?? new();
 			Brand? brand = await _context.Brands.FirstOrDefaultAsync(s => s.Id == application.BrandId);
 			BrandName = brand.Name ?? string.Empty;
 			BrandId = brand.Id;
-			BrandLogoLink = _brandService.GetBrandIconPath(brand.Id);
+			BrandLogoLink = _brandService.GetIconPath(brand.Id);
 			ApiResponse<TranslateResponse> apiResponse = await _translatorService.AutodetectSourceLanguageAndTranslateAsync(brand.Description, CurrentCulture);
 			if(apiResponse.Successful)
 			{

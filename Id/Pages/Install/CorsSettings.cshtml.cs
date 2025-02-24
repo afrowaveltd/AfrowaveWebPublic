@@ -61,7 +61,7 @@ namespace Id.Pages.Install
 				AllowedMethods = cors.AllowedMethods,
 				AllowedHeaders = cors.AllowedHeaders,
 				AllowCredentials = cors.AllowCredentials,
-				CorsConfigured = cors.CorsConfigured
+				CorsConfigured = cors.IsConfigured
 			};
 
 			return Page();
@@ -88,7 +88,7 @@ namespace Id.Pages.Install
 				AllowAnyHeader = Input.AllowAnyHeader,
 				AllowedHeaders = Input.AllowedHeaders,
 				AllowCredentials = Input.AllowCredentials,
-				CorsConfigured = true
+				IsConfigured = true
 			};
 
 			await _settingsService.SetSettingsAsync(settings);

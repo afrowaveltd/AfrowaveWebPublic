@@ -66,6 +66,10 @@ namespace Id.Services
 				_ = await _context.SaveChangesAsync();
 				result.Success = true;
 				result.RoleId = role.Id;
+				result.RoleName = role.Name;
+				result.NormalizedName = role.NormalizedName;
+				result.AllignToAll = role.AllignToAll;
+				result.CanAdministerRoles = role.CanAdministerRoles;
 			}
 			catch(Exception ex)
 			{
@@ -188,7 +192,8 @@ namespace Id.Services
 		/// </example>
 		public async Task<List<RoleAssignResult>> GetApplicationUserRolesAsync(int applicationUserId)
 		{
-			if(applicationUserId == 0) { return new List<RoleAssignResult>(); }
+			if(applicationUserId == 0)
+			{ return new List<RoleAssignResult>(); }
 			List<RoleAssignResult> results = new();
 			List<UserRole> userRoles = await _context.UserRoles.Where(x => x.ApplicationUserId == applicationUserId).ToListAsync();
 			foreach(UserRole userRole in userRoles)

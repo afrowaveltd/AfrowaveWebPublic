@@ -68,8 +68,8 @@
 
 	public enum CorsPolicyMode
 	{
-		AllowAll,      // Povolit všechny domény
-		AllowSpecific, // Povolit jen vybrané domény
-		DenyAll        // Zakázat všechny domény
+		AllowAll,      // Allow all domains
+		AllowSpecific, // Allow selected domains only
+		DenyAll        // Deny all domains
 	}
 }

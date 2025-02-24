@@ -9,12 +9,17 @@ namespace Id.Pages.Install
 		  IInstallationStatusService status,
 		  ISelectOptionsServices selectOptions) : PageModel
 	{
+		// Injected services
 		private readonly ILogger<PasswordRulesModel> _logger = logger;
+
 		private readonly ISettingsService _settings = settings;
 		private readonly IInstallationStatusService _status = status;
 		private readonly ISelectOptionsServices _selectOptions = selectOptions;
 		public readonly IStringLocalizer<PasswordRulesModel> t = _t;
+
+		// Set the select list items
 		public List<SelectListItem> RequireNonAlphanumeric { get; set; } = [];
+
 		public List<SelectListItem> RequireLowercase { get; set; } = [];
 		public List<SelectListItem> RequireUppercase { get; set; } = [];
 		public List<SelectListItem> RequireDigit { get; set; } = [];
@@ -22,6 +27,15 @@ namespace Id.Pages.Install
 		[BindProperty]
 		public InputModel? Input { get; set; }
 
+		/// <summary>
+		/// The input model for the password rules
+		/// </summary>
+		/// <permission cref="MinimumLength">The minimum length of the password</permission>
+		/// <permission cref="MaximumLength">The maximum length of the password</permission>
+		/// <permission cref="RequireNonAlphanumeric">If the password requires a non-alphanumeric character</permission>
+		/// <permission cref="RequireLowercase">If the password requires a lowercase character</permission>
+		/// <permission cref="RequireUppercase">If the password requires an uppercase character</permission>
+		/// <permission cref="RequireDigit">If the password requires a digit</permission>
 		public class InputModel
 		{
 			[Range(1, 100)]
@@ -36,6 +50,10 @@ namespace Id.Pages.Install
 			public bool RequireDigit { get; set; } = true;
 		}
 
+		/// <summary>
+		/// Handles the GET request
+		/// </summary>
+		/// <returns>The password rules page</returns>
 		public async Task<IActionResult> OnGetAsync()
 		{
 			RequireNonAlphanumeric = await _selectOptions.GetBinaryOptionsAsync(false);
@@ -53,13 +71,18 @@ namespace Id.Pages.Install
 			return Page();
 		}
 
+		/// <summary>
+		/// Handles the POST request
+		/// </summary>
+		/// <returns>Redirect to the Cookie rules page in the case of success</returns>
+
 		public async Task<IActionResult> OnPostAsync()
 		{
 			if(!ModelState.IsValid)
 			{
 				return Page();
 			}
-			var settings = await _settings.GetSettingsAsync();
+			Models.SettingsModels.IdentificatorSettings settings = await _settings.GetSettingsAsync();
 			settings.PasswordRules = new()
 			{
 				MinimumLength = Input.MinimumLength,
@@ -67,7 +90,8 @@ namespace Id.Pages.Install
 				RequireDigit = Input.RequireDigit,
 				RequireLowercase = Input.RequireLowercase,
 				RequireNonAlphanumeric = Input.RequireNonAlphanumeric,
-				RequireUppercase = Input.RequireUppercase
+				RequireUppercase = Input.RequireUppercase,
+				IsConfigured = true
 			};
 			await _settings.SetSettingsAsync(settings);
 			return RedirectToPage("/Install/CookieSettings");

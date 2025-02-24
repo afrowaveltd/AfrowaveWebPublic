@@ -14,20 +14,35 @@ namespace Id.Pages.Install
 								  IImageService imageService,
 								  IStringLocalizer<ApplicationModel> _t) : PageModel
 	{
+		// Dependency Injection
 		private readonly ILogger<ApplicationModel> _logger = logger;
+
 		private readonly ApplicationDbContext _context = context;
 		private readonly IInstallationStatusService _installationStatus = installationStatus;
 		private readonly IEncryptionService _encryptionService = encryptionService;
 		private readonly ISettingsService _settingsService = settingsService;
 		private readonly IApplicationsManager _applicationService = applicationService;
 		private readonly IImageService _imageService = imageService;
+
+		// Localization
 		public IStringLocalizer<ApplicationModel> t = _t;
 
+		// Properties
 		[BindProperty]
 		public InputSettings Input { get; set; } = new();
 
 		public string ErrorMessage { get; set; } = string.Empty;
 
+		/// <summary>
+		/// Input settings for the application
+		/// </summary>
+		/// <permission cref="ApplicationName">Name of the application used for authentication and authorization services</permission>
+		/// <permission cref="ApplicationDescription">Description of the application</permission>
+		/// <permission cref="ApplicationEmail">Email of the application</permission>
+		/// <permission cref="ApplicationWebsite">Website of the application</permission>
+		/// <permission cref="OwnerId">Id of the owner of the application</permission>
+		/// <permission cref="BrandId">Id of the brand of the application</permission>
+		/// <permission cref="ApplicationIcon">Icon of the application</permission>
 		public class InputSettings
 		{
 			[Required]
@@ -47,6 +62,10 @@ namespace Id.Pages.Install
 			public IFormFile? ApplicationIcon { get; set; }
 		}
 
+		/// <summary>
+		/// Get the page
+		/// </summary>
+		/// <returns>The default application registration page</returns>
 		public async Task<IActionResult> OnGetAsync()
 		{
 			if(!await _installationStatus.ProperInstallState(InstalationSteps.Application))
@@ -88,6 +107,10 @@ namespace Id.Pages.Install
 			return Page();
 		}
 
+		/// <summary>
+		/// Post the page
+		/// </summary>
+		/// <returns>In the case of success, redirects to the ApplicationRoles page</returns>
 		public async Task<IActionResult> OnPostAsync()
 		{
 			if(!await _installationStatus.ProperInstallState(InstalationSteps.Application))

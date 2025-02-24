@@ -16,7 +16,9 @@ namespace Id.Pages.Install
 		IRolesManager roleService,
 		ApplicationDbContext context) : PageModel
 	{
+		// Dependency Injection
 		private readonly ILogger<ApplicationRolesModel> _logger = logger;
+
 		private readonly IInstallationStatusService _installationStatus = installationStatus;
 		private readonly IUsersManager _userService = userService;
 		private readonly IApplicationsManager _applicationService = applicationService;
@@ -25,10 +27,15 @@ namespace Id.Pages.Install
 		private readonly IRolesManager _roleService = roleService;
 		private readonly ApplicationDbContext _context = context;
 		private readonly IEncryptionService _encryptionService = encryptionService;
+
+		// private properties
 		private readonly string successMessage = "<span class='text-center success'><i class='bi bi-check-lg'></i></span>";
+
 		private readonly string failMessage = "<span class='text-center error'><i class='bi bi-x-lg'></i></span>";
 
+		// public properties
 		public readonly IStringLocalizer<ApplicationRolesModel> t = _t;
+
 		public string ErrorMessage { get; set; } = string.Empty;
 		public string UserIdData { get; set; } = string.Empty;
 		public string ApplicationIdData { get; set; } = string.Empty;
@@ -36,10 +43,25 @@ namespace Id.Pages.Install
 		public bool UserIdFound { get; set; } = false;
 		public bool ApplicationIdFound { get; set; } = false;
 
+		// public properties for the form
 		public List<SelectListItem> TermsAgreement = [];
+
 		public List<SelectListItem> CookiesAgreement = [];
 		public List<SelectListItem> SharingUserDetailsAgreement = [];
+		public List<CreateRoleResult> RoleCreatingResult = [];
+		public List<RoleAssignResult> RoleAssigningResult = [];
 
+		[BindProperty]
+		public FormInput Input { get; set; } = new();
+
+		/// <summary>
+		/// Form input model
+		/// </summary>
+		/// <permission cref="ApplicationId">ApplicationId for the authenticator application</permission>
+		/// <permission cref="UserId">UserId for the authenticator administrator</permission>"
+		/// <permission cref="AgreedToTerms">Agreed to terms</permission>
+		/// <permission cref="AgreedToCookies">Agreed to cookies</permission>
+		/// <permission cref="AgreedSharingUserDetails">Agreed to share user details</permission>
 		public class FormInput
 		{
 			public string ApplicationId { get; set; } = string.Empty;
@@ -49,9 +71,10 @@ namespace Id.Pages.Install
 			public bool AgreedSharingUserDetails { get; set; } = false;
 		}
 
-		[BindProperty]
-		public FormInput Input { get; set; } = new();
-
+		/// <summary>
+		/// OnGetAsync method
+		/// </summary>
+		/// <returns>Application roles Page</returns>
 		public async Task<IActionResult> OnGetAsync()
 		{
 			if(!await _installationStatus.ProperInstallState(InstalationSteps.ApplicationRoles))
@@ -107,13 +130,13 @@ namespace Id.Pages.Install
 
 			// create default roles for the application
 
-			var roleCreatingResult = await CreateDefaultRolesAsync(application.Id);
+			List<CreateRoleResult> roleCreatingResult = await CreateDefaultRolesAsync(application.Id);
 
 			if(!roleCreatingResult.Where(x => x.Success == false).Any())
 			{
 				CreateRoles = t["Creating default application roles"];
 
-				var RoleAssigningResult = await _roleService.SetAllRolesToOwner(user.Id, application.Id);
+				List<RoleAssignResult> RoleAssigningResult = await _roleService.SetAllRolesToOwner(user.Id, application.Id);
 
 				return Page();
 			}
@@ -124,6 +147,10 @@ namespace Id.Pages.Install
 			}
 		}
 
+		/// <summary>
+		/// OnPostAsync method
+		/// </summary>
+		/// <returns>Redirection to the SmtpSettings page in the case of success</returns>
 		public async Task<IActionResult> OnPostAsync()
 		{
 			if(!await _installationStatus.ProperInstallState(InstalationSteps.ApplicationRoles))
@@ -157,7 +184,7 @@ namespace Id.Pages.Install
 					AgreedSharingUserDetails = Input.AgreedSharingUserDetails,
 				};
 
-				var result = await _applicationUsersManager.RegisterApplicationUserAsync(applicationUser);
+				RegisterApplicationUserResult result = await _applicationUsersManager.RegisterApplicationUserAsync(applicationUser);
 
 				if(!result.Success)
 				{

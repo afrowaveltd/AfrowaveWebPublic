@@ -11,17 +11,30 @@ namespace Id.Pages.Install
 	  IBrandsManager brandService)
 	 : PageModel
 	{
+		// Dependency injection
 		private readonly ILogger<BrandModel> _logger = logger;
+
 		private readonly ApplicationDbContext _context = context;
 		private readonly IInstallationStatusService _installationStatus = installationStatus;
 		public readonly IStringLocalizer<BrandModel> t = _t;
 		public readonly IBrandsManager _brandService = brandService;
 
+		// Model binding
 		[BindProperty]
 		public InputModel Input { get; set; } = new();
 
+		// Properties
 		public string ErrorMessage { get; set; } = string.Empty;
 
+		/// <summary>
+		/// Model for the input form
+		/// </summary>
+		/// <permission cref="Name">Name of the brand</permission>
+		/// <permission cref="OwnerId">Id of the owner of the brand</permission>
+		/// <permission cref="CompanyLogo">Logo of the brand</permission>
+		/// <permission cref="Website">Website of the brand</permission>
+		/// <permission cref="Description">Description of the brand</permission>
+		/// <permission cref="Email">Email of the brand</permission>
 		public class InputModel
 		{
 			[Required]
@@ -40,7 +53,6 @@ namespace Id.Pages.Install
 		/// Get the page
 		/// </summary>
 		/// <returns> The Brand registration page</returns>
-
 		public async Task<IActionResult> OnGetAsync()
 		{
 			if(!await _installationStatus.ProperInstallState(InstalationSteps.Brand))
@@ -61,7 +73,7 @@ namespace Id.Pages.Install
 		/// <summary>
 		/// Post the Brand registration
 		/// </summary>
-		/// <returns>If successful returns redirection to the next step</returns>
+		/// <returns>If successful returns redirection to the next step - application registration</returns>
 		public async Task<IActionResult> OnPostAsync()
 		{
 			if(!await _installationStatus.ProperInstallState(InstalationSteps.Brand))

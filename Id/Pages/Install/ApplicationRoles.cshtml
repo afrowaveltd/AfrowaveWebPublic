@@ -61,20 +61,29 @@
                 <hr />
                 <h4 class="text-center">@Model.CreateRoles</h4>
                 <hr />
-                @if(Model.RoleCreatingResult.Successful)
-                {
                     <table class="result">
                         <tr>
                             <th class="result">@Model.t["Role name"]</th>
                             <th class="result">@Model.t["Normalized name"]</th>
                             <th class="result">@Model.t["Role Id"]</th>
+                            <th class="result text-center">@Model.t["Success"]</th>
                         </tr>
-                        @foreach(var role in Model.RoleCreatingResult.Data)
+                        @foreach(var role in Model.RoleCreatingResult)
                         {
                             <tr>
-                                <td class="result">@role.Name</td>
+                                <td class="result">@role.RoleName</td>
                                 <td class="result">@role.NormalizedName</td>
-                                <td class="result text-end">@role.Id</td>
+                                <td class="result text-end">@role.RoleId</td>
+							    <td class="result text-center">
+								    @if(role.Success)
+								    {
+									    <span class='text-center success'><i class='bi bi-check-lg'></i></span>
+								    }
+								    @if(!role.Success)
+    								{
+		    							<span class='text-center error'><i class='bi bi-x-lg'></i></span>
+	    							}
+							    </td>
                             </tr>
                         }
                     </table>
@@ -110,7 +119,6 @@
                             }
                         }                            
                 </table>
-                }
             </div>
         </div>
     </div>

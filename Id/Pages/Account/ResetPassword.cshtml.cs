@@ -1,11 +1,11 @@
 namespace Id.Pages.Account
 {
-	public class ResetPasswordModel(IEmailService emailService,
-		IUserService userService,
+	public class ResetPasswordModel(IEmailManager emailService,
+		IUsersManager userService,
 		IStringLocalizer<ResetPasswordModel> t) : PageModel
 	{
-		private readonly IEmailService _emailService = emailService;
-		private readonly IUserService _userService = userService;
+		private readonly IEmailManager _emailService = emailService;
+		private readonly IUsersManager _userService = userService;
 		private readonly IStringLocalizer<ResetPasswordModel> _t = t;
 
 		[FromRoute]
