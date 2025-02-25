@@ -193,8 +193,8 @@ namespace Id.Services
 		public async Task<List<RoleAssignResult>> GetApplicationUserRolesAsync(int applicationUserId)
 		{
 			if(applicationUserId == 0)
-			{ return new List<RoleAssignResult>(); }
-			List<RoleAssignResult> results = new();
+			{ return []; }
+			List<RoleAssignResult> results = [];
 			List<UserRole> userRoles = await _context.UserRoles.Where(x => x.ApplicationUserId == applicationUserId).ToListAsync();
 			foreach(UserRole userRole in userRoles)
 			{
@@ -432,7 +432,7 @@ namespace Id.Services
 		/// </example>
 		public async Task<RoleAssignResult> SetApplicationUserRoleAsync(int applicationUserId, int roleId)
 		{
-			RoleAssignResult result = new RoleAssignResult();
+			RoleAssignResult result = new();
 			if(applicationUserId == 0)
 			{
 				result.Successful = false;
@@ -595,7 +595,7 @@ namespace Id.Services
 		/// </example>
 		public async Task<RoleAssignResult> SetUserRoleByNameAsync(string userId, string applicationId, string rolename)
 		{
-			RoleAssignResult result = new RoleAssignResult();
+			RoleAssignResult result = new();
 			if(string.IsNullOrWhiteSpace(userId))
 			{
 				result.Successful = false;
@@ -680,7 +680,7 @@ namespace Id.Services
 		///	 </example>
 		public async Task<RoleAssignResult> SetUserRoleAsync(string userId, int roleId)
 		{
-			RoleAssignResult result = new RoleAssignResult();
+			RoleAssignResult result = new();
 			if(string.IsNullOrWhiteSpace(userId))
 			{
 				result.Successful = false;

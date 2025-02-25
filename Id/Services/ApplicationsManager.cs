@@ -258,14 +258,14 @@ namespace Id.Services
 			{
 				result.ApplicationCreated = false;
 				result.LogoUploaded = false;
-				result.ErrorMessage = _t["Application name is already in use"];
+				result.ErrorMessage = _t["Application name is not unique"];
 				return result;
 			}
 			if(!await _brandsManager.ValidBrandAndOwner(input.BrandId, input.OwnerId))
 			{
 				result.ApplicationCreated = false;
 				result.LogoUploaded = false;
-				result.ErrorMessage = _t["Invalid brand"];
+				result.ErrorMessage = _t["Invalid brand name"];
 				return result;
 			}
 			Application application = new();
@@ -435,7 +435,7 @@ namespace Id.Services
 			{
 				_logger.LogError("UpdateApplicationAsync: invalid brand");
 				result.Success = false;
-				result.Errors.Add(_t["Invalid brand"]);
+				result.Errors.Add(_t["Invalid brand name"]);
 				return result;
 			}
 
@@ -465,7 +465,7 @@ namespace Id.Services
 				{
 					_logger.LogError("UpdateApplicationAsync: name is not unique");
 					result.Success = false;
-					result.Errors.Add(_t["Application name is already in use"]);
+					result.Errors.Add(_t["Application name is already taken"]);
 					return result;
 				}
 				application.Name = input.Name;
@@ -693,7 +693,7 @@ namespace Id.Services
 				result.Errors.Add(_t["Application name is too long"]);
 			}
 
-			if(input.Description != null && input.Description.Length > 500)
+			if(input.Description != null && input.Description.Length > 1000)
 			{
 				_logger.LogError("CheckRegistration: Description is too long");
 				result.Success = false;

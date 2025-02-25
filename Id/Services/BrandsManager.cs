@@ -27,8 +27,8 @@ namespace Id.Services
 
 		// Private variables
 		private readonly string appImgDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory
-			.Substring(0, AppDomain.CurrentDomain.BaseDirectory
-			.IndexOf("bin")), "wwwroot", "brands");
+[..AppDomain.CurrentDomain.BaseDirectory
+			.IndexOf("bin")], "wwwroot", "brands");
 
 		private readonly string webImgDirectory = "/brands";
 

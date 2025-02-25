@@ -116,7 +116,7 @@ namespace Id.Services
 
 			// if we reach this point, the autodetection failed
 			response.Successful = false;
-			response.Message = _t["SMTP settings autodetection failed"];
+			response.Message = _t["SMTP settings not found"];
 			return response;
 		}
 

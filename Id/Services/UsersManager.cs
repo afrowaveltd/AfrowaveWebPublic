@@ -1,4 +1,10 @@
-﻿using Id.Models.InputModels;
+﻿/*
+ *  UsersManager.cs
+ *  Class that manages users in the system and their profile pictures. It is responsible for creating, updating, and deleting users, as well as uploading and deleting their profile pictures.
+ *  The class is responsible for checking the input data, hashing passwords, and sending emails to users.
+ */
+
+using Id.Models.InputModels;
 using Id.Models.ResultModels;
 using Id.Models.SettingsModels;
 using SharedTools.Services;
@@ -32,14 +38,14 @@ namespace Id.Services
 		// Public functions
 
 		/// <summary>
-		/// Get the path to the icon profile picture of the user
+		/// Gets the path of the user's profile icon (32x32 px).
 		/// </summary>
 		/// <param name="userId">User ID</param>
-		/// <returns>Path pointing to the user picture in size 32x32px, or place holder if picture is not presented with the same size</returns>
+		/// <returns>Path to the profile picture</returns>
 		/// <example>
-		/// Request
+		/// Request:
 		/// await GetIconPath("1234567890")
-		/// Response
+		/// Response:
 		/// "/users/1234567890/profile-picture/1234567890-32x32.jpg"
 		/// </example>
 		public async Task<string> GetIconPath(string userId)
@@ -47,13 +53,15 @@ namespace Id.Services
 			return await GetImagePath(userId, ProfilePictureSize.icon);
 		}
 
-		/// <summary> Get the path to the medium profile picture of the user </summary>
+		/// <summary>
+		/// Gets the path of the user's medium profile image (52x52 px).
+		/// </summary>
 		/// <param name="userId">User ID</param>
-		/// <returns>Path pointing to the user picture in size 52x52px, or place holder if picture is not presented with the same size</returns>
+		/// <returns>Path to the profile picture</returns>
 		/// <example>
-		/// request
+		/// Request:
 		/// await GetMediumImagePath("1234567890")
-		/// response
+		/// Response:
 		/// "/users/1234567890/profile-picture/1234567890-52x52.jpg"
 		/// </example>
 		public async Task<string> GetMediumImagePath(string userId)
@@ -61,21 +69,65 @@ namespace Id.Services
 			return await GetImagePath(userId, ProfilePictureSize.small);
 		}
 
+		/// <summary>
+		/// Gets the path of the user's large profile image (192x192 px).
+		/// </summary>
+		/// <param name="userId">User ID</param>
+		/// <returns>Path to the profile picture</returns>
+		/// <example>
+		/// Request:
+		/// await GetBigImagePath("1234567890")
+		/// Response:
+		/// "/users/1234567890/profile-picture/1234567890-192x192.jpg"
+		/// </example>
 		public async Task<string> GetBigImagePath(string userId)
 		{
 			return await GetImagePath(userId, ProfilePictureSize.big);
 		}
 
+		/// <summary>
+		/// Gets the path of the user's original profile image.
+		/// </summary>
+		/// <param name="userId">User ID</param>
+		/// <returns>Path to the profile picture</returns>
+		/// <example>
+		/// Request:
+		/// await GetOriginalImagePath("1234567890")
+		/// Response:
+		/// "/users/1234567890/profile-picture/1234567890.jpg"
+		/// </example>
 		public async Task<string> GetOriginalImagePath(string userId)
 		{
 			return await GetImagePath(userId, ProfilePictureSize.original);
 		}
 
+		/// <summary>
+		/// Checks if the given email is available.
+		/// </summary>
+		/// <param name="email">Email to check</param>
+		/// <returns>True if the email is free, otherwise false</returns>
+		/// <example>
+		/// Request:
+		/// await IsEmailFreeAsync("user@example.com")
+		/// Response:
+		/// true
+		/// </example>
 		public async Task<bool> IsEmailFreeAsync(string email)
 		{
 			return !await _dbContext.Users.AnyAsync(u => u.Email == email);
 		}
 
+		/// <summary>
+		/// Registers a new user with validation and optional profile picture upload.
+		/// </summary>
+		/// <param name="input">User registration input model</param>
+		/// <returns>Result of the registration process</returns>
+		/// <example>
+		/// Request:
+		/// await RegisterUserAsync(new RegisterUserInput { Email = "user@example.com", Password = "password123", ... })
+		/// Response:
+		/// { "UserCreated": true, "ProfilePictureUploaded": false, "Errors": [] }
+		/// </example>
 		public async Task<RegisterUserResult> RegisterUserAsync(RegisterUserInput input)
 		{
 			LoginRules loginRules = await _settingsService.GetLoginRulesAsync();
@@ -175,6 +227,17 @@ namespace Id.Services
 			return result;
 		}
 
+		/// <summary>
+		/// Updates an existing user's details.
+		/// </summary>
+		/// <param name="input">User update input model</param>
+		/// <returns>Result of the update process</returns>
+		/// <example>
+		/// Request:
+		/// await UpdateUserAsync(new UpdateUserInput { UserId = "123456", FirstName = "John" })
+		/// Response:
+		/// { "Success": true, "UpdatedValues": { "First name": "John" }, "Errors": [] }
+		/// </example>
 		public async Task<UpdateResult> UpdateUserAsync(UpdateUserInput input)
 		{
 			UpdateResult result = new();

@@ -50,8 +50,8 @@ namespace Id.Services
 				return result;
 			}
 			result.DeletedId = applicationUserId;
-			_context.ApplicationUsers.Remove(user);
-			await _context.SaveChangesAsync();
+			_ = _context.ApplicationUsers.Remove(user);
+			_ = await _context.SaveChangesAsync();
 			result.Success = true;
 			return result;
 		}
@@ -107,7 +107,7 @@ namespace Id.Services
 		///	 </example>
 		public async Task<RegisterApplicationUserResult> RegisterApplicationUserAsync(RegisterApplicationUserInput input)
 		{
-			var result = new RegisterApplicationUserResult();
+			RegisterApplicationUserResult result = new RegisterApplicationUserResult();
 			if(await UserExistsAsync(input.UserId, input.ApplicationId))
 			{
 				result.ErrorMessage = _t["User already exists"];
@@ -141,7 +141,7 @@ namespace Id.Services
 		///	 </example>
 		public async Task<UpdateResult> UpdateApplicationUserAsync(UpdateApplicationUserInput input)
 		{
-			var result = new UpdateResult();
+			UpdateResult result = new UpdateResult();
 			if(input == null)
 			{
 				result.Success = false;
@@ -164,8 +164,8 @@ namespace Id.Services
 			if(input.UserDescription != user.UserDescription)
 			{
 				user.UserDescription = input.UserDescription;
-				await _context.SaveChangesAsync();
-				result.UpdatedValues.Add("UserDescription", input.UserDescription);
+				_ = await _context.SaveChangesAsync();
+				result.UpdatedValues.Add("UserDescription", input.UserDescription ?? string.Empty);
 				return result;
 			}
 
