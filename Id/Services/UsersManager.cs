@@ -250,7 +250,7 @@ namespace Id.Services
 				return result;
 			}
 			// Get user
-			User user = await _dbContext.Users.FindAsync(input.UserId);
+			User? user = await _dbContext.Users.FindAsync(input.UserId);
 			if(user == null)
 			{
 				_logger.LogWarning("User not found");
@@ -277,23 +277,28 @@ namespace Id.Services
 			// Update user
 			if(input.FirstName != user.Firstname)
 			{
-				user.Firstname = input.FirstName;
-				result.UpdatedValues["First name"] = input.FirstName;
+				user.Firstname = input.FirstName ?? string.Empty;
+				result.UpdatedValues["First name"] = input.FirstName ?? string.Empty;
 			}
 			if(input.LastName != user.Lastname)
 			{
-				user.Lastname = input.LastName;
-				result.UpdatedValues["Last name"] = input.LastName;
+				user.Lastname = input.LastName ?? string.Empty;
+				result.UpdatedValues["Last name"] = input.LastName ?? string.Empty;
 			}
 			if(input.DisplayedName != user.DisplayName)
 			{
-				user.DisplayName = input.DisplayedName;
-				result.UpdatedValues["Displayed name"] = input.DisplayedName;
+				user.DisplayName = input.DisplayedName ?? string.Empty;
+				if(user.DisplayName == string.Empty)
+				{
+					user.DisplayName = user.Firstname;
+				}
+
+				result.UpdatedValues["Displayed name"] = input.DisplayedName ?? string.Empty;
 			}
 			if(DateOnly.FromDateTime(input.Birthdate ?? DateTime.UtcNow) != user.BirthDate)
 			{
 				user.BirthDate = DateOnly.FromDateTime(input.Birthdate ?? DateTime.UtcNow);
-				result.UpdatedValues["Birthdate"] = input.Birthdate.ToString();
+				result.UpdatedValues["Birthdate"] = input.Birthdate.ToString() ?? string.Empty;
 			}
 			if(input.ProfilePicture != null)
 			{
@@ -302,11 +307,11 @@ namespace Id.Services
 				{
 					user.ProfilePicture = uploadResult.Data;
 					_ = await _dbContext.SaveChangesAsync();
-					result.UpdatedValues["Profile picture"] = uploadResult.Data;
+					result.UpdatedValues["Profile picture"] = uploadResult.Data ?? _t["Error"];
 				}
 				else
 				{
-					result.Errors.Add(uploadResult.Message);
+					result.Errors.Add(uploadResult.Message ?? _t["Error"]);
 				}
 			}
 			result.Success = true;
@@ -355,28 +360,28 @@ namespace Id.Services
 			{
 				_logger.LogWarning("Password does not contain uppercase letters");
 				checkResult.Success = false;
-				checkResult.Errors.Add(_t["Password does not contain uppercase letters"]);
+				checkResult.Errors.Add(_t["Password must contain at least one uppercase letter"]);
 			}
 			// Check if password contains lowercase letters
 			if(rules.RequireLowercase && !password.Any(char.IsLower))
 			{
 				_logger.LogWarning("Password does not contain lowercase letters");
 				checkResult.Success = false;
-				checkResult.Errors.Add(_t["Password does not contain lowercase letters"]);
+				checkResult.Errors.Add(_t["Password must contain at least one lowercase letter"]);
 			}
 			// Check if password contains digits
 			if(rules.RequireDigit && !password.Any(char.IsDigit))
 			{
 				_logger.LogWarning("Password does not contain digits");
 				checkResult.Success = false;
-				checkResult.Errors.Add(_t["Password does not contain digits"]);
+				checkResult.Errors.Add(_t["Password must contain at least one number"]);
 			}
 			// Check if password contains non-alphanumeric characters
 			if(rules.RequireNonAlphanumeric && password.All(char.IsLetterOrDigit))
 			{
 				_logger.LogWarning("Password does not contain non-alphanumeric characters");
 				checkResult.Success = false;
-				checkResult.Errors.Add(_t["Password does not contain non-alphanumeric characters"]);
+				checkResult.Errors.Add(_t["Password must contain at least one special character"]);
 			}
 
 			return checkResult;
@@ -405,16 +410,16 @@ namespace Id.Services
 			{
 				_logger.LogWarning("Email is already in use");
 				checkResult.Success = false;
-				checkResult.Errors.Add(_t["Email is already in use"]);
+				checkResult.Errors.Add(_t["Email address is already registered"]);
 			}
 			return checkResult;
 		}
 
 		private async Task<CheckInputResult> CheckUserInputAsync<T>(T input) where T : IUserInput
 		{
-			CheckInputResult checkResult = new CheckInputResult();
+			CheckInputResult checkResult = new();
 			// Check email
-			CheckInputResult emailCheck = await CheckEmailAsync(input.Email);
+			CheckInputResult emailCheck = await CheckEmailAsync(input.Email ?? string.Empty);
 			if(!emailCheck.Success)
 			{
 				checkResult.Success = false;
@@ -437,13 +442,13 @@ namespace Id.Services
 			{
 				_logger.LogWarning("First name is too short");
 				checkResult.Success = false;
-				checkResult.Errors.Add(_t["First name is too short"]);
+				checkResult.Errors.Add(_t["First name must be at least 2 characters long"]);
 			}
 			if(input.LastName.Length < 2)
 			{
-				_logger.LogWarning("Last name is too short");
+				_logger.LogWarning("Last name must be at least 2 characters long");
 				checkResult.Success = false;
-				checkResult.Errors.Add(_t["Last name is too short"]);
+				checkResult.Errors.Add(_t["Last name must be at least 2 characters long"]);
 			}
 			if(input.FirstName.Length > 50)
 			{
@@ -467,14 +472,14 @@ namespace Id.Services
 			{
 				_logger.LogWarning("Birthdate is null");
 				checkResult.Success = false;
-				checkResult.Errors.Add(_t["Birthdate is null"]);
+				checkResult.Errors.Add(_t["Birthdate is required"]);
 			}
 			// Check if birthdate is in the future
 			if(input.Birthdate.HasValue && input.Birthdate.Value > DateTime.UtcNow)
 			{
 				_logger.LogWarning("Birthdate is in the future");
 				checkResult.Success = false;
-				checkResult.Errors.Add(_t["Birthdate is in the future"]);
+				checkResult.Errors.Add(_t["Birthdate must be in the past"]);
 			}
 
 			// Check birthdate for minimal age of 7 years
@@ -496,21 +501,21 @@ namespace Id.Services
 			{
 				_logger.LogWarning("Terms and conditions are not accepted");
 				checkResult.Success = false;
-				checkResult.Errors.Add(_t["Terms and conditions are not accepted"]);
+				checkResult.Errors.Add(_t["You must accept the terms"]);
 			}
 			// Check if privacy policy is accepted
 			if(!input.AcceptPrivacyPolicy)
 			{
 				_logger.LogWarning("Privacy policy is not accepted");
 				checkResult.Success = false;
-				checkResult.Errors.Add(_t["Privacy policy is not accepted"]);
+				checkResult.Errors.Add(_t["You must accept the privacy policy"]);
 			}
 			// Check if cookie policy is accepted
 			if(!input.AcceptCookiePolicy)
 			{
 				_logger.LogWarning("Cookie policy is not accepted");
 				checkResult.Success = false;
-				checkResult.Errors.Add(_t["Cookie policy is not accepted"]);
+				checkResult.Errors.Add(_t["You must accept the cookies policy"]);
 			}
 			return checkResult;
 		}
