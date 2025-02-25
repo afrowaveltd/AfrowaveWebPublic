@@ -2,7 +2,6 @@
 
 using Id.I18n;
 using Id.Middlewares;
-using Id.Models.SettingsModels;
 using Microsoft.AspNetCore.HttpOverrides;
 using Scalar.AspNetCore;
 using Serilog;
@@ -91,6 +90,7 @@ builder.Services.AddTransient<I18nMiddleware>();
 // Scoped slu�by (HTTP request-based)
 builder.Services.AddScoped<IApplicationLoader, ApplicationLoader>();
 builder.Services.AddScoped<IApplicationsManager, ApplicationsManager>();
+builder.Services.AddScoped<IApplicationUsersManager, ApplicationUsersManager>();
 builder.Services.AddScoped<IBrandsManager, BrandsManager>();
 builder.Services.AddScoped<ICookieService, CookieService>();
 builder.Services.AddScoped<IInstallationStatusService, InstallationStatusService>();
@@ -112,19 +112,13 @@ builder.Services.AddTransient<IUiTranslatorService, UiTranslatorService>();
 
 // Singleton slu�by (glob�ln�, thread-safe)
 builder.Services.AddSingleton<ISettingsService, SettingsService>();
-
+ISettingsService settingsService = builder.Services.BuildServiceProvider().GetRequiredService<ISettingsService>();
+Id.Models.SettingsModels.IdentificatorSettings Settings = await settingsService.GetSettingsAsync();
 // Hosted services
 builder.Services.AddHostedService<ScssCompilerService>();
 builder.Services.AddHostedService<UiTranslatorHostedService>();
 
 // I need to use the settings service and load the settings to use them for cookies and JWT configuration
-IdentificatorSettings Settings;
-builder.Services.AddSingleton<ISettingsService>(sp =>
-{
-	ISettingsService settingsService = sp.GetRequiredService<ISettingsService>();
-	Settings = settingsService.GetSettingsAsync().GetAwaiter().GetResult();
-	return settingsService;
-});
 
 WebApplication app = builder.Build();
 
