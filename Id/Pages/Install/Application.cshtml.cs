@@ -11,6 +11,7 @@ namespace Id.Pages.Install
 								  IEncryptionService encryptionService,
 								  ISettingsService settingsService,
 								  IApplicationsManager applicationService,
+								  IApplicationUsersManager applicationUserService,
 								  IImageService imageService,
 								  IStringLocalizer<ApplicationModel> _t) : PageModel
 	{
@@ -21,6 +22,7 @@ namespace Id.Pages.Install
 		private readonly IInstallationStatusService _installationStatus = installationStatus;
 		private readonly IEncryptionService _encryptionService = encryptionService;
 		private readonly ISettingsService _settingsService = settingsService;
+		private readonly IApplicationUsersManager _applicationUserService = applicationUserService;
 		private readonly IApplicationsManager _applicationService = applicationService;
 		private readonly IImageService _imageService = imageService;
 
@@ -162,6 +164,18 @@ namespace Id.Pages.Install
 				ErrorMessage = response.ErrorMessage ?? "Unknown error";
 				return Page();
 			}
+
+			// we have the application, let register the applicationUser;
+			RegisterApplicationUserInput applicationUser = new()
+			{
+				ApplicationId = response.ApplicationId,
+				UserId = user.Id,
+				AgreedSharingUserDetails = true,
+				AgreedToCookies = true,
+				AgreedToTerms = true,
+			};
+			_ = await _applicationUserService.RegisterApplicationUserAsync(applicationUser);
+
 			// now we need to work on ApplicationId and Settings
 			await _settingsService.SetApplicationId(response.ApplicationId);
 			return RedirectToPage("/ApplicationRoles");

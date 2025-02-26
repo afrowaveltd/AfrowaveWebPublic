@@ -12,6 +12,8 @@
 		public DbSet<Language> Languages { get; set; } = null!;
 		public DbSet<PolicyTranslation> PolicyTranslations { get; set; } = null!;
 		public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
+		public DbSet<SuspendedApplication> SuspendedApplications { get; set; } = null!;
+		public DbSet<SuspendedUser> SuspendedUsers { get; set; } = null!;
 		public DbSet<UiTranslatorLog> UiTranslatorLogs { get; set; } = null!;
 		public DbSet<User> Users { get; set; } = null!;
 		public DbSet<UserAddress> UserAddresses { get; set; } = null!;
@@ -92,6 +94,28 @@
 				 .HasOne(rt => rt.User)
 				 .WithMany(u => u.RefreshTokens)
 				 .HasForeignKey(rt => rt.UserId);
+
+			_ = builder.Entity<SuspendedApplication>()
+				.HasKey(rt => rt.Id);
+			_ = builder.Entity<SuspendedApplication>()
+				.HasOne(rt => rt.Application)
+				.WithMany(rt => rt.SuspendedApplications)
+				.HasForeignKey(rt => rt.ApplicationId);
+
+			_ = builder.Entity<SuspendedUser>()
+				.HasKey(rt => rt.Id);
+			_ = builder.Entity<SuspendedUser>()
+				.HasOne(rt => rt.Application)
+				.WithMany(rt => rt.SuspendedUsers)
+				.HasForeignKey(rt => rt.ApplicationId);
+			_ = builder.Entity<SuspendedUser>()
+				.HasOne(rt => rt.Suspender)
+				.WithMany(rt => rt.Suspenders)
+				.HasForeignKey(rt => rt.SuspenderId);
+			_ = builder.Entity<SuspendedUser>()
+				.HasOne(rt => rt.Suspended)
+				.WithMany(rt => rt.SuspendedUsers)
+				.HasForeignKey(rt => rt.ApplicationUserId);
 
 			_ = builder.Entity<User>()
 				 .HasKey(u => u.Id);

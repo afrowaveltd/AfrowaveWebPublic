@@ -242,7 +242,16 @@ namespace Id.Services
 		/// </example>
 		public async Task<List<RoleAssignResult>> SetAllRolesToOwner(string applicationId, string userId)
 		{
-			List<RoleAssignResult> results = new();
+			List<RoleAssignResult> results = [];
+			if(applicationId == null || userId == null)
+			{
+				results.Add(new RoleAssignResult
+				{
+					Successful = false,
+					Message = _t["Missing user data"]
+				});
+				return results;
+			}
 			ApplicationUser? user = await _context.ApplicationUsers
 				.FirstOrDefaultAsync(x => x.ApplicationId == applicationId && x.UserId == userId);
 			if(user == null)

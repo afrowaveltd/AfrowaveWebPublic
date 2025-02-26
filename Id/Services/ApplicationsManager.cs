@@ -285,9 +285,6 @@ namespace Id.Services
 			application.Published = DateTime.UtcNow;
 			application.IsEnabled = true;
 			application.IsDeleted = false;
-			application.Suspended = false;
-			application.SuspendedById = string.Empty;
-			application.ReasonForSuspension = string.Empty;
 
 			_ = await _context.Applications.AddAsync(application);
 			_ = await _context.SaveChangesAsync();

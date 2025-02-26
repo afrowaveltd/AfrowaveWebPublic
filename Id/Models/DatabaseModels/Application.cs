@@ -25,15 +25,13 @@
 		public bool RequireCookiePolicy { get; set; } = false;
 		public bool IsEnabled { get; set; } = true;
 		public bool IsDeleted { get; set; } = false;
-		public bool Suspended { get; set; } = false;
-		public string? SuspendedById { get; set; } = string.Empty;
 		public User? Owner { get; set; }
-		public User? SuspendedBy { get; set; }
-		public string? ReasonForSuspension { get; set; }
 		public Brand? Brand { get; set; }
 		public ApplicationSmtpSettings? SmtpSettings { get; set; }
 		public List<ApplicationRole> Roles { get; set; } = [];
 		public List<ApplicationPolicy> Policies { get; set; } = [];
 		public List<ApplicationUser> Users { get; set; } = [];
+		public List<SuspendedApplication> SuspendedApplications { get; set; } = [];
+		public List<SuspendedUser> SuspendedUsers { get; set; } = [];
 	}
 }

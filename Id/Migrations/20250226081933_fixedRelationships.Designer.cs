@@ -4,6 +4,7 @@ using Id.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Id.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250226081933_fixedRelationships")]
+    partial class fixedRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,6 +78,9 @@ namespace Id.Migrations
                     b.Property<DateTime>("Published")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ReasonForSuspension")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RedirectUri")
                         .HasColumnType("nvarchar(max)");
 
@@ -87,11 +93,19 @@ namespace Id.Migrations
                     b.Property<bool>("RequireTerms")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("Suspended")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SuspendedById")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
 
                     b.HasIndex("OwnerId");
+
+                    b.HasIndex("SuspendedById");
 
                     b.ToTable("Applications");
                 });
@@ -451,85 +465,6 @@ namespace Id.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("Id.Models.DatabaseModels.SuspendedApplication", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Reason")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("SuspendedFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("SuspendedUntil")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SuspenderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("SuspensionActive")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationId");
-
-                    b.HasIndex("SuspenderId");
-
-                    b.ToTable("SuspendedApplications");
-                });
-
-            modelBuilder.Entity("Id.Models.DatabaseModels.SuspendedUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ApplicationUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Reason")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("SuspendedFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("SuspendedUntil")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SuspenderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("SuspensionActive")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationId");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("SuspenderId");
-
-                    b.ToTable("SuspendedUsers");
-                });
-
             modelBuilder.Entity("Id.Models.DatabaseModels.UiTranslatorLog", b =>
                 {
                     b.Property<int>("Id")
@@ -718,9 +653,16 @@ namespace Id.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("Id.Models.DatabaseModels.User", "SuspendedBy")
+                        .WithMany("SuspendedApplications")
+                        .HasForeignKey("SuspendedById")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.Navigation("Brand");
 
                     b.Navigation("Owner");
+
+                    b.Navigation("SuspendedBy");
                 });
 
             modelBuilder.Entity("Id.Models.DatabaseModels.ApplicationPolicy", b =>
@@ -816,52 +758,6 @@ namespace Id.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Id.Models.DatabaseModels.SuspendedApplication", b =>
-                {
-                    b.HasOne("Id.Models.DatabaseModels.Application", "Application")
-                        .WithMany("SuspendedApplications")
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Id.Models.DatabaseModels.User", "Suspender")
-                        .WithMany("SuspendedApplications")
-                        .HasForeignKey("SuspenderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Application");
-
-                    b.Navigation("Suspender");
-                });
-
-            modelBuilder.Entity("Id.Models.DatabaseModels.SuspendedUser", b =>
-                {
-                    b.HasOne("Id.Models.DatabaseModels.Application", "Application")
-                        .WithMany("SuspendedUsers")
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Id.Models.DatabaseModels.ApplicationUser", "Suspended")
-                        .WithMany("SuspendedUsers")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Id.Models.DatabaseModels.User", "Suspender")
-                        .WithMany("Suspenders")
-                        .HasForeignKey("SuspenderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Application");
-
-                    b.Navigation("Suspended");
-
-                    b.Navigation("Suspender");
-                });
-
             modelBuilder.Entity("Id.Models.DatabaseModels.UserAddress", b =>
                 {
                     b.HasOne("Id.Models.DatabaseModels.Country", "Country")
@@ -907,10 +803,6 @@ namespace Id.Migrations
 
                     b.Navigation("SmtpSettings");
 
-                    b.Navigation("SuspendedApplications");
-
-                    b.Navigation("SuspendedUsers");
-
                     b.Navigation("Users");
                 });
 
@@ -926,8 +818,6 @@ namespace Id.Migrations
 
             modelBuilder.Entity("Id.Models.DatabaseModels.ApplicationUser", b =>
                 {
-                    b.Navigation("SuspendedUsers");
-
                     b.Navigation("UserRoles");
                 });
 
@@ -957,8 +847,6 @@ namespace Id.Migrations
                     b.Navigation("RefreshTokens");
 
                     b.Navigation("SuspendedApplications");
-
-                    b.Navigation("Suspenders");
 
                     b.Navigation("UserAddresses");
                 });

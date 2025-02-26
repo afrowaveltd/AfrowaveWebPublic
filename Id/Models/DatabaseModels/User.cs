@@ -40,10 +40,12 @@ namespace Id.Models.DatabaseModels
 		public DateTime? OTPTokenExpiration { get; set; }
 
 		public int AccessFailedCount { get; set; } = 0;
-		public List<Application> OwnedApplications { get; set; } = new();
-		public List<UserAddress> UserAddresses { get; set; } = new();
-		public List<RefreshToken> RefreshTokens { get; set; } = new();
-		public List<ApplicationUser> ApplicationUsers { get; set; } = new();
-		public List<Brand> Brands { get; set; } = new();
+		public List<Application> OwnedApplications { get; set; } = [];
+		public List<UserAddress> UserAddresses { get; set; } = [];
+		public List<RefreshToken> RefreshTokens { get; set; } = [];
+		public List<ApplicationUser> ApplicationUsers { get; set; } = [];
+		public List<Brand> Brands { get; set; } = [];
+		public List<SuspendedApplication> SuspendedApplications { get; set; } = [];
+		public List<SuspendedUser> Suspenders { get; set; } = [];
 	}
 }
