@@ -1,5 +1,11 @@
 ﻿using System.Xml.Serialization;
 
+/// <summary>
+/// Initializes a new instance of the <see cref="CustomErrorHandlingMiddleware"/> class.
+/// </summary>
+/// <param name="next">The next middleware delegate.</param>
+/// <param name="env">The hosting environment.</param>
+/// <param name="logger">The logger instance.</param>
 public class CustomErrorHandlingMiddleware(
 		 RequestDelegate next,
 		 IWebHostEnvironment env,
@@ -9,6 +15,10 @@ public class CustomErrorHandlingMiddleware(
 	private readonly IWebHostEnvironment _env = env;
 	private readonly ILogger<CustomErrorHandlingMiddleware> _logger = logger;
 
+	/// <summary>
+	/// Middleware execution logic.
+	/// </summary>
+	/// <param name="context">The HTTP context.</param>
 	public async Task InvokeAsync(HttpContext context)
 	{
 		Stream originalBodyStream = context.Response.Body;
@@ -20,7 +30,7 @@ public class CustomErrorHandlingMiddleware(
 
 			await _next(context);
 
-			responseBody.Seek(0, SeekOrigin.Begin);
+			_ = responseBody.Seek(0, SeekOrigin.Begin);
 			if(IsErrorStatusCode(context.Response.StatusCode) || context.Response.StatusCode == 404)
 			{
 				await HandleErrorResponse(context, responseBody, originalBodyStream);
@@ -45,17 +55,20 @@ public class CustomErrorHandlingMiddleware(
 		await HandleErrorResponse(context, null, originalBodyStream, exception);
 	}
 
+	/// <summary>
+	/// Handles error responses based on the request format.
+	/// </summary>
 	private async Task HandleErrorResponse(
 		 HttpContext context,
 		 MemoryStream? responseBody = null,
-		 Stream originalBodyStream = null,
-		 Exception exception = null)
+		 Stream? originalBodyStream = null,
+		 Exception? exception = null)
 	{
 		try
 		{
 			int statusCode = context.Response.StatusCode;
 			ResponseFormat formatter = GetResponseFormatter(context.Request);
-			ErrorDetails errorDetails = CreateErrorDetails(statusCode, exception, context);
+			ErrorDetails errorDetails = CreateErrorDetails(statusCode, exception ?? new(), context);
 
 			if(formatter == ResponseFormat.Html)
 			{
@@ -65,7 +78,7 @@ public class CustomErrorHandlingMiddleware(
 
 			if(statusCode == 500 && !_env.IsDevelopment())
 			{
-				LogProductionError(exception);
+				LogProductionError(exception ?? new());
 			}
 
 			string responseContent = formatter switch
@@ -102,13 +115,13 @@ public class CustomErrorHandlingMiddleware(
 
 	private ErrorDetails CreateErrorDetails(int statusCode, Exception exception, HttpContext context)
 	{
-		var localizer = context.RequestServices.GetRequiredService<IStringLocalizer<CustomErrorHandlingMiddleware>>();
+		IStringLocalizer<CustomErrorHandlingMiddleware> localizer = context.RequestServices.GetRequiredService<IStringLocalizer<CustomErrorHandlingMiddleware>>();
 		return new ErrorDetails
 		{
 			StatusCode = statusCode,
 			Title = GetLocalizedTitle(statusCode, localizer),
 			Message = exception?.Message ?? GetLocalizedMessage(statusCode, localizer),
-			Details = _env.IsDevelopment() ? exception?.ToString() : null,
+			Details = exception?.ToString() ?? string.Empty,
 			Timestamp = DateTime.UtcNow
 		};
 	}
@@ -153,11 +166,42 @@ public class CustomErrorHandlingMiddleware(
 	}
 }
 
+/// <summary>
+/// Enumeration of supported response formats.
+/// </summary>
 public enum ResponseFormat
-{ Json, Xml, Html, Text }
+{
+	/// <summary>
+	/// JSON format.
+	/// </summary>
+	Json,
 
+	/// <summary>
+	/// XML format.
+	/// </summary>
+	Xml,
+
+	/// <summary>
+	/// HTML format.
+	/// </summary>
+	Html,
+
+	/// <summary>
+	/// Text format.
+	/// </summary>
+	Text
+}
+
+/// <summary>
+/// Extension methods for <see cref="ResponseFormat"/>.
+/// </summary>
 public static class ResponseFormatExtensions
 {
+	/// <summary>
+	/// Gets the content type based on the response format.
+	/// </summary>
+	/// <param name="format">The response format.</param>
+	/// <returns>The corresponding content type.</returns>
 	public static string GetContentType(this ResponseFormat format)
 	{
 		return format switch
@@ -170,11 +214,34 @@ public static class ResponseFormatExtensions
 	}
 }
 
+/// <summary>
+/// Represents the details of an error response.
+/// </summary>
 public class ErrorDetails
 {
+	/// <summary>
+	/// The status code of the response.
+	/// </summary>
 	public int StatusCode { get; set; }
-	public string Title { get; set; }
-	public string Message { get; set; }
-	public string Details { get; set; }
+
+	/// <summary>
+	/// The title of the error.
+	/// </summary>
+	public string Title { get; set; } = string.Empty;
+
+	/// <summary>
+	/// The message of the error.
+	/// </summary>
+	public string Message { get; set; } = string.Empty;
+
+	/// <summary>
+	/// The details of the error.
+	/// </summary>
+
+	public string Details { get; set; } = string.Empty;
+
+	/// <summary>
+	/// The timestamp of the error.
+	/// </summary>
 	public DateTime Timestamp { get; set; }
 }

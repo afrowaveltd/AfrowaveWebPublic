@@ -17,6 +17,13 @@ using System.Text;
 
 namespace Id.Services
 {
+	/// <summary>
+	/// Email manager class
+	/// </summary>
+	/// <param name="t">Localization service</param>
+	/// <param name="logger">Logging service</param>
+	/// <param name="settings">Settings service</param>
+	/// <param name="applicationManager">ApplicationManager</param>
 	public class EmailManager(IStringLocalizer<EmailManager> t,
 		ILogger<EmailManager> logger,
 		ISettingsService settings,
@@ -326,7 +333,7 @@ namespace Id.Services
 		/// <returns>Result of the email sending</returns>
 		/// <example>
 		/// <!-- Example usage: -->
-		/// await SendGroupEmailFromTemplateAsync(new List<string>
+		/// await SendGroupEmailFromTemplateAsync(new ()
 		///		{
 		///			"email1@somedomain.com",
 		///			"email2@otherdomain.com"
@@ -343,7 +350,7 @@ namespace Id.Services
 		///	  {
 		///			SenderApplicationId: 0,
 		///			Subject: "TemplateName",
-		///			Result: new List<EmailResult>() {
+		///			Result: new () {
 		///			  new EmailResult() {
 		///					TargerEmail: "email1@somedomain.com",
 		///					Sucess: true,
@@ -422,7 +429,7 @@ namespace Id.Services
 		/// <returns>Result of the email sending</returns>
 		/// <example>
 		/// <!-- Example usage: -->
-		/// await SendGroupEmailFromTemplateAsync(new List<string>
+		/// await SendGroupEmailFromTemplateAsync(new ()
 		///		{
 		///			"email1@somedomain.com",
 		///			"email2@otherdomain.com"
@@ -439,7 +446,7 @@ namespace Id.Services
 		///	  {
 		///			SenderApplicationId: 0,
 		///			Subject: "TemplateName",
-		///			Result: new List<EmailResult>() {
+		///			Result: new() {
 		///			  new EmailResult() {
 		///					TargerEmail: "email1@somedomain.com",
 		///					Sucess: true,
@@ -468,7 +475,7 @@ namespace Id.Services
 		/// <returns>Result of the email sending</returns>
 		/// <example>
 		/// <!-- Example usage: -->
-		/// await SendGroupEmailAsync(new List<string>
+		/// await SendGroupEmailAsync(new ()
 		/// {
 		///		"email1@somedomain.com",
 		///		"email2@somedomain.com"
@@ -481,7 +488,7 @@ namespace Id.Services
 		///	 {
 		///	   SenderApplicationId: 0,
 		///	   Subject: "Test email",
-		///	   Result: new List<EmailResult>()
+		///	   Result: new()
 		///	   {
 		///			new()
 		///			{
@@ -562,7 +569,7 @@ namespace Id.Services
 		/// <returns>Result of the email sending</returns>
 		/// <example>
 		/// <!-- Example usage: -->
-		/// await SendGroupEmailAsync(new List<string>
+		/// await SendGroupEmailAsync(new ()
 		/// {
 		///		"email1@somedomain.com",
 		///		"email2@somedomain.com"
@@ -575,7 +582,7 @@ namespace Id.Services
 		///	 {
 		///	   SenderApplicationId: 0,
 		///	   Subject: "Test email",
-		///	   Result: new List<EmailResult>()
+		///	   Result: ()
 		///	   {
 		///			new()
 		///			{

@@ -148,7 +148,6 @@ foreach(ApiResponse<List<string>> result in assetTranslationResults)
 string[] supportedCultures = loader.GetSupportedCultures();
 
 app.UseMiddleware<I18nMiddleware>();
-//app.UseMiddleware<ErrorMiddleware>();
 
 app.UseRequestLocalization(options =>
 {

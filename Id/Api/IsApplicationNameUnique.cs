@@ -1,5 +1,9 @@
 ﻿namespace Id.Api
 {
+	/// <summary>
+	/// Check if the application name is unique
+	/// </summary>
+	/// <param name="applicationService">Service for application manager</param>
 	[Route("api/[controller]")]
 	[ApiController]
 	public class IsApplicationNameUnique(IApplicationsManager applicationService) : ControllerBase
@@ -28,6 +32,9 @@
 
 		private class IsUniqueResponse(bool unique)
 		{
+			/// <summary>
+			/// Gets or sets a value indicating whether the name is unique
+			/// </summary>
 			public bool IsUnique { get; set; } = unique;
 		}
 	}

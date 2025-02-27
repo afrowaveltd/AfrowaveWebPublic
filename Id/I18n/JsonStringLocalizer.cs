@@ -1,141 +1,122 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace Id.I18n
 {
-    public class JsonStringLocalizer : IStringLocalizer
-    {
-        private readonly IDistributedCache _cache;
-        private readonly Newtonsoft.Json.JsonSerializer _serializer = new Newtonsoft.Json.JsonSerializer();
-        private readonly string localesPath;
+	/// <summary>
+	/// Provides localization using JSON files stored in a distributed cache.
+	/// </summary>
+	public class JsonStringLocalizer : IStringLocalizer
+	{
+		private readonly IDistributedCache _cache;
+		private readonly Newtonsoft.Json.JsonSerializer _serializer = new();
+		private readonly string _localesPath;
 
-        public JsonStringLocalizer(IDistributedCache cache)
-        {
-            _cache = cache;
-            string projectPath = AppDomain.CurrentDomain.BaseDirectory
-                    .Substring(0, AppDomain.CurrentDomain.BaseDirectory
-                    .IndexOf("bin"));
-            localesPath = Path.Combine(projectPath, "Locales");
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="JsonStringLocalizer"/> class.
+		/// </summary>
+		/// <param name="cache">Distributed cache instance.</param>
+		public JsonStringLocalizer(IDistributedCache cache)
+		{
+			_cache = cache;
+			string projectPath = AppDomain.CurrentDomain.BaseDirectory.Split("bin")[0];
+			_localesPath = Path.Combine(projectPath, "Locales");
+		}
 
-        public LocalizedString this[string name]
-        {
-            get
-            {
-                string value = GetString(name);
-                return new LocalizedString(name, value ?? name, value == null);
-            }
-        }
+		/// <inheritdoc/>
+		public LocalizedString this[string name] => new(name, GetString(name) ?? name, GetString(name) == null);
 
-        public LocalizedString this[string name, params object[] arguments]
-        {
-            get
-            {
-                LocalizedString actualValue = this[name];
-                return !actualValue.ResourceNotFound
-                     ? new LocalizedString(name, string.Format(actualValue.Value, arguments), false)
-                     : actualValue;
-            }
-        }
+		/// <inheritdoc/>
+		public LocalizedString this[string name, params object[] arguments]
+		{
+			get
+			{
+				LocalizedString localized = this[name];
+				return localized.ResourceNotFound
+					 ? localized
+					 : new LocalizedString(name, string.Format(localized.Value, arguments), false);
+			}
+		}
 
-        public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
-        {
-            string filePath = Path.Combine(localesPath, Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName.ToLower() + ".json");
+		/// <inheritdoc/>
+		public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
+		{
+			string filePath = GetLocaleFilePath();
+			if(!File.Exists(filePath))
+			{
+				throw new FileNotFoundException("Localization file not found.");
+			}
 
-            if(!File.Exists(filePath))
-            {
-                filePath = Path.Combine(localesPath, "en.json");
-                if(!File.Exists(filePath))
-                {
-                    throw new FileNotFoundException("en.json file not found.");
-                }
-            }
-            using FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-            using StreamReader sReader = new StreamReader(stream);
-            using JsonTextReader reader = new JsonTextReader(sReader);
-            while(reader.Read())
-            {
-                if(reader.TokenType != JsonToken.PropertyName)
-                {
-                    continue;
-                }
+			using FileStream stream = File.OpenRead(filePath);
+			using StreamReader reader = new StreamReader(stream);
+			using JsonTextReader jsonReader = new JsonTextReader(reader);
 
-                string key = (string)reader.Value;
-                _ = reader.Read();
-                string value = _serializer.Deserialize<string>(reader);
-                yield return new LocalizedString(key, value, false);
-            }
-        }
+			while(jsonReader.Read())
+			{
+				if(jsonReader.TokenType == JsonToken.PropertyName)
+				{
+					string key = jsonReader.Value.ToString();
+					_ = jsonReader.Read();
+					yield return new LocalizedString(key, _serializer.Deserialize<string>(jsonReader), false);
+				}
+			}
+		}
 
-        private string GetString(string key)
-        {
-            string filePath = Path.Combine(localesPath, Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName.ToLower() + ".json");
-            if(!File.Exists(filePath))
-            {
-                filePath = Path.Combine(localesPath, "en.json");
-                if(!File.Exists(filePath))
-                {
-                    throw new FileNotFoundException("en.json file not found.");
-                }
-            }
+		private string GetString(string key)
+		{
+			string filePath = GetLocaleFilePath();
+			string cacheKey = $"locale_{CultureInfo.CurrentUICulture.Name}_{key}";
+			string cachedValue = _cache.GetString(cacheKey);
 
-            string cacheKey = $"locale_{Thread.CurrentThread.CurrentUICulture.Name}_{key}";
-            string cacheValue = _cache.GetString(cacheKey);
-            if(!string.IsNullOrEmpty(cacheValue))
-            {
-                return cacheValue;
-            }
+			if(!string.IsNullOrEmpty(cachedValue))
+			{
+				return cachedValue;
+			}
 
-            string result = GetValueFromJSON(key, filePath);
-            if(!string.IsNullOrEmpty(result))
-            {
-                _cache.SetString(cacheKey, result);
-            }
+			string value = GetValueFromJson(key, filePath);
+			if(!string.IsNullOrEmpty(value))
+			{
+				_cache.SetString(cacheKey, value);
+			}
 
-            return result;
-        }
+			return value;
+		}
 
-        private string GetValueFromJSON(string propertyName, string filePath)
-        {
-            try
-            {
-                filePath = Path.Combine(localesPath, Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName.ToLower() + ".json");
-                if(!File.Exists(filePath))
-                {
-                    filePath = Path.Combine(localesPath, "en.json");
-                    if(!File.Exists(filePath))
-                    {
-                        return default;
-                    }
-                }
-                if(propertyName == null)
-                {
-                    return default;
-                }
+		private string GetLocaleFilePath()
+		{
+			string culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToLower();
+			string filePath = Path.Combine(_localesPath, $"{culture}.json");
+			return File.Exists(filePath) ? filePath : Path.Combine(_localesPath, "en.json");
+		}
 
-                if(filePath == null)
-                {
-                    return default;
-                }
+		private string GetValueFromJson(string key, string filePath)
+		{
+			if(string.IsNullOrEmpty(key) || string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
+			{
+				return default;
+			}
 
-                using FileStream str = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                using StreamReader sReader = new StreamReader(str);
-                using JsonTextReader reader = new JsonTextReader(sReader);
-                while(reader.Read())
-                {
-                    if(reader.TokenType == JsonToken.PropertyName && (string)reader.Value == propertyName)
-                    {
-                        _ = reader.Read();
-                        return _serializer.Deserialize<string>(reader);
-                    }
-                }
+			try
+			{
+				using FileStream stream = File.OpenRead(filePath);
+				using StreamReader reader = new StreamReader(stream);
+				using JsonTextReader jsonReader = new JsonTextReader(reader);
 
-                return default;
-            }
-            catch
-            {
-                return default;
-            }
-        }
-    }
+				while(jsonReader.Read())
+				{
+					if(jsonReader.TokenType == JsonToken.PropertyName && jsonReader.Value.ToString() == key)
+					{
+						_ = jsonReader.Read();
+						return _serializer.Deserialize<string>(jsonReader);
+					}
+				}
+			}
+			catch
+			{
+				return default;
+			}
+			return default;
+		}
+	}
 }

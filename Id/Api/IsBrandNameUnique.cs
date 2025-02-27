@@ -1,5 +1,9 @@
 ﻿namespace Id.Api
 {
+	/// <summary>
+	/// Check if the brand name is unique
+	/// </summary>
+	/// <param name="brandService"></param>
 	[Route("api/[controller]")]
 	[ApiController]
 	public class IsBrandNameUnique(IBrandsManager brandService) : ControllerBase
@@ -27,6 +31,9 @@
 
 		private class IsUniqueResponse(bool unique)
 		{
+			/// <summary>
+			/// Gets or sets a value indicating whether the name is unique
+			/// </summary>
 			public bool IsUnique { get; set; } = unique;
 		}
 	}
