@@ -1,12 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
 namespace Id.Pages.Account
 {
-    public class SendOtpModel : PageModel
-    {
-        public void OnGet()
-        {
-        }
-    }
+	/// <summary>
+	/// Represents the model for the send OTP page.
+	/// </summary>
+	public class SendOtpModel : PageModel
+	{
+		/// <summary>
+		/// Handles the GET request.
+		/// </summary>
+		public void OnGet()
+		{
+		}
+	}
 }

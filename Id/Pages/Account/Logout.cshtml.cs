@@ -1,12 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
 namespace Id.Pages.Account
 {
-    public class LogoutModel : PageModel
-    {
-        public void OnGet()
-        {
-        }
-    }
+	/// <summary>
+	/// Represents the logout page.
+	/// </summary>
+	public class LogoutModel : PageModel
+	{
+		/// <summary>
+		/// Handles the GET request.
+		/// </summary>
+		public void OnGet()
+		{
+		}
+	}
 }

@@ -1,12 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
 namespace Id.Pages.Account
 {
-    public class ForgottenPasswordModel : PageModel
-    {
-        public void OnGet()
-        {
-        }
-    }
+	/// <summary>
+	/// Represents the forgotten password page.
+	/// </summary>
+	public class ForgottenPasswordModel : PageModel
+	{
+		/// <summary>
+		/// Handles the GET request.
+		/// </summary>
+		public void OnGet()
+		{
+		}
+	}
 }

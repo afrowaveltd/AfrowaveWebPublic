@@ -1,12 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
 namespace Id.Pages.Account
 {
-    public class LoginUserModel : PageModel
-    {
-        public void OnGet()
-        {
-        }
-    }
+	/// <summary>
+	/// Represents the login page.
+	/// </summary>
+	public class LoginModel : PageModel
+	{
+		/// <summary>
+		/// Handles the GET request.
+		/// </summary>
+		public void OnGet()
+		{
+		}
+	}
 }

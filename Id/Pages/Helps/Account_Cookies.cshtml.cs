@@ -1,11 +1,26 @@
 namespace Id.Pages.Helps
 {
+	/// <summary>
+	/// Represents the model for the cookies help page.
+	/// </summary>
+	/// <param name="_t"></param>
 	public class Account_CookiesModel(IStringLocalizer<Account_CookiesModel> _t) : PageModel
 	{
 		private readonly IStringLocalizer<Account_CookiesModel> t = _t;
+
+		/// <summary>
+		/// Sets the title of the page.
+		/// </summary>
 		public string Title => t["Cookies"];
+
+		/// <summary>
+		/// Gets the list of lines.
+		/// </summary>
 		public List<string> Lines = [];
 
+		/// <summary>
+		/// Handles the GET request.
+		/// </summary>
 		public void OnGet()
 		{
 			Lines.Add(t["Cookies are small text files that are stored on your device."]);

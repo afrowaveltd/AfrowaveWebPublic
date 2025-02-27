@@ -1,12 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
 namespace Id.Pages.Account
 {
-    public class IndexModel : PageModel
-    {
-        public void OnGet()
-        {
-        }
-    }
+	/// <summary>
+	/// Represents the index page.
+	/// </summary>
+	public class IndexModel : PageModel
+	{
+		/// <summary>
+		/// Handles the GET request.
+		/// </summary>
+		public void OnGet()
+		{
+		}
+	}
 }

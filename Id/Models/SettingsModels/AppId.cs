@@ -1,7 +1,13 @@
 ﻿namespace Id.Models.SettingsModels
 {
-    public class AppId
-    {
-        public string Id { get; set; } = string.Empty;
-    }
+	/// <summary>
+	/// Represents the ID of the authenticator application.
+	/// </summary>
+	public class AppId
+	{
+		/// <summary>
+		/// The ID of the authenticator application.
+		/// </summary>
+		public string Id { get; set; } = string.Empty;
+	}
 }

@@ -1,12 +1,15 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-
 namespace Id.Pages.Helps
 {
-    public class IndexModel : PageModel
-    {
-        public void OnGet()
-        {
-        }
-    }
+	/// <summary>
+	/// This page is used to help the user to understand the application.
+	/// </summary>
+	public class IndexModel : PageModel
+	{
+		/// <summary>
+		/// OnGet method of the page.
+		/// </summary>
+		public void OnGet()
+		{
+		}
+	}
 }

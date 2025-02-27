@@ -1,11 +1,26 @@
 namespace Id.Pages.Helps
 {
+	/// <summary>
+	/// This page is used to help the user to understand the terms and conditions.
+	/// </summary>
+	/// <param name="_t"></param>
 	public class Account_TermsModel(IStringLocalizer<Account_TermsModel> _t) : PageModel
 	{
 		private readonly IStringLocalizer<Account_TermsModel> t = _t;
+
+		/// <summary>
+		/// The title of the page.
+		/// </summary>
 		public string Title => t["Terms and conditions"];
+
+		/// <summary>
+		/// The lines of the page.
+		/// </summary>
 		public List<string> Lines = [];
 
+		/// <summary>
+		/// OnGet method of the page.
+		/// </summary>
 		public void OnGet()
 		{
 			Lines.Add(t["The terms and conditions are the rules that you must follow."]);
