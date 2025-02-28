@@ -2,6 +2,13 @@ using Id.Models.SettingsModels;
 
 namespace Id.Pages.Install
 {
+	/// <summary>
+	/// The login rules page model
+	/// </summary>
+	/// <param name="logger">Logger service</param>
+	/// <param name="settings">Application settings manager</param>
+	/// <param name="_t">Localizer</param>
+	/// <param name="status">Installation status service</param>
 	public class LoginRulesModel(ILogger<LoginRulesModel> logger,
 		ISettingsService settings,
 		IStringLocalizer<LoginRulesModel> _t,
@@ -12,9 +19,16 @@ namespace Id.Pages.Install
 
 		private readonly ISettingsService _settings = settings;
 		private readonly IInstallationStatusService _status = status;
+
+		/// <summary>
+		/// Localizer
+		/// </summary>
 		public readonly IStringLocalizer<LoginRulesModel> t = _t;
 
 		// Input model
+		/// <summary>
+		/// The input model for the login rules
+		/// </summary>
 		[BindProperty]
 		public InputModel? Input { get; set; }
 
@@ -30,11 +44,34 @@ namespace Id.Pages.Install
 		/// <permission cref="IsConfigured">If the login rules are configured</permission>
 		public class InputModel
 		{
+			/// <summary>
+			/// Gets or sets the maximum number of failed login attempts.
+			/// </summary>
 			public int MaxFailedLoginAttempts { get; set; } = 5;
+
+			/// <summary>
+			/// Gets or sets the lockout time in minutes.
+			/// </summary>
 			public int LockoutTime { get; set; } = 15;
+
+			/// <summary>
+			/// Gets or sets the password reset token expiration time in minutes.
+			/// </summary>
 			public int PasswordResetTokenExpiration { get; set; } = 15;
+
+			/// <summary>
+			/// Gets or sets the OTP token expiration time in minutes.
+			/// </summary>
 			public int OTPTokenExpiration { get; set; } = 15;
+
+			/// <summary>
+			/// Gets or sets a value indicating whether the email must be confirmed.
+			/// </summary>
 			public bool RequireConfirmedEmail { get; set; } = true;
+
+			/// <summary>
+			/// Gets or sets the application id.
+			/// </summary>
 			public string ApplicationId { get; set; } = string.Empty;
 		}
 
@@ -51,8 +88,10 @@ namespace Id.Pages.Install
 
 			IdentificatorSettings settings = await _settings.GetSettingsAsync();
 			string applicationId = settings.ApplicationId;
-			Input = new();
-			Input.ApplicationId = applicationId;
+			Input = new()
+			{
+				ApplicationId = applicationId
+			};
 
 			return Page();
 		}
@@ -60,7 +99,6 @@ namespace Id.Pages.Install
 		/// <summary>
 		/// Handles the POST request
 		/// </summary>
-		/// <param name="Input">The input model</param>
 		/// <returns>In case of success redirects to the PasswordRules page</returns>
 		public async Task<IActionResult> OnPostAsync()
 		{

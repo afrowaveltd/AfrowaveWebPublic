@@ -2,12 +2,21 @@
 
 namespace Id.Services
 {
+	/// <summary>
+	/// Service to compile SCSS files to CSS.
+	/// </summary>
+	/// <param name="logger"></param>
 	public class ScssCompilerService(ILogger<ScssCompilerService> logger) : IHostedService, IDisposable
 	{
 		private readonly ILogger<ScssCompilerService> _logger = logger;
 		private readonly string _scssDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "css");
 		private FileSystemWatcher _watcher;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScssCompilerService"/> class.
+		/// </summary>
+		/// <param name="cancellationToken">The cancellation token</param>
+		/// <returns></returns>
 		public Task StartAsync(CancellationToken cancellationToken)
 		{
 			_logger.LogInformation("Starting SCSS Compiler Service...");
@@ -16,6 +25,11 @@ namespace Id.Services
 			return Task.CompletedTask;
 		}
 
+		/// <summary>
+		/// Stops the SCSS Compiler Service.
+		/// </summary>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns></returns>
 		public Task StopAsync(CancellationToken cancellationToken)
 		{
 			_logger.LogInformation("Stopping SCSS Compiler Service...");
@@ -68,6 +82,9 @@ namespace Id.Services
 			}
 		}
 
+		/// <summary>
+		/// Disposes the FileSystemWatcher.
+		/// </summary>
 		public void Dispose()
 		{
 			_watcher?.Dispose();

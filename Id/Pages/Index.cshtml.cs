@@ -1,5 +1,11 @@
 namespace Id.Pages
 {
+	/// <summary>
+	/// The index page model
+	/// </summary>
+	/// <param name="logger">Logger manager</param>
+	/// <param name="context">Entity service</param>
+	/// <param name="installationStatus">Installation status manager</param>
 	public class IndexModel(ILogger<IndexModel> logger,
 			 ApplicationDbContext context,
 			 IInstallationStatusService installationStatus) : PageModel
@@ -8,6 +14,10 @@ namespace Id.Pages
 		private readonly ApplicationDbContext _context = context;
 		private readonly IInstallationStatusService _installationStatus = installationStatus;
 
+		/// <summary>
+		/// The index page model
+		/// </summary>
+		/// <returns></returns>
 		public async Task<ActionResult> OnGetAsync()
 		{
 			InstalationSteps step = await _installationStatus.GetInstallationStepAsync();

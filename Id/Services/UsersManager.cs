@@ -12,6 +12,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Id.Services
 {
+	/// <summary>
+	/// Manages users in the system.
+	/// </summary>
+	/// <param name="logger">Logger</param>
+	/// <param name="dbContext">Entity Framework</param>
+	/// <param name="settingsService">Application settings manager</param>
+	/// <param name="encryptionService">Encryption service</param>
+	/// <param name="emailService">Emails service</param>
+	/// <param name="imageService">Images service</param>
+	/// <param name="t">Localizer</param>
 	public class UsersManager(ILogger<UsersManager> logger,
 		ApplicationDbContext dbContext,
 		ISettingsService settingsService,

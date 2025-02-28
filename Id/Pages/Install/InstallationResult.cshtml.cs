@@ -4,6 +4,17 @@ using System.Globalization;
 
 namespace Id.Pages.Install
 {
+	/// <summary>
+	/// The installation result page model
+	/// </summary>
+	/// <param name="_t">Localizer</param>
+	/// <param name="context">Entity manager</param>
+	/// <param name="applicationService">Applications service</param>
+	/// <param name="brandService">Brands service</param>
+	/// <param name="settingsService">Settings manager</param>
+	/// <param name="installationStatus">Installation status service</param>
+	/// <param name="translatorService">Translator manager</param>
+	/// <param name="logger">Logger manager</param>
 	public class InstallationResultModel(IStringLocalizer<InstallationResultModel> _t,
 		ApplicationDbContext context,
 		IApplicationsManager applicationService,
@@ -22,33 +33,117 @@ namespace Id.Pages.Install
 		private readonly ILogger<InstallationResultModel> _logger = logger;
 		private readonly ITranslatorService _translatorService = translatorService;
 
+		/// <summary>
+		/// Model for the input form
+		/// </summary>
 		[BindProperty]
 		public InputModel Input { get; set; }
 
+		/// <summary>
+		/// Model for the input form
+		/// </summary>
 		public class InputModel
 		{
+			/// <summary>
+			/// Gets or sets the installation finished state.
+			/// </summary>
 			public bool InstallationFinished { get; set; }
 		}
 
-		public string CurrentCulture { get; private set; }
+		/// <summary>
+		/// The current culture
+		/// </summary>
+		public string CurrentCulture { get; private set; } = "en";
+
+		/// <summary>
+		/// The brand name
+		/// </summary>
 		public string BrandName { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The brand description
+		/// </summary>
 		public string BrandDescription { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The brand ID
+		/// </summary>
 		public int BrandId { get; set; } = 0;
+
+		/// <summary>
+		/// The brand email
+		/// </summary>
 		public string BrandEmail { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The brand website
+		/// </summary>
 		public string BrandWebsite { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The brand logo link
+		/// </summary>
 		public string BrandLogoLink { get; set; } = "/img/no-logo.png";
+
+		/// <summary>
+		/// The application name
+		/// </summary>
 		public string ApplicationName { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The application description
+		/// </summary>
 		public string ApplicationDescription { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The application email
+		/// </summary>
 		public string ApplicationEmail { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The application website
+		/// </summary>
 		public string ApplicationWebsite { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The application ID
+		/// </summary>
 		public string ApplicationId { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The application logo link
+		/// </summary>
 		public string ApplicationLogoLink { get; set; } = "/img/no-logo.png";
+
+		/// <summary>
+		/// The admin name
+		/// </summary>
 		public string AdminName { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The admin roles
+		/// </summary>
 		public string AdminRoles { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The SMTP settings
+		/// </summary>
 		public ApplicationSmtpSettings SmtpSettings { get; set; } = new ApplicationSmtpSettings();
+
+		/// <summary>
+		/// The SMTP needs authentication
+		/// </summary>
 		public string SmtpNeedsAuthentication { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The identificator settings
+		/// </summary>
 		public IdentificatorSettings IdentificatorSettings { get; set; } = new IdentificatorSettings();
 
+		/// <summary>
+		/// On post
+		/// </summary>
+		/// <returns></returns>
 		public async Task<IActionResult> OnPostAsync()
 		{
 			if(!await _statusService.ProperInstallState(InstalationSteps.Result))
@@ -61,6 +156,10 @@ namespace Id.Pages.Install
 			return RedirectToPage("/Index");
 		}
 
+		/// <summary>
+		/// Get the page
+		/// </summary>
+		/// <returns></returns>
 		public async Task<IActionResult> OnGetAsync()
 		{
 			if(!await _statusService.ProperInstallState(InstalationSteps.Result))
@@ -76,10 +175,10 @@ namespace Id.Pages.Install
 			AdminName = admin.DisplayName;
 			ApplicationSmtpSettings smtpSettings = application.SmtpSettings ?? new();
 			Brand? brand = await _context.Brands.FirstOrDefaultAsync(s => s.Id == application.BrandId);
-			BrandName = brand.Name ?? string.Empty;
+			BrandName = brand?.Name ?? string.Empty;
 			BrandId = brand.Id;
 			BrandLogoLink = _brandService.GetIconPath(brand.Id);
-			ApiResponse<TranslateResponse> apiResponse = await _translatorService.AutodetectSourceLanguageAndTranslateAsync(brand.Description, CurrentCulture);
+			ApiResponse<TranslateResponse> apiResponse = await _translatorService.AutodetectSourceLanguageAndTranslateAsync(brand.Description ?? string.Empty, CurrentCulture);
 			if(apiResponse.Successful)
 			{
 				if(apiResponse.Data?.DetectedLanguage?.Language == CurrentCulture)

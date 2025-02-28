@@ -1,13 +1,30 @@
+/// <summary>
+/// The error page model
+/// </summary>
+/// <param name="_t"></param>
 public class ErrorModel(IStringLocalizer<ErrorModel> _t) : PageModel
 {
 	private readonly IStringLocalizer<ErrorModel> t = _t;
 
+	/// <summary>
+	/// The status code
+	/// </summary>
 	[BindProperty(SupportsGet = true)]
-	public int StatusCode { get; set; }
+	public new int StatusCode { get; set; } = 500;
 
+	/// <summary>
+	/// The title of the error
+	/// </summary>
 	public string Title { get; set; } = string.Empty;
+
+	/// <summary>
+	/// The message of the error
+	/// </summary>
 	public string Message { get; set; } = string.Empty;
 
+	/// <summary>
+	/// Get request for the page
+	/// </summary>
 	public void OnGet()
 	{
 		Message = StatusCode switch

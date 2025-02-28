@@ -7,6 +7,16 @@ using SharedTools.Services;
 
 namespace Id.Services
 {
+	/// <summary>
+	/// Applications manager
+	/// </summary>
+	/// <param name="context">Application Entity</param>
+	/// <param name="imageService">Image manager</param>
+	/// <param name="brandsManager">Brands manager</param>
+	/// <param name="settings">Settings service</param>
+	/// <param name="t">Localizer</param>
+	/// <param name="logger">Logger service</param>
+	/// <param name="encryptionService">Encryption service</param>
 	public class ApplicationsManager(ApplicationDbContext context,
 		IImageService imageService,
 		IBrandsManager brandsManager,

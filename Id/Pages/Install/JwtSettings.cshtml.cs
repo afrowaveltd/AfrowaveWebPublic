@@ -25,10 +25,24 @@ namespace Id.Pages.Install
 		/// <permission cref="RefreshTokenExpiration">Sets expiration time of the refresh token in days</permission>
 		public class InputModel
 		{
+			/// <summary>
+			/// Gets or sets the issuer of the JWT Token.
+			/// </summary>
 			public string Issuer { get; set; } = string.Empty;
+
+			/// <summary>
+			/// Gets or sets the audience of the JWT Token.
+			/// </summary>
 			public string Audience { get; set; } = string.Empty;
 
+			/// <summary>
+			/// Gets or sets the expiration time of the access token in minutes.
+			/// </summary>
 			public int AccessTokenExpiration { get; set; } = 30; // in minutes
+
+			/// <summary>
+			/// Gets or sets the expiration time of the refresh token in days.
+			/// </summary>
 			public int RefreshTokenExpiration { get; set; } = 7; // in days
 		}
 

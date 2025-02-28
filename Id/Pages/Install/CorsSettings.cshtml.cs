@@ -3,6 +3,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Id.Pages.Install
 {
+	/// <summary>
+	/// The CORS settings page model
+	/// </summary>
+	/// <param name="logger">Logger</param>
+	/// <param name="settings">Settings manager</param>
+	/// <param name="_t">Localization service</param>
+	/// <param name="status">Installation status</param>
+	/// <param name="selectOptions">Options generating service for Select HTML element</param>
 	public class CorsSettingsModel(ILogger<CorsSettingsModel> logger,
 		 ISettingsService settings,
 		 IStringLocalizer<CorsSettingsModel> _t,
@@ -14,28 +22,93 @@ namespace Id.Pages.Install
 		public readonly IStringLocalizer<CorsSettingsModel> t = _t;
 		private readonly IInstallationStatusService _statusService = status;
 		private readonly ISelectOptionsServices _selectOptions = selectOptions;
-		public List<SelectListItem> HttpMethodsOptions { get; set; } = new();
-		public List<SelectListItem> HttpHeadersOptions { get; set; } = new();
-		public List<SelectListItem> AllowAnyOriginOptions { get; set; } = new();
-		public List<SelectListItem> AllowAnyMethodOptions { get; set; } = new();
-		public List<SelectListItem> AllowCredentialsOptions { get; set; } = new();
-		public List<SelectListItem> AllowAnyHeaderOptions { get; set; } = new();
 
+		/// <summary>
+		/// HTTP methods options
+		/// </summary>
+		public List<SelectListItem> HttpMethodsOptions { get; set; } = [];
+
+		/// <summary>
+		/// HTTP headers options
+		/// </summary>
+		public List<SelectListItem> HttpHeadersOptions { get; set; } = [];
+
+		/// <summary>
+		/// Allow any origin options
+		/// </summary>
+		public List<SelectListItem> AllowAnyOriginOptions { get; set; } = [];
+
+		/// <summary>
+		/// Allow any method options
+		/// </summary>
+		public List<SelectListItem> AllowAnyMethodOptions { get; set; } = [];
+
+		/// <summary>
+		/// Allow credentials options
+		/// </summary>
+		public List<SelectListItem> AllowCredentialsOptions { get; set; } = [];
+
+		/// <summary>
+		/// Allow any header options
+		/// </summary>
+		public List<SelectListItem> AllowAnyHeaderOptions { get; set; } = [];
+
+		/// <summary>
+		/// The input model for the CORS settings
+		/// </summary>
 		[BindProperty]
 		public InputModel Input { get; set; } = new();
 
+		/// <summary>
+		/// The input model for the CORS settings
+		/// </summary>
 		public class InputModel
 		{
+			/// <summary>
+			/// Gets or sets the policy mode for CORS.
+			/// </summary>
 			public CorsPolicyMode PolicyMode { get; set; } = CorsPolicyMode.AllowAll;
-			public List<string> AllowedOrigins { get; set; } = new();
+
+			/// <summary>
+			/// Gets or sets the allowed origins for CORS.
+			/// </summary>
+			public List<string> AllowedOrigins { get; set; } = [];
+
+			/// <summary>
+			/// Gets or sets a value indicating whether any method is allowed for CORS.
+			/// </summary>
 			public bool AllowAnyMethod { get; set; } = false;
-			public List<string> AllowedMethods { get; set; } = new();
+
+			/// <summary>
+			/// Gets or sets the allowed methods for CORS.
+			/// </summary>
+			public List<string> AllowedMethods { get; set; } = [];
+
+			/// <summary>
+			/// Gets or sets a value indicating whether any header is allowed for CORS.
+			/// </summary>
 			public bool AllowAnyHeader { get; set; } = false;
-			public List<string> AllowedHeaders { get; set; } = new();
+
+			/// <summary>
+			/// Gets or sets the allowed headers for CORS.
+			/// </summary>
+			public List<string> AllowedHeaders { get; set; } = [];
+
+			/// <summary>
+			/// Gets or sets a value indicating whether credentials are allowed for CORS.
+			/// </summary>
 			public bool AllowCredentials { get; set; } = false;
+
+			/// <summary>
+			/// Gets or sets a value indicating whether CORS is configured.
+			/// </summary>
 			public bool CorsConfigured { get; set; } = false;
 		}
 
+		/// <summary>
+		/// Get the page
+		/// </summary>
+		/// <returns></returns>
 		public async Task<IActionResult> OnGetAsync()
 		{
 			if(!await _statusService.ProperInstallState(InstalationSteps.CorsSettings))
@@ -67,6 +140,10 @@ namespace Id.Pages.Install
 			return Page();
 		}
 
+		/// <summary>
+		/// Post the page
+		/// </summary>
+		/// <returns></returns>
 		public async Task<IActionResult> OnPostAsync()
 		{
 			if(!await _statusService.ProperInstallState(InstalationSteps.CorsSettings))

@@ -1,7 +1,15 @@
 namespace Id.Pages.Test
 {
+	/// <summary>
+	/// The HTTP error page model
+	/// </summary>
 	public class HttpErrorModel : PageModel
 	{
+		/// <summary>
+		/// Generate a response with the given status code
+		/// </summary>
+		/// <param name="id">Error ID</param>
+		/// <returns>The custom Error page based on the integer with the error code</returns>
 		public IActionResult OnGet(int? id)
 		{
 			if(id == null)

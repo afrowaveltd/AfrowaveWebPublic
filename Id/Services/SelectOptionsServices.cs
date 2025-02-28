@@ -3,6 +3,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Id.Services
 {
+	/// <summary>
+	/// Service to handle select options.
+	/// </summary>
+	/// <param name="context">Application Db Context</param>
+	/// <param name="loader">ApplicationLoader service</param>
+	/// <param name="_t">Localization</param>
 	public class SelectOptionsServices(ApplicationDbContext context, IApplicationLoader loader, IStringLocalizer<SelectOptionsServices> _t) : ISelectOptionsServices
 	{
 		private readonly ApplicationDbContext _context = context;
@@ -13,6 +19,11 @@ namespace Id.Services
 									  .Substring(0, AppDomain.CurrentDomain.BaseDirectory
 									  .IndexOf("bin")), "wwwroot", "css");
 
+		/// <summary>
+		/// Gets the binary options.
+		/// </summary>
+		/// <param name="selected">Selected option</param>
+		/// <returns>List of SelectListItem</returns>
 		public async Task<List<SelectListItem>> GetBinaryOptionsAsync(bool selected = true)
 		{
 			List<SelectListItem> items =
@@ -33,6 +44,11 @@ namespace Id.Services
 			return await Task.FromResult(items);
 		}
 
+		/// <summary>
+		/// Gets the direction options.
+		/// </summary>
+		/// <param name="code">Selected language code</param>
+		/// <returns>List of SelectListItem</returns>
 		public async Task<string> GetDirectionAsync(string code)
 		{
 			Language? language = await _context.Languages.FirstOrDefaultAsync(l => l.Code == code);
@@ -43,6 +59,11 @@ namespace Id.Services
 			return language.Rtl == 1 ? "rtl" : "ltr";
 		}
 
+		/// <summary>
+		/// Gets the HTTP headers options.
+		/// </summary>
+		/// <param name="selected">Selected option</param>
+		/// <returns>List of SelectListItem</returns>
 		public async Task<List<SelectListItem>> GetHttpHeadersAsync(List<string> selected)
 		{
 			List<string> headers =
@@ -91,6 +112,11 @@ namespace Id.Services
 			return await Task.FromResult(items);
 		}
 
+		/// <summary>
+		/// Gets the HTTP methods options.
+		/// </summary>
+		/// <param name="selected">Selected option</param>
+		/// <returns>List of SelectListItem</returns>
 		public async Task<List<SelectListItem>> GetHttpMethodsAsync(List<string> selected)
 		{
 			string[] methods = new[] { "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD" };
@@ -103,6 +129,11 @@ namespace Id.Services
 			return await Task.FromResult(items);
 		}
 
+		/// <summary>
+		/// Gets the languages options.
+		/// </summary>
+		/// <param name="selected">Selected language</param>
+		/// <returns>List of SelectListItem</returns>
 		public async Task<List<SelectListItem>> GetLanguagesOptionsAsync(string selected)
 		{
 			string[] codes = _loader.GetSupportedCultures();
@@ -132,6 +163,11 @@ namespace Id.Services
 			return languages;
 		}
 
+		/// <summary>
+		/// Gets the same site mode options.
+		/// </summary>
+		/// <param name="selected">Selected option</param>
+		/// <returns>List of SelectListItem</returns>
 		public async Task<List<SelectListItem>> GetSameSiteModeOptionsAsync(SameSiteMode selected = SameSiteMode.Lax)
 		{
 			SameSiteMode[] options = Enum.GetValues<SameSiteMode>();
@@ -144,6 +180,11 @@ namespace Id.Services
 			return await Task.FromResult(items);
 		}
 
+		/// <summary>
+		/// Gets the secure socket options.
+		/// </summary>
+		/// <param name="selected">Selected option</param>
+		/// <returns>List of SelectListItem</returns>
 		public async Task<List<SelectListItem>> GetSecureSocketOptionsAsync(SecureSocketOptions selected = SecureSocketOptions.Auto)
 		{
 			SecureSocketOptions[] options = Enum.GetValues<SecureSocketOptions>();
@@ -183,6 +224,12 @@ namespace Id.Services
 			});
 		}
 
+		/// <summary>
+		/// Gets the themes options.
+		/// </summary>
+		/// <param name="selected">Selected theme</param>
+		/// <param name="userId">UserId</param>
+		/// <returns>List of theme options for user</returns>
 		public async Task<List<SelectListItem>> GetThemesAsync(string selected, string? userId)
 		{
 			List<string> themes = await GetThemeNamesAsync(userId);

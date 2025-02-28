@@ -8,6 +8,11 @@ using Id.Models.ResultModels;
 
 namespace Id.Services
 {
+	/// <summary>
+	/// Interface for managing application users.
+	/// </summary>
+	/// <param name="t"></param>
+	/// <param name="context"></param>
 	public class ApplicationUsersManager(IStringLocalizer<ApplicationUsersManager> t,
 		ApplicationDbContext context) : IApplicationUsersManager
 	{

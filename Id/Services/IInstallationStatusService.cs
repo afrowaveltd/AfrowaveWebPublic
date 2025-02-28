@@ -1,9 +1,21 @@
 ﻿namespace Id.Services
 {
-    public interface IInstallationStatusService
-    {
-        Task<InstalationSteps> GetInstallationStepAsync();
+	/// <summary>
+	/// Service to handle installation status.
+	/// </summary>
+	public interface IInstallationStatusService
+	{
+		/// <summary>
+		/// Get the current installation step.
+		/// </summary>
+		/// <returns>InstalationSteps</returns>
+		Task<InstalationSteps> GetInstallationStepAsync();
 
-        Task<bool> ProperInstallState(InstalationSteps actualStep);
-    }
+		/// <summary>
+		/// Checks if the installation is in the correct state.
+		/// </summary>
+		/// <param name="actualStep">InstalationStep which is actually being executed</param>
+		/// <returns>True if the ActualStep is equal to expected step</returns>
+		Task<bool> ProperInstallState(InstalationSteps actualStep);
+	}
 }

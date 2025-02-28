@@ -1,10 +1,21 @@
 ﻿namespace Id.Services
 {
+	/// <summary>
+	/// Service for handling error responses
+	/// </summary>
+	/// <param name="_t">Localizer</param>
+	/// <param name="logger">Logger service</param>
 	public class ErrorResponseService(IStringLocalizer<ErrorResponseService> _t, ILogger<ErrorResponseService> logger) : IErrorResponseService
 	{
 		private readonly IStringLocalizer<ErrorResponseService> t = _t;
 		private readonly ILogger<ErrorResponseService> _logger = logger;
 
+		/// <summary>
+		/// Handle an error response
+		/// </summary>
+		/// <param name="context">Http context</param>
+		/// <param name="errorCode">Error code</param>
+		/// <returns>Proper response based on the type of an error</returns>
 		public async Task HandleErrorResponse(HttpContext context, int errorCode)
 		{
 			string? acceptHeader = context.Request.Headers["Accept"].FirstOrDefault();

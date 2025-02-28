@@ -2,6 +2,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Id.Pages.Install
 {
+	/// <summary>
+	/// The administrator registration page model
+	/// </summary>
+	/// <param name="logger">The logger service</param>
+	/// <param name="context">Entity framework</param>
+	/// <param name="t">Localization service</param>
+	/// <param name="installationStatus">Installation status service</param>
+	/// <param name="encryptionService">Encryption service</param>
 	public class IndexModel(ILogger<IndexModel> logger,
 							  ApplicationDbContext context,
 							  IStringLocalizer<IndexModel> t,
@@ -16,9 +24,15 @@ namespace Id.Pages.Install
 		private readonly IEncryptionService _encryptionService = encryptionService;
 
 		// Localization
+		/// <summary>
+		/// Localizer
+		/// </summary>
 		public readonly IStringLocalizer<IndexModel> t = t;
 
 		// Model binding
+		/// <summary>
+		/// Model for the input form
+		/// </summary>
 		[BindProperty]
 		public InputModel Input { get; set; } = new();
 
@@ -30,14 +44,23 @@ namespace Id.Pages.Install
 		/// <permission cref="PasswordConfirm">Password confirmation</permission>
 		public class InputModel
 		{
+			/// <summary>
+			/// Gets or sets the email address of the user.
+			/// </summary>
 			[Required]
 			[EmailAddress]
 			public string Email { get; set; } = string.Empty;
 
+			/// <summary>
+			/// Gets or sets the password of the user.
+			/// </summary>
 			[Required]
 			[DataType(DataType.Password)]
 			public string Password { get; set; } = string.Empty;
 
+			/// <summary>
+			/// Gets or sets the password confirmation of the user.
+			/// </summary>
 			[Required]
 			[DataType(DataType.Password)]
 			public string PasswordConfirm { get; set; } = string.Empty;

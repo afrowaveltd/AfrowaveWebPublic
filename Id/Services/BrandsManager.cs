@@ -12,6 +12,13 @@ using SharedTools.Services;
 
 namespace Id.Services
 {
+	/// <summary>
+	/// Interface for managing brands.
+	/// </summary>
+	/// <param name="context"></param>
+	/// <param name="imageService"></param>
+	/// <param name="logger"></param>
+	/// <param name="t"></param>
 	public class BrandsManager(
 		ApplicationDbContext context,
 		IImageService imageService,

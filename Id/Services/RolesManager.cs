@@ -3,6 +3,12 @@ using Id.Models.ResultModels;
 
 namespace Id.Services
 {
+	/// <summary>
+	/// Provides methods to manage roles.
+	/// </summary>
+	/// <param name="t">Localizer</param>
+	/// <param name="logger">Logger</param>
+	/// <param name="context">Entity framework</param>
 	public class RolesManager(IStringLocalizer<RolesManager> t,
 		ILogger<RolesManager> logger,
 		ApplicationDbContext context) : IRolesManager

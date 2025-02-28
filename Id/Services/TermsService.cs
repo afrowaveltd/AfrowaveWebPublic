@@ -2,12 +2,23 @@
 
 namespace Id.Services
 {
+	/// <summary>
+	/// Service to handle terms.
+	/// </summary>
+	/// <param name="environment">Web Host Environment</param>
+	/// <param name="textToHtmlService">Text to HTML service</param>
+	/// <param name="logger">Logger</param>
 	public class TermsService(IWebHostEnvironment environment, ITextToHtmlService textToHtmlService, ILogger<TermsService> logger) : ITermsService
 	{
 		private readonly IWebHostEnvironment _environment = environment;
 		private readonly ITextToHtmlService _textToHtmlService = textToHtmlService;
 		private readonly ILogger<TermsService> _logger = logger;
 
+		/// <summary>
+		/// Get the privacy policy HTML.
+		/// </summary>
+		/// <param name="language"></param>
+		/// <returns>Privacy policy HTML</returns>
 		public async Task<string> GetTermsHtmlAsync(string language)
 		{
 			string termsPath = Path.Combine(_environment.WebRootPath, "docs", "terms", $"{language}.txt");
@@ -30,6 +41,11 @@ namespace Id.Services
 			return _textToHtmlService.ConvertTextToHtml(termsText);
 		}
 
+		/// <summary>
+		/// Get the cookies HTML.
+		/// </summary>
+		/// <param name="language">Language code</param>
+		/// <returns>Cookies HTML page</returns>
 		public async Task<string> GetCookiesHTMLAsync(string language)
 		{
 			string cookiesPath = Path.Combine(_environment.WebRootPath, "docs", "cookies", $"{language}.txt");

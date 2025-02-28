@@ -1,17 +1,44 @@
 ﻿namespace Id.Services
 {
-   public interface IApplicationLoader
-   {
-      Task ApplyMigrations();
+	/// <summary>
+	/// Interface for the application loader
+	/// </summary>
+	public interface IApplicationLoader
+	{
+		/// <summary>
+		/// Apply migrations
+		/// </summary>
+		/// <returns></returns>
+		Task ApplyMigrations();
 
-      string[] GetSupportedCultures();
+		/// <summary>
+		/// Gets the supported cultures
+		/// </summary>
+		/// <returns>Array of supported cultures</returns>
+		string[] GetSupportedCultures();
 
-      Task SeedCountriesAsync();
+		/// <summary>
+		/// Seed the database with countries
+		/// </summary>
+		/// <returns></returns>
+		Task SeedCountriesAsync();
 
-      Task SeedLanguagesAsync();
+		/// <summary>
+		/// Seed the database with languages
+		/// </summary>
+		/// <returns></returns>
+		Task SeedLanguagesAsync();
 
-      Task TranslateLanguageNamesAsync();
+		/// <summary>
+		/// Translates the language names to all supported languages
+		/// </summary>
+		/// <returns></returns>
+		Task TranslateLanguageNamesAsync();
 
-      Task<List<ApiResponse<List<string>>>> TranslateStaticAssetsAsync();
-   }
+		/// <summary>
+		/// Translates the static assets
+		/// </summary>
+		/// <returns></returns>
+		Task<List<ApiResponse<List<string>>>> TranslateStaticAssetsAsync();
+	}
 }

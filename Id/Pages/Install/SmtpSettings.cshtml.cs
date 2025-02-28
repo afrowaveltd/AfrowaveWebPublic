@@ -3,6 +3,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Id.Pages.Install
 {
+	/// <summary>
+	/// The SMTP settings page model
+	/// </summary>
+	/// <param name="logger"></param>
+	/// <param name="context"></param>
+	/// <param name="installationStatus"></param>
+	/// <param name="settingsService"></param>
+	/// <param name="_t"></param>
+	/// <param name="selectOptions"></param>
 	public class SmtpSettingsModel(ILogger<BrandModel> logger,
 		ApplicationDbContext context,
 		IInstallationStatusService installationStatus,
@@ -15,13 +24,28 @@ namespace Id.Pages.Install
 		private readonly ApplicationDbContext _context = context;
 		private readonly IInstallationStatusService _installationStatus = installationStatus;
 		private readonly ISettingsService _settingsService = settingsService;
-		public readonly IStringLocalizer<SmtpSettingsModel> t = _t;
-		private readonly ISelectOptionsServices _selectOptions = selectOptions;
-		public List<SelectListItem> options = new();
 
+		/// <summary>
+		/// The localization service
+		/// </summary>
+		public readonly IStringLocalizer<SmtpSettingsModel> t = _t;
+
+		private readonly ISelectOptionsServices _selectOptions = selectOptions;
+
+		/// <summary>
+		/// The options for the secure socket options
+		/// </summary>
+		public List<SelectListItem> options = [];
+
+		/// <summary>
+		/// The input model for the smtp settings
+		/// </summary>
 		[BindProperty]
 		public InputModel Input { get; set; } = new();
 
+		/// <summary>
+		/// The error message
+		/// </summary>
 		public string ErrorMessage { get; set; } = string.Empty;
 
 		/// <summary>
@@ -39,30 +63,57 @@ namespace Id.Pages.Install
 		/// <remarks> The input model for the smtp settings</remarks>
 		public class InputModel
 		{
+			/// <summary>
+			/// Gets or sets the application id.
+			/// </summary>
 			[Required]
 			public string ApplicationId { get; set; } = string.Empty;
 
+			/// <summary>
+			/// Gets or sets the host of the smtp server.
+			/// </summary>
 			[Required]
 			public string Host { get; set; } = string.Empty;
 
+			/// <summary>
+			/// Gets or sets the port of the smtp server.
+			/// </summary>
 			[Required]
 			public int Port { get; set; } = 0;
 
+			/// <summary>
+			/// Gets or sets the username for the smtp server.
+			/// </summary>
 			[Required]
 			public string SmtpUsername { get; set; } = string.Empty;
 
+			/// <summary>
+			/// Gets or sets the password for the smtp server.
+			/// </summary>
 			[Required]
 			public string SmtpPassword { get; set; } = string.Empty;
 
+			/// <summary>
+			/// Gets or sets the email of the sender.
+			/// </summary>
 			[Required]
 			public string SenderEmail { get; set; } = string.Empty;
 
+			/// <summary>
+			/// Gets or sets the name of the sender.
+			/// </summary>
 			[Required]
 			public string SenderName { get; set; } = string.Empty;
 
+			/// <summary>
+			/// Gets or sets the secure socket options.
+			/// </summary>
 			[Required]
 			public MailKit.Security.SecureSocketOptions Secure { get; set; } = MailKit.Security.SecureSocketOptions.Auto;
 
+			/// <summary>
+			/// Gets or sets a value indicating whether authorization is required.
+			/// </summary>
 			[Required]
 			public bool AuthorizationRequired { get; set; } = true;
 		}
@@ -99,7 +150,6 @@ namespace Id.Pages.Install
 		/// </summary>
 		/// <remarks>Post the SMTP Settings creation</remarks>
 		/// <permission cref="Input">The input model for the smtp settings</permission>
-		/// <param name="Input">The input model for the smtp settings</param>
 		/// <response>Redirection to the next page (Login rules)</response>
 		/// <returns></returns>
 		public async Task<IActionResult> OnPostAsync()

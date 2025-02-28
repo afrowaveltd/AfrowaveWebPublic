@@ -2,6 +2,9 @@
 
 namespace Id.Services
 {
+	/// <summary>
+	/// Service to manage themes.
+	/// </summary>
 	public class ThemeManagementService : IHostedService, IDisposable
 	{
 		private readonly ILogger<ThemeManagementService> _logger;
@@ -11,6 +14,11 @@ namespace Id.Services
 
 		private FileSystemWatcher? _watcher;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ThemeManagementService"/> class.
+		/// </summary>
+		/// <param name="logger">Logger service</param>
+		/// <param name="themeService">Theme service</param>
 		public ThemeManagementService(ILogger<ThemeManagementService> logger, IThemeService themeService)
 		{
 			_logger = logger;
@@ -19,6 +27,11 @@ namespace Id.Services
 			Task.Run(() => OnReferenceThemeChanged(this, new FileSystemEventArgs(WatcherChangeTypes.Changed, _scssDirectory, "light-theme.scss")));
 		}
 
+		/// <summary>
+		/// Start the theme management service.
+		/// </summary>
+		/// <param name="cancellationToken">Cancellation Token</param>
+		/// <returns></returns>
 		public Task StartAsync(CancellationToken cancellationToken)
 		{
 			_logger.LogInformation("Starting Theme Management Service...");
@@ -35,6 +48,11 @@ namespace Id.Services
 			return Task.CompletedTask;
 		}
 
+		/// <summary>
+		/// Stop the theme management service.
+		/// </summary>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns></returns>
 		public Task StopAsync(CancellationToken cancellationToken)
 		{
 			_logger.LogInformation("Stopping Theme Management Service...");
@@ -149,6 +167,9 @@ namespace Id.Services
 			}
 		}
 
+		/// <summary>
+		/// Dispose the theme management service.
+		/// </summary>
 		public void Dispose()
 		{
 			_watcher?.Dispose();

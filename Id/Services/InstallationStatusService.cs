@@ -56,35 +56,34 @@ namespace Id.Services
 			if(settings.LoginRules == null || !settings.LoginRules.IsConfigured)
 			{
 				return InstalationSteps.LoginRules;
-
-				if(settings.PasswordRules == null || !settings.PasswordRules.IsConfigured)
-				{
-					return InstalationSteps.PasswordRules;
-				}
-
-				if(settings.CookieSettings == null || !settings.CookieSettings.IsConfigured)
-				{
-					return InstalationSteps.CookieSettings;
-				}
-
-				if(settings.JwtSettings == null || !settings.JwtSettings.IsConfigured)
-				{
-					return InstalationSteps.JwtSettings;
-				}
-
-				if(settings.CorsSettings == null || !settings.CorsSettings.IsConfigured)
-				{
-					return InstalationSteps.CorsSettings;
-				}
-
-				if(!settings.InstallationFinished)
-				{
-					return InstalationSteps.Result;
-				}
-
-				return InstalationSteps.Finish;
+			}
+			if(settings.PasswordRules == null || !settings.PasswordRules.IsConfigured)
+			{
+				return InstalationSteps.PasswordRules;
 			}
 
+			if(settings.CookieSettings == null || !settings.CookieSettings.IsConfigured)
+			{
+				return InstalationSteps.CookieSettings;
+			}
+
+			if(settings.JwtSettings == null || !settings.JwtSettings.IsConfigured)
+			{
+				return InstalationSteps.JwtSettings;
+			}
+
+			if(settings.CorsSettings == null || !settings.CorsSettings.IsConfigured)
+			{
+				return InstalationSteps.CorsSettings;
+			}
+
+			if(!settings.InstallationFinished)
+			{
+				return InstalationSteps.Result;
+			}
+
+			return InstalationSteps.Finish;
+		}
 
 		/// <summary>
 		/// Validates whether the current installation state matches the expected step.

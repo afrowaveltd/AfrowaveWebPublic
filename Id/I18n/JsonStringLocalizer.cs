@@ -56,25 +56,25 @@ namespace Id.I18n
 			{
 				if(jsonReader.TokenType == JsonToken.PropertyName)
 				{
-					string key = jsonReader.Value.ToString();
+					string key = jsonReader.Value?.ToString() ?? string.Empty;
 					_ = jsonReader.Read();
-					yield return new LocalizedString(key, _serializer.Deserialize<string>(jsonReader), false);
+					yield return new LocalizedString(key, _serializer.Deserialize<string>(jsonReader) ?? string.Empty, false);
 				}
 			}
 		}
 
-		private string GetString(string key)
+		private string? GetString(string key)
 		{
 			string filePath = GetLocaleFilePath();
 			string cacheKey = $"locale_{CultureInfo.CurrentUICulture.Name}_{key}";
-			string cachedValue = _cache.GetString(cacheKey);
+			string? cachedValue = _cache.GetString(cacheKey);
 
 			if(!string.IsNullOrEmpty(cachedValue))
 			{
 				return cachedValue;
 			}
 
-			string value = GetValueFromJson(key, filePath);
+			string? value = GetValueFromJson(key, filePath);
 			if(!string.IsNullOrEmpty(value))
 			{
 				_cache.SetString(cacheKey, value);
@@ -90,7 +90,7 @@ namespace Id.I18n
 			return File.Exists(filePath) ? filePath : Path.Combine(_localesPath, "en.json");
 		}
 
-		private string GetValueFromJson(string key, string filePath)
+		private string? GetValueFromJson(string key, string filePath)
 		{
 			if(string.IsNullOrEmpty(key) || string.IsNullOrEmpty(filePath) || !File.Exists(filePath))
 			{
@@ -105,7 +105,7 @@ namespace Id.I18n
 
 				while(jsonReader.Read())
 				{
-					if(jsonReader.TokenType == JsonToken.PropertyName && jsonReader.Value.ToString() == key)
+					if(jsonReader.TokenType == JsonToken.PropertyName && jsonReader.Value?.ToString() == key)
 					{
 						_ = jsonReader.Read();
 						return _serializer.Deserialize<string>(jsonReader);

@@ -3,6 +3,13 @@ using SharedTools.Services;
 
 namespace Id.Services
 {
+	/// <summary>
+	/// Service to handle UI translations.
+	/// </summary>
+	/// <param name="logger"></param>
+	/// <param name="translator"></param>
+	/// <param name="config"></param>
+	/// <param name="context"></param>
 	public class UiTranslatorService(ILogger<UiTranslatorService> logger,
 		ITranslatorService translator,
 		IConfiguration config,
@@ -19,10 +26,25 @@ namespace Id.Services
 									  .Substring(0, AppDomain.CurrentDomain.BaseDirectory
 									  .IndexOf("bin")), "Locales");
 
+		/// <summary>
+		/// Temporary folder path.
+		/// </summary>
 		public string tempFolderPath = string.Empty;
+
+		/// <summary>
+		/// Default language.
+		/// </summary>
 		public string defaultLanguage = string.Empty;
+
+		/// <summary>
+		/// Ignored languages.
+		/// </summary>
 		public List<string> ignoredLanguages = [];
 
+		/// <summary>
+		/// Run the translations.
+		/// </summary>
+		/// <returns></returns>
 		public async Task RunTranslationsAsync()
 		{
 			_logger.LogInformation("UiTranslatorService is starting.");
@@ -197,6 +219,10 @@ namespace Id.Services
 			_logger.LogInformation("UiTranslatorService is done.");
 		}
 
+		/// <summary>
+		/// Check if the old language file exists.
+		/// </summary>
+		/// <returns>True if translations ran before</returns>
 		public bool OldLangaugeExists()
 		{
 			string targetFile = Path.Join(tempFolderPath, "old.json");

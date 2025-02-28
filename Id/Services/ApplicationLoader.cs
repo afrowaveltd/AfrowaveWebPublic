@@ -9,6 +9,14 @@ using SharedTools.Services;
 
 namespace Id.Services
 {
+	/// <summary>
+	/// Represents the application loader for the application.
+	/// </summary>
+	/// <param name="context">Entity managers</param>
+	/// <param name="logger">Logger manager</param>
+	/// <param name="environment">Web host environment</param>
+	/// <param name="translator">The translator service</param>
+	/// <param name="textTranslationService">The text translation service</param>
 	public class ApplicationLoader(ApplicationDbContext context,
 												ILogger<ApplicationLoader> logger,
 												IWebHostEnvironment environment,

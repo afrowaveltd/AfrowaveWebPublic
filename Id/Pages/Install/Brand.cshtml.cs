@@ -37,15 +37,36 @@ namespace Id.Pages.Install
 		/// <permission cref="Email">Email of the brand</permission>
 		public class InputModel
 		{
+			/// <summary>
+			/// Gets or sets the brand name.
+			/// </summary>
 			[Required]
 			public string Name { get; set; } = string.Empty;
 
+			/// <summary>
+			/// Gets or sets the brand owner ID.
+			/// </summary>
 			[Required]
 			public string OwnerId { get; set; } = string.Empty;
 
+			/// <summary>
+			/// Gets or sets the brand icon.
+			/// </summary>
 			public IFormFile? CompanyLogo { get; set; }
+
+			/// <summary>
+			/// Gets or sets the brand website.
+			/// </summary>
 			public string? Website { get; set; }
+
+			/// <summary>
+			/// Gets or sets the brand description.
+			/// </summary>
 			public string? Description { get; set; }
+
+			/// <summary>
+			/// Gets or sets the brand email.
+			/// </summary>
 			public string? Email { get; set; }
 		}
 

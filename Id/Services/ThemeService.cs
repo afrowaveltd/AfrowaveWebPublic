@@ -1,13 +1,28 @@
 ﻿namespace Id.Services
 {
+	/// <summary>
+	/// Service to handle themes.
+	/// </summary>
+	/// <param name="logger">Logger</param>
+	/// <param name="environment">WebHostEnvironment</param>
 	public class ThemeService(ILogger<ThemeService> logger,
 											  IWebHostEnvironment environment) : IThemeService
 	{
 		private readonly ILogger<ThemeService> _logger = logger;
 		private readonly string _cssFolderPath = Path.Combine(environment.WebRootPath, "css");
 
+		/// <summary>
+		/// Get the CSS file path.
+		/// </summary>
+		/// <returns>CSS file path</returns>
 		public string GetCssFolderPath() => _cssFolderPath;
 
+		/// <summary>
+		/// Get names of all themes.
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <returns>List of strings with names of Themes</returns>
+		/// <exception cref="DirectoryNotFoundException"></exception>
 		public async Task<List<string>> GetThemeNamesAsync(string? userId)
 		{
 			if(!Directory.Exists(_cssFolderPath))
@@ -34,6 +49,10 @@
 			});
 		}
 
+		/// <summary>
+		/// Ensure that the complete theme files are present.
+		/// </summary>
+		/// <returns></returns>
 		public async Task EnsureCompleteThemeFilesAsync()
 		{
 			string referenceThemePath = Path.Combine(_cssFolderPath, "light-theme.scss");

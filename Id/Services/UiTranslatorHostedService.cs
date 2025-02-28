@@ -1,5 +1,10 @@
 ﻿namespace Id.Services
 {
+	/// <summary>
+	/// Hosted service to handle translations.
+	/// </summary>
+	/// <param name="logger">Logger</param>
+	/// <param name="serviceProvider">Service provider</param>
 	public class UiTranslatorHostedService(ILogger<UiTranslatorHostedService> logger,
 		 IServiceProvider serviceProvider) : IHostedService, IDisposable
 	{
@@ -8,6 +13,11 @@
 		private Timer? _timer;
 		private volatile bool _isProcessing; // Vlajka pro sledování běžícího úkolu
 
+		/// <summary>
+		/// Start the hosted service.
+		/// </summary>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns></returns>
 		public Task StartAsync(CancellationToken cancellationToken)
 		{
 			_logger.LogInformation("UiTranslatorHostedService is starting.");
@@ -51,6 +61,11 @@
 			}
 		}
 
+		/// <summary>
+		/// Stop the hosted service.
+		/// </summary>
+		/// <param name="cancellationToken">Cancellation token</param>
+		/// <returns></returns>
 		public Task StopAsync(CancellationToken cancellationToken)
 		{
 			_logger.LogInformation("UiTranslatorHostedService is stopping.");
@@ -58,6 +73,9 @@
 			return Task.CompletedTask;
 		}
 
+		/// <summary>
+		/// Dispose the hosted service.
+		/// </summary>
 		public void Dispose()
 		{
 			_timer?.Dispose();

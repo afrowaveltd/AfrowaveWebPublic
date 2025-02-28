@@ -3,6 +3,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Id.Pages.Install
 {
+	/// <summary>
+	/// The password rules page model
+	/// </summary>
+	/// <param name="logger"></param>
+	/// <param name="settings"></param>
+	/// <param name="_t"></param>
+	/// <param name="status"></param>
+	/// <param name="selectOptions"></param>
 	public class PasswordRulesModel(ILogger<PasswordRulesModel> logger,
 		  ISettingsService settings,
 		  IStringLocalizer<PasswordRulesModel> _t,
@@ -15,15 +23,36 @@ namespace Id.Pages.Install
 		private readonly ISettingsService _settings = settings;
 		private readonly IInstallationStatusService _status = status;
 		private readonly ISelectOptionsServices _selectOptions = selectOptions;
+
+		/// <summary>
+		/// Localizer
+		/// </summary>
 		public readonly IStringLocalizer<PasswordRulesModel> t = _t;
 
 		// Set the select list items
+		/// <summary>
+		/// Require non-alphanumeric options
+		/// </summary>
 		public List<SelectListItem> RequireNonAlphanumeric { get; set; } = [];
 
+		/// <summary>
+		/// Require lowercase options
+		/// </summary>
 		public List<SelectListItem> RequireLowercase { get; set; } = [];
+
+		/// <summary>
+		/// Require uppercase options
+		/// </summary>
 		public List<SelectListItem> RequireUppercase { get; set; } = [];
+
+		/// <summary>
+		/// Require digit options
+		/// </summary>
 		public List<SelectListItem> RequireDigit { get; set; } = [];
 
+		/// <summary>
+		/// The input model for the password rules
+		/// </summary>
 		[BindProperty]
 		public InputModel? Input { get; set; }
 
@@ -38,15 +67,36 @@ namespace Id.Pages.Install
 		/// <permission cref="RequireDigit">If the password requires a digit</permission>
 		public class InputModel
 		{
+			/// <summary>
+			/// Gets or sets the minimum length of the password.
+			/// </summary>
 			[Range(1, 100)]
 			public int MinimumLength { get; set; } = 6;
 
+			/// <summary>
+			/// Gets or sets the maximum length of the password.
+			/// </summary>
 			[Range(1, 100)]
 			public int MaximumLength { get; set; } = 100;
 
+			/// <summary>
+			/// Gets or sets if the password requires a non-alphanumeric character.
+			/// </summary>
 			public bool RequireNonAlphanumeric { get; set; } = false;
+
+			/// <summary>
+			/// Gets or sets if the password requires a lowercase character.
+			/// </summary>
 			public bool RequireLowercase { get; set; } = true;
+
+			/// <summary>
+			/// Gets or sets if the password requires an uppercase character.
+			/// </summary>
 			public bool RequireUppercase { get; set; } = true;
+
+			/// <summary>
+			/// Gets or sets if the password requires a digit.
+			/// </summary>
 			public bool RequireDigit { get; set; } = true;
 		}
 
