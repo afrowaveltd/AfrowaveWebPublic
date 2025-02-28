@@ -1,13 +1,31 @@
 namespace Id.Pages.Helps
 {
+	/// <summary>
+	/// Cookie settings
+	/// </summary>
+	/// <param name="_t"></param>
 	public class Install_CookieModel(IStringLocalizer<Install_CookieModel> _t) : PageModel
 	{
 		private readonly IStringLocalizer<Install_CookieModel> t = _t;
 
+		/// <summary>
+		/// Title
+		/// </summary>
 		public string Title => t["Cookie settings"];
+
+		/// <summary>
+		/// Lines
+		/// </summary>
 		public List<string> Lines = [];
+
+		/// <summary>
+		/// Li elements
+		/// </summary>
 		public List<string> LiElements = [];
 
+		/// <summary>
+		/// OnGet method
+		/// </summary>
 		public void OnGet()
 		{
 			Lines.Add(t["Cookie settings are used to store user session information."]);

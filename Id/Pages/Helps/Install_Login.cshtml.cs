@@ -1,13 +1,32 @@
 namespace Id.Pages.Helps
 {
+	/// <summary>
+	/// Configure login rules
+	/// </summary>
+	/// <param name="t"></param>
 	public class Install_LoginModel(IStringLocalizer<Install_LoginModel> t) : PageModel
 	{
 		private readonly IStringLocalizer<Install_LoginModel> _t = t;
 
+		/// <summary>
+		/// Title
+		/// </summary>
 		public string Title => _t["Configure login rules"];
-		public List<string> Lines = new();
-		public List<string> LiElements = new();
 
+		/// <summary>
+		/// Lines
+		/// </summary>
+		public List<string> Lines = [];
+
+		/// <summary>
+		/// Li elements
+		/// </summary>
+		public List<string> LiElements = [];
+
+		/// <summary>
+		/// On get
+		/// </summary>
+		/// <returns></returns>
 		public IActionResult OnGet()
 		{
 			Lines.Add(_t["The login rules are used to configure the login process. The following rules are available:"]);

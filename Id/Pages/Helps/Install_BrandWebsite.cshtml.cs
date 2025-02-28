@@ -1,17 +1,31 @@
 namespace Id.Pages.Helps
 {
-   public class Install_BrandWebsiteModel(IStringLocalizer<Install_BrandWebsiteModel> _t) : PageModel
-   {
-      public IStringLocalizer<Install_BrandWebsiteModel> t = _t;
+	/// <summary>
+	/// Help for the brand website.
+	/// </summary>
+	/// <param name="_t"></param>
+	public class Install_BrandWebsiteModel(IStringLocalizer<Install_BrandWebsiteModel> _t) : PageModel
+	{
+		private readonly IStringLocalizer<Install_BrandWebsiteModel> t = _t;
 
-      public string Title { get; set; } = "";
-      public List<string> Lines = new List<string>();
+		/// <summary>
+		/// The title of the help.
+		/// </summary>
+		public string Title { get; set; } = "";
 
-      public void OnGet()
-      {
-         Title = t["Brand website"];
-         Lines.Add(t["The brand website is the URL of the website of the company or organization that owns the application"]);
-         Lines.Add(t["On this page you can enter the URL of the brand website"]);
-      }
-   }
+		/// <summary>
+		/// The lines of the help.
+		/// </summary>
+		public List<string> Lines = [];
+
+		/// <summary>
+		/// Called when the page is requested.
+		/// </summary>
+		public void OnGet()
+		{
+			Title = t["Brand website"];
+			Lines.Add(t["The brand website is the URL of the website of the company or organization that owns the application"]);
+			Lines.Add(t["On this page you can enter the URL of the brand website"]);
+		}
+	}
 }

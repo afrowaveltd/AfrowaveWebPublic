@@ -26,25 +26,65 @@ namespace Id.Services
 		/// <returns>The next required installation step.</returns>
 		public async Task<InstalationSteps> GetInstallationStepAsync()
 		{
-			if(!await _context.Users.AnyAsync()) return InstalationSteps.Administrator;
-			if(!await _context.Brands.AnyAsync()) return InstalationSteps.Brand;
-			if(!await _context.Applications.AnyAsync()) return InstalationSteps.Application;
+			if(!await _context.Users.AnyAsync())
+			{
+				return InstalationSteps.Administrator;
+			}
+
+			if(!await _context.Brands.AnyAsync())
+			{
+				return InstalationSteps.Brand;
+			}
+
+			if(!await _context.Applications.AnyAsync())
+			{
+				return InstalationSteps.Application;
+			}
 
 			IdentificatorSettings settings = await _settingsService.GetSettingsAsync();
-			if(!await _context.ApplicationRoles.AnyAsync()) return InstalationSteps.ApplicationRoles;
+			if(!await _context.ApplicationRoles.AnyAsync() || !await _context.UserRoles.AnyAsync())
+			{
+				return InstalationSteps.ApplicationRoles;
+			}
 
 			ApplicationSmtpSettings? smtpSettings = await _context.ApplicationSmtpSettings.FirstOrDefaultAsync();
-			if(smtpSettings == null || string.IsNullOrEmpty(smtpSettings.Host)) return InstalationSteps.SmtpSettings;
+			if(smtpSettings == null)
+			{
+				return InstalationSteps.SmtpSettings;
+			}
 
-			if(settings.LoginRules == null || !settings.LoginRules.IsConfigured) return InstalationSteps.LoginRules;
-			if(settings.PasswordRules == null || !settings.PasswordRules.IsConfigured) return InstalationSteps.PasswordRules;
-			if(settings.CookieSettings == null || !settings.CookieSettings.IsConfigured) return InstalationSteps.CookieSettings;
-			if(settings.JwtSettings == null || !settings.JwtSettings.IsConfigured) return InstalationSteps.JwtSettings;
-			if(settings.CorsSettings == null || !settings.CorsSettings.IsConfigured) return InstalationSteps.CorsSettings;
-			if(!settings.InstallationFinished) return InstalationSteps.Result;
+			if(settings.LoginRules == null || !settings.LoginRules.IsConfigured)
+			{
+				return InstalationSteps.LoginRules;
 
-			return InstalationSteps.Finish;
-		}
+				if(settings.PasswordRules == null || !settings.PasswordRules.IsConfigured)
+				{
+					return InstalationSteps.PasswordRules;
+				}
+
+				if(settings.CookieSettings == null || !settings.CookieSettings.IsConfigured)
+				{
+					return InstalationSteps.CookieSettings;
+				}
+
+				if(settings.JwtSettings == null || !settings.JwtSettings.IsConfigured)
+				{
+					return InstalationSteps.JwtSettings;
+				}
+
+				if(settings.CorsSettings == null || !settings.CorsSettings.IsConfigured)
+				{
+					return InstalationSteps.CorsSettings;
+				}
+
+				if(!settings.InstallationFinished)
+				{
+					return InstalationSteps.Result;
+				}
+
+				return InstalationSteps.Finish;
+			}
+
 
 		/// <summary>
 		/// Validates whether the current installation state matches the expected step.
@@ -69,12 +109,19 @@ namespace Id.Services
 		private async Task CheckAndFixApplicationId()
 		{
 			IdentificatorSettings settings = await _settingsService.GetSettingsAsync();
-			if(settings == null || string.IsNullOrEmpty(settings.ApplicationId)) return;
+			if(settings == null || string.IsNullOrEmpty(settings.ApplicationId))
+			{
+				return;
+			}
 
 			List<Application> applications = await _context.Applications.ToListAsync();
 			if(applications.Count != 1)
 			{
-				if(applications.Count == 0) return;
+				if(applications.Count == 0)
+				{
+					return;
+				}
+
 				throw new InvalidOperationException("There should be only one application in the database.");
 			}
 

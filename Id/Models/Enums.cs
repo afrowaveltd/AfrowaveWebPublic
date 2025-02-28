@@ -47,11 +47,6 @@
 		ApplicationRoles,
 
 		/// <summary>
-		/// Step for configuring application settings.
-		/// </summary>
-		ApplicationSettings,
-
-		/// <summary>
 		/// Step for configuring SMTP (email) settings.
 		/// </summary>
 		SmtpSettings,

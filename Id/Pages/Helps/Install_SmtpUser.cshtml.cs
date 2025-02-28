@@ -1,12 +1,26 @@
 namespace Id.Pages.Helps
 {
+	/// <summary>
+	/// SMTP Username
+	/// </summary>
+	/// <param name="_t"></param>
 	public class Install_SmtpUserModel(IStringLocalizer<Install_SmtpUserModel> _t) : PageModel
 	{
 		private readonly IStringLocalizer<Install_SmtpUserModel> t = _t;
 
+		/// <summary>
+		/// Help title
+		/// </summary>
 		public string Title { get; set; } = string.Empty;
-		public List<string> Lines { get; set; } = new();
 
+		/// <summary>
+		/// Help lines
+		/// </summary>
+		public List<string> Lines { get; set; } = [];
+
+		/// <summary>
+		/// OnGet method
+		/// </summary>
 		public void OnGet()
 		{
 			Title = t["SMTP Username"];

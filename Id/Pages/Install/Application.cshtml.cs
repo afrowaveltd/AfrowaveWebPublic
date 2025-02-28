@@ -5,6 +5,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Id.Pages.Install
 {
+	/// <summary>
+	/// The ApplicationModel class is a Razor Page PageModel that is responsible for the application registration process.
+	/// </summary>
+	/// <param name="logger">Logger service</param>
+	/// <param name="context">Entity manager</param>
+	/// <param name="installationStatus">Installation status checker</param>
+	/// <param name="encryptionService">Data encryption manager</param>
+	/// <param name="settingsService">Settings manager</param>
+	/// <param name="applicationService">Application manager</param>
+	/// <param name="applicationUserService">ApplicationUser manager</param>
+	/// <param name="imageService">Image service</param>
+	/// <param name="_t">Localizer</param>
 	public class ApplicationModel(ILogger<ApplicationModel> logger,
 								  ApplicationDbContext context,
 								  IInstallationStatusService installationStatus,
@@ -27,12 +39,21 @@ namespace Id.Pages.Install
 		private readonly IImageService _imageService = imageService;
 
 		// Localization
+		/// <summary>
+		/// Localizer
+		/// </summary>
 		public IStringLocalizer<ApplicationModel> t = _t;
 
 		// Properties
+		/// <summary>
+		/// Input settings for the application
+		/// </summary>
 		[BindProperty]
 		public InputSettings Input { get; set; } = new();
 
+		/// <summary>
+		/// Error message
+		/// </summary>
 		public string ErrorMessage { get; set; } = string.Empty;
 
 		/// <summary>
@@ -47,20 +68,42 @@ namespace Id.Pages.Install
 		/// <permission cref="ApplicationIcon">Icon of the application</permission>
 		public class InputSettings
 		{
+			/// <summary>
+			/// Name of the application used for authentication and authorization services
+			/// </summary>
 			[Required]
 			public string ApplicationName { get; set; } = string.Empty;
 
+			/// <summary>
+			/// Description of the application
+			/// </summary>
 			public string ApplicationDescription { get; set; } = string.Empty;
 
+			/// <summary>
+			/// Email of the application
+			/// </summary>
 			public string? ApplicationEmail { get; set; } = string.Empty;
+
+			/// <summary>
+			/// Website of the application
+			/// </summary>
 			public string? ApplicationWebsite { get; set; } = string.Empty;
 
+			/// <summary>
+			/// Id of the owner of the application
+			/// </summary>
 			[Required]
 			public string OwnerId { get; set; } = string.Empty;
 
+			/// <summary>
+			/// Id of the brand of the application
+			/// </summary>
 			[Required]
 			public int BrandId { get; set; } = 0;
 
+			/// <summary>
+			/// Icon of the application
+			/// </summary>
 			public IFormFile? ApplicationIcon { get; set; }
 		}
 
@@ -124,7 +167,7 @@ namespace Id.Pages.Install
 			if(!ModelState.IsValid)
 			{
 				_logger.LogError("Model state is not valid. It has following error(s):{err}", ModelState.Select(x => x.Value?.Errors)
-							  .Where(y => y.Count > 0)
+							  .Where(y => y?.Count > 0)
 							  .ToList());
 				ErrorMessage = ModelState.Select(x => x.Value?.Errors).ToString() ?? "Form data invalid";
 				return Page();
@@ -174,7 +217,13 @@ namespace Id.Pages.Install
 				AgreedToCookies = true,
 				AgreedToTerms = true,
 			};
-			_ = await _applicationUserService.RegisterApplicationUserAsync(applicationUser);
+			RegisterApplicationUserResult registerApplicationUserResult = await _applicationUserService.RegisterApplicationUserAsync(applicationUser);
+
+			if(!registerApplicationUserResult.Success)
+			{
+				ErrorMessage = registerApplicationUserResult.ErrorMessage ?? "Unknown error";
+				return Page();
+			}
 
 			// now we need to work on ApplicationId and Settings
 			await _settingsService.SetApplicationId(response.ApplicationId);

@@ -1,13 +1,31 @@
 namespace Id.Pages.Helps
 {
+	/// <summary>
+	/// SMTP Secure socket options
+	/// </summary>
+	/// <param name="_t"></param>
 	public class Install_SmtpSecure_Model(IStringLocalizer<Install_SmtpSecure_Model> _t) : PageModel
 	{
 		private readonly IStringLocalizer<Install_SmtpSecure_Model> t = _t;
 
+		/// <summary>
+		/// Help title
+		/// </summary>
 		public string Title { get; set; } = string.Empty;
-		public List<string> Lines { get; set; } = new();
-		public List<string> Options { get; set; } = new();
 
+		/// <summary>
+		/// Help lines
+		/// </summary>
+		public List<string> Lines { get; set; } = [];
+
+		/// <summary>
+		/// Secure socket options
+		/// </summary>
+		public List<string> Options { get; set; } = [];
+
+		/// <summary>
+		/// OnGet method
+		/// </summary>
 		public void OnGet()
 		{
 			Title = t["SMTP Secure socket options"];

@@ -1,12 +1,26 @@
 namespace Id.Pages.Helps
 {
+	/// <summary>
+	/// CORS Settings
+	/// </summary>
+	/// <param name="_t"></param>
 	public class Install_CorsModel(IStringLocalizer<Install_CorsModel> _t) : PageModel
 	{
 		private readonly IStringLocalizer<Install_CorsModel> t = _t;
 
+		/// <summary>
+		/// Title
+		/// </summary>
 		public string Title => t["CORS Settings"];
+
+		/// <summary>
+		/// Lines
+		/// </summary>
 		public List<string> Lines = [];
 
+		/// <summary>
+		/// OnGet method
+		/// </summary>
 		public void OnGet()
 		{
 			Lines.Add(t["CORS is a security feature that restricts what resources a web page can access from another domain."]);
