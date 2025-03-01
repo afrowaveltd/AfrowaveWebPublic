@@ -51,8 +51,8 @@ namespace Id.Services
 			if(file == null)
 				return false;
 
-			// Check if the file is less than 1MB
-			if(file.Length > 1048576)
+			// Check if the file is less than 10MB
+			if(file.Length > 10485760)
 				return false;
 			// Check if the file has a valid extension
 			return permittedExtensions.Contains(Path.GetExtension(file.FileName).ToLower());

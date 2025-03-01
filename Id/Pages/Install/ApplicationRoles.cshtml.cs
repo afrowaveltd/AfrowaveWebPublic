@@ -213,15 +213,15 @@ namespace Id.Pages.Install
 			// create default roles for the application
 
 			ApiResponse<List<CreateRoleResult>> RoleCreationResponse = await CreateDefaultRolesAsync(application.Id);
+			CreateRoles = t["Creating default application roles"];
 			if(!RoleCreationResponse.Successful)
 			{
-				CreateRoles = failMessage;
+				ErrorMessage = RoleCreationResponse.Message ?? string.Empty;
 				RoleCreatingResult = RoleCreationResponse.Data ?? [];
 				return Page();
 			}
 			else
 			{
-				CreateRoles = successMessage;
 				RoleCreatingResult = RoleCreationResponse.Data ?? [];
 			}
 			// create application user
@@ -229,6 +229,7 @@ namespace Id.Pages.Install
 			{
 				ApplicationId = application.Id,
 				UserId = user.Id,
+				UserDescription = "The application owner",
 				AgreedToTerms = true,
 				AgreedToCookies = true,
 				AgreedSharingUserDetails = true,
@@ -313,6 +314,7 @@ namespace Id.Pages.Install
 				}
 				results.Add(roleResult);
 			}
+			response.Data = results;
 			return response;
 		}
 	}

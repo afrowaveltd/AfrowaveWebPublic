@@ -5,8 +5,16 @@
 	using System.Text.RegularExpressions;
 	using System.Web;
 
+	/// <summary>
+	/// TextToHtmlService is a class that is used to convert text to HTML.
+	/// </summary>
 	public class TextToHtmlService : ITextToHtmlService
 	{
+		/// <summary>
+		/// ConvertTextToHtml is a method that takes a string input and returns a string output.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
 		public string ConvertTextToHtml(string input)
 		{
 			if(string.IsNullOrWhiteSpace(input))
@@ -128,7 +136,6 @@
 			// Return the transformed line (non-link portions are already encoded by the input processing logic)
 			return line;
 		}
-
 
 		private string ProcessLinkLine(string line)
 		{

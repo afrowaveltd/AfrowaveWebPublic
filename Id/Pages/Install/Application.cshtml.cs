@@ -207,27 +207,28 @@ namespace Id.Pages.Install
 				ErrorMessage = response.ErrorMessage ?? "Unknown error";
 				return Page();
 			}
+			/*
+						// we have the application, let register the applicationUser;
+						RegisterApplicationUserInput applicationUser = new()
+						{
+							ApplicationId = response.ApplicationId,
+							UserId = user.Id,
+							UserDescription = "The application owner",
+							AgreedSharingUserDetails = true,
+							AgreedToCookies = true,
+							AgreedToTerms = true,
+						};
+						RegisterApplicationUserResult registerApplicationUserResult = await _applicationUserService.RegisterApplicationUserAsync(applicationUser);
 
-			// we have the application, let register the applicationUser;
-			RegisterApplicationUserInput applicationUser = new()
-			{
-				ApplicationId = response.ApplicationId,
-				UserId = user.Id,
-				AgreedSharingUserDetails = true,
-				AgreedToCookies = true,
-				AgreedToTerms = true,
-			};
-			RegisterApplicationUserResult registerApplicationUserResult = await _applicationUserService.RegisterApplicationUserAsync(applicationUser);
-
-			if(!registerApplicationUserResult.Success)
-			{
-				ErrorMessage = registerApplicationUserResult.ErrorMessage ?? "Unknown error";
-				return Page();
-			}
-
+						if(!registerApplicationUserResult.Success)
+						{
+							ErrorMessage = registerApplicationUserResult.ErrorMessage ?? "Unknown error";
+							return Page();
+						}
+			*/
 			// now we need to work on ApplicationId and Settings
 			await _settingsService.SetApplicationId(response.ApplicationId);
-			return RedirectToPage("/ApplicationRoles");
+			return RedirectToPage("/Install/ApplicationRoles");
 		}
 	}
 }

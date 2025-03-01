@@ -6,6 +6,9 @@ using System.Text.Json;
 
 namespace SharedTools.Services
 {
+	/// <summary>
+	/// TranslatorService is a class that is used to translate text.
+	/// </summary>
 	public class TranslatorService : ITranslatorService
 	{
 		private readonly HttpClient _client;
@@ -20,6 +23,11 @@ namespace SharedTools.Services
 			ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles
 		};
 
+		/// <summary>
+		/// TranslatorService is a constructor that takes a configuration and logger.
+		/// </summary>
+		/// <param name="config">Configuration</param>
+		/// <param name="logger">Logger</param>
 		public TranslatorService(IConfiguration config, ILogger<TranslatorService> logger)
 		{
 			Translator translator = config.GetSection("Translator").Get<Translator>() ?? new Translator();
@@ -29,6 +37,10 @@ namespace SharedTools.Services
 			_logger = logger;
 		}
 
+		/// <summary>
+		/// GetSupportedLanguagesAsync is a method that returns a list of supported languages.
+		/// </summary>
+		/// <returns>List of supported languages</returns>
 		public async Task<string[]> GetSupportedLanguagesAsync()
 		{
 			try
@@ -50,6 +62,13 @@ namespace SharedTools.Services
 			}
 		}
 
+		/// <summary>
+		/// TranslateAsync is a method that takes a string input and returns a translated string output.
+		/// </summary>
+		/// <param name="text">Text for translation</param>
+		/// <param name="sourceLanguage">Source language code</param>
+		/// <param name="targetLanguage">Target language code</param>
+		/// <returns>ApiResponse with a string data containing translated string</returns>
 		public async Task<ApiResponse<string>> TranslateAsync(string text, string sourceLanguage, string targetLanguage)
 		{
 			ApiResponse<string> returnValue = new ApiResponse<string>();
@@ -96,6 +115,12 @@ namespace SharedTools.Services
 			return returnValue;
 		}
 
+		/// <summary>
+		/// AutodetectSourceLanguageAndTranslateAsync is a method that takes a string input and returns a translated string output.
+		/// </summary>
+		/// <param name="text">Text for translation</param>
+		/// <param name="targetLanguage">Target language code</param>
+		/// <returns>ApiResponse with TranslateResponse object</returns>
 		public async Task<ApiResponse<TranslateResponse>> AutodetectSourceLanguageAndTranslateAsync(string text, string targetLanguage)
 		{
 			ApiResponse<TranslateResponse> returnValue = new ApiResponse<TranslateResponse>();

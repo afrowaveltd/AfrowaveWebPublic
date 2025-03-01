@@ -119,7 +119,34 @@ namespace Id.Services
 				result.Success = false;
 				return result;
 			}
-
+			if(!input.AgreedToTerms || !input.AgreedSharingUserDetails || !input.AgreedToCookies)
+			{
+				result.ErrorMessage = _t["User did not agree to terms, sharing user details, or cookies"];
+				result.Success = false;
+				return result;
+			}
+			ApplicationUser user = new ApplicationUser
+			{
+				ApplicationId = input.ApplicationId,
+				UserId = input.UserId,
+				UserDescription = input.UserDescription,
+				AgreedToTerms = input.AgreedToTerms,
+				AgreedSharingUserDetails = input.AgreedSharingUserDetails,
+				AgreedToCookies = input.AgreedToCookies
+			};
+			try
+			{
+				_ = await _context.ApplicationUsers.AddAsync(user);
+				_ = await _context.SaveChangesAsync();
+				result.ApplicationUserId = user.Id;
+				result.UserId = user.UserId;
+				result.Success = true;
+			}
+			catch(Exception e)
+			{
+				result.ErrorMessage = e.Message;
+				result.Success = false;
+			}
 			return result;
 		}
 

@@ -284,6 +284,7 @@ namespace Id.Services
 			application.Description = input.Description ?? string.Empty;
 			application.ApplicationEmail = input.Email;
 			application.ApplicationWebsite = input.Website;
+			application.ClientSecret = _encryptionService.GenerateApplicationSecret();
 			application.OwnerId = input.OwnerId;
 			application.BrandId = input.BrandId;
 			application.ApplicationPrivacyPolicy = input.PrivacyUrl ?? string.Empty;

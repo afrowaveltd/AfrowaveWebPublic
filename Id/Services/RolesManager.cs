@@ -271,7 +271,6 @@ namespace Id.Services
 			}
 			List<ApplicationRole> roles = await _context.ApplicationRoles
 				.Where(x => x.ApplicationId == applicationId)
-				.Where(x => x.AllignToAll)
 				.ToListAsync();
 			foreach(ApplicationRole role in roles)
 			{

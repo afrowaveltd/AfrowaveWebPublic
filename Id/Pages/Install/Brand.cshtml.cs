@@ -4,6 +4,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Id.Pages.Install
 {
+	/// <summary>
+	/// Brand registration page
+	/// </summary>
+	/// <param name="logger">Logger service</param>
+	/// <param name="context">Database context</param>
+	/// <param name="installationStatus">Installation status service</param>
+	/// <param name="_t">Localization service</param>
+	/// <param name="brandService">Brand manager service</param>
 	public class BrandModel(ILogger<BrandModel> logger,
 	  ApplicationDbContext context,
 	  IInstallationStatusService installationStatus,
@@ -20,10 +28,16 @@ namespace Id.Pages.Install
 		public readonly IBrandsManager _brandService = brandService;
 
 		// Model binding
+		/// <summary>
+		/// Model for the input form
+		/// </summary>
 		[BindProperty]
 		public InputModel Input { get; set; } = new();
 
 		// Properties
+		/// <summary>
+		/// Error message
+		/// </summary>
 		public string ErrorMessage { get; set; } = string.Empty;
 
 		/// <summary>
@@ -124,7 +138,7 @@ namespace Id.Pages.Install
 			}
 			else
 			{
-				ModelState.AddModelError("Input.Name", response.ErrorMessage);
+				ErrorMessage = response.ErrorMessage;
 				return Page();
 			}
 		}

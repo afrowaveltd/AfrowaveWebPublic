@@ -27,6 +27,9 @@
 	<div class="col-md-7">
 		<h2 class="text-center">@Model.t["Create brand"]</h2>
 		<div id="form-div">
+		<div class="error">
+				@Model.ErrorMessage
+		</div>
 			<form method="post" id="addBrand" enctype="multipart/form-data">
 				<div class="form-group">
 					<div id="brand_err" class="text-danger p-2 pb-0"></div>

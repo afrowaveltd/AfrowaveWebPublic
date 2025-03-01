@@ -8,20 +8,33 @@ using System.Security.Cryptography;
 
 namespace SharedTools.Services
 {
+	/// <summary>
+	/// ImageService class is a class that is used to handle image operations.
+	/// </summary>
+	/// <param name="logger"></param>
 	public class ImageService(ILogger<ImageService> logger) : IImageService
 	{
 		private readonly ILogger<ImageService> _logger = logger;
-		private List<int> DefaultSizes = [16, 32, 76, 120, 152, 180, 192, 512];
+		private static readonly List<int> ImageSizes = [16, 32, 76, 120, 152, 180, 192, 512];
+		private readonly List<int> DefaultSizes = ImageSizes;
 		private readonly string[] permittedExtensions = { ".jpeg", ".jpg", ".gif", ".png" };
 
-		private string baseDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory
-			 .Substring(0, AppDomain.CurrentDomain.BaseDirectory
-			 .IndexOf("bin")), "wwwroot");
+		private readonly string baseDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory
+			[..AppDomain.CurrentDomain.BaseDirectory
+			 .IndexOf("bin")], "wwwroot");
 
 		// Resize and save an image
+		/// <summary>
+		/// Resize and save an image.
+		/// </summary>
+		/// <param name="img"></param>
+		/// <param name="targetPath"></param>
+		/// <param name="width"></param>
+		/// <param name="height"></param>
+		/// <returns></returns>
 		public async Task<ApiResponse<string>> ResizeAndSaveAsync(Image img, string targetPath, int width, int height)
 		{
-			ApiResponse<string> returnValue = new ApiResponse<string>();
+			ApiResponse<string> returnValue = new();
 			try
 			{
 				using Image image = img;
@@ -33,7 +46,7 @@ namespace SharedTools.Services
 					{
 						if(Path.GetDirectoryName(targetPath) != null && Path.GetDirectoryName(targetPath) != string.Empty)
 						{
-							_ = Directory.CreateDirectory(Path.GetDirectoryName(targetPath));
+							_ = Directory.CreateDirectory(Path.GetDirectoryName(targetPath) ?? string.Empty);
 						}
 					}
 					catch(Exception ex)
@@ -63,6 +76,12 @@ namespace SharedTools.Services
 		}
 
 		// Create icons for a brand
+		/// <summary>
+		/// Create icons for a brand.
+		/// </summary>
+		/// <param name="img">IFormFile image file</param>
+		/// <param name="brandId">Brand Id</param>
+		/// <returns>List of strings with newly created files</returns>
 		public async Task<List<ApiResponse<string>>> CreateBrandIcons(IFormFile img, int brandId)
 		{
 			string targetPath = Path.Combine(baseDirectory, "brands", brandId.ToString(), "icons");
@@ -70,6 +89,12 @@ namespace SharedTools.Services
 		}
 
 		// Create icons for an application
+		/// <summary>
+		/// Create icons for an application.
+		/// </summary>
+		/// <param name="img">IFormFile image file</param>
+		/// <param name="applicationId">Application Id</param>
+		/// <returns>List of newly created files</returns>
 		public async Task<List<ApiResponse<string>>> CreateApplicationIcons(IFormFile img, string applicationId)
 		{
 			string targetPath = Path.Combine(baseDirectory, "applications", applicationId, "icons");
@@ -77,6 +102,12 @@ namespace SharedTools.Services
 		}
 
 		// Create profile images for a user
+		/// <summary>
+		/// Create profile images for a user.
+		/// </summary>
+		/// <param name="img">IFormFile image file</param>
+		/// <param name="userId">User ID</param>
+		/// <returns>List of newly created files</returns>
 		public async Task<ApiResponse<string>> CreateUserProfileImages(IFormFile img, string userId)
 		{
 			ApiResponse<string> result = new();
@@ -108,6 +139,11 @@ namespace SharedTools.Services
 		}
 
 		// Check if a file is an image
+		/// <summary>
+		/// Check if a file is an image.
+		/// </summary>
+		/// <param name="img">IFormFile image file</param>
+		/// <returns>True if the file is valid picture</returns>
 		public bool IsImage(IFormFile img)
 		{
 			string fileExtension = Path.GetExtension(img.FileName).ToLower();

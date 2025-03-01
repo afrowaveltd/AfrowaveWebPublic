@@ -192,7 +192,7 @@ namespace Id.Services
 			User user = new User
 			{
 				Email = input.Email,
-				Password = await _encryptionService.HashPasswordAsync(input.Password),
+				Password = _encryptionService.HashPasswordAsync(input.Password),
 				Gender = input.Gender,
 				Firstname = input.FirstName,
 				Lastname = input.LastName,

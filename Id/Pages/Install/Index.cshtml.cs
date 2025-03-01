@@ -96,7 +96,7 @@ namespace Id.Pages.Install
 				User admin = new()
 				{
 					Email = Input.Email,
-					Password = await _encryptionService.HashPasswordAsync(Input.Password),
+					Password = _encryptionService.HashPasswordAsync(Input.Password),
 					DisplayName = "Administrator",
 					Firstname = "System",
 					Lastname = "Administrator",
