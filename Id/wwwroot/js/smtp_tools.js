@@ -1,4 +1,5 @@
-﻿const testSmtp = async (host,
+﻿// Test SmtpSettings
+const testSmtp = async (host,
 	port,
 	username,
 	password,
@@ -41,9 +42,10 @@
 	}
 }
 
+// Autodetect SmtpSettings
 const detectSmtp = async (host, username = "", password = "") => {
 	// now we create json body of the post request
-	const body = JSON.stringify({ host: host, SmtpUsername: username, SmtpPassword: password });
+	const body = JSON.stringify({ host: host, username: username, password: password });
 	const url = "/api/smtp/autodetect";
 	try {
 		const response = await fetch(url, {

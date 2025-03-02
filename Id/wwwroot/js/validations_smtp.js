@@ -239,13 +239,12 @@ const autodetectSmtp = async () => {
 		resultDiv.classList.add('success');
 		resultDiv.innerHTML = await localize(autodetectResult.message);
 
-		document.getElementById('smtp_port').value = autodetectResult.data.port;
-		document.getElementById('smtp_sso').value = autodetectResult.data.secure.toString();
-		document.getElementById('auth_required').value = autodetectResult.data.authorizationRequired;
+		document.getElementById('smtp_port').value = autodetectResult.port;
+		document.getElementById('smtp_sso').value = autodetectResult.secure.toString();
+		document.getElementById('auth_required').value = autodetectResult.requiresAuthentication;
 		document.getElementById('smtp_port').style.borderColor = 'green';
 		document.getElementById('smtp_sso').style.borderColor = 'green';
 		document.getElementById('auth_required').style.borderColor = 'green';
-		checkSmtpHost(document.getElementById('smtp_host'));
 		checkSmtpPort(document.getElementById('smtp_port'));
 		checkSmtpUseAuthentication(document.getElementById('auth_required'));
 		checkSmtpUser(document.getElementById('smtp_user'));
@@ -272,20 +271,24 @@ const testSmtpSettings = async () => {
 	const authorizationRequiredVal = document.getElementById('auth_required').value;
 	document.getElementById('spinner_test').classList.add('spinner');
 	const testResult = await testSmtp(hostVal, portVal, usernameVal, passwordVal, senderEmailVal, senderNameVal, ssoVal, authorizationRequiredVal);
+	console.log(testResult);
 	document.getElementById('spinner_test').classList.remove('spinner');
 	const resultDiv = document.getElementById('result_div');
 	resultDiv.innerHTML = "";
-	if (testResult.successful) {
+	if (testResult.success) {
 		resultDiv.classList.remove('error');
 		resultDiv.classList.add('success');
-		resultDiv.innerHTML = await localize(testResult.message);
+		resultDiv.innerHTML = await localize("Testing email sent successfully");
 		canSave = true;
 		checkSmtpForm();
 	} else {
 		resultDiv.classList.remove('success');
 		resultDiv.classList.add('error');
-		resultDiv.innerHTML = await localize(testResult.message);
+		resultDiv.innerHTML = await localize(testResult.error);
 		canSave = false;
+	}
+	if (testResult.log) {
+		console.log(testResult.log);
 	}
 }
 

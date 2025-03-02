@@ -1,7 +1,6 @@
 ﻿// Purpose: Contains the functions that are used to interact with the API.
 
 // Result class
-
 class Result {
 	constructor(success, data = null, error = null) {
 		this.success = success; // Boolean: true if request succeeded
@@ -11,7 +10,6 @@ class Result {
 }
 
 // API Request function
-
 const apiRequest = async ({
 	url,
 	method = 'GET',
@@ -99,14 +97,12 @@ const apiRequest = async ({
 };
 
 // Submit Form by Name
-
 const submitForm = async (formName, url, method = 'POST', token = null) => {
 	const result = await apiRequest({ url, method, useFormData: true, formName, token });
 	return result;
 }
 
 // Fetch Data from API
-
 const fetchData = async (url, token = null) => {
 	const result = await apiRequest({ url, token });
 	return result;
@@ -142,6 +138,7 @@ const fetchTextWithParamsAndHeaders = async (url, params, headers, token = null)
 	const result = await apiRequest({ url, data: params, headers, token, responseType: 'text' });
 	return result;
 }
+
 // fetch html with parameters and headers
 const fetchHTMLWithParamsAndHeaders = async (url, params, headers, token = null) => {
 	const result = await apiRequest({ url, data: params, headers, token, responseType: 'html' });
@@ -167,7 +164,6 @@ const deleteDataWithParamsAndHeaders = async (url, params, headers, token = null
 }
 
 // Update data with parameters and headers
-
 const updateDataWithParamsAndHeaders = async (url, data, headers, token = null) => {
 	const result = await apiRequest({ url, method: 'PUT', data, headers, token });
 	return result;

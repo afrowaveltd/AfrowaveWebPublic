@@ -2,7 +2,6 @@
 using Id.Models.InputModels;
 using Id.Models.ResultModels;
 using Microsoft.AspNetCore.Authorization;
-using System.ComponentModel.DataAnnotations;
 
 namespace Id.Api
 {
@@ -17,38 +16,6 @@ namespace Id.Api
 		private readonly IEmailManager _email = email;
 
 		/// <summary>
-		/// Represents input data for SMTP settings detection.
-		/// </summary>
-		public class InputModel
-		{
-			/// <summary>
-			/// The SMTP host.
-			/// </summary>
-			[Required]
-			public string Host { get; set; } = string.Empty;
-
-			/// <summary>
-			/// The SMTP username (optional).
-			/// </summary>
-			public string? SmtpUsername { get; set; }
-
-			/// <summary>
-			/// The SMTP password (optional).
-			/// </summary>
-			public string? SmtpPassword { get; set; }
-
-			/// <summary>
-			/// The sender's display name (optional).
-			/// </summary>
-			public string? SenderName { get; set; }
-
-			/// <summary>
-			/// The sender's email address (optional).
-			/// </summary>
-			public string? SenderEmail { get; set; }
-		}
-
-		/// <summary>
 		/// Automatically detects SMTP settings based on input parameters.
 		/// </summary>
 		/// <param name="model">The input model containing SMTP details.</param>
@@ -60,23 +27,21 @@ namespace Id.Api
 		///     "Host": "smtp.example.com",
 		///     "SmtpUsername": "user@example.com",
 		///     "SmtpPassword": "password",
-		///     "SenderEmail": "sender@example.com"
 		/// }
 		///
 		/// Example response:
 		/// {
-		///     "Successful": true,
-		///     "Data": {
-		///         "Host": "smtp.example.com",
-		///         "Port": 587,
-		///         "RequiresAuthentication": true
+		///     "successful": true,
+		///     "port": 587,
+		///     "requiresAuthentication": true,
+		///     "secure": 2,
 		///     }
 		/// }
 		/// </example>
 		[AllowAnonymous]
 		[HttpPost]
 		[Route("autodetect")]
-		public async Task<ApiResponse<SmtpSenderModel>> AutodetectSettings([FromBody] InputModel model)
+		public async Task<SmtpDetectionResult> AutodetectSettings([FromBody] DetectSmtpSettingsInput model)
 		{
 			if(string.IsNullOrWhiteSpace(model.Host))
 			{
@@ -85,9 +50,8 @@ namespace Id.Api
 			return await _email.AutodetectSmtpSettingsAsync(new DetectSmtpSettingsInput
 			{
 				Host = model.Host,
-				Username = model.SmtpUsername,
-				Password = model.SmtpPassword,
-				SenderEmail = model.SenderEmail ?? string.Empty
+				Username = model.Username,
+				Password = model.Password,
 			});
 		}
 

@@ -7,13 +7,11 @@
 using Id.Models.CommunicationModels;
 using Id.Models.InputModels;
 using Id.Models.ResultModels;
-using MailKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 using RazorLight;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Id.Services
 {
@@ -67,11 +65,11 @@ namespace Id.Services
 		///		Message = "SMTP settings successfully detected"
 		///	 }
 		///	 </example>
-		public async Task<ApiResponse<SmtpSenderModel>> AutodetectSmtpSettingsAsync(DetectSmtpSettingsInput input)
+		public async Task<SmtpDetectionResult> AutodetectSmtpSettingsAsync(DetectSmtpSettingsInput input)
 		{
 			// Common SMTP ports
-			List<(int Port, SecureSocketOptions Security)> portSecurityCombinations = new List<(int Port, SecureSocketOptions Security)>()
-			{
+			List<(int Port, SecureSocketOptions Security)> portSecurityCombinations =
+			[
 				(25, SecureSocketOptions.None),
 				(587, SecureSocketOptions.StartTls),
 				(465, SecureSocketOptions.SslOnConnect),
@@ -79,10 +77,10 @@ namespace Id.Services
 				(587, SecureSocketOptions.Auto),
 				(465, SecureSocketOptions.Auto),
 				(2525, SecureSocketOptions.Auto) // failback
-			};
+			];
 
-			ApiResponse<SmtpSenderModel> response = new();
-			response.Data = new SmtpSenderModel();
+			SmtpDetectionResult response = new();
+
 			foreach((int port, SecureSocketOptions security) in portSecurityCombinations)
 			{
 				try
@@ -94,25 +92,20 @@ namespace Id.Services
 					// check if the server requires authentication
 					if(client.Capabilities.HasFlag(SmtpCapabilities.Authentication))
 					{
-						response.Data.AuthorizationRequired = true;
+						response.RequiresAuthentication = true;
 						if(string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
 						{
 							response.Successful = false;
-							response.Message = _t["Server requires authentication, but no credentials provided"];
+							response.Message = "Server requires authentication, but no credentials provided";
 							return response;
 						}
 						await client.AuthenticateAsync(input.Username, input.Password);
 					}
 					response.Successful = true;
-					response.Data.Host = input.Host;
-					response.Data.Port = port;
-					response.Data.Secure = security;
-					response.Data.Username = input.Username;
-					response.Data.Password = input.Password;
-					response.Data.SenderEmail = input.SenderEmail;
-					response.Data.SenderName = input.SenderEmail;
+					response.Port = port;
+					response.Secure = security;
 					await client.DisconnectAsync(true);
-					response.Message = _t["SMTP settings successfully detected"];
+					response.Message = "SMTP settings successfully detected";
 					return response;
 				}
 				catch
@@ -123,7 +116,7 @@ namespace Id.Services
 
 			// if we reach this point, the autodetection failed
 			response.Successful = false;
-			response.Message = _t["SMTP settings not found"];
+			response.Message = "SMTP settings not found";
 			return response;
 		}
 
@@ -634,43 +627,45 @@ namespace Id.Services
 		{
 			string targetEmail = input.TargetForTesting ?? input.SenderEmail;
 			SmtpTestResult result = new();
-			StringBuilder logBuilder = new StringBuilder();
+
 			if(string.IsNullOrEmpty(input.Host))
 			{
-				result.Error = _t["Host is empty"];
+				result.Error = "Host is empty";
 				return result;
 			}
 			if(input.Port == 0)
 			{
-				result.Error = _t["Port is empty"];
+				result.Error = "Port is empty";
 				return result;
 			}
 			if(string.IsNullOrEmpty(input.SenderEmail))
 			{
-				result.Error = _t["Sender email is empty"];
+				result.Error = "Sender email is empty";
 				return result;
 			}
 			if(string.IsNullOrEmpty(input.SenderName))
 			{
 				input.SenderName = input.SenderEmail;
 			}
+
+			var logger = new StringProtocolLogger();
+
 			try
 			{
-				using MemoryStream memoryStream = new();
-				using SmtpClient client = new(new ProtocolLogger(memoryStream));
+				using var client = new SmtpClient(logger);
 				await client.ConnectAsync(input.Host, input.Port ?? 25, input.Secure);
 
 				if(input.AuthorizationRequired)
 				{
 					if(string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
 					{
-						result.Error = _t["Server requires authentication, but no credentials provided"];
+						result.Error = "Server requires authentication, but no credentials provided";
 						return result;
 					}
 					await client.AuthenticateAsync(input.Username, input.Password);
 				}
 
-				MimeMessage message = new();
+				var message = new MimeMessage();
 				message.From.Add(new MailboxAddress(input.SenderName, input.SenderEmail));
 				message.To.Add(new MailboxAddress("", targetEmail));
 				message.Subject = _t["SMTP test"];
@@ -678,11 +673,11 @@ namespace Id.Services
 				{
 					Text = _t["SMTP test email"]
 				};
-				_ = await client.SendAsync(message);
+
+				await client.SendAsync(message);
 				await client.DisconnectAsync(true);
+
 				result.Success = true;
-				result.Log = memoryStream.ToString() ?? string.Empty;
-				return result;
 			}
 			catch(Exception ex)
 			{
@@ -691,8 +686,7 @@ namespace Id.Services
 			}
 			finally
 			{
-				// Ensure the log is attached even if there's an error
-				result.Log ??= logBuilder.ToString();
+				result.Log = logger.GetLog();
 			}
 
 			return result;

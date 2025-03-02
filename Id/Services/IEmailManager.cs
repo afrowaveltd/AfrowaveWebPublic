@@ -14,7 +14,7 @@ namespace Id.Services
 		/// </summary>
 		/// <param name="input">Detect SMTP settings input data for the test</param>
 		/// <returns>Resulted settings or an error</returns>
-		Task<ApiResponse<SmtpSenderModel>> AutodetectSmtpSettingsAsync(DetectSmtpSettingsInput input);
+		Task<SmtpDetectionResult> AutodetectSmtpSettingsAsync(DetectSmtpSettingsInput input);
 
 		/// <summary>
 		/// Sends an email.
