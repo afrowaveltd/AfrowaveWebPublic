@@ -7,6 +7,7 @@
 using Id.Models.CommunicationModels;
 using Id.Models.InputModels;
 using Id.Models.ResultModels;
+using MailKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
@@ -648,11 +649,11 @@ namespace Id.Services
 				input.SenderName = input.SenderEmail;
 			}
 
-			var logger = new StringProtocolLogger();
+			string logPath = await CreateTemporarySmtpLogFile();
 
 			try
 			{
-				using var client = new SmtpClient(logger);
+				using SmtpClient client = new SmtpClient(new ProtocolLogger(logPath));
 				await client.ConnectAsync(input.Host, input.Port ?? 25, input.Secure);
 
 				if(input.AuthorizationRequired)
@@ -665,7 +666,7 @@ namespace Id.Services
 					await client.AuthenticateAsync(input.Username, input.Password);
 				}
 
-				var message = new MimeMessage();
+				MimeMessage message = new MimeMessage();
 				message.From.Add(new MailboxAddress(input.SenderName, input.SenderEmail));
 				message.To.Add(new MailboxAddress("", targetEmail));
 				message.Subject = _t["SMTP test"];
@@ -674,7 +675,7 @@ namespace Id.Services
 					Text = _t["SMTP test email"]
 				};
 
-				await client.SendAsync(message);
+				_ = await client.SendAsync(message);
 				await client.DisconnectAsync(true);
 
 				result.Success = true;
@@ -686,7 +687,7 @@ namespace Id.Services
 			}
 			finally
 			{
-				result.Log = logger.GetLog();
+				result.Log = await GetLogAndDisposeFileAsync(logPath);
 			}
 
 			return result;
@@ -718,6 +719,20 @@ namespace Id.Services
 				result.ErrorMessage = _t["Error sending email"];
 			}
 			return result;
+		}
+
+		private static async Task<string> CreateTemporarySmtpLogFile()
+		{
+			string path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+			await File.WriteAllTextAsync(path, "");
+			return path;
+		}
+
+		private static async Task<string> GetLogAndDisposeFileAsync(string path)
+		{
+			string log = await File.ReadAllTextAsync(path);
+			File.Delete(path);
+			return log;
 		}
 	}
 }

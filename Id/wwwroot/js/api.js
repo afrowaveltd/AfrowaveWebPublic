@@ -1,7 +1,15 @@
 ﻿// Purpose: Contains the functions that are used to interact with the API.
 
-// Result class
+/**
+ * Represents the result of an API request.
+ */
 class Result {
+	/**
+	 * Creates a new Result instance.
+	 * @param {boolean} success - Indicates if the request was successful.
+	 * @param {any} [data=null] - The response data.
+	 * @param {{code: number, message: string}} [error=null] - Error details if the request failed.
+	 */
 	constructor(success, data = null, error = null) {
 		this.success = success; // Boolean: true if request succeeded
 		this.data = data;       // Data: server output (JSON, text, etc.)
@@ -10,6 +18,19 @@ class Result {
 }
 
 // API Request function
+/**
+ * Makes an API request with various options.
+ * @param {object} options - Request options.
+ * @param {string} options.url - The API URL.
+ * @param {string} [options.method='GET'] - HTTP method.
+ * @param {object|null} [options.data=null] - Request payload.
+ * @param {object} [options.headers={}] - Request headers.
+ * @param {string} [options.responseType='json'] - Expected response type ('json', 'text', 'html').
+ * @param {boolean} [options.useFormData=false] - Whether to use FormData.
+ * @param {string|null} [options.token=null] - Authorization token.
+ * @param {string|null} [options.formName=null] - Optional form name (for FormData submission).
+ * @returns {Promise<Result>} - Result object containing success flag, data, or error.
+ */
 const apiRequest = async ({
 	url,
 	method = 'GET',
@@ -96,92 +117,185 @@ const apiRequest = async ({
 	}
 };
 
-// Submit Form by Name
+/**
+ * Submits a form using its name.
+ * @param {string} formName - The name of the form.
+ * @param {string} url - The submission URL.
+ * @param {string} [method='POST'] - HTTP method.
+ * @param {string|null} [token=null] - Authorization token.
+ * @returns {Promise<Result>}
+ */
 const submitForm = async (formName, url, method = 'POST', token = null) => {
 	const result = await apiRequest({ url, method, useFormData: true, formName, token });
 	return result;
 }
 
-// Fetch Data from API
+/**
+ * Fetches data from the given API URL.
+ * @param {string} url - API URL.
+ * @param {string|null} [token=null] - Authorization token.
+ * @returns {Promise<Result>}
+ */
 const fetchData = async (url, token = null) => {
 	const result = await apiRequest({ url, token });
 	return result;
 }
 
-// Fetch Text data from API
+/**
+ * Fetches text from the given API URL.
+ * @param {string} url - API URL.
+ * @param {string|null} [token=null] - Authorization token.
+ * @returns {Promise<Result>}
+ */
 const fetchText = async (url, token = null) => {
 	const result = await apiRequest({ url, token, responseType: 'text' });
 	return result;
 }
 
-// Fetch HTML data from API
+/**
+ * Fetches HTML from the given API URL.
+ * @param {string} url - API URL.
+ * @param {string|null} [token=null] - Authorization token.
+ * @returns {Promise<Result>}
+ */
 const fetchHTML = async (url, token = null) => {
 	const result = await apiRequest({ url, token, responseType: 'html' });
 	return result;
 }
 
-// All previous fetches with data parameter
-
+/**
+ * Fetches data with a request body.
+ * @param {string} url - API URL.
+ * @param {object} data - Request body.
+ * @param {string} [method='POST'] - HTTP method.
+ * @param {string|null} [token=null] - Authorization token.
+ * @returns {Promise<Result>}
+ */
 const fetchDataWithBody = async (url, data, method = 'POST', token = null) => {
 	const result = await apiRequest({ url, method, data, token });
 	return result;
 }
 
-// Fetch Data with parameters and headers
+/**
+ * Fetches data with parameters and headers.
+ * @param {string} url - API URL.
+ * @param {object} params - Request parameters.
+ * @param {object} headers - Request headers.
+ * @param {string|null} [token=null] - Authorization token.
+ * @returns {Promise<Result>}
+ */
 const fetchDataWithParamsAndHeaders = async (url, params, headers, token = null) => {
 	const result = await apiRequest({ url, data: params, headers, token });
 	return result;
 }
 
-// fetch text with parameters and headers
+/**
+ * Fetches plain text with query parameters and custom headers.
+ * @param {string} url - The API endpoint.
+ * @param {object} params - Query parameters.
+ * @param {object} headers - Additional headers.
+ * @param {string|null} [token=null] - Optional authorization token.
+ * @returns {Promise<Result>} - The result containing fetched text or error.
+ */
 const fetchTextWithParamsAndHeaders = async (url, params, headers, token = null) => {
 	const result = await apiRequest({ url, data: params, headers, token, responseType: 'text' });
 	return result;
 }
 
-// fetch html with parameters and headers
+/**
+ * Fetches HTML content with query parameters and custom headers.
+ * @param {string} url - The API endpoint.
+ * @param {object} params - Query parameters.
+ * @param {object} headers - Additional headers.
+ * @param {string|null} [token=null] - Optional authorization token.
+ * @returns {Promise<Result>} - The result containing fetched HTML or error.
+ */
 const fetchHTMLWithParamsAndHeaders = async (url, params, headers, token = null) => {
 	const result = await apiRequest({ url, data: params, headers, token, responseType: 'html' });
 	return result;
 }
 
-// Delete data from API
+/**
+ * Deletes data at the specified API endpoint.
+ * @param {string} url - The API endpoint.
+ * @param {string|null} [token=null] - Optional authorization token.
+ * @returns {Promise<Result>} - The result indicating success or failure.
+ */
 const deleteData = async (url, token = null) => {
 	const result = await apiRequest({ url, method: 'DELETE', token });
 	return result;
 }
 
-// Update data using API
+/**
+ * Updates data at the specified API endpoint (PUT).
+ * @param {string} url - The API endpoint.
+ * @param {object} data - The data to update.
+ * @param {string|null} [token=null] - Optional authorization token.
+ * @returns {Promise<Result>} - The result indicating success or failure.
+ */
 const updateData = async (url, data, token = null) => {
 	const result = await apiRequest({ url, method: 'PUT', data, token });
 	return result;
 }
 
-// Delete data with parameters and headers
+/**
+ * Deletes data with query parameters and custom headers.
+ * @param { string } url - The API endpoint.
+ * @param { object } params - Query parameters.
+ * @param { object } headers - Additional headers.
+ * @param { string | null } [token = null] - Optional authorization token.
+ * @returns { Promise < Result >} - The result indicating success or failure.
+ */
 const deleteDataWithParamsAndHeaders = async (url, params, headers, token = null) => {
 	const result = await apiRequest({ url, method: 'DELETE', data: params, headers, token });
 	return result;
 }
 
-// Update data with parameters and headers
+/**
+ * Updates data with parameters and custom headers.
+ * @param {string} url - The API endpoint.
+ * @param {object} data - The data to update.
+ * @param {object} headers - Additional headers.
+ * @param {string|null} [token=null] - Optional authorization token.
+ * @returns {Promise<Result>} - The result indicating success or failure.
+ */
 const updateDataWithParamsAndHeaders = async (url, data, headers, token = null) => {
 	const result = await apiRequest({ url, method: 'PUT', data, headers, token });
 	return result;
 }
 
-// Post data with parameters and headers
+/**
+ * Sends POST data with parameters and custom headers.
+ * @param {string} url - The API endpoint.
+ * @param {object} data - The data to send.
+ * @param {object} headers - Additional headers.
+ * @param {string|null} [token=null] - Optional authorization token.
+ * @returns {Promise<Result>} - The result indicating success or failure.
+ */
 const postDataWithParamsAndHeaders = async (url, data, headers, token = null) => {
 	const result = await apiRequest({ url, method: 'POST', data, headers, token });
 	return result;
 }
 
-// Post data with parameters but no headers
+/**
+ * Sends POST data with parameters (no headers).
+ * @param {string} url - The API endpoint.
+ * @param {object} data - The data to send.
+ * @param {string|null} [token=null] - Optional authorization token.
+ * @returns {Promise<Result>} - The result indicating success or failure.
+ */
 const postDataWithParams = async (url, data, token = null) => {
 	const result = await apiRequest({ url, method: 'POST', data, token });
 	return result;
 }
 
-// Get localized data from API
+/**
+ * Localizes text using a language cookie or specified language.
+ * Falls back to English if no language is provided.
+ * @param {string} text - The text to localize.
+ * @param {string} [language=""] - Optional language code.
+ * @returns {Promise<string>} - Localized text.
+ */
 const localize = async (text, language = "") => {
 	const getCookie = (cname) => {
 		let name = cname + "=";
@@ -216,7 +330,12 @@ const localize = async (text, language = "") => {
 	return res;
 }
 
-// Display help div
+/**
+ * Loads and displays help content for a given help topic.
+ * Replaces the content of 'div_help' with the loaded help topic.
+ * @param {string} helpTopic - The help topic identifier.
+ * @returns {Promise<void>}
+ */
 const loadHelp = async (helpTopic) => {
 	const slow = "fast";
 	console.log(helpTopic)
@@ -239,11 +358,20 @@ const loadHelp = async (helpTopic) => {
 	$(element).show(slow);
 }
 
+/**
+ * Checks if an email already exists in the system.
+ * @param {string} email - The email address to check.
+ * @returns {Promise<Result>} - The result indicating if the email exists.
+ */
 const checkIfEmailExists = async (email) => {
 	const result = await fetchData('/api/CheckIfEmailExists/' + email);
 	return result;
 }
 
+/**
+ * Fetches password rules from the server.
+ * @returns {Promise<object|null>} - Password rules or null if an error occurs.
+ */
 const getPasswordRules = async () => {
 	const result = await fetchData('/api/PasswordRequirements');
 	if (result.success) {

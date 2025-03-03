@@ -1,4 +1,17 @@
-﻿// Test SmtpSettings
+﻿/**
+ * Tests SMTP settings by sending a request to the SMTP test API.
+ * If no target for testing is provided, it defaults to the sender email.
+ * @param {string} host - SMTP server host.
+ * @param {number|string} port - SMTP server port (converted to integer).
+ * @param {string} username - SMTP account username.
+ * @param {string} password - SMTP account password.
+ * @param {string} senderEmail - Email address used as sender.
+ * @param {string} senderName - Display name for sender.
+ * @param {number|string} sso - Security option (converted to integer, e.g., SSL, TLS).
+ * @param {string|boolean} authorizationRequired - Indicates whether authorization is required ("true"/"false").
+ * @param {string} [targetForTesting] - Optional email address to send the test email to.
+ * @returns {Promise<object>} - An object indicating success status and message.
+ */
 const testSmtp = async (host,
 	port,
 	username,
@@ -6,8 +19,12 @@ const testSmtp = async (host,
 	senderEmail,
 	senderName,
 	sso,
-	authorizationRequired) => {
+	authorizationRequired,
+	targetForTesting) => {
 	// now we create json body of the post request
+	if (!targetForTesting || targetForTesting === "") {
+		targetForTesting = senderEmail;
+	}
 	const body = JSON.stringify({
 		Host: host,
 		Port: parseInt(port, 10),  // Convert Port to an integer
@@ -16,7 +33,9 @@ const testSmtp = async (host,
 		SenderEmail: senderEmail,
 		SenderName: senderName,
 		Secure: parseInt(sso, 10),  // Convert Secure to an integer
-		AuthorizationRequired: authorizationRequired === "true"  // Convert string "true"/"false" to boolean
+		AuthorizationRequired: authorizationRequired === "true",
+		TargetForTesting: targetForTesting
+		// Convert string "true"/"false" to boolean
 	});
 	console.log(body);
 	const url = "/api/smtp/test";
@@ -40,9 +59,16 @@ const testSmtp = async (host,
 	catch (error) {
 		console.error("Error:", error);
 	}
-}
+};
 
-// Autodetect SmtpSettings
+/**
+ * Attempts to automatically detect SMTP settings using the provided host, username, and password.
+ * Sends the credentials to the SMTP autodetect API and returns the detected settings.
+ * @param {string} host - SMTP server host.
+ * @param {string} [username=""] - Optional SMTP account username.
+ * @param {string} [password=""] - Optional SMTP account password.
+ * @returns {Promise<object>} - An object indicating success status and message, possibly with detected settings.
+ */
 const detectSmtp = async (host, username = "", password = "") => {
 	// now we create json body of the post request
 	const body = JSON.stringify({ host: host, username: username, password: password });
@@ -71,4 +97,4 @@ const detectSmtp = async (host, username = "", password = "") => {
 		console.error("Error:", error);
 		return data;
 	}
-}
+};

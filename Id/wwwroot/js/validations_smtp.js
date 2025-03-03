@@ -18,6 +18,9 @@ const smtpPasswordErr = document.getElementById('smtp_pass_err');
 const smtpSenderEmailErr = document.getElementById('smtp_email_err');
 const smtpSenderNameErr = document.getElementById('smtp_name_err');
 const smtpSecureConnectionErr = document.getElementById('smtp_sso_err');
+const logDiv = document.getElementById('test_log');
+const logData = document.getElementById('log_content');
+const logTitle = document.getElementById('log_title');
 
 const checkSmtpForm = () => {
 	if (smtpHostOk && smtpPortOk && smtpUserOk && smtpPasswordOk && smtpSenderEmailOk && smtpSenderNameOk && smtpSecureConnectionOk && smtpUseAuthenticationOk) {
@@ -269,11 +272,24 @@ const testSmtpSettings = async () => {
 	const senderNameVal = document.getElementById('smtp_name').value;
 	const ssoVal = document.getElementById('smtp_sso').value;
 	const authorizationRequiredVal = document.getElementById('auth_required').value;
+	let testingTarget = prompt(await localize("Enter the email address to send the test email to"), senderEmailVal);
+	if (testingTarget === null) {
+		return;
+	}
+	if (testingTarget.trim() === '') {
+		alert(await localize("Please enter a valid email address"));
+		return;
+	}
+	
+
 	document.getElementById('spinner_test').classList.add('spinner');
-	const testResult = await testSmtp(hostVal, portVal, usernameVal, passwordVal, senderEmailVal, senderNameVal, ssoVal, authorizationRequiredVal);
+	const testResult = await testSmtp(hostVal, portVal, usernameVal, passwordVal, senderEmailVal, senderNameVal, ssoVal, authorizationRequiredVal, testingTarget);
 	console.log(testResult);
 	document.getElementById('spinner_test').classList.remove('spinner');
 	const resultDiv = document.getElementById('result_div');
+	logDiv.style.display = 'block';
+	logTitle.innerHTML = await localize("SMTP testing result");
+	showLogInElement(testResult.log, 'log_content');
 	resultDiv.innerHTML = "";
 	if (testResult.success) {
 		resultDiv.classList.remove('error');
@@ -296,4 +312,5 @@ window.onload = () => {
 	checkSmtpHost(document.getElementById('smtp_host'));
 	checkSmtpSenderEmail(document.getElementById('smtp_email'));
 	checkSmtpSenderName(document.getElementById('smtp_name'));
+	document.getElementById('test_log').style.display = 'none';
 }
