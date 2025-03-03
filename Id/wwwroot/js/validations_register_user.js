@@ -1,494 +1,192 @@
-﻿// important elements
+﻿// References to input elements.
+const inputs = {
+	email: document.getElementById("email_input"),
+	password: document.getElementById("password_input"),
+	passwordConfirm: document.getElementById("password_confirm_input"),
+	firstName: document.getElementById("first_name_input"),
+	lastName: document.getElementById("last_name_input"),
+	displayName: document.getElementById("displayed_name_input"),
+	birthdate: document.getElementById("birthdate_input"),
+	profilePicture: document.getElementById("profile_picture_input"),
+	acceptTerms: document.getElementById("accept_terms_input"),
+	acceptPrivacy: document.getElementById("accept_data_share"),
+	acceptCookies: document.getElementById("accept_cookies_input"),
+	submit: document.getElementById("submit_button"),
+	iconPreview: document.getElementById("icon_preview"),
+};
 
-// input elements
-const email = document.getElementById("email_input");
-const password = document.getElementById("password_input");
-const passwordConfirm = document.getElementById("password_confirm_input");
-const firstName = document.getElementById("first_name_input");
-const lastName = document.getElementById("last_name_input");
-const displayName = document.getElementById("displayed_name_input");
-const birthdate = document.getElementById("birthdate_input");
-const profilePicture = document.getElementById("profile_picture_input");
-const acceptTerms = document.getElementById("accept_terms_input");
-const acceptPrivacy = document.getElementById("accept_data_share");
-const acceptCookies = document.getElementById("accept_cookies_input");
-const submit = document.getElementById("submit_button");
-const iconPreview = document.getElementById("icon_preview");
+// References to error message containers.
+const errors = {
+	email: document.getElementById("email_err"),
+	password: document.getElementById("password_err"),
+	passwordConfirm: document.getElementById("password_confirm_err"),
+	firstName: document.getElementById("firstname_err"),
+	lastName: document.getElementById("lastname_err"),
+	displayName: document.getElementById("displayedname_err"),
+	birthdate: document.getElementById("birthdate_err"),
+	icon: document.getElementById("icon_err"),
+	terms: document.getElementById("terms_err"),
+	privacy: document.getElementById("privacy_err"),
+	cookies: document.getElementById("cookies_err"),
+};
 
-// error elements
-const emailError = document.getElementById("email_err");
-const passwordError = document.getElementById("password_err");
-const passwordConfirmError = document.getElementById("password_confirm_err");
-const firstnameError = document.getElementById("firstname_err");
-const lastnameError = document.getElementById("lastname_err");
-const displayednameError = document.getElementById("displayedname_err");
-const birthdateError = document.getElementById("birthdate_err");
-const iconError = document.getElementById("icon_err");
-const termsError = document.getElementById("terms_err");
-const privacyError = document.getElementById("privacy_err");
-const cookiesError = document.getElementById("cookies_err");
+// Tracks validation status for each field.
+const fieldStatus = {
+	email: false,
+	password: false,
+	passwordConfirm: false,
+	firstName: false,
+	lastName: false,
+	displayName: false,
+	birthdate: false,
+	profilePicture: true, // Optional - default to true
+	acceptTerms: false,
+	acceptPrivacy: false,
+	acceptCookies: false,
+};
 
-// check results
-let emailOk = false;
-let passwordOk = false;
-let passwordConfirmOk = false;
-let firstNameOk = false;
-let lastNameOk = false;
-let displayNameOk = false;
-let birthdateOk = false;
-let profilePictureOk = true;
-let acceptTermsOk = false;
-let acceptPrivacyOk = false;
-let acceptCookiesOk = false;
-
-// password rules
 let passwordRules = null;
 
-// element validation results
+/**
+ * Sets field state to valid.
+ */
 const setValid = (element, errorElement) => {
 	element.classList.remove('input-invalid');
 	element.classList.add('input-valid');
 	errorElement.innerHTML = '';
 }
 
+/**
+ * Sets field state to invalid with a provided message.
+ */
 const setInvalid = (element, errorElement, message) => {
 	element.classList.remove('input-valid');
 	element.classList.add('input-invalid');
 	errorElement.innerHTML = message;
 }
-// form validation
+
+/**
+ * Re-evaluates overall form validity and toggles submit button.
+ */
 const checkForm = () => {
-	if (emailOk
-		&& passwordOk
-		&& passwordConfirmOk
-		&& firstNameOk
-		&& lastNameOk
-		&& displayNameOk
-		&& birthdateOk
-		&& profilePictureOk
-		&& acceptTermsOk
-		&& acceptPrivacyOk
-		&& acceptCookiesOk) {
-		submit.removeAttribute('disabled');
-	}
-	else {
-		submit.setAttribute('disabled', 'disabled');
-	}
+	const allValid = Object.values(fieldStatus).every(status => status);
+	inputs.submit.disabled = !allValid;
 }
 
-// validations
-const validateEmail = async (element) => {
-	const email = element.value;
-	const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-	if (!emailPattern.test(email)) {
-		setInvalid(element, emailError, await localize("Invalid email address"));
-		emailOk = false;
-		checkForm();
-	}
-	else {
-		const result = await fetchData('/api/IsEmailUnique/' + email);
-		if (result.success) {
-			if (result.data.isUnique) {
-				setValid(element, emailError);
-				emailOk = true;
-				checkForm();
-			}
-			else {
-				setInvalid(element, emailError, await localize("Email address is already registered"));
-				emailOk = false;
-				checkForm();
-			}
-		}
-		else {
-			setInvalid(element, emailError, await localize("Error checking email address"));
-			emailOk = true;
-			checkForm();
-		}
-	}
-}
+/**
+ * Validates email using regex and checks uniqueness via API.
+ */
+const validateEmail = async () => {
+	const email = inputs.email.value;
+	const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-// password validation
-const validatePassword = async (element) => {
-	if (passwordRules == null) {
-		let message = await localize("Password rules are not available");
-		setInvalid(element, passwordError, message);
-		let checks = document.getElementById("password_checks");
-		checks.innerHTML = await localize("Password will be checked by the server");
-		checks.style.borderColor = "orange";
-		passwordOk = true;// password will be checked on the server
-	}
-	else {
-		const password = element.value;
-		const minChars = passwordRules.minimumLength;
-		const maxChars = passwordRules.maximumLength;
-		const requireLowercase = passwordRules.requireLowercase;
-		const requireUppercase = passwordRules.requireUppercase;
-		const requireDigit = passwordRules.requireDigit;
-		const requireSpecial = passwordRules.requireNonAlphanumeric;
-
-		passwordOk = true;
-		// check minimal length
-		if (password.length < minChars) {
-			let message = await localize("Minimal password length") + ": " + minChars + " " + await localize("characters");
-			setInvalid(element, passwordError, message);
-			passChecker = document.getElementById('password_checks_minlength');
-			passChecker.classList.remove("success");
-			passChecker.classList.add("error");
-			passwordOk = false;
-		}
-		else {
-			setValid(element, passwordError);
-			passChecker = document.getElementById('password_checks_minlength');
-			passChecker.classList.remove("error");
-			passChecker.classList.add("success");
-		}
-
-		// check maximal length
-		if (password.length > maxChars) {
-			let message = await localize("Maximal password length") + ": " + minChars + " " + await localize("characters");
-			setInvalid(element, passwordError, message);
-			passChecker = document.getElementById('password_checks_maxlength');
-			passChecker.classList.remove("success");
-			passChecker.classList.add("error");
-			passwordOk = false;
-		}
-		else {
-			setValid(element, passwordError);
-			passChecker = document.getElementById('password_checks_maxlength');
-			passChecker.classList.remove("error");
-			passChecker.classList.add("success");
-		}
-
-		// check lowercase
-		if (requireLowercase && !/[a-z]/.test(password)) {
-			let message = await localize("Password must contain at least one lowercase letter");
-			setInvalid(element, passwordError, message);
-			passChecker = document.getElementById('password_checks_lowercase');
-			passChecker.classList.remove("success");
-			passChecker.classList.add("error");
-			passwordOk = false;
-		}
-		else if (!requireLowercase) {
-		}
-		else {
-			setValid(element, passwordError);
-			passChecker = document.getElementById('password_checks_lowercase');
-			passChecker.classList.remove("error");
-			passChecker.classList.add("success");
-		}
-
-		// check uppercase
-		if (requireUppercase && !/[A-Z]/.test(password)) {
-			let message = await localize("Password must contain at least one uppercase letter");
-			setInvalid(element, passwordError, message);
-			passChecker = document.getElementById('password_checks_uppercase');
-			passChecker.classList.remove("success");
-			passChecker.classList.add("error");
-			passwordOk = false;
-		}
-		else if (!requireUppercase) {
-		}
-		else {
-			setValid(element, passwordError);
-			passChecker = document.getElementById('password_checks_uppercase');
-			passChecker.classList.remove("error");
-			passChecker.classList.add("success");
-		}
-
-		// check digit
-		if (requireDigit && !/[0-9]/.test(password)) {
-			let message = await localize("Password must contain at least one number");
-			setInvalid(element, passwordError, message);
-			passChecker = document.getElementById('password_checks_digit');
-			passChecker.classList.remove("success");
-			passChecker.classList.add("error");
-			passwordOk = false;
-		}
-		else if (!requireDigit) {
-		}
-		else {
-			setValid(element, passwordError);
-			passChecker = document.getElementById('password_checks_digit');
-			passChecker.classList.remove("error");
-			passChecker.classList.add("success");
-		}
-
-		// check special character
-		if (requireSpecial && !/[^a-zA-Z0-9]/.test(password)) {
-			let message = await localize("Password must contain at least one special character");
-			setInvalid(element, passwordError, message);
-			passChecker = document.getElementById('password_checks_special');
-			passChecker.classList.remove("success");
-			passChecker.classList.add("error");
-			passwordOk = false;
-		}
-		else if (!requireSpecial) {
-		}
-		else {
-			setValid(element, passwordError);
-			passChecker = document.getElementById('password_checks_special');
-			passChecker.classList.remove("error");
-			passChecker.classList.add("success");
-		}
-	}
-}
-
-// password confirmation
-const validatePasswordConfirm = async (element) => {
-	const password = document.getElementById("password_input").value;
-	const passwordConfirm = element.value;
-	if (password !== passwordConfirm) {
-		setInvalid(element, passwordConfirmError, await localize("Passwords do not match"));
-		passwordConfirmOk = false;
-	}
-	else {
-		setValid(element, passwordConfirmError);
-		passwordConfirmOk = true;
-	}
-	checkForm();
-}
-
-// first name validation
-const validateFirstName = async (element) => {
-	const firstName = element.value;
-	if (firstName.length < 2) {
-		setInvalid(element, firstnameError, await localize("First name must be at least 2 characters long"));
-		firstNameOk = false;
-	}
-	else {
-		setValid(element, firstnameError);
-		firstNameOk = true;
-	}
-	checkForm();
-}
-
-// last name validation
-const validateLastName = async (element) => {
-	const lastName = element.value;
-	if (lastName.length < 2) {
-		setInvalid(element, lastnameError, await localize("Last name must be at least 2 characters long"));
-		lastNameOk = false;
-	}
-	else {
-		setValid(element, lastnameError);
-		lastNameOk = true;
-	}
-	checkForm();
-}
-
-// displayed name validation
-const validateDisplayedName = async (element) => {
-	const displayedName = element.value;
-	if (displayedName.length < 2) {
-		element.value = firstName.value + " " + lastName.value;
-		setInvalid(element, displayednameError, await localize("If empty, your real name will be used"));
-		displayNameOk = true;
-	}
-	else {
-		setValid(element, displayednameError);
-		displayNameOk = true;
-	}
-	checkForm();
-}
-
-// birthdate validation
-const validateBirthdate = async (element) => {
-	const birthdate = element.value;
-	// check if birthdate is empty
-	if (birthdate === "") {
-		setInvalid(element, birthdateError, await localize("Birthdate is required"));
-		birthdateOk = false;
-	}
-	// check if birthdate is in the past
-	else if (new Date(birthdate) > new Date()) {
-		setInvalid(element, birthdateError, await localize("Birthdate must be in the past"));
-		birthdateOk = false;
-	}
-	// check if user is too young (less than 8 years old))
-	else if (new Date(birthdate) > new Date(new Date().getFullYear() - 8, new Date().getMonth(), new Date().getDate())) {
-		setInvalid(element, birthdateError, await localize("You must be at least 8 years old"));
-		birthdateOk = false;
-	}
-	else {
-		setValid(element, birthdateError);
-		birthdateOk = true;
-	}
-	checkForm();
-}
-
-// profile picture validation
-const validateProfilePicture = async (element) => {
-	const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
-	const file = element.files[0];
-	if (!file) {
-		setValid(element, iconError);
-		profilePictureOk = true;
-		return;
-	}
-	else if (!validTypes.includes(file.type)) {
-		setInvalid(element, iconError, await localize("Invalid file type.Please upload an image file"));
-		profilePictureOk = false;
-		return;
-	}
-	try {
-		const isValidImage = await checkIfRealImage(file);
-		console.log(isValidImage);
-		if (!isValidImage) {
-			setInvalid(element, iconError, await localize("The file is not a valid image."));
-			profilePictureOk = false;
-			checkForm();
+	if (!pattern.test(email)) {
+		setInvalid(inputs.email, errors.email, await localize("Invalid email address"));
+		fieldStatus.email = false;
+	} else {
+		const result = await fetchData(`/api/IsEmailUnique/${email}`);
+		if (result.success && result.data.isUnique) {
+			setValid(inputs.email, errors.email);
+			fieldStatus.email = true;
 		} else {
-			showImagePreview(file); // Display the image preview
-			setValid(element, iconError);
-			applicationIconOk = true;
-			checkForm();
+			setInvalid(inputs.email, errors.email, await localize("Email address is already registered"));
+			fieldStatus.email = false;
 		}
-	} catch (error) {
-		setInvalid(element, iconError, await localize("An error occurred while validating the file."));
-		profilePictureOk = false;
-		checkForm();
-	}
-
-	/**
-	* Check if a file is a real image
-	* @param {File} file
-	* @returns {Promise<boolean>}
-	*/
-	async function checkIfRealImage(file) {
-		const reader = new FileReader();
-
-		return new Promise((resolve, reject) => {
-			reader.onload = (e) => {
-				const img = new Image();
-				img.onload = () => resolve(true); // Real image
-				img.onerror = () => resolve(false); // Invalid image
-				img.src = e.target.result; // Load the image
-			};
-
-			reader.onerror = () => reject("Error reading the file");
-			reader.readAsDataURL(file); // Read file content as Data URL
-		});
-	}
-	/**
-	 * Show a 32x32px preview of the uploaded image
-	 * @param {File} file
-	 */
-	async function showImagePreview(file) {
-		const reader = new FileReader();
-
-		reader.onload = (e) => {
-			const img = document.createElement("img");
-			img.src = e.target.result; // Set the source to the file's data URL
-			img.alt = "Image Preview";
-			iconPreview.innerHTML = "";
-			iconPreview.appendChild(img);
-		};
-
-		reader.readAsDataURL(file); // Read file content as Data URL
-	}
-}
-
-
-// terms validation
-const validateTerms = async (element) => {
-	if (element.value != "true") {
-		setInvalid(element, termsError, await localize("You must accept the terms"));
-		acceptTermsOk = false;
-	}
-	else {
-		setValid(element, termsError);
-		acceptTermsOk = true;
 	}
 	checkForm();
 }
 
-// privacy validation
-const validatePrivacy = async (element) => {
-	if (element.value != "true") {
-		setInvalid(element, privacyError, await localize("You must accept the privacy policy"));
-		acceptPrivacyOk = false;
-	}
-	else {
-		setValid(element, privacyError);
-		acceptPrivacyOk = true;
-	}
-	checkForm();
-}
-
-// cookies validation
-const validateCookies = async (element) => {
-	if (element.value != "true") {
-		setInvalid(element, cookiesError, await localize("You must accept the cookies policy"));
-		acceptCookiesOk = false;
-	}
-	else {
-		setValid(element, cookiesError);
-		acceptCookiesOk = true;
+/**
+ * Generic function to validate text inputs with min length.
+ */
+const validateText = async (field, minLen) => {
+	if (inputs[field].value.length < minLen) {
+		setInvalid(inputs[field], errors[field], await localize(`${field} must be at least ${minLen} characters long`));
+		fieldStatus[field] = false;
+	} else {
+		setValid(inputs[field], errors[field]);
+		fieldStatus[field] = true;
 	}
 	checkForm();
 }
 
+/**
+ * Auto-populates display name if empty.
+ */
+const validateDisplayName = async () => {
+	if (inputs.displayName.value.length < 2) {
+		inputs.displayName.value = `${inputs.firstName.value} ${inputs.lastName.value}`;
+		setInvalid(inputs.displayName, errors.displayName, await localize("If empty, your real name will be used"));
+		fieldStatus.displayName = true; // Considered valid even with auto-populate
+	} else {
+		setValid(inputs.displayName, errors.displayName);
+		fieldStatus.displayName = true;
+	}
+	checkForm();
+}
+
+/**
+ * Validates birthdate.
+ */
+const validateBirthdate = async () => {
+	const birthdate = new Date(inputs.birthdate.value);
+	const today = new Date();
+
+	if (!inputs.birthdate.value || birthdate > today || birthdate > new Date(today.getFullYear() - 8, today.getMonth(), today.getDate())) {
+		setInvalid(inputs.birthdate, errors.birthdate, await localize("Invalid birthdate"));
+		fieldStatus.birthdate = false;
+	} else {
+		setValid(inputs.birthdate, errors.birthdate);
+		fieldStatus.birthdate = true;
+	}
+	checkForm();
+}
+
+/**
+ * Validates checkbox fields like terms, privacy, cookies.
+ */
+const validateCheckbox = async (field) => {
+	if (inputs[field].value !== "true") {
+		setInvalid(inputs[field], errors[field], await localize(`You must accept the ${field}`));
+		fieldStatus[field] = false;
+	} else {
+		setValid(inputs[field], errors[field]);
+		fieldStatus[field] = true;
+	}
+	checkForm();
+}
+
+/**
+ * Example listener setup to validate on input.
+ */
+const setupListeners = () => {
+	inputs.email.addEventListener('input', validateEmail);
+	inputs.firstName.addEventListener('change', () => validateText('firstName', 2));
+	inputs.lastName.addEventListener('change', () => validateText('lastName', 2));
+	inputs.displayName.addEventListener('change', validateDisplayName);
+	inputs.birthdate.addEventListener('input', validateBirthdate);
+	['acceptTerms', 'acceptPrivacy', 'acceptCookies'].forEach(field =>
+		inputs[field].addEventListener('input', () => validateCheckbox(field))
+	);
+}
+
+/**
+ * Initial startup process.
+ */
 const startup = async () => {
-	let translation = await localize(description);
+	document.getElementById("description").innerHTML = await localize(description);
 	passwordRules = await getPasswordRules();
-	document.getElementById("description").innerHTML = translation;
-	await validateEmail(email);
-	await validatePassword(password);
-	await validatePasswordConfirm(passwordConfirm);
-	await validateFirstName(firstName);
-	await validateLastName(lastName);
-	await validateDisplayedName(displayName);
-	await validateBirthdate(birthdate);
-	await validateProfilePicture(profilePicture);
-	await validateTerms(acceptTerms);
-	await validatePrivacy(acceptPrivacy);
-	await validateCookies(acceptCookies);
+
+	await validateEmail();
+	await validateText('firstName', 2);
+	await validateText('lastName', 2);
+	await validateDisplayName();
+	await validateBirthdate();
+
+	await validateCheckbox('acceptTerms');
+	await validateCheckbox('acceptPrivacy');
+	await validateCheckbox('acceptCookies');
+
 	checkForm();
+	setupListeners();
 }
-
-email.addEventListener('input', async () => {
-	await validateEmail(email);
-});
-
-password.addEventListener('input', async () => {
-	await validatePassword(password);
-	await validatePasswordConfirm(passwordConfirm);
-});
-
-passwordConfirm.addEventListener('input', async () => {
-	await validatePasswordConfirm(passwordConfirm);
-});
-
-firstName.addEventListener('change', async () => {
-	await validateFirstName(firstName);
-	await validateDisplayedName(displayName);
-});
-
-lastName.addEventListener('change', async () => {
-	await validateLastName(lastName);
-	await validateDisplayedName(displayName);
-});
-
-displayName.addEventListener('change', async () => {
-	await validateDisplayedName(displayName);
-});
-
-birthdate.addEventListener('input', async () => {
-	await validateBirthdate(birthdate);
-});
-
-profilePicture.addEventListener('change', async () => {
-	await validateProfilePicture(profilePicture);
-});
-
-acceptTerms.addEventListener('input', async () => {
-	await validateTerms(acceptTerms);
-});
-
-acceptPrivacy.addEventListener('input', async () => {
-	await validatePrivacy(acceptPrivacy);
-});
-
-acceptCookies.addEventListener('input', async () => {
-	await validateCookies(acceptCookies);
-});

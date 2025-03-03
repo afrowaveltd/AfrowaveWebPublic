@@ -336,7 +336,7 @@ namespace SharedTools.Services
 		}
 
 		// ResizeImage
-		private void ResizeImage(string sourcePath, string targetPath, int width, int height)
+		private static void ResizeImage(string sourcePath, string targetPath, int width, int height)
 		{
 			using Image image = Image.Load(sourcePath);
 			image.Mutate(x => x.Resize(new ResizeOptions

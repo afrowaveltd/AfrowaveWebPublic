@@ -1,316 +1,203 @@
-﻿let smtpHostOk = false;
-let smtpPortOk = true;
-let smtpUserOk = false;
-let smtpPasswordOk = false;
-let smtpSenderEmailOk = false;
-let smtpSenderNameOk = true;
-let smtpSecureConnectionOk = true;
-let smtpUseAuthenticationOk = true;
+﻿// Track validation states for all SMTP fields
+const smtpStatus = {
+	host: false,
+	port: true, // default
+	user: false,
+	password: false,
+	senderEmail: false,
+	senderName: true, // default
+	secureConnection: true, // default
+	useAuthentication: true, // default
+};
 
+// Track form capabilities
 let canAutodetect = false;
 let canTest = false;
 let canSave = false;
 
-const smtpHostErr = document.getElementById('smtp_host_err');
-const smtpPortErr = document.getElementById('smtp_port_err');
-const smtpUserErr = document.getElementById('smtp_user_err');
-const smtpPasswordErr = document.getElementById('smtp_pass_err');
-const smtpSenderEmailErr = document.getElementById('smtp_email_err');
-const smtpSenderNameErr = document.getElementById('smtp_name_err');
-const smtpSecureConnectionErr = document.getElementById('smtp_sso_err');
+// References to error message containers
+const errors = {
+	host: document.getElementById('smtp_host_err'),
+	port: document.getElementById('smtp_port_err'),
+	user: document.getElementById('smtp_user_err'),
+	password: document.getElementById('smtp_pass_err'),
+	senderEmail: document.getElementById('smtp_email_err'),
+	senderName: document.getElementById('smtp_name_err'),
+	secureConnection: document.getElementById('smtp_sso_err'),
+};
+
+// References to UI elements
 const logDiv = document.getElementById('test_log');
 const logData = document.getElementById('log_content');
 const logTitle = document.getElementById('log_title');
 
+// Unified check form function to handle all state and button toggling
 const checkSmtpForm = () => {
-	if (smtpHostOk && smtpPortOk && smtpUserOk && smtpPasswordOk && smtpSenderEmailOk && smtpSenderNameOk && smtpSecureConnectionOk && smtpUseAuthenticationOk) {
-		canTest = true;
-	} else {
-		canTest = false;
-	}
-	if (smtpHostOk && document.getElementById('auth_required').value == "true") {
-		canAutodetect = true;
-	}
-	else {
-		canAutodetect = false;
-	}
+	const allValid = Object.values(smtpStatus).every(status => status);
+	const authRequired = document.getElementById('auth_required').value === "true";
 
-	if (canTest) {
-		document.getElementById('testSmtp').removeAttribute('disabled');
-	}
-	else {
-		document.getElementById('testSmtp').setAttribute('disabled', 'disabled');
-	}
+	canTest = allValid;
+	canAutodetect = smtpStatus.host && authRequired;
 
-	if (canAutodetect) {
-		document.getElementById('detectSmtp').removeAttribute('disabled');
-	}
-	else {
-		document.getElementById('detectSmtp').setAttribute('disabled', 'disabled');
-	}
+	toggleButton('testSmtp', canTest);
+	toggleButton('detectSmtp', canAutodetect);
+	toggleButton('submit', canSave);
 
-	// check status of variables *Ok to colorize the input fields
-
-	const smtpHost = document.getElementById('smtp_host');
-	const smtpPort = document.getElementById('smtp_port');
-	const smtpUser = document.getElementById('smtp_user');
-	const smtpPassword = document.getElementById('smtp_pass');
-	const smtpSendEmail = document.getElementById('smtp_email');
-	const smtpSendName = document.getElementById('smtp_name');
-	const smtpSecureConnection = document.getElementById('smtp_sso');
-	const smtpUseAuthentication = document.getElementById('auth_required');
-
-	if (smtpHostOk) {
-		smtpHost.style.borderColor = 'green';
-	} else {
-		smtpHost.style.borderColor = 'red';
-	}
-
-	if (smtpPortOk) {
-		smtpPort.style.borderColor = 'green';
-	} else {
-		smtpPort.style.borderColor = 'red';
-	}
-
-	if (smtpUserOk) {
-		smtpUser.style.borderColor = 'green';
-	} else {
-		smtpUser.style.borderColor = 'red';
-	}
-
-	if (smtpPasswordOk) {
-		smtpPassword.style.borderColor = 'green';
-	} else {
-		smtpPassword.style.borderColor = 'red';
-	}
-
-	if (smtpSenderEmailOk) {
-		smtpSendEmail.style.borderColor = 'green';
-	} else {
-		smtpSendEmail.style.borderColor = 'red';
-	}
-
-	if (smtpSenderNameOk) {
-		smtpSendName.style.borderColor = 'green';
-	} else {
-		smtpSendName.style.borderColor = 'red';
-	}
-
-	if (smtpSecureConnectionOk) {
-		smtpSecureConnection.style.borderColor = 'green';
-	} else {
-		smtpSecureConnection.style.borderColor = 'red';
-	}
-
-	if (smtpUseAuthenticationOk) {
-		smtpUseAuthentication.style.borderColor = 'green';
-	} else {
-		smtpUseAuthentication.style.borderColor = 'red';
-	}
-
-	if (canSave == true) {
-		document.getElementById('submit').removeAttribute('disabled');
-	}
-	else {
-		document.getElementById('submit').setAttribute('disabled', 'disabled');
-	}
+	// Visual feedback (border colors)
+	applyFieldStatus('smtp_host', smtpStatus.host);
+	applyFieldStatus('smtp_port', smtpStatus.port);
+	applyFieldStatus('smtp_user', smtpStatus.user);
+	applyFieldStatus('smtp_pass', smtpStatus.password);
+	applyFieldStatus('smtp_email', smtpStatus.senderEmail);
+	applyFieldStatus('smtp_name', smtpStatus.senderName);
+	applyFieldStatus('smtp_sso', smtpStatus.secureConnection);
+	applyFieldStatus('auth_required', smtpStatus.useAuthentication);
 }
 
-const checkSmtpHost = async (element) => {
-	if (element.value.trim() === '') {
-		smtpHostOk = false;
-		smtpHostErr.innerHTML = await localize('SMTP Host is required');
+// Helper: Set input field border color based on its validation status
+const applyFieldStatus = (fieldId, isValid) => {
+	document.getElementById(fieldId).style.borderColor = isValid ? 'green' : 'red';
+}
+
+// Helper: Enable or disable a button
+const toggleButton = (buttonId, enabled) => {
+	document.getElementById(buttonId).disabled = !enabled;
+}
+
+// Generic field checker for simple required fields
+const checkRequiredField = async (field, errorElement, errorMessageKey) => {
+	if (field.value.trim() === '') {
+		smtpStatus[field.id.split('_')[1]] = false;
+		errorElement.innerHTML = await localize(errorMessageKey);
 	} else {
-		smtpHostOk = true;
-		smtpHostErr.innerHTML = '';
+		smtpStatus[field.id.split('_')[1]] = true;
+		errorElement.innerHTML = '';
 	}
 	checkSmtpForm();
 }
 
-const checkSmtpPort = async (element) => {
-	if (element.value.trim() === '' || element.value.trim() === "0") {
-		smtpPortOk = false;
-		smtpPortErr.innerHTML = await localize('SMTP port is required');
-	} else {
-		smtpPortOk = true;
-		smtpPortErr.innerHTML = '';
-	}
-	checkSmtpForm();
-}
+// Individual field checkers
+const checkSmtpHost = async (element) => checkRequiredField(element, errors.host, 'SMTP Host is required');
+const checkSmtpPort = async (element) => checkRequiredField(element, errors.port, 'SMTP Port is required');
 
 const checkSmtpUser = async (element) => {
-	const smtpUser = element;
-	if (smtpUser.value.trim() === '' && document.getElementById('auth_required').value === "true") {
-		smtpUserOk = false;
-		smtpUserErr.innerHTML = await localize('SMTP user is required');
+	const authRequired = document.getElementById('auth_required').value === "true";
+	if (element.value.trim() === '' && authRequired) {
+		smtpStatus.user = false;
+		errors.user.innerHTML = await localize('SMTP user is required');
 	} else {
-		smtpUserOk = true;
-		smtpUserErr.innerHTML = '';
+		smtpStatus.user = true;
+		errors.user.innerHTML = '';
 	}
 	checkSmtpForm();
 }
 
 const checkSmtpPassword = async (element) => {
-	const smtpPassword = element;
-	if (smtpPassword.value.trim() === '' && document.getElementById('auth_required').value === "true") {
-		smtpPasswordOk = false;
-		smtpPasswordErr.innerHTML = await localize('SMTP Password is required');
+	const authRequired = document.getElementById('auth_required').value === "true";
+	if (element.value.trim() === '' && authRequired) {
+		smtpStatus.password = false;
+		errors.password.innerHTML = await localize('SMTP Password is required');
 	} else {
-		smtpPasswordOk = true;
-		smtpPasswordErr.innerHTML = '';
+		smtpStatus.password = true;
+		errors.password.innerHTML = '';
 	}
 	checkSmtpForm();
 }
 
-const checkSmtpSenderEmail = async (element) => {
-	if (element.value.trim() === '') {
-		smtpSenderEmailOk = false;
-		smtpSenderEmailErr.innerHTML = 'Sender Email is required';
-	} else {
-		smtpSenderEmailOk = true;
-		smtpSenderEmailErr.innerHTML = '';
-	}
-	checkSmtpForm();
-}
+const checkSmtpSenderEmail = async (element) => checkRequiredField(element, errors.senderEmail, 'Sender Email is required');
 
 const checkSmtpSenderName = async (element) => {
 	if (element.value.trim() === '') {
-		let emailValue = document.getElementById('smtp_email').value;
-		if (emailValue.trim() === '') {
-			smtpSenderNameOk = false;
-			smtpSenderNameErr.innerHTML = await localize('Sender name is required');
+		const email = document.getElementById('smtp_email').value;
+		if (email.trim() === '') {
+			smtpStatus.senderName = false;
+			errors.senderName.innerHTML = await localize('Sender name is required');
 		} else {
-			this.value = emailValue;
-			smtpSenderNameOk = true;
-			smtpSenderNameErr.innerHTML = '';
+			element.value = email;
+			smtpStatus.senderName = true;
+			errors.senderName.innerHTML = '';
 		}
 	} else {
-		smtpSenderNameOk = true;
-		smtpSenderNameErr.innerHTML = '';
+		smtpStatus.senderName = true;
+		errors.senderName.innerHTML = '';
 	}
 	checkSmtpForm();
 }
 
-const checkSmtpSecureConnection = (element) => {
-	const smtpSecureConnection = element
-	smtpSecureConnectionOk = true;
-	smtpSecureConnectionErr.innerHTML = '';
-
+const checkSmtpSecureConnection = () => {
+	smtpStatus.secureConnection = true;
+	errors.secureConnection.innerHTML = '';
 	checkSmtpForm();
 }
 
-const checkSmtpUseAuthentication = (element) => {
-	const userElement = document.getElementById('smtp_user');
-	const passElement = document.getElementById('smtp_pass');
+const checkSmtpUseAuthentication = () => {
+	const userField = document.getElementById('smtp_user');
+	const passField = document.getElementById('smtp_pass');
+	const authRequired = document.getElementById('auth_required').value === 'true';
 
-	const smtpUseAuthentication = element;
-	if (smtpUseAuthentication.value.trim() === 'true') {
-		// userElement.removeAttribute('disabled');
-		// passElement.removeAttribute('disabled');
-		userElement.removeAttribute('disabled');
-		passElement.removeAttribute('disabled');
-	} else {
-		// userElement.setAttribute('disabled', 'disabled');
-		// passElement.setAttribute('disabled', 'disabled');
-		userElement.setAttribute('disabled', 'disabled');
-		passElement.setAttribute('disabled', 'disabled');
-		smtpUseAuthenticationOk = true;
-	}
+	userField.disabled = !authRequired;
+	passField.disabled = !authRequired;
+
+	smtpStatus.useAuthentication = true; // This doesn't need explicit validation
 	checkSmtpForm();
 }
 
+// Function to set selected secure connection option (used by autodetect)
 function setSelectedSmtpSecure(value) {
-	const selectElement = document.getElementById("smtp_sso");
-
-	if (selectElement) {
-		selectElement.value = value.toString(); // Ensure it's a string
-	}
+	document.getElementById("smtp_sso").value = value.toString();
 }
 
+// Autodetect SMTP settings from the server
 const autodetectSmtp = async () => {
 	const resultDiv = document.getElementById('result_div');
-	resultDiv.innerHTML = "";
-	const hostName = document.getElementById('smtp_host').value;
+	resultDiv.innerHTML = '';
+
+	const host = document.getElementById('smtp_host').value;
 	const user = document.getElementById('smtp_user').value;
 	const pass = document.getElementById('smtp_pass').value;
-	document.getElementById('spinner_autodetect').classList.add('spinner');
-	let autodetectResult = await detectSmtp(hostName, user, pass);
-	document.getElementById('spinner_autodetect').classList.remove('spinner');
-	console.log(autodetectResult);
-	if (autodetectResult.successful) {
-		resultDiv.classList.remove('error');
-		resultDiv.classList.add('success');
-		resultDiv.innerHTML = await localize(autodetectResult.message);
 
+	document.getElementById('spinner_autodetect').classList.add('spinner');
+	const autodetectResult = await detectSmtp(host, user, pass);
+	document.getElementById('spinner_autodetect').classList.remove('spinner');
+
+	resultDiv.classList.remove('error', 'success');
+	resultDiv.classList.add(autodetectResult.successful ? 'success' : 'error');
+	resultDiv.innerHTML = await localize(autodetectResult.message);
+
+	if (autodetectResult.successful) {
 		document.getElementById('smtp_port').value = autodetectResult.port;
-		document.getElementById('smtp_sso').value = autodetectResult.secure.toString();
+		setSelectedSmtpSecure(autodetectResult.secure);
 		document.getElementById('auth_required').value = autodetectResult.requiresAuthentication;
-		document.getElementById('smtp_port').style.borderColor = 'green';
-		document.getElementById('smtp_sso').style.borderColor = 'green';
-		document.getElementById('auth_required').style.borderColor = 'green';
-		checkSmtpPort(document.getElementById('smtp_port'));
-		checkSmtpUseAuthentication(document.getElementById('auth_required'));
-		checkSmtpUser(document.getElementById('smtp_user'));
-		checkSmtpPassword(document.getElementById('smtp_pass'));
-		checkSmtpSenderEmail(document.getElementById('smtp_email'));
-		checkSmtpSenderName(document.getElementById('smtp_name'));
-		checkSmtpSecureConnection(document.getElementById('smtp_sso'));
+
 		checkSmtpForm();
-	} else {
-		resultDiv.classList.remove('success');
-		resultDiv.classList.add('error');
-		resultDiv.innerHTML = await localize(autodetectResult.message);
 	}
 }
 
+// Test SMTP settings
 const testSmtpSettings = async () => {
-	const hostVal = document.getElementById('smtp_host').value;
-	const portVal = document.getElementById('smtp_port').value;
-	const usernameVal = document.getElementById('smtp_user').value;
-	const passwordVal = document.getElementById('smtp_pass').value;
-	const senderEmailVal = document.getElementById('smtp_email').value;
-	const senderNameVal = document.getElementById('smtp_name').value;
-	const ssoVal = document.getElementById('smtp_sso').value;
-	const authorizationRequiredVal = document.getElementById('auth_required').value;
-	let testingTarget = prompt(await localize("Enter the email address to send the test email to"), senderEmailVal);
-	if (testingTarget === null) {
-		return;
-	}
-	if (testingTarget.trim() === '') {
-		alert(await localize("Please enter a valid email address"));
-		return;
-	}
-	
+	const testTarget = prompt(await localize("Enter the email address to send the test email to"), document.getElementById('smtp_email').value);
+	if (!testTarget) return;
 
 	document.getElementById('spinner_test').classList.add('spinner');
-	const testResult = await testSmtp(hostVal, portVal, usernameVal, passwordVal, senderEmailVal, senderNameVal, ssoVal, authorizationRequiredVal, testingTarget);
-	console.log(testResult);
+	const testResult = await testSmtp(
+		...['host', 'port', 'user', 'password', 'senderEmail', 'senderName', 'secureConnection', 'useAuthentication']
+			.map(field => document.getElementById(`smtp_${field}`).value),
+		testTarget
+	);
 	document.getElementById('spinner_test').classList.remove('spinner');
-	const resultDiv = document.getElementById('result_div');
+
 	logDiv.style.display = 'block';
 	logTitle.innerHTML = await localize("SMTP testing result");
 	showLogInElement(testResult.log, 'log_content');
-	resultDiv.innerHTML = "";
-	if (testResult.success) {
-		resultDiv.classList.remove('error');
-		resultDiv.classList.add('success');
-		resultDiv.innerHTML = await localize("Testing email sent successfully");
-		canSave = true;
-		checkSmtpForm();
-	} else {
-		resultDiv.classList.remove('success');
-		resultDiv.classList.add('error');
-		resultDiv.innerHTML = await localize(testResult.error);
-		canSave = false;
-	}
-	if (testResult.log) {
-		console.log(testResult.log);
-	}
+
+	canSave = testResult.success;
+	checkSmtpForm();
 }
 
+// On load initialization
 window.onload = () => {
 	checkSmtpHost(document.getElementById('smtp_host'));
 	checkSmtpSenderEmail(document.getElementById('smtp_email'));
 	checkSmtpSenderName(document.getElementById('smtp_name'));
-	document.getElementById('test_log').style.display = 'none';
+	logDiv.style.display = 'none';
 }

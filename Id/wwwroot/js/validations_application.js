@@ -12,6 +12,12 @@ const iconPreview = document.getElementById('icon_preview');
 const applicationEmailErr = document.getElementById('application_email_err');
 const applicationWebsiteErr = document.getElementById('application_website_err');
 
+/**
+ * Helper function to check if a given URL is valid.
+ * Returns true if the URL is correctly formed, false otherwise.
+ * @param {string} url - The URL string to validate.
+ * @returns {boolean} - True if valid, false if invalid.
+ */
 const isValidUrl = (url) => {
 	try {
 		new URL(url);
@@ -21,6 +27,10 @@ const isValidUrl = (url) => {
 	}
 };
 
+/**
+ * Re-evaluates the overall form validity based on individual field statuses.
+ * Enables or disables the form submit button accordingly.
+ */
 const checkForm = () => {
 	if (applicationNameOk
 		&& applicationIconOk
@@ -41,6 +51,12 @@ const checkForm = () => {
 	}
 }
 
+/**
+ * Validates the application name field.
+ * Ensures length constraints are met and checks if the name is unique via an API call.
+ * Displays appropriate error messages and updates the validation status.
+ * @param {HTMLElement} element - The input element for the application name.
+ */
 const checkName = async (element) => {
 	const applicationName = element.value;
 	if (applicationName.length < 3) {
@@ -89,6 +105,12 @@ const checkName = async (element) => {
 	}
 }
 
+/**
+ * Validates the uploaded application icon file.
+ * Ensures the file is of a supported image type and is a real image.
+ * Displays an image preview and updates the validation status.
+ * @param {HTMLElement} element - The file input element for the application icon.
+ */
 const checkIcon = async (element) => {
 	const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
 	const file = element.files[0];
@@ -167,6 +189,12 @@ const checkIcon = async (element) => {
 	}
 }
 
+/**
+ * Validates the application email field.
+ * Ensures the email address format is correct.
+ * Displays an error message if invalid and updates the validation status.
+ * @param {HTMLElement} element - The input element for the application email.
+ */
 const checkEmail = async (element) => {
 	const email = element.value;
 	let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -184,6 +212,12 @@ const checkEmail = async (element) => {
 	checkForm();
 }
 
+/**
+ * Validates the application website URL field.
+ * Ensures the URL is correctly formatted (if provided).
+ * Displays an error message if invalid and updates the validation status.
+ * @param {HTMLElement} element - The input element for the application website URL.
+ */
 const checkWebsite = async (element) => {
 	const brandUrl = element.value;
 	if (brandUrl.length > 0) {
