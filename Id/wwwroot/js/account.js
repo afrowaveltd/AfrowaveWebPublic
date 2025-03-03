@@ -1,4 +1,8 @@
-﻿window.onload = async () => {
+﻿/**
+ * Basic functions running on the page load time.
+ */
+
+window.onload = async () => {
 	try {
 		loadHelp(help);
 	}
