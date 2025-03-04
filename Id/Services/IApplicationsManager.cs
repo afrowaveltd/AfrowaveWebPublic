@@ -1,8 +1,4 @@
-﻿using Id.Models.DataViews;
-using Id.Models.InputModels;
-using Id.Models.ResultModels;
-
-namespace Id.Services
+﻿namespace Id.Services
 {
 	/// <summary>
 	/// Interface for managing applications.
@@ -30,6 +26,12 @@ namespace Id.Services
 		Task<string> GetAuthenticatorIdAsync();
 
 		/// <summary>
+		/// Gets the authenticator images links.
+		/// </summary>
+		/// <returns>ImageLinksResult</returns>
+		Task<ImageLinksResult> GetAuthenticatorImagesLinksAsync();
+
+		/// <summary>
 		/// Get the full size logo path.
 		/// </summary>
 		/// <param name="applicationId"></param>
@@ -42,6 +44,13 @@ namespace Id.Services
 		/// <param name="applicationId">Application ID</param>
 		/// <returns>string with the relative path to the icon</returns>
 		string GetIconPath(string applicationId);
+
+		/// <summary>
+		/// Get the image links.
+		/// </summary>
+		/// <param name="applicationId">Application ID</param>
+		/// <returns>ImageLinksResult</returns>
+		Task<ImageLinksResult> GetImageLinksAsync(string applicationId);
 
 		/// <summary>
 		/// Get the application information.

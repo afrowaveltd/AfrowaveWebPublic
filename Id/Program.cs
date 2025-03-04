@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
-using SharedTools.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -65,6 +64,15 @@ builder.Services
 	 .AddLocalization();
 
 builder.Services.AddOpenApi("AfrowaveId");
+
+/*
+builder.Services.AddSwaggerGen(options =>
+{
+	string xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+	string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+	options.IncludeXmlComments(xmlPath);
+});
+*/
 
 // Add services to the container.
 builder.Services.AddRazorPages()

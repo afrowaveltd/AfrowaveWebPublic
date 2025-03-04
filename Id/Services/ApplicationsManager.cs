@@ -1,10 +1,5 @@
 ﻿/* ApplicationsManager.cs */
 
-using Id.Models.DataViews;
-using Id.Models.InputModels;
-using Id.Models.ResultModels;
-using SharedTools.Services;
-
 namespace Id.Services
 {
 	/// <summary>
@@ -58,6 +53,79 @@ namespace Id.Services
 		public async Task<bool> ApplicationExistsAsync(string applicationId)
 		{
 			return await _context.Applications.AnyAsync(s => s.Id == applicationId);
+		}
+
+		/// <summary>
+		/// Get authenticator images links
+		/// </summary>
+		/// <returns>ImageLinksResult</returns>
+		public async Task<ImageLinksResult> GetAuthenticatorImagesLinksAsync()
+		{
+			string applicationId = await GetAuthenticatorIdAsync();
+			if(string.IsNullOrEmpty(applicationId))
+			{
+				return new ImageLinksResult();
+			}
+			else
+			{
+				return await GetImageLinksAsync(applicationId);
+			}
+		}
+
+		/// <summary>
+		/// Get image links
+		/// </summary>
+		/// <param name="applicationId">The application ID</param>
+		/// <returns>ImageLinksResult</returns>
+		public async Task<ImageLinksResult> GetImageLinksAsync(string applicationId)
+		{
+			ImageLinksResult result = new();
+			if(!await _context.Applications
+				.Where(s => s.Id == applicationId)
+				.AnyAsync())
+			{
+				return result;
+			}
+			string path = Path.Combine(appImgDirectory, applicationId, "icons");
+			string urlPath = $"{webImgDirectory}/{applicationId}/icons";
+			if(File.Exists(Path.Combine(path, "icon-32x32.ico")))
+			{
+				result.Ico = $"{urlPath}/icon-32x32.ico";
+			}
+			if(File.Exists(Path.Combine(path, "icon-16x16.png")))
+			{
+				result.Png16 = $"{urlPath}/icon-16x16.png";
+			}
+			if(File.Exists(Path.Combine(path, "icon-32x32.png")))
+			{
+				result.Png32 = $"{urlPath}/icon-32x32.png";
+			}
+			if(File.Exists(Path.Combine(path, "icon-76x76.png")))
+			{
+				result.Png76 = $"{urlPath}/icon-76x76.png";
+			}
+			if(File.Exists(Path.Combine(path, "icon-120x120.png")))
+			{
+				result.Png120 = $"{urlPath}/icon-120x120.png";
+			}
+			if(File.Exists(Path.Combine(path, "icon-152x152.png")))
+			{
+				result.Png152 = $"{urlPath}/icon-152x152.png";
+			}
+			if(File.Exists(Path.Combine(path, "icon-180x180.png")))
+			{
+				result.Png180 = $"{urlPath}/icon-180x180.png";
+			}
+			if(File.Exists(Path.Combine(path, "icon-192x192.png")))
+			{
+				result.Png192 = $"{urlPath}/icon-192x192.png";
+			}
+			if(File.Exists(Path.Combine(path, "icon-512x512.png")))
+			{
+				result.Png512 = $"{urlPath}/icon-512x512.png";
+			}
+
+			return result;
 		}
 
 		/// <summary>

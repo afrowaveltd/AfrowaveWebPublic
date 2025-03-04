@@ -7,7 +7,6 @@
 using Id.Models.InputModels;
 using Id.Models.ResultModels;
 using Id.Models.SettingsModels;
-using SharedTools.Services;
 using System.ComponentModel.DataAnnotations;
 
 namespace Id.Services

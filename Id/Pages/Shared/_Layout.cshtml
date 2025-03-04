@@ -3,11 +3,12 @@
 
 @inject IStringLocalizer<Id.Pages.IndexModel> t;
 @inject ICookieService cookieService;
+@inject IApplicationsManager applicationsManager;
 @inject ISelectOptionsServices options;
 
 @{
     ViewData["theme"] = cookieService.GetOrCreateCookie("theme", "dark", 0);
-
+	var icons = await applicationsManager.GetAuthenticatorImagesLinksAsync();
     var theme = cookieService.GetOrCreateCookie("theme", "dark", 0);
     var style = $"/css/{theme}-theme.css";
     string selected = cookieService.GetCookie("language") ?? "en";
@@ -21,12 +22,12 @@
 <html lang="@selected" dir="@direction">
 <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="@icons.Png76" sizes="76x76" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="shortcut icon" href="@icons.Ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="@icons.Png180" />
     <meta name="apple-mobile-web-app-title" content="Afrowave" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - @t["Id"]</title>
     <script type="importmap"></script>
@@ -41,7 +42,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
             <div class="container-xxl">
-                <a class="navbar-brand" asp-area="" asp-page="/Index" title=@t["Home page"]><img src="/img/favicon_32.png" /></a>
+                <a class="navbar-brand" asp-area="" asp-page="/Index" title=@t["Home page"]><img src="@icons.Png32" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
