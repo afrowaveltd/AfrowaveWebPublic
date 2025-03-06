@@ -23,6 +23,13 @@ namespace Id.Services
 		Task<string> GetDirectionAsync(string code);
 
 		/// <summary>
+		/// Get the genders options
+		/// </summary>
+		/// <param name="selected">Selected value</param>
+		/// <returns>List of items for SELECT element</returns>
+		Task<List<SelectListItem>> GetGendersAsync(string selected = "Other");
+
+		/// <summary>
 		/// Get the HTTP headers options
 		/// </summary>
 		/// <param name="selected">Selected value</param>

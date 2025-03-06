@@ -1,0 +1,10 @@
+﻿@page
+@model Id.Pages.Helps.Account_GenderModel
+@{
+}
+<h2 class="information text-center">@Model.Title</h2>
+
+@foreach(var line in Model.Lines)
+{
+	<p>@Html.Raw(line)</p>
+}

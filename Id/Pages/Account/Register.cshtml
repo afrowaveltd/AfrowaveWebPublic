@@ -12,9 +12,9 @@
 
 <style>
 	#icon_preview img {
-	width: 50px;
-	height: 50px;
-	margin-top: 15px;
+	width: 85px;
+	height: 85px;
+	margin-top: 8px;
 
 	object-fit: cover; /* Ensures the image fits nicely */
 	}
@@ -29,11 +29,12 @@
 
 		<div class="row"> 
 			<div class="col-md-2">
-				<img class="centered" style="width: 32px; height: 32px; margin: 3px;" src="@Model.ApplicationInfo.ApplicationLogoUrl" />
+				<img class="centered" style="width: 76px; height: 76px; margin: 3px; margin-right: 5px;" src="@Model.ApplicationInfo.ApplicationLogoUrl" />
 			</div>
 			<div class="col-md-10">
-				<h4>@Model.ApplicationInfo.BrandName | @Model.ApplicationInfo.ApplicationName</h4>
-				<div class="text-center"><i><span id="description"></span></i></div>
+				<h4 class="mt-3 mb-0">@Model.ApplicationInfo.BrandName | @Model.ApplicationInfo.ApplicationName</h4><br />
+				<div class="text-center mt-0"><i><span id="description"></span></i></div>
+				</span>
 			</div>
 		</div>
 		<hr />
@@ -161,6 +162,17 @@
 						<span id="icon_preview" class="centered"></span>
 					</div>
 				</div>
+
+			<div class="form-group">
+				<label style="font-weight: bold">@t["Gender"] </label>
+				<select asp-for="Input.Gender"
+						class="form-control"
+						id="gender_input"
+						onclick="loadHelp('Account_Gender')"
+						asp-items="@Model.GenderOptions">
+				</select>
+			</div>
+
 				<div class="form-group">
 					<div id="terms_err" class="text-danger p-2 pb0"></div>
 					<label style="font-weight: bold">@t["Agree to terms"] <a href="/Privacy" target="_blank" style="margin-left: auto;"><i class="bi bi-info-circle" style="margin-left: auto;"></i></a></label>

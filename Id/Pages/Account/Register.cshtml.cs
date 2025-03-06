@@ -1,6 +1,3 @@
-using Id.Models.DataViews;
-using Id.Models.InputModels;
-using Id.Models.SettingsModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Id.Pages.Account
@@ -60,6 +57,11 @@ namespace Id.Pages.Account
 		/// Gets the list of terms options.
 		/// </summary>
 		public List<SelectListItem> TermsOptions => _selectOptionsService.GetBinaryOptionsAsync(false).Result;
+
+		/// <summary>
+		/// Gets the list of gender options
+		/// </summary>
+		public List<SelectListItem> GenderOptions => _selectOptionsService.GetGendersAsync("Other").Result;
 
 		/// <summary>
 		/// Gets the list of cookie options.
@@ -155,10 +157,26 @@ namespace Id.Pages.Account
 			_logger.LogInformation("Registering user");
 			if(ModelState.IsValid)
 			{
-				return RedirectToPage("/Account/Index");
+				// To do: Implement the registration logic
+				RegisterUserResult registrationResult = await _userService.RegisterUserAsync(Input);
+				if(!registrationResult.UserCreated)
+				{
+					RegistrationErrors = registrationResult.Errors;
+					return Page();
+				}
+
+				return RedirectToPage(
+					"/Account/ApplicationUserRegistration",
+					new
+					{
+						applicationId = Input.ApplicationId ?? AuthenticatorId,
+						userId = registrationResult.UserId,
+						profilePictureUploaded = registrationResult.ProfilePictureUploaded
+					});
 			}
 			else
 			{
+				RegistrationErrors = [.. ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)];
 				return Page();
 			}
 		}

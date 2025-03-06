@@ -205,7 +205,7 @@ namespace Id.Services
 			ApplicationView result = new();
 			result.ApplicationId = application.Id;
 			result.ApplicationName = application.Name;
-			result.ApplicationLogoUrl = GetIconPath(applicationId);
+			result.ApplicationLogoUrl = GetLogoPath(applicationId, LogoSize.png76px);
 			result.ApplicationDescription = application.Description ?? string.Empty;
 			result.ApplicationWebsite = application.ApplicationWebsite ?? string.Empty;
 			result.BrandName = application.Brand?.Name ?? string.Empty;

@@ -60,6 +60,27 @@ namespace Id.Services
 		}
 
 		/// <summary>
+		/// Gets options for genders
+		/// </summary>
+		/// <param name="selected">Selected gender</param>
+		/// <returns>List of SelectListItem</returns>
+
+		public async Task<List<SelectListItem>> GetGendersAsync(string selected = "Other")
+		{
+			List<SelectListItem> items = [];
+			foreach(Gender gender in Enum.GetValues<Gender>())
+			{
+				items.Add(new SelectListItem
+				{
+					Value = gender.ToString(),
+					Text = t[gender.ToString()],
+					Selected = gender.ToString() == selected
+				});
+			}
+			return await Task.FromResult(items);
+		}
+
+		/// <summary>
 		/// Gets the HTTP headers options.
 		/// </summary>
 		/// <param name="selected">Selected option</param>
