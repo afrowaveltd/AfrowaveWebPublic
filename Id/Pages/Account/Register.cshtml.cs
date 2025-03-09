@@ -169,9 +169,10 @@ namespace Id.Pages.Account
 					"/Account/ApplicationUserRegistration",
 					new
 					{
-						applicationId = Input.ApplicationId ?? AuthenticatorId,
+						authenticatorId = AuthenticatorId,
 						userId = registrationResult.UserId,
-						profilePictureUploaded = registrationResult.ProfilePictureUploaded
+						profilePictureUploaded = registrationResult.ProfilePictureUploaded,
+						applicationId = ApplicationId
 					});
 			}
 			else
