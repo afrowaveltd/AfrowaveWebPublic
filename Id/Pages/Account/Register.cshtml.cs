@@ -166,7 +166,7 @@ namespace Id.Pages.Account
 				}
 
 				return RedirectToPage(
-					"/Account/ApplicationUserRegistration",
+					"/Account/AuthenticatorUserRegistration",
 					new
 					{
 						authenticatorId = AuthenticatorId,

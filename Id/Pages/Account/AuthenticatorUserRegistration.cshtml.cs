@@ -4,15 +4,18 @@ namespace Id.Pages.Account
 	/// Model for the authenticator user registration
 	/// </summary>
 	/// <remarks>
-	/// Initializing new class instance<see cref="ApplicationUserRegistrationModel"/>.
+	/// Initializing new class instance<see cref="AuthenticatorUserRegistrationModel"/>.
 	/// </remarks>
 	/// <param name="t">String localizer.</param>
+	/// <param name="context">Application database context.</param>
 	/// <param name="logger">Logger.</param>
-	public class ApplicationUserRegistrationModel(IStringLocalizer<ApplicationUserRegistrationModel> t,
-			 ILogger<ApplicationUserRegistrationModel> logger) : PageModel
+	public class AuthenticatorUserRegistrationModel(IStringLocalizer<AuthenticatorUserRegistrationModel> t,
+		ApplicationDbContext context,
+		ILogger<AuthenticatorUserRegistrationModel> logger) : PageModel
 	{
-		private readonly IStringLocalizer<ApplicationUserRegistrationModel> _t = t;
-		private readonly ILogger<ApplicationUserRegistrationModel> _logger = logger;
+		private readonly IStringLocalizer<AuthenticatorUserRegistrationModel> _t = t;
+		private readonly ILogger<AuthenticatorUserRegistrationModel> _logger = logger;
+		private readonly ApplicationDbContext _context = context;
 
 		/// <summary>
 		/// Gets or sets the authenticator ID.
@@ -45,11 +48,13 @@ namespace Id.Pages.Account
 		/// <returns>Výsledek akce.</returns>
 		public async Task<IActionResult> OnGetAsync()
 		{
+			// Check if the authenticator ID is valid
 			if(string.IsNullOrEmpty(AuthenticatorId) || string.IsNullOrEmpty(UserId))
 			{
 				_logger.LogError("ApplicationId nebo UserId je neplatné");
 				return RedirectToPage("/Error/404");
 			}
+			User? user = await _context.Users.FindAsync(UserId);
 
 			return Page();
 		}
