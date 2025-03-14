@@ -25,7 +25,7 @@
 					<input asp-for="Input.Host" type="text" class="form-control" id="smtp_host"
 						onfocus="loadHelp('Install_SmtpServer')" onkeypress="checkSmtpHost(this);" />
 				</div>
-				<div class="form-group">
+				<div class="form-group manual">
 					<div id="smtp_port_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_port">@Model.t["Port"]</label>
 					<input asp-for="Input.Port" type="number" class="form-control" id="smtp_port"
@@ -34,57 +34,57 @@
 				<div class="form-group">
 					<div id="smtp_user_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_user">@Model.t["Login"]</label>
-					<input asp-for="Input.SmtpUsername" type="text" class="form-control" id="smtp_user" autocomplete="off"
-						onfocus="loadHelp('Install_SmtpUser')" onchange="checkSmtpUser(this)" />
+					<input asp-for="Input.SmtpUsername" type="text" class="form-control" id="smtp_user"
+						autocomplete="off" onfocus="loadHelp('Install_SmtpUser')" onchange="checkSmtpUser(this)" />
 				</div>
 				<div class="form-group">
 					<div id="smtp_pass_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_pass">@Model.t["Password"]</label>
-					<input asp-for="Input.SmtpPassword" type="password" class="form-control" id="smtp_pass" autocompolete="off"
-						onfocus="loadHelp('Install_SmtpPassword')" onchange="checkSmtpPassword(this)" />
+					<input asp-for="Input.SmtpPassword" type="password" class="form-control" id="smtp_pass"
+						autocompolete="off" onfocus="loadHelp('Install_SmtpPassword')"
+						onchange="checkSmtpPassword(this)" />
 				</div>
 				<div class="form-group">
 					<div id="smtp_email_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_email">@Model.t["Sender email"]</label>
-					<input asp-for="Input.SenderEmail" 
-						value="@Model.Input.SenderEmail" type="email" class="form-control" id="smtp_email"
-						onfocus="loadHelp('Install_SmtpEmail')" 
-						onchange="checkSmtpSenderEmail(this)" />
+					<input asp-for="Input.SenderEmail" value="@Model.Input.SenderEmail" type="email"
+						class="form-control" id="smtp_email" onfocus="loadHelp('Install_SmtpEmail')"
+						onchange="checkSmtpSenderEmail(this)" onfocus="checkSmtpSenderEmail(this)"
+						oninput="checkSmtpSenderEmail(this)" />
 				</div>
 				<div class="form-group">
 					<div id="smtp_name_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_sender">@Model.t["Sender Name"]</label>
 					<input asp-for="Input.SenderName" type="text" class="form-control" id="smtp_name"
-						value="@Model.Input.SenderName"
-						onfocus="loadHelp('Install_SmtpSender')" 
+						value="@Model.Input.SenderName" onfocus="loadHelp('Install_SmtpSender')"
 						onchange="checkSmtpSenderName(this)" />
 				</div>
-				<div class="form-group">
+				<div class="form-group manual">
 					<div id="smtp_sso_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_secure">@Model.t["Secure Socket Options"]</label>
-					<select asp-for="Input.Secure" class="form-control"
-							id="smtp_sso"
-						asp-items="@Model.options"
-						onfocus="loadHelp('Install_SmtpSecure')"
-						onchange="checkSmtpSecureConnection(this)"></select>
+					<select asp-for="Input.Secure" class="form-control" id="smtp_sso" asp-items="@Model.options"
+						onfocus="loadHelp('Install_SmtpSecure')" onchange="checkSmtpSecureConnection(this)"></select>
 				</div>
 				<div class="form-group">
 					<div id="uselogin_err" class="text-danger p-2 pb-0"></div>
 					<label for="smtp_secure">@Model.t["SMTP requires authentication"]</label>
 					<select asp-for="Input.AuthorizationRequired" id="auth_required" class="form-control"
-							onfocus="loadHelp('Install_SmtpAuthorizationRequired')"
-							onchange="checkSmtpUseAuthentication(this)">
+						onfocus="loadHelp('Install_SmtpAuthorizationRequired')"
+						onchange="checkSmtpUseAuthentication(this)">
 						<option value="true" selected>@Model.t["Yes"]</option>
 						<option value="false">@Model.t["No"]</option>
-						</select>
+					</select>
 				</div>
-				
+
 				<input type="hidden" asp-for="Input.ApplicationId" value="@Model.Input.ApplicationId" />
 				<div class="row mb-3">
-					<div class="col-4">
-						<button type="button" id="detectSmtp" class="btn btn-danger mt-3"
-						onclick="autodetectSmtp()"
-						disabled>
+					<div class="col-1">
+						<div class="centered"><a href="#" onclick="toggleAM()" title="@Model.t["Adjust manually"]"
+								style="font-size: 1.2em;" id="toggler"><i class="bi bi-hammer"></i></a> </div>
+					</div>
+					<div class="col-3">
+						<button type="button" id="detectSmtp" class="btn btn-danger mt-3" onclick="autodetectSmtp()"
+							disabled>
 							@Model.t["Detect settings"]
 						</button>
 					</div>
@@ -92,8 +92,8 @@
 						<div id="spinner_autodetect" style="padding:0px; margin-top: 13px"></div>
 					</div>
 					<div class="col-4">
-						<button type="button" id="testSmtp" class="btn btn-secondary mt-3" 
-							onclick="testSmtpSettings()" disabled>
+						<button type="button" id="testSmtp" class="btn btn-secondary mt-3" onclick="testSmtpSettings()"
+							disabled>
 							@Model.t["Test settings"]
 						</button>
 					</div>
@@ -108,13 +108,6 @@
 				</div>
 				<div class="row mb-3">
 					<div col="12" class="test-center" id="result_div"></div>
-					
-				</div>
-				<div class="row mb-3">
-					<div class="helper" style="display:none" id="test_log">
-						<h5 id="log_title" class="text-center"></h5>
-						<div id="log_content" style="font-family: monospace"></div>
-					</div>
 				</div>
 
 			</form>
@@ -122,8 +115,12 @@
 	</div>
 	<div class="col-md-5">
 		<div id="div_help" class="helper" style="display:none">
+
 		</div>
-		
+		<div class="helper mt-3" style="display:none; border-color: forestgreen" id="log_smtp">
+			<h5 id="log_title" class="text-center"></h5>
+			<div id="log_content" style="font-family: monospace; font-size: 0.8em"></div>
+		</div>
 	</div>
 </div>
 
@@ -131,4 +128,3 @@
 	let active_page = "smtp";
 	let help = ('Install_Smtp');
 </script>
-

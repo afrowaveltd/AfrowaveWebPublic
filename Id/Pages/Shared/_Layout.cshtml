@@ -8,18 +8,19 @@
 
 @{
     ViewData["theme"] = cookieService.GetOrCreateCookie("theme", "dark", 0);
-	var icons = await applicationsManager.GetAuthenticatorImagesLinksAsync();
+    var icons = await applicationsManager.GetAuthenticatorImagesLinksAsync();
     var theme = cookieService.GetOrCreateCookie("theme", "dark", 0);
     var style = $"/css/{theme}-theme.css";
     string selected = cookieService.GetCookie("language") ?? "en";
 
     List<SelectListItem> languageSelectList = await options.GetLanguagesOptionsAsync(selected);
-	List<SelectListItem> themeSelectList = await options.GetThemesAsync(theme, null);
+    List<SelectListItem> themeSelectList = await options.GetThemesAsync(theme, null);
     string direction = await options.GetDirectionAsync(selected);
 }
 
 <!DOCTYPE html>
 <html lang="@selected" dir="@direction">
+
 <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/png" href="@icons.Png76" sizes="76x76" />
@@ -38,35 +39,44 @@
     <link rel="stylesheet" href="@style" asp-append-version="true" />
 
 </head>
+
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
-            <div class="container-xxl">
-                <a class="navbar-brand" asp-area="" asp-page="/Index" title=@t["Home page"]><img src="@icons.Png32" /></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-page="/Index" title=@t["Home page"]><img
+                        src="@icons.Png32" /></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Account/Index" title="@t["Account"]"><i class="bi bi-person"></i></a>
+                            <a class="nav-link" asp-area="" asp-page="/Account/Index" title="@t["Account"]"><i
+                                    class="bi bi-person"></i></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Privacy" title="@t["Terms and Conditions"]"><i class="bi bi-info-circle"></i></a>
+                            <a class="nav-link" asp-area="" asp-page="/Privacy" title="@t["Terms and Conditions"]"><i
+                                    class="bi bi-info-circle"></i></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Cookies" title="@t["Cookies"]"><i class="bi bi-cookie"></i></a>
+                            <a class="nav-link" asp-area="" asp-page="/Cookies" title="@t["Cookies"]"><i
+                                    class="bi bi-cookie"></i></a>
                         </li>
                     </ul>
-        
-                    <select id="language_selector" class="nav-item form" style="margin-right: 10px; padding-top:2px; padding-bottom: 2px; padding-left: 5px;" onchange="changeLanguage(this.value)" asp-items="@languageSelectList"></select>
-                    <select id="theme_selector" class="nav-item form" style="margin-right: 10px; padding-top:2px;  padding-bottom: 2px; padding-left: 5px;" onchange="setTheme(this.value)" asp-items="@themeSelectList"></select>
+
+                    <select id="language_selector" class="nav-item form"
+                        style="margin-right: 10px; padding-top:2px; padding-bottom: 2px; padding-left: 5px;"
+                        onchange="changeLanguage(this.value)" asp-items="@languageSelectList"></select>
+                    <select id="theme_selector" class="nav-item form"
+                        style="margin-right: 10px; padding-top:2px;  padding-bottom: 2px; padding-left: 5px;"
+                        onchange="setTheme(this.value)" asp-items="@themeSelectList"></select>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container-fluid" style="padding: 20px, 5px, 20px, 5px;">
         <main role="main" class="pb-3 pt-3">
             @RenderBody()
         </main>
@@ -86,4 +96,5 @@
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

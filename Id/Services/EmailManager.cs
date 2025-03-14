@@ -68,57 +68,56 @@ namespace Id.Services
 		///	 </example>
 		public async Task<SmtpDetectionResult> AutodetectSmtpSettingsAsync(DetectSmtpSettingsInput input)
 		{
-			// Common SMTP ports
 			List<(int Port, SecureSocketOptions Security)> portSecurityCombinations =
 			[
 				(25, SecureSocketOptions.None),
-				(587, SecureSocketOptions.StartTls),
-				(465, SecureSocketOptions.SslOnConnect),
-				(25, SecureSocketOptions.Auto),
-				(587, SecureSocketOptions.Auto),
-				(465, SecureSocketOptions.Auto),
-				(2525, SecureSocketOptions.Auto) // failback
+		(587, SecureSocketOptions.StartTls),
+		(465, SecureSocketOptions.SslOnConnect),
+		(25, SecureSocketOptions.Auto),
+		(587, SecureSocketOptions.Auto),
+		(465, SecureSocketOptions.Auto),
+		(2525, SecureSocketOptions.Auto) // failback
 			];
 
 			SmtpDetectionResult response = new();
 
-			foreach((int port, SecureSocketOptions security) in portSecurityCombinations)
+			var tasks = portSecurityCombinations.Select(async combination =>
 			{
 				try
 				{
 					using SmtpClient client = new();
-					// attemt to connect with the current combination
-					await client.ConnectAsync(input.Host, port, security);
+					await client.ConnectAsync(input.Host, combination.Port, combination.Security);
 
-					// check if the server requires authentication
-					if(client.Capabilities.HasFlag(SmtpCapabilities.Authentication))
+					if (client.Capabilities.HasFlag(SmtpCapabilities.Authentication))
 					{
-						response.RequiresAuthentication = true;
-						if(string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
+						if (string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
 						{
-							response.Successful = false;
-							response.Message = "Server requires authentication, but no credentials provided";
-							return response;
+							return new SmtpDetectionResult
+							{
+								Successful = false,
+								Message = "Server requires authentication, but no credentials provided"
+							};
 						}
 						await client.AuthenticateAsync(input.Username, input.Password);
 					}
-					response.Successful = true;
-					response.Port = port;
-					response.Secure = security;
+
 					await client.DisconnectAsync(true);
-					response.Message = "SMTP settings successfully detected";
-					return response;
+					return new SmtpDetectionResult
+					{
+						Successful = true,
+						Port = combination.Port,
+						Secure = combination.Security,
+						Message = "SMTP settings successfully detected"
+					};
 				}
 				catch
 				{
-					continue;
+					return null;
 				}
-			}
+			});
 
-			// if we reach this point, the autodetection failed
-			response.Successful = false;
-			response.Message = "SMTP settings not found";
-			return response;
+			var completedTask = await Task.WhenAny(tasks);
+			return completedTask.Result ?? new SmtpDetectionResult { Successful = false, Message = "SMTP settings not found" };
 		}
 
 		/// <summary>
@@ -150,7 +149,7 @@ namespace Id.Services
 		public async Task<EmailResult> SendEmailAsync(string targetEmail, string subject, string body, string applicationId)
 		{
 			ApplicationSmtpSettings? smtpSettings = await _applicationManager.GetApplicationSmtpSettingsAsync(applicationId);
-			if(smtpSettings == null)
+			if (smtpSettings == null)
 			{
 				_logger.LogError("SMTP settings not found for application {applicationId}", applicationId);
 				return new EmailResult
@@ -161,7 +160,7 @@ namespace Id.Services
 					ErrorMessage = _t["SMTP settings not found"]
 				};
 			}
-			if(string.IsNullOrEmpty(targetEmail))
+			if (string.IsNullOrEmpty(targetEmail))
 			{
 				_logger.LogError("Target email is empty");
 				return new EmailResult
@@ -172,7 +171,7 @@ namespace Id.Services
 					ErrorMessage = _t["Target email is empty"]
 				};
 			}
-			if(string.IsNullOrEmpty(subject))
+			if (string.IsNullOrEmpty(subject))
 			{
 				_logger.LogError("Subject is empty");
 				return new EmailResult
@@ -183,7 +182,7 @@ namespace Id.Services
 					ErrorMessage = _t["Subject is empty"]
 				};
 			}
-			if(string.IsNullOrEmpty(body))
+			if (string.IsNullOrEmpty(body))
 			{
 				_logger.LogError("Body is empty");
 				return new EmailResult
@@ -257,7 +256,7 @@ namespace Id.Services
 		public async Task<EmailResult> SendEmailFromTemplateAsync(string targetEmail, string templateName, object model, string applicationId)
 		{
 			ApplicationSmtpSettings? smtpSettings = await _applicationManager.GetApplicationSmtpSettingsAsync(applicationId);
-			if(smtpSettings == null)
+			if (smtpSettings == null)
 			{
 				_logger.LogError("SMTP settings not found for application {applicationId}", applicationId);
 				return new EmailResult
@@ -268,7 +267,7 @@ namespace Id.Services
 					ErrorMessage = _t["SMTP settings not found"]
 				};
 			}
-			if(string.IsNullOrEmpty(targetEmail))
+			if (string.IsNullOrEmpty(targetEmail))
 			{
 				_logger.LogError("Target email is empty");
 				return new EmailResult
@@ -279,7 +278,7 @@ namespace Id.Services
 					ErrorMessage = _t["Target email is empty"]
 				};
 			}
-			if(string.IsNullOrEmpty(templateName))
+			if (string.IsNullOrEmpty(templateName))
 			{
 				_logger.LogError("Template name is empty");
 				return new EmailResult
@@ -365,11 +364,11 @@ namespace Id.Services
 			SendEmailsResult result = new();
 			result.Subject = model.GetType().GetProperty("Subject")?.GetValue(model)?.ToString() ?? _t["Notification"];
 			// do checks if address list is not empty, and in each loop check if the recepient address is valid
-			if(targetEmails != null && targetEmails.Count > 0)
+			if (targetEmails != null && targetEmails.Count > 0)
 			{
-				foreach(string recepient in targetEmails)
+				foreach (string recepient in targetEmails)
 				{
-					if(!string.IsNullOrEmpty(recepient) && new EmailAddressAttribute().IsValid(recepient))
+					if (!string.IsNullOrEmpty(recepient) && new EmailAddressAttribute().IsValid(recepient))
 					{
 						EmailResult emailResult = await SendEmailFromTemplateAsync(recepient, templateName, model, applicationId);
 						result.Results.Add(emailResult);
@@ -389,7 +388,7 @@ namespace Id.Services
 				return result;
 			}
 			else
-				if(targetEmails == null)
+				if (targetEmails == null)
 			{
 				_logger.LogError("Target email list is null");
 				result.Results.Add(new EmailResult
@@ -506,11 +505,11 @@ namespace Id.Services
 			SendEmailsResult result = new();
 			result.Subject = subject;
 			// do checks if address list is not empty, and in each loop check if the recepient address is valid
-			if(targetEmails != null && targetEmails.Count > 0)
+			if (targetEmails != null && targetEmails.Count > 0)
 			{
-				foreach(string recepient in targetEmails)
+				foreach (string recepient in targetEmails)
 				{
-					if(!string.IsNullOrEmpty(recepient) && new EmailAddressAttribute().IsValid(recepient))
+					if (!string.IsNullOrEmpty(recepient) && new EmailAddressAttribute().IsValid(recepient))
 					{
 						EmailResult emailResult = await SendEmailAsync(recepient, subject, body, applicationId);
 						result.Results.Add(emailResult);
@@ -530,7 +529,7 @@ namespace Id.Services
 				return result;
 			}
 			else
-				if(targetEmails == null)
+				if (targetEmails == null)
 			{
 				_logger.LogError("Target email list is null");
 				result.Results.Add(new EmailResult
@@ -629,22 +628,22 @@ namespace Id.Services
 			string targetEmail = input.TargetForTesting ?? input.SenderEmail;
 			SmtpTestResult result = new();
 
-			if(string.IsNullOrEmpty(input.Host))
+			if (string.IsNullOrEmpty(input.Host))
 			{
 				result.Error = "Host is empty";
 				return result;
 			}
-			if(input.Port == 0)
+			if (input.Port == 0)
 			{
 				result.Error = "Port is empty";
 				return result;
 			}
-			if(string.IsNullOrEmpty(input.SenderEmail))
+			if (string.IsNullOrEmpty(input.SenderEmail))
 			{
 				result.Error = "Sender email is empty";
 				return result;
 			}
-			if(string.IsNullOrEmpty(input.SenderName))
+			if (string.IsNullOrEmpty(input.SenderName))
 			{
 				input.SenderName = input.SenderEmail;
 			}
@@ -656,9 +655,9 @@ namespace Id.Services
 				using SmtpClient client = new SmtpClient(new ProtocolLogger(logPath));
 				await client.ConnectAsync(input.Host, input.Port ?? 25, input.Secure);
 
-				if(input.AuthorizationRequired)
+				if (input.AuthorizationRequired)
 				{
-					if(string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
+					if (string.IsNullOrEmpty(input.Username) || string.IsNullOrEmpty(input.Password))
 					{
 						result.Error = "Server requires authentication, but no credentials provided";
 						return result;
@@ -680,7 +679,7 @@ namespace Id.Services
 
 				result.Success = true;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				result.Success = false;
 				result.Error = ex.Message;
@@ -705,7 +704,7 @@ namespace Id.Services
 			{
 				using SmtpClient client = new();
 				await client.ConnectAsync(settings.Host, settings.Port, settings.Secure);
-				if(settings.AuthorizationRequired)
+				if (settings.AuthorizationRequired)
 				{
 					await client.AuthenticateAsync(settings.Username, settings.Password);
 				}
@@ -713,7 +712,7 @@ namespace Id.Services
 				await client.DisconnectAsync(true);
 				result.Success = true;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				_logger.LogError(ex, "Error sending email");
 				result.ErrorMessage = _t["Error sending email"];

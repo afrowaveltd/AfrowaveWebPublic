@@ -27,7 +27,7 @@ const errors = {
 };
 
 // References to UI elements
-const logDiv = document.getElementById('test_log');
+const logDiv = document.getElementById('log_smtp');
 const logData = document.getElementById('log_content');
 const logTitle = document.getElementById('log_title');
 
@@ -104,7 +104,19 @@ const checkSmtpPassword = async (element) => {
 	checkSmtpForm();
 }
 
-const checkSmtpSenderEmail = async (element) => checkRequiredField(element, errors.senderEmail, 'Sender Email is required');
+const checkSmtpSenderEmail = async (element) => {
+	if (element.value.trim() === '') {
+		smtpStatus.senderEmail = false;
+		errors.senderEmail.innerHTML = await localize('Sender email is required');
+	} else if (!validateEmail(element.value)) {
+		smtpStatus.senderEmail = false;
+		errors.senderEmail.innerHTML = await localize('Invalid email format');
+	} else {
+		smtpStatus.senderEmail = true;
+		errors.senderEmail.innerHTML = '';
+	}
+	checkSmtpForm();
+};
 
 const checkSmtpSenderName = async (element) => {
 	if (element.value.trim() === '') {
@@ -158,6 +170,7 @@ const autodetectSmtp = async () => {
 
 	document.getElementById('spinner_autodetect').classList.add('spinner');
 	const autodetectResult = await detectSmtp(host, user, pass);
+	toggleAM();
 	document.getElementById('spinner_autodetect').classList.remove('spinner');
 
 	resultDiv.classList.remove('error', 'success');
@@ -167,8 +180,7 @@ const autodetectSmtp = async () => {
 	if (autodetectResult.successful) {
 		document.getElementById('smtp_port').value = autodetectResult.port;
 		setSelectedSmtpSecure(autodetectResult.secure);
-		document.getElementById('auth_required').value = autodetectResult.requiresAuthentication;
-
+		//document.getElementById('auth_required').value = autodetectResult.requiresAuthentication;
 		checkSmtpForm();
 	}
 }
@@ -180,12 +192,12 @@ const testSmtpSettings = async () => {
 
 	document.getElementById('spinner_test').classList.add('spinner');
 	const testResult = await testSmtp(
-		...['host', 'port', 'user', 'password', 'senderEmail', 'senderName', 'secureConnection', 'useAuthentication']
+		...['host', 'port', 'user', 'pass', 'email', 'name', 'sso']
 			.map(field => document.getElementById(`smtp_${field}`).value),
+		document.getElementById('auth_required').value,
 		testTarget
 	);
 	document.getElementById('spinner_test').classList.remove('spinner');
-
 	logDiv.style.display = 'block';
 	logTitle.innerHTML = await localize("SMTP testing result");
 	showLogInElement(testResult.log, 'log_content');
@@ -194,10 +206,51 @@ const testSmtpSettings = async () => {
 	checkSmtpForm();
 }
 
+const validateEmail = (email) => {
+	const re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/;
+	return re.test(email);
+};
+
+// toggle the visibility of the class 'manual'
+const toggleAM = async () => {
+	let detectSmtp = document.getElementById('detectSmtp');
+	let switchBtn = document.getElementById('toggler');
+	if (showFields) {
+		hideManual();
+		detectSmtp.style.display = 'block';
+		switchBtn.title = await localize("Adjust manually")
+		showFields = false;
+
+	} else {
+		showManual();
+		detectSmtp.style.display = 'none';
+		switchBtn.title = await localize("Adjust automatically");
+		showFields = true;
+	}
+}
+
+// show the class 'manual'
+const showManual = () => {
+	let elements = document.getElementsByClassName('manual');
+	for (let i = 0; i < elements.length; i++) {
+		elements[i].style.display = 'block';
+	}
+}
+
+// hide the class 'manual'
+const hideManual = () => {
+	let elements = document.getElementsByClassName('manual');
+	for (let i = 0; i < elements.length; i++) {
+		elements[i].style.display = 'none';
+	}
+}
+
 // On load initialization
 window.onload = () => {
 	checkSmtpHost(document.getElementById('smtp_host'));
 	checkSmtpSenderEmail(document.getElementById('smtp_email'));
 	checkSmtpSenderName(document.getElementById('smtp_name'));
 	logDiv.style.display = 'none';
+	showFields = false;
+	loadHelp('Install_Smtp')
 }

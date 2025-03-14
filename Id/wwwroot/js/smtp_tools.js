@@ -37,7 +37,6 @@ const testSmtp = async (host,
 		TargetForTesting: targetForTesting
 		// Convert string "true"/"false" to boolean
 	});
-	console.log(body);
 	const url = "/api/smtp/test";
 	try {
 		const response = await fetch(url, {

@@ -43,13 +43,13 @@ namespace Id.Pages.Account
 		public bool ProfilePictureUploaded { get; set; }
 
 		/// <summary>
-		/// Zpracovává požadavek GET.
+		/// Deals with the GET method.
 		/// </summary>
-		/// <returns>Výsledek akce.</returns>
+		/// <returns>The action result.</returns>
 		public async Task<IActionResult> OnGetAsync()
 		{
 			// Check if the authenticator ID is valid
-			if(string.IsNullOrEmpty(AuthenticatorId) || string.IsNullOrEmpty(UserId))
+			if (string.IsNullOrEmpty(AuthenticatorId) || string.IsNullOrEmpty(UserId))
 			{
 				_logger.LogError("ApplicationId nebo UserId je neplatné");
 				return RedirectToPage("/Error/404");

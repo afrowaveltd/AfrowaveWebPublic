@@ -8,10 +8,14 @@ html {
 	font-size: 14px;
 }
 
-@media (min-width: 960) {
+@media (min-width: 1450px) {
 	html {
 		font-size: 14px;
 	}
+}
+
+.manual {
+	display: none;
 }
 
 button.accept-policy {
@@ -30,6 +34,7 @@ html {
 body {
 	/* Margin bottom by footer height */
 	margin-bottom: 60px;
+	padding-top: 60px;
 	font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 	display: flex;
 	flex-direction: column;
@@ -44,11 +49,18 @@ label {
 	bottom: 0;
 	width: 100%;
 	white-space: nowrap;
-	line-height: 60px; /* Vertically center the text there */
+	line-height: 60px;
+	/* Vertically center the text there */
 }
 
 .navbar {
-	min-height: 50px;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 1000;
+	/* Ensures it stays above other elements */
+	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+	/* Optional: adds slight shadow */
 }
 
 .nav-link {
@@ -56,9 +68,9 @@ label {
 	font-size: large;
 }
 
-	.nav-link:active {
-		font-weight: bold;
-	}
+.nav-link:active {
+	font-weight: bold;
+}
 
 .nav-item {
 	font-weight: bold;
@@ -180,6 +192,8 @@ h6 {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: 100vh; /* Full viewport height */
-	width: 100vw; /* Full viewport width */
+	height: 100vh;
+	/* Full viewport height */
+	width: 100vw;
+	/* Full viewport width */
 }

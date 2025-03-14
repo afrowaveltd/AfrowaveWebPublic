@@ -114,6 +114,65 @@ const logToHtml = (message) => {
 const showLogInElement = (message, elementId = 'log') => {
 	const logElement = document.getElementById(elementId);
 	if (logElement) {
-		logElement.innerHTML = logToHtml(message);
+		let lines = message.split('\n');
+		let html = '<ul>\n';
+		for (let line of lines) {
+			if (line.length > 0) {
+				let res = escapeHTML(line);
+				html += `<li>${res}</li>\n`;
+			}
+		}
+		html += '</ul>';
+		typewriter(elementId, html, 5);
 	}
+};
+
+/**
+ * 
+ * @param {string} elementId 
+ * @param {string} text 
+ * @param {number} speed 
+ */
+const typewriter = async (elementId, text, speed = 10) => {
+	const element = document.getElementById(elementId);
+	if (!element) {
+		console.error(`Element with ID "${elementId}" not found.`);
+		return;
+	}
+
+	element.innerHTML = ""; // Clear the content before starting
+	let container = document.createElement("div");
+	container.innerHTML = text; // Convert text to DOM elements
+
+	const processNode = async (node, parent) => {
+		if (node.nodeType === Node.TEXT_NODE) {
+			let textContent = node.textContent;
+			for (let i = 0; i < textContent.length; i++) {
+				parent.append(textContent[i]);
+				await new Promise(resolve => setTimeout(resolve, Math.random() * speed * 2));
+			}
+		} else if (node.nodeType === Node.ELEMENT_NODE) {
+			let newElement = document.createElement(node.tagName);
+			parent.appendChild(newElement);
+			for (let child of node.childNodes) {
+				await processNode(child, newElement);
+			}
+		}
+	};
+
+	// Ensure <ul> is created for <li> elements
+	let ulElement = document.createElement("ul");
+	element.appendChild(ulElement);
+
+	for (let child of container.childNodes) {
+		if (child.nodeType === Node.ELEMENT_NODE && child.tagName === "LI") {
+			await processNode(child, ulElement);
+		} else {
+			await processNode(child, element);
+		}
+	}
+};
+
+const escapeHTML = (text) => {
+	return text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 };
