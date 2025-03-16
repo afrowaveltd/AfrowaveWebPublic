@@ -1,0 +1,19 @@
+{
+    "environments": {
+        "scs2cloud08": {
+            "F2RestSettings": {
+                "EnvironmentURL": "https://example.com/F2Rest/",
+                "ClientId": "CucumberClient",
+                "ClientSecret": "your-client-secret"
+            },
+            "SelfServiceSettings": {
+                "AuthenticationMode": "BasicAuth",
+                "CertificateThumbprint": "your-cert-thumbprint",
+                "Username": "CucumberBasicClient",
+                "Password": "lNrTlfzzmMD05vg3uhrHqGUGepltSnyUCDAZYYOeNTLfKWqooz"
+            }
+        }
+    },
+    "CustomquerySecret": "Q6FtvXp7QKipQa60wWX2TwroPyUYvD",
+    "CucumberTestDirectory": "/media/sa-admin/Programming/C#/AfrowaveWeb"
+}
