@@ -1,15 +1,29 @@
 namespace Id.Tests.SharedTools.Tests
 {
+	/// <summary>
+	/// Unit tests for the <see cref="EncryptionService"/> class.
+	/// These tests validate password hashing, secret generation, JWT key retrieval, and encryption/decryption.
+	/// </summary>
 	public class EncryptionServiceTests
 	{
+		/// <summary>
+		/// Instance of the encryption service used for testing.
+		/// </summary>
 		private readonly EncryptionService _encryptionService;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="EncryptionServiceTests"/> class.
+		/// Sets up a mock logger and creates an instance of the encryption service.
+		/// </summary>
 		public EncryptionServiceTests()
 		{
 			Mock<ILogger<EncryptionService>> mockLogger = new Mock<ILogger<EncryptionService>>();
 			_encryptionService = new EncryptionService(mockLogger.Object);
 		}
 
+		/// <summary>
+		/// Tests whether a password is hashed correctly and can be successfully verified.
+		/// </summary>
 		[Fact]
 		public void HashPasswordAsync_Should_Create_Hash_And_Verify_Successfully()
 		{
@@ -24,6 +38,9 @@ namespace Id.Tests.SharedTools.Tests
 			Assert.True(isVerified);
 		}
 
+		/// <summary>
+		/// Tests whether GenerateApplicationSecret returns a valid base64-encoded secret key.
+		/// </summary>
 		[Fact]
 		public void GenerateApplicationSecret_Should_Return_Base64String()
 		{
@@ -32,9 +49,12 @@ namespace Id.Tests.SharedTools.Tests
 
 			// Assert
 			byte[] secretBytes = Convert.FromBase64String(secret);
-			Assert.Equal(32, secretBytes.Length); // Should be 256-bit key
+			Assert.Equal(32, secretBytes.Length); // Should be a 256-bit key
 		}
 
+		/// <summary>
+		/// Tests whether GetJwtSigningKey returns the correct byte array from a secret key.
+		/// </summary>
 		[Fact]
 		public void GetJwtSigningKey_Should_Return_Correct_Bytes()
 		{
@@ -48,6 +68,9 @@ namespace Id.Tests.SharedTools.Tests
 			Assert.Equal(32, keyBytes.Length);
 		}
 
+		/// <summary>
+		/// Tests whether EncryptTextAsync correctly encrypts text and DecryptTextAsync restores it.
+		/// </summary>
 		[Fact]
 		public void EncryptTextAsync_And_DecryptTextAsync_Should_Work_Correctly()
 		{

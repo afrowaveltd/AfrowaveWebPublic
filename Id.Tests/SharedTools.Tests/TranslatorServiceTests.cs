@@ -3,8 +3,17 @@ using System.Text;
 
 namespace Id.Tests.SharedTools.Tests
 {
+	/// <summary>
+	/// Unit tests for the <see cref="TranslatorService"/> class.
+	/// These tests verify the behavior of the translation service, ensuring correct
+	/// responses and handling of failures.
+	/// </summary>
 	public class TranslatorServiceTests : TranslatorTestBase
 	{
+		/// <summary>
+		/// Tests whether the GetSupportedLanguagesAsync method successfully returns a list of supported languages.
+		/// </summary>
+		/// <returns>A task representing the asynchronous unit test.</returns>
 		[Fact]
 		public async Task GetSupportedLanguagesAsync_Success_ReturnsLanguages()
 		{
@@ -13,18 +22,18 @@ namespace Id.Tests.SharedTools.Tests
 			string responseContent = JsonSerializer.Serialize(
 				 new List<LibretranslateLanguage>
 				 {
-						  new() { Code = "en" },
-						  new() { Code = "es" }
+					  new() { Code = "en" },
+					  new() { Code = "es" }
 				 },
-				 TranslatorService.Options // ✅ Use class name, not interface
+				 TranslatorService.Options
 			);
 
 			_ = MockHttpMessageHandler.Protected()
 				 .Setup<Task<HttpResponseMessage>>(
 					  "SendAsync",
 					  ItExpr.Is<HttpRequestMessage>(req =>
-							req.Method == HttpMethod.Get &&
-							req.RequestUri.ToString().Contains("/languages")),
+						req.Method == HttpMethod.Get &&
+						req.RequestUri.ToString().Contains("/languages")),
 					  ItExpr.IsAny<CancellationToken>()
 				 )
 				 .ReturnsAsync(new HttpResponseMessage
@@ -40,6 +49,10 @@ namespace Id.Tests.SharedTools.Tests
 			Assert.Equal(expectedLanguages, result);
 		}
 
+		/// <summary>
+		/// Tests whether the TranslateAsync method retries on failure and eventually returns a successful response.
+		/// </summary>
+		/// <returns>A task representing the asynchronous unit test.</returns>
 		[Fact]
 		public async Task TranslateAsync_RetriesOnFailure_ReturnsSuccessAfterRetry()
 		{
@@ -54,8 +67,8 @@ namespace Id.Tests.SharedTools.Tests
 				 .Setup<Task<HttpResponseMessage>>(
 					  "SendAsync",
 					  ItExpr.Is<HttpRequestMessage>(req =>
-							req.Method == HttpMethod.Post &&
-							req.RequestUri.ToString().Contains("/translate")),
+						req.Method == HttpMethod.Post &&
+						req.RequestUri.ToString().Contains("/translate")),
 					  ItExpr.IsAny<CancellationToken>()
 				 )
 				 .ReturnsAsync(() =>
@@ -78,6 +91,42 @@ namespace Id.Tests.SharedTools.Tests
 			// Assert
 			Assert.Equal(3, callCount);
 			Assert.True(result.Successful);
+		}
+
+		/// <summary>
+		/// Tests whether the AutodetectSourceLanguageAndTranslateAsync method successfully translates text with automatic language detection.
+		/// </summary>
+		/// <returns>A task representing the asynchronous unit test.</returns>
+		[Fact]
+		public async Task AutodetectSourceLanguageAndTranslateAsync_Success_ReturnsTranslation()
+		{
+			// Arrange
+			string expectedTranslatedText = "Hola Mundo";
+			string responseContent = JsonSerializer.Serialize(
+				 new TranslateResponse { TranslatedText = expectedTranslatedText },
+				 TranslatorService.Options
+			);
+
+			_ = MockHttpMessageHandler.Protected()
+				 .Setup<Task<HttpResponseMessage>>(
+					  "SendAsync",
+					  ItExpr.Is<HttpRequestMessage>(req =>
+						req.Method == HttpMethod.Post &&
+						req.RequestUri.ToString().Contains("/translate")),
+					  ItExpr.IsAny<CancellationToken>()
+				 )
+				 .ReturnsAsync(new HttpResponseMessage
+				 {
+					 StatusCode = HttpStatusCode.OK,
+					 Content = new StringContent(responseContent, Encoding.UTF8, "application/json")
+				 });
+
+			// Act
+			ApiResponse<TranslateResponse> result = await TranslatorService.AutodetectSourceLanguageAndTranslateAsync("Hello World", "es");
+
+			// Assert
+			Assert.True(result.Successful);
+			Assert.Equal(expectedTranslatedText, result.Data.TranslatedText);
 		}
 	}
 }

@@ -1,42 +1,58 @@
-
 using Id.Tests.Data;
+
+/// <summary>
+/// Base test class for setting up a service provider with dependency injection.
+/// This class provides shared configurations and mock dependencies for unit tests.
+/// </summary>
 public class TestBase
 {
-    protected readonly ServiceProvider ServiceProvider;
+	/// <summary>
+	/// Service provider for resolving dependencies in tests.
+	/// </summary>
+	protected readonly ServiceProvider ServiceProvider;
 
-    public TestBase()
-    {
-        var services = new ServiceCollection();
+	/// <summary>
+	/// Initializes a new instance of the <see cref="TestBase"/> class.
+	/// Sets up dependency injection, configuration, and an in-memory SQLite database.
+	/// </summary>
+	public TestBase()
+	{
+		ServiceCollection services = new ServiceCollection();
 
-        // ✅ Load Configuration from appsettings.json
-        var config = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.Test.json", optional: true, reloadOnChange: true)
-            .Build();
+		// ✅ Load Configuration from appsettings.json
+		IConfigurationRoot config = new ConfigurationBuilder()
+			 .SetBasePath(Directory.GetCurrentDirectory())
+			 .AddJsonFile("appsettings.Test.json", optional: true, reloadOnChange: true)
+			 .Build();
 
-        services.AddSingleton<IConfiguration>(config);
+		_ = services.AddSingleton<IConfiguration>(config);
 
-        // ✅ Mocking Logger
-        services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
+		// ✅ Mocking Logger
+		_ = services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
 
-        // ✅ Register Localization Services
-        services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();
-        services.AddSingleton(typeof(IStringLocalizer<>), typeof(StringLocalizer<>));
+		// ✅ Register Localization Services
+		_ = services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();
+		_ = services.AddSingleton(typeof(IStringLocalizer<>), typeof(StringLocalizer<>));
 
-        // ✅ Register the service we are testing
-        services.AddTransient<ITranslatorService, TranslatorService>();
+		// ✅ Register the service we are testing
+		_ = services.AddTransient<ITranslatorService, TranslatorService>();
 
-        // ✅ Register SQLite in-memory test database
-        services.AddDbContext<ApplicationDbContextTesting>(options =>
-          options.UseSqlite("Data Source=:memory:"));
+		// ✅ Register SQLite in-memory test database
+		_ = services.AddDbContext<ApplicationDbContextTesting>(options =>
+		  options.UseSqlite("Data Source=:memory:"));
 
-        ServiceProvider = services.BuildServiceProvider();
+		ServiceProvider = services.BuildServiceProvider();
 
-        // Ensure database is created
-        using var scope = ServiceProvider.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContextTesting>();
-        dbContext.EnsureDatabaseCreated();
-    }
+		// Ensure database is created
+		using IServiceScope scope = ServiceProvider.CreateScope();
+		ApplicationDbContextTesting dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContextTesting>();
+		dbContext.EnsureDatabaseCreated();
+	}
 
-    protected T GetService<T>() => ServiceProvider.GetRequiredService<T>();
+	/// <summary>
+	/// Resolves a service of the specified type from the service provider.
+	/// </summary>
+	/// <typeparam name="T">The type of service to resolve.</typeparam>
+	/// <returns>The requested service instance.</returns>
+	protected T GetService<T>() => ServiceProvider.GetRequiredService<T>();
 }

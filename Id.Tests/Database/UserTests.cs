@@ -2,8 +2,14 @@ using Id.Tests.Data;
 
 namespace Id.Tests.Database;
 
+/// <summary>
+/// Unit tests for user-related database operations.
+/// </summary>
 public class UserTests
 {
+	/// <summary>
+	/// Tests whether a user can be successfully inserted into the database.
+	/// </summary>
 	[Fact]
 	public void Can_Insert_User_Into_Database()
 	{
