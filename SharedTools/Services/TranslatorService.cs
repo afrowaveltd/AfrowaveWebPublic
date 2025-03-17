@@ -16,7 +16,10 @@ namespace SharedTools.Services
 		private readonly string languagesEndpoint;
 		private readonly string translateEndpoint;
 
-		private JsonSerializerOptions options = new JsonSerializerOptions
+		/// <summary>
+		/// Options is a JsonSerializerOptions object that is used to configure the JSON serialization options.
+		/// </summary>
+		public JsonSerializerOptions Options { get; } = new JsonSerializerOptions
 		{
 			PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
 			DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never,
@@ -48,7 +51,7 @@ namespace SharedTools.Services
 			{
 				HttpResponseMessage response = await _client.GetAsync(languagesEndpoint);
 				_ = response.EnsureSuccessStatusCode();
-				List<LibretranslateLanguage> supportedLanguages = await _client.GetFromJsonAsync<List<LibretranslateLanguage>>(languagesEndpoint, options) ?? new();
+				List<LibretranslateLanguage> supportedLanguages = await _client.GetFromJsonAsync<List<LibretranslateLanguage>>(languagesEndpoint, Options) ?? new();
 				if(supportedLanguages.Count == 0)
 				{
 					_logger.LogWarning("No supported languages found");
@@ -89,7 +92,7 @@ namespace SharedTools.Services
 					 });
 					HttpResponseMessage response = await _client.PostAsync(translateEndpoint, request.Content);
 					_ = response.EnsureSuccessStatusCode();
-					TranslateResponse translation = await response.Content.ReadFromJsonAsync<TranslateResponse>(options) ?? new();
+					TranslateResponse translation = await response.Content.ReadFromJsonAsync<TranslateResponse>(Options) ?? new();
 					if(translation.TranslatedText == string.Empty)
 					{
 						_logger.LogWarning("No translation found");
@@ -136,7 +139,7 @@ namespace SharedTools.Services
 					 });
 				HttpResponseMessage response = await _client.PostAsync(translateEndpoint, request.Content);
 				_ = response.EnsureSuccessStatusCode();
-				TranslateResponse translation = await response.Content.ReadFromJsonAsync<TranslateResponse>(options) ?? new();
+				TranslateResponse translation = await response.Content.ReadFromJsonAsync<TranslateResponse>(Options) ?? new();
 				return new ApiResponse<TranslateResponse>
 				{
 					Successful = true,

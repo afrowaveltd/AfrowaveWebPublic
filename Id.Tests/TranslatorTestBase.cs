@@ -1,23 +1,29 @@
+// TranslatorTestBase.cs
 public class TranslatorTestBase
 {
-    protected readonly ITranslatorService TranslatorService;
+	protected readonly ITranslatorService TranslatorService;
+	protected readonly Mock<HttpMessageHandler> MockHttpMessageHandler;
+	protected readonly HttpClient MockHttpClient;
 
-    public TranslatorTestBase()
-    {
-        var services = new ServiceCollection();
+	public TranslatorTestBase()
+	{
+		MockHttpMessageHandler = new Mock<HttpMessageHandler>();
+		MockHttpClient = new HttpClient(MockHttpMessageHandler.Object);
 
-        var config = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string?>
-            {
-                {"Translator:Host", "http://fake-translator-service"}
-            })
-            .Build();
+		ServiceCollection services = new ServiceCollection();
+		IConfigurationRoot config = new ConfigurationBuilder()
+			 .AddInMemoryCollection(new Dictionary<string, string?>
+			 {
+					 {"Translator:Host", "http://fake-translator-service"}
+			 })
+			 .Build();
 
-        services.AddSingleton<IConfiguration>(config);
-        services.AddLogging(builder => builder.AddConsole());
-        services.AddTransient<ITranslatorService, TranslatorService>();
+		_ = services.AddSingleton<IConfiguration>(config);
+		_ = services.AddLogging(builder => builder.AddConsole());
+		_ = services.AddSingleton(MockHttpClient); // ✅ Register mock client
+		_ = services.AddTransient<ITranslatorService, TranslatorService>();
 
-        var serviceProvider = services.BuildServiceProvider();
-        TranslatorService = serviceProvider.GetRequiredService<ITranslatorService>();
-    }
+		ServiceProvider serviceProvider = services.BuildServiceProvider();
+		TranslatorService = serviceProvider.GetRequiredService<ITranslatorService>();
+	}
 }

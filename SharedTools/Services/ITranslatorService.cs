@@ -1,4 +1,5 @@
 ﻿using SharedTools.Models;
+using System.Text.Json;
 
 namespace SharedTools.Services
 {
@@ -7,6 +8,8 @@ namespace SharedTools.Services
 	/// </summary>
 	public interface ITranslatorService
 	{
+		JsonSerializerOptions Options { get; }
+
 		/// <summary>
 		/// AutodetectSourceLanguageAndTranslateAsync is a method that takes a string input and returns a translated string output.
 		/// </summary>
