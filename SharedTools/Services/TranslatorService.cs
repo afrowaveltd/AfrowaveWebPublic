@@ -28,12 +28,13 @@ namespace SharedTools.Services
 		/// </summary>
 		/// <param name="config">Configuration</param>
 		/// <param name="logger">Logger</param>
-		public TranslatorService(IConfiguration config, ILogger<TranslatorService> logger)
+		/// <param name="client">HttpClient</param>
+		public TranslatorService(IConfiguration config, ILogger<TranslatorService> logger, HttpClient client)
 		{
 			Translator translator = config.GetSection("Translator").Get<Translator>() ?? new Translator();
 			languagesEndpoint = $"{translator.Host}/languages";
 			translateEndpoint = $"{translator.Host}/translate";
-			_client = new HttpClient();
+			_client = client;
 			_logger = logger;
 		}
 

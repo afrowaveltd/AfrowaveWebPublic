@@ -7,8 +7,17 @@ using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 
+/// <summary>
+/// The main entry point for the application.
+/// </summary>
 public class Program
 {
+	/// <summary>
+	/// The main entry point for the application.
+	/// </summary>
+	/// <param name="args">Starting parameters</param>
+	/// <returns>The ID project running</returns>
+	/// <exception cref="InvalidOperationException"></exception>
 	public static async global::System.Threading.Tasks.Task Main(string[] args)
 	{
 		WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -18,8 +27,8 @@ public class Program
 
 		IConfiguration configuration = builder.Configuration;
 
-		builder.Services.AddHttpContextAccessor();
-		builder.Services.Configure<ForwardedHeadersOptions>(options =>
+		_ = builder.Services.AddHttpContextAccessor();
+		_ = builder.Services.Configure<ForwardedHeadersOptions>(options =>
 		{
 			options.ForwardedHeaders =
 			ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
@@ -38,7 +47,7 @@ public class Program
 						  options.UseNpgsql(configuration.GetConnectionString("PostgreSQL"))),
 			_ => throw new InvalidOperationException("Invalid database provider."),
 		};
-		builder.Services.AddSerilog((serviceProvider, loggerConfiguration) => loggerConfiguration
+		_ = builder.Services.AddSerilog((serviceProvider, loggerConfiguration) => loggerConfiguration
 			 .Enrich.FromLogContext()
 			 .Enrich.WithUserName()
 			 .Enrich.WithClientIp()
@@ -50,7 +59,7 @@ public class Program
 			 .WriteTo.Async(s => s.SQLite("../../../logs/log.db", "Logs"))
 		);
 
-		builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+		_ = builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
 		{
 			// Set property naming policy to camelCase
 			options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -64,10 +73,10 @@ public class Program
 			// Customize any other settings as needed (e.g., number or date handling)
 		});
 
-		builder.Services
+		_ = builder.Services
 			 .AddLocalization();
 
-		builder.Services.AddOpenApi("AfrowaveId");
+		_ = builder.Services.AddOpenApi("AfrowaveId");
 
 		/*
         builder.Services.AddSwaggerGen(options =>
@@ -79,10 +88,10 @@ public class Program
         */
 
 		// Add services to the container.
-		builder.Services.AddRazorPages()
+		_ = builder.Services.AddRazorPages()
 			.AddViewLocalization();
 
-		builder.Services.AddControllers()
+		_ = builder.Services.AddControllers()
 			 .AddJsonOptions(options =>
 			 {
 				 // Set property naming policy to camelCase
@@ -96,39 +105,40 @@ public class Program
 			 });
 
 		// Middleware
-		builder.Services.AddTransient<I18nMiddleware>();
+		_ = builder.Services.AddTransient<I18nMiddleware>();
 		// builder.Services.AddTransient<ErrorMiddleware>();
 
 		// Scoped slu�by (HTTP request-based)
-		builder.Services.AddScoped<IApplicationLoader, ApplicationLoader>();
-		builder.Services.AddScoped<IApplicationsManager, ApplicationsManager>();
-		builder.Services.AddScoped<IApplicationUsersManager, ApplicationUsersManager>();
-		builder.Services.AddScoped<IBrandsManager, BrandsManager>();
-		builder.Services.AddScoped<ICookieService, CookieService>();
-		builder.Services.AddScoped<IInstallationStatusService, InstallationStatusService>();
-		builder.Services.AddScoped<IRolesManager, RolesManager>();
-		builder.Services.AddScoped<ISelectOptionsServices, SelectOptionsServices>();
-		builder.Services.AddScoped<ITermsService, TermsService>();
-		builder.Services.AddScoped<ITextToHtmlService, TextToHtmlService>();
-		builder.Services.AddScoped<ITextTranslationService, TextTranslationService>();
-		builder.Services.AddScoped<ITranslatorService, TranslatorService>();
-		builder.Services.AddScoped<IUsersManager, UsersManager>();
-		builder.Services.AddScoped<IEmailManager, EmailManager>();
+		_ = builder.Services.AddScoped<IApplicationLoader, ApplicationLoader>();
+		_ = builder.Services.AddScoped<IApplicationsManager, ApplicationsManager>();
+		_ = builder.Services.AddScoped<IApplicationUsersManager, ApplicationUsersManager>();
+		_ = builder.Services.AddScoped<IBrandsManager, BrandsManager>();
+		_ = builder.Services.AddScoped<ICookieService, CookieService>();
+		_ = builder.Services.AddScoped<IInstallationStatusService, InstallationStatusService>();
+		_ = builder.Services.AddScoped<IRolesManager, RolesManager>();
+		_ = builder.Services.AddScoped<ISelectOptionsServices, SelectOptionsServices>();
+		_ = builder.Services.AddScoped<ITermsService, TermsService>();
+		_ = builder.Services.AddScoped<ITextToHtmlService, TextToHtmlService>();
+		_ = builder.Services.AddScoped<ITextTranslationService, TextTranslationService>();
+		_ = builder.Services.AddScoped<ITranslatorService, TranslatorService>();
+		_ = builder.Services.AddScoped<IUsersManager, UsersManager>();
+		_ = builder.Services.AddScoped<IEmailManager, EmailManager>();
 
 		// Transient slu�by (stateless)
-		builder.Services.AddTransient<IStringLocalizerFactory, JsonStringLocalizerFactory>();
-		builder.Services.AddTransient<IEncryptionService, EncryptionService>();
-		builder.Services.AddTransient<IImageService, ImageService>();
-		builder.Services.AddTransient<IThemeService, ThemeService>();
-		builder.Services.AddTransient<IUiTranslatorService, UiTranslatorService>();
+		_ = builder.Services.AddTransient<IStringLocalizerFactory, JsonStringLocalizerFactory>();
+		_ = builder.Services.AddTransient<IEncryptionService, EncryptionService>();
+		_ = builder.Services.AddTransient<IImageService, ImageService>();
+		_ = builder.Services.AddTransient<IThemeService, ThemeService>();
+		_ = builder.Services.AddTransient<IUiTranslatorService, UiTranslatorService>();
 
 		// Singleton slu�by (glob�ln�, thread-safe)
-		builder.Services.AddSingleton<ISettingsService, SettingsService>();
+		_ = builder.Services.AddSingleton<ISettingsService, SettingsService>();
+		_ = builder.Services.AddSingleton<HttpClient>();
 		ISettingsService settingsService = builder.Services.BuildServiceProvider().GetRequiredService<ISettingsService>();
 		Id.Models.SettingsModels.IdentificatorSettings Settings = await settingsService.GetSettingsAsync();
 		// Hosted services
-		builder.Services.AddHostedService<ScssCompilerService>();
-		builder.Services.AddHostedService<UiTranslatorHostedService>();
+		_ = builder.Services.AddHostedService<ScssCompilerService>();
+		_ = builder.Services.AddHostedService<UiTranslatorHostedService>();
 
 		// I need to use the settings service and load the settings to use them for cookies and JWT configuration
 
@@ -145,9 +155,9 @@ public class Program
 		await loader.SeedCountriesAsync();
 		await loader.TranslateLanguageNamesAsync();
 		List<ApiResponse<List<string>>> assetTranslationResults = await loader.TranslateStaticAssetsAsync();
-		foreach (ApiResponse<List<string>> result in assetTranslationResults)
+		foreach(ApiResponse<List<string>> result in assetTranslationResults)
 		{
-			if (result.Successful)
+			if(result.Successful)
 			{
 				logger.LogInformation("Successfully translated {count} assets for {language}", result.Data?.Count, result.Message);
 			}
@@ -159,9 +169,9 @@ public class Program
 
 		string[] supportedCultures = loader.GetSupportedCultures();
 
-		app.UseMiddleware<I18nMiddleware>();
+		_ = app.UseMiddleware<I18nMiddleware>();
 
-		app.UseRequestLocalization(options =>
+		_ = app.UseRequestLocalization(options =>
 		{
 			_ = options.AddSupportedCultures(supportedCultures)
 					 .AddSupportedUICultures(supportedCultures)
@@ -169,18 +179,18 @@ public class Program
 					 .ApplyCurrentCultureToResponseHeaders = true;
 		});
 
-		if (!app.Environment.IsDevelopment())
+		if(!app.Environment.IsDevelopment())
 		{
 			// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 			_ = app.UseHsts();
 		}
-		app.UseHttpsRedirection();
+		_ = app.UseHttpsRedirection();
 
-		app.UseForwardedHeaders();
-		app.MapOpenApi()
+		_ = app.UseForwardedHeaders();
+		_ = app.MapOpenApi()
 			.CacheOutput();
 
-		app.MapScalarApiReference(options =>
+		_ = app.MapScalarApiReference(options =>
 		{
 			_ = options
 				 .WithTitle("Afrowave Id")
@@ -188,19 +198,19 @@ public class Program
 				 .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
 		});
 
-		app.UseRouting();
-		app.UseMiddleware<CustomErrorHandlingMiddleware>();
-		app.UseAuthorization();
+		_ = app.UseRouting();
+		_ = app.UseMiddleware<CustomErrorHandlingMiddleware>();
+		_ = app.UseAuthorization();
 
-		app.MapControllers();
-		app.MapStaticAssets();
-		app.MapRazorPages()
+		_ = app.MapControllers();
+		_ = app.MapStaticAssets();
+		_ = app.MapRazorPages()
 			.WithStaticAssets();
-		app.Use(async (context, next) =>
+		_ = app.Use(async (context, next) =>
 		{
 			await next();
 
-			if (context.Response.StatusCode == 404) // Detects 404 responses
+			if(context.Response.StatusCode == 404) // Detects 404 responses
 			{
 				ILogger<Program> logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
 				logger.LogWarning("404 Not Found: {Path}", context.Request.Path);
