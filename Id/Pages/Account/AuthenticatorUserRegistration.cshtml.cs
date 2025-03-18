@@ -49,12 +49,18 @@ namespace Id.Pages.Account
 		public async Task<IActionResult> OnGetAsync()
 		{
 			// Check if the authenticator ID is valid
-			if (string.IsNullOrEmpty(AuthenticatorId) || string.IsNullOrEmpty(UserId))
+			if(string.IsNullOrEmpty(AuthenticatorId) || string.IsNullOrEmpty(UserId))
 			{
 				_logger.LogError("ApplicationId nebo UserId je neplatné");
 				return RedirectToPage("/Error/404");
 			}
 			User? user = await _context.Users.FindAsync(UserId);
+
+			// ✅ Fix: Log error when user is missing
+			if(user == null)
+			{
+				_logger.LogError("User not found: {UserId}", UserId);
+			}
 
 			return Page();
 		}

@@ -1,247 +1,185 @@
-﻿using System.Xml.Serialization;
-
-/// <summary>
-/// Initializes a new instance of the <see cref="CustomErrorHandlingMiddleware"/> class.
+﻿/// <summary>
+/// Middleware for handling custom error responses.
 /// </summary>
-/// <param name="next">The next middleware delegate.</param>
-/// <param name="env">The hosting environment.</param>
-/// <param name="logger">The logger instance.</param>
-public class CustomErrorHandlingMiddleware(
-		 RequestDelegate next,
-		 IWebHostEnvironment env,
-		 ILogger<CustomErrorHandlingMiddleware> logger)
+public class CustomErrorHandlingMiddleware
 {
-	private readonly RequestDelegate _next = next;
-	private readonly IWebHostEnvironment _env = env;
-	private readonly ILogger<CustomErrorHandlingMiddleware> _logger = logger;
+	private readonly RequestDelegate _next;
+	private readonly IWebHostEnvironment _env;
+	private readonly ILogger<CustomErrorHandlingMiddleware> _logger;
 
 	/// <summary>
-	/// Middleware execution logic.
+	/// Initializes a new instance of the <see cref="CustomErrorHandlingMiddleware"/> class.
 	/// </summary>
-	/// <param name="context">The HTTP context.</param>
+	/// <param name="next">Middleware delegate</param>
+	/// <param name="env">Environment</param>
+	/// <param name="logger">Logging function</param>
+	public CustomErrorHandlingMiddleware(RequestDelegate next, IWebHostEnvironment env, ILogger<CustomErrorHandlingMiddleware> logger)
+	{
+		_next = next;
+		_env = env;
+		_logger = logger;
+	}
+
+	/// <summary>
+	/// Middleware execution logic to handle custom error responses.
+	/// </summary>
+	/// <param name="context">Http context</param>
+	/// <returns></returns>
 	public async Task InvokeAsync(HttpContext context)
 	{
 		Stream originalBodyStream = context.Response.Body;
-
 		try
 		{
-			using MemoryStream responseBody = new MemoryStream();
-			context.Response.Body = responseBody;
-
 			await _next(context);
 
-			_ = responseBody.Seek(0, SeekOrigin.Begin);
-			if(IsErrorStatusCode(context.Response.StatusCode) || context.Response.StatusCode == 404)
+			if(context.Response.StatusCode == 404)
 			{
-				await HandleErrorResponse(context, responseBody, originalBodyStream);
+				await HandleErrorResponse(context, 404);
 			}
-			else if(responseBody.Length > 0)
-			{
-				await responseBody.CopyToAsync(originalBodyStream);
-			}
-		}
-		catch(Exception ex)
-		{
-			await HandleExceptionAsync(context, originalBodyStream, ex);
-		}
-	}
-
-	private bool IsErrorStatusCode(int statusCode)
-		 => statusCode >= 400 && statusCode < 600;
-
-	private async Task HandleExceptionAsync(HttpContext context, Stream originalBodyStream, Exception exception)
-	{
-		context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-		await HandleErrorResponse(context, null, originalBodyStream, exception);
-	}
-
-	/// <summary>
-	/// Handles error responses based on the request format.
-	/// </summary>
-	private async Task HandleErrorResponse(
-		 HttpContext context,
-		 MemoryStream? responseBody = null,
-		 Stream? originalBodyStream = null,
-		 Exception? exception = null)
-	{
-		try
-		{
-			int statusCode = context.Response.StatusCode;
-			ResponseFormat formatter = GetResponseFormatter(context.Request);
-			ErrorDetails errorDetails = CreateErrorDetails(statusCode, exception ?? new(), context);
-
-			if(formatter == ResponseFormat.Html)
-			{
-				context.Response.Redirect($"/Error?statusCode={statusCode}");
-				return;
-			}
-
-			if(statusCode == 500 && !_env.IsDevelopment())
-			{
-				LogProductionError(exception ?? new());
-			}
-
-			string responseContent = formatter switch
-			{
-				ResponseFormat.Json => FormatJson(errorDetails),
-				ResponseFormat.Xml => FormatXml(errorDetails),
-				_ => FormatText(errorDetails)
-			};
-
-			context.Response.Clear();
-			context.Response.ContentType = formatter.GetContentType();
-			await context.Response.WriteAsync(responseContent);
-			context.Response.Body = originalBodyStream;
 		}
 		catch(Exception ex)
 		{
 			_logger.LogError(ex, "Error handling failed");
+			await HandleErrorResponse(context, 500);
+		}
+		finally
+		{
+			context.Response.Body = originalBodyStream; // Restore the original response body
 		}
 	}
 
-	private string FormatJson(ErrorDetails details) =>
-		 JsonSerializer.Serialize(details, new JsonSerializerOptions { WriteIndented = true });
-
-	private string FormatXml(ErrorDetails details)
+	private async Task HandleErrorResponse(HttpContext context, int statusCode)
 	{
-		using StringWriter writer = new StringWriter();
-		XmlSerializer serializer = new XmlSerializer(typeof(ErrorDetails));
-		serializer.Serialize(writer, details);
-		return writer.ToString();
+		if(!context.Response.HasStarted)
+		{
+			context.Response.Clear();
+		}
+
+		context.Response.StatusCode = statusCode;
+		context.Response.ContentType = "application/json";
+
+		ErrorDetails errorDetails = CreateErrorDetails(statusCode, new Exception(), context);
+
+		if(statusCode == 500 && _env.EnvironmentName != "Development")
+		{
+			LogErrorToFile(errorDetails);
+		}
+
+		if(context.Request.Headers["Accept"].ToString().Contains("text/html"))
+		{
+			context.Response.Redirect($"/Error?statusCode={statusCode}");
+			return;
+		}
+
+		await context.Response.WriteAsync(JsonSerializer.Serialize(errorDetails));
 	}
 
-	private string FormatText(ErrorDetails details) =>
-		 $"{details.Title} ({details.StatusCode})\n{details.Message}\n{details.Details}";
-
-	private ErrorDetails CreateErrorDetails(int statusCode, Exception exception, HttpContext context)
+	/// <summary>
+	/// Creates an error details object for the given status code and exception.
+	/// </summary>
+	/// <param name="statusCode">Error status code</param>
+	/// <param name="exception">Exception message</param>
+	/// <param name="context">HttpContext</param>
+	/// <returns></returns>
+	public ErrorDetails CreateErrorDetails(int statusCode, Exception exception, HttpContext context)
 	{
 		IStringLocalizer<CustomErrorHandlingMiddleware> localizer = context.RequestServices.GetRequiredService<IStringLocalizer<CustomErrorHandlingMiddleware>>();
 		return new ErrorDetails
 		{
 			StatusCode = statusCode,
-			Title = GetLocalizedTitle(statusCode, localizer),
-			Message = exception?.Message ?? GetLocalizedMessage(statusCode, localizer),
+			Title = localizer != null ? GetLocalizedTitle(statusCode, localizer) : $"Error {statusCode}",
+			Message = exception?.Message ?? (localizer != null ? GetLocalizedMessage(statusCode, localizer) : "An error occurred"),
 			Details = exception?.ToString() ?? string.Empty,
 			Timestamp = DateTime.UtcNow
 		};
 	}
 
-	private string GetLocalizedTitle(int statusCode, IStringLocalizer<CustomErrorHandlingMiddleware> localizer)
+	/// <summary>
+	/// Gets the localized title for the given status code.
+	/// </summary>
+	/// <param name="statusCode">Status code</param>
+	/// <param name="localizer">Localization service</param>
+	/// <returns></returns>
+	public string GetLocalizedTitle(int statusCode, IStringLocalizer<CustomErrorHandlingMiddleware> localizer)
 	{
 		return localizer[$"Error_{statusCode}_Title"] ?? localizer["Error_Generic_Title"];
 	}
 
-	private string GetLocalizedMessage(int statusCode, IStringLocalizer<CustomErrorHandlingMiddleware> localizer)
+	/// <summary>
+	/// Gets the localized message for the given status code.
+	/// </summary>
+	/// <param name="statusCode">Status code</param>
+	/// <param name="localizer">Localization service</param>
+	/// <returns></returns>
+	public string GetLocalizedMessage(int statusCode, IStringLocalizer<CustomErrorHandlingMiddleware> localizer)
 	{
 		return localizer[$"Error_{statusCode}_Message"] ?? localizer["Error_Generic_Message"];
 	}
 
-	private ResponseFormat GetResponseFormatter(HttpRequest request)
-	{
-		string acceptHeader = request.Headers.Accept.ToString();
-
-		return acceptHeader switch
-		{
-			string h when h.Contains("text/html") => ResponseFormat.Html,
-			string h when h.Contains("application/xml") => ResponseFormat.Xml,
-			string h when h.Contains("application/json") => ResponseFormat.Json,
-			_ => ResponseFormat.Text
-		};
-	}
-
-	private void LogProductionError(Exception exception)
+	private void LogErrorToFile(ErrorDetails errorDetails)
 	{
 		try
 		{
-			string logDir = Path.Combine(_env.ContentRootPath, "logs");
-			_ = Directory.CreateDirectory(logDir);
-
-			string logFile = Path.Combine(logDir, $"{Guid.NewGuid()}.log");
-			File.WriteAllText(logFile, $"[{DateTime.UtcNow:u}] {exception}");
+			string logDir = Path.Combine(Directory.GetCurrentDirectory(), "logs");
+			if(!Directory.Exists(logDir))
+			{
+				_ = Directory.CreateDirectory(logDir);
+			}
+			string logFile = Path.Combine(logDir, "errors.log");
+			File.AppendAllText(logFile, $"{DateTime.UtcNow}: {JsonSerializer.Serialize(errorDetails)}{Environment.NewLine}");
 		}
 		catch(Exception ex)
 		{
-			_logger.LogError(ex, "Failed to log error");
+			_logger.LogError(ex, "Failed to log error to file.");
+		}
+	}
+
+	/// <summary>
+	/// Checks if the client is disconnected.
+	/// </summary>
+	/// <param name="context">Http context</param>
+	/// <returns>true if client is not connected</returns>
+	public async Task<bool> IsClientDisconnectedAsync(HttpContext context)
+	{
+		try
+		{
+			return await Task.FromResult(context.RequestAborted.IsCancellationRequested);
+		}
+		catch(Exception ex)
+		{
+			_logger.LogError(ex, "Failed to check client connection status.");
+			return await Task.FromResult(true);
 		}
 	}
 }
 
 /// <summary>
-/// Enumeration of supported response formats.
-/// </summary>
-public enum ResponseFormat
-{
-	/// <summary>
-	/// JSON format.
-	/// </summary>
-	Json,
-
-	/// <summary>
-	/// XML format.
-	/// </summary>
-	Xml,
-
-	/// <summary>
-	/// HTML format.
-	/// </summary>
-	Html,
-
-	/// <summary>
-	/// Text format.
-	/// </summary>
-	Text
-}
-
-/// <summary>
-/// Extension methods for <see cref="ResponseFormat"/>.
-/// </summary>
-public static class ResponseFormatExtensions
-{
-	/// <summary>
-	/// Gets the content type based on the response format.
-	/// </summary>
-	/// <param name="format">The response format.</param>
-	/// <returns>The corresponding content type.</returns>
-	public static string GetContentType(this ResponseFormat format)
-	{
-		return format switch
-		{
-			ResponseFormat.Json => "application/json",
-			ResponseFormat.Xml => "application/xml",
-			ResponseFormat.Html => "text/html",
-			_ => "text/plain"
-		};
-	}
-}
-
-/// <summary>
-/// Represents the details of an error response.
+/// Error details object for custom error responses.
 /// </summary>
 public class ErrorDetails
 {
 	/// <summary>
-	/// The status code of the response.
+	/// Error status code.
 	/// </summary>
 	public int StatusCode { get; set; }
 
 	/// <summary>
-	/// The title of the error.
+	/// Error title.
 	/// </summary>
 	public string Title { get; set; } = string.Empty;
 
 	/// <summary>
-	/// The message of the error.
+	/// Error message.
 	/// </summary>
 	public string Message { get; set; } = string.Empty;
 
 	/// <summary>
-	/// The details of the error.
+	/// Error details.
 	/// </summary>
-
 	public string Details { get; set; } = string.Empty;
 
 	/// <summary>
-	/// The timestamp of the error.
+	/// Timestamp of the error.
 	/// </summary>
 	public DateTime Timestamp { get; set; }
 }

@@ -1,6 +1,4 @@
-﻿using Id.Models.SettingsModels;
-
-namespace Id.Api
+﻿namespace Id.Api
 {
 	/// <summary>
 	/// API controller for retrieving password requirements.
@@ -20,8 +18,8 @@ namespace Id.Api
 		[HttpGet]
 		public async Task<IActionResult> Get()
 		{
-			_settings = await _settingsService.GetSettingsAsync();
-			return Ok(_settings.PasswordRules);
+			_settings = await _settingsService.GetSettingsAsync() ?? new IdentificatorSettings();
+			return Ok(_settings.PasswordRules ?? new PasswordRules());
 		}
 	}
 }

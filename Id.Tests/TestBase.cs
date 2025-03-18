@@ -1,5 +1,3 @@
-using Id.Tests.Data;
-
 /// <summary>
 /// Base test class for setting up a service provider with dependency injection.
 /// This class provides shared configurations and mock dependencies for unit tests.
@@ -36,17 +34,6 @@ public class TestBase
 
 		// ✅ Register the service we are testing
 		_ = services.AddTransient<ITranslatorService, TranslatorService>();
-
-		// ✅ Register SQLite in-memory test database
-		_ = services.AddDbContext<ApplicationDbContextTesting>(options =>
-		  options.UseSqlite("Data Source=:memory:"));
-
-		ServiceProvider = services.BuildServiceProvider();
-
-		// Ensure database is created
-		using IServiceScope scope = ServiceProvider.CreateScope();
-		ApplicationDbContextTesting dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContextTesting>();
-		dbContext.EnsureDatabaseCreated();
 	}
 
 	/// <summary>

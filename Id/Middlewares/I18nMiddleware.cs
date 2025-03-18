@@ -18,21 +18,15 @@ namespace Id.Middlewares
 		public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 		{
 			// Check cookie or header for language preference
-			string cultureKey;
-			if(!string.IsNullOrEmpty(_cookieService.GetCookie("language")))
+			string cultureKey = _cookieService.GetCookie("language") ?? _cookieService.GetCookie("Language");
+
+			if(!string.IsNullOrEmpty(cultureKey))
 			{
-				cultureKey = _cookieService.GetCookie("language");
-				context.Request.Headers.AcceptLanguage = cultureKey;
-			}
-			else if(!string.IsNullOrEmpty(_cookieService.GetCookie("Language")))
-			{
-				cultureKey = _cookieService.GetCookie("Language");
-				context.Request.Headers.AcceptLanguage = cultureKey;
+				context.Request.Headers["Accept-Language"] = cultureKey; // ✅ Fixed header modification
 			}
 			else
 			{
-				cultureKey = context.Request.Headers.AcceptLanguage.ToString() ?? "en";
-				_cookieService.SetCookie("language", cultureKey);
+				cultureKey = context.Request.Headers["Accept-Language"].ToString() ?? "en";
 			}
 
 			// Apply culture settings if valid
@@ -61,7 +55,7 @@ namespace Id.Middlewares
 		private static bool CultureExists(string cultureName)
 		{
 			return CultureInfo.GetCultures(CultureTypes.AllCultures)
-				 .Any(culture => culture.Name.Equals(cultureName, StringComparison.InvariantCultureIgnoreCase));
+				 .Any(culture => culture.Name.Equals(cultureName, StringComparison.OrdinalIgnoreCase)); // ✅ Improved performance
 		}
 	}
 }

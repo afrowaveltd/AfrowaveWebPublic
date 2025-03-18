@@ -25,7 +25,15 @@ namespace Id.I18n
 		}
 
 		/// <inheritdoc/>
-		public LocalizedString this[string name] => new(name, GetString(name) ?? name, GetString(name) == null);
+		// Original code had GetString(name) called twice. Now called once.
+		public LocalizedString this[string name]
+		{
+			get
+			{
+				string? value = GetString(name);
+				return new LocalizedString(name, value ?? name, value == null);
+			}
+		}
 
 		/// <inheritdoc/>
 		public LocalizedString this[string name, params object[] arguments]
