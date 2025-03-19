@@ -1,5 +1,3 @@
-using Id.Models.SettingsModels;
-
 namespace Id.Pages.Install
 {
 	/// <summary>
@@ -41,7 +39,7 @@ namespace Id.Pages.Install
 		/// <permission cref="OTPTokenExpiration">The time in minutes for the OTP token to expire</permission>
 		/// <permission cref="RequireConfirmedEmail">If the email must be confirmed</permission>
 		/// <permission cref="ApplicationId">The application id</permission>
-		/// <permission cref="IsConfigured">If the login rules are configured</permission>
+
 		public class InputModel
 		{
 			/// <summary>

@@ -18,6 +18,11 @@ namespace Id.Pages.Helps
 		/// </summary>
 		public List<string> Lines = [];
 
+		/// <summary>
+		/// Handles the retrieval of information related to birthdate verification and its importance in personalizing the
+		/// application.
+		/// Includes age requirements and emphasizes the need for accuracy.
+		/// </summary>
 		public void OnGet()
 		{
 			Lines.Add(t["The birthdate is used to verify your age."]);

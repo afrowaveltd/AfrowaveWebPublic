@@ -1,5 +1,12 @@
 namespace Id.Pages.Install
 {
+	/// <summary>
+	/// Handles JWT settings for a web page, including loading and saving configuration.
+	/// </summary>
+	/// <param name="logger">Used for logging information and errors related to JWT settings.</param>
+	/// <param name="settings">Provides access to application settings for retrieving and saving JWT configurations.</param>
+	/// <param name="_t">Facilitates localization for the JWT settings page.</param>
+	/// <param name="status">Checks the installation status to ensure proper configuration before proceeding.</param>
 	public class JwtSettingsModel(ILogger<JwtSettingsModel> logger,
 		ISettingsService settings,
 		IStringLocalizer<JwtSettingsModel> _t,
@@ -12,7 +19,9 @@ namespace Id.Pages.Install
 		public readonly IStringLocalizer<JwtSettingsModel> t = _t;
 		private readonly IInstallationStatusService _statusService = status;
 
-		// Properties
+		/// <summary>
+		/// Binds an InputModel property for use in a Razor page. It initializes the property with a new instance.
+		/// </summary>
 		[BindProperty]
 		public InputModel Input { get; set; } = new();
 

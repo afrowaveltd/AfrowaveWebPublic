@@ -13,6 +13,9 @@ public class ImageServiceTests
 	private readonly Mock<ILogger<ImageService>> _mockLogger;
 	private readonly ImageService _imageService;
 
+	/// <summary>
+	/// Initializes an instance of ImageServiceTests. Sets up a mock logger and an instance of ImageService for testing.
+	/// </summary>
 	public ImageServiceTests()
 	{
 		_mockLogger = new Mock<ILogger<ImageService>>();

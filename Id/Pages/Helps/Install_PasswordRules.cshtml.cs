@@ -6,6 +6,9 @@ namespace Id.Pages.Helps
 	/// <param name="_t"></param>
 	public class Install_PasswordRulesModel(IStringLocalizer<Install_PasswordRulesModel> _t) : PageModel
 	{
+		/// <summary>
+		/// Holds a reference to a localized string provider for the Install_PasswordRulesModel. It is marked as readonly.
+		/// </summary>
 		public readonly IStringLocalizer<Install_PasswordRulesModel> t = _t;
 
 		/// <summary>

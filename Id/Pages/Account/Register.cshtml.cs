@@ -161,7 +161,12 @@ namespace Id.Pages.Account
 				RegisterUserResult registrationResult = await _userService.RegisterUserAsync(Input);
 				if(!registrationResult.UserCreated)
 				{
-					RegistrationErrors = registrationResult.Errors;
+					_logger.LogError("User registration failed: {Errors}", string.Join(", ", registrationResult.Errors ?? new List<string> { "Unknown error" }));
+					RegistrationErrors = registrationResult.Errors ?? new List<string>();
+					foreach(var error in RegistrationErrors)
+					{
+						ModelState.AddModelError(string.Empty, error ?? "Unknown registration error");
+					}
 					return Page();
 				}
 
@@ -178,6 +183,8 @@ namespace Id.Pages.Account
 			else
 			{
 				RegistrationErrors = [.. ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage)];
+				_logger.LogError("User registration failed: {Errors}", string.Join(", ", RegistrationErrors));
+				ModelState.AddModelError("RegistrationError", t["User registration failed"]);
 				return Page();
 			}
 		}

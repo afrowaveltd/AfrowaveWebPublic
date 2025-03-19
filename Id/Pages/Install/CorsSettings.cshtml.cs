@@ -1,4 +1,3 @@
-using Id.Models.SettingsModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Id.Pages.Install
@@ -19,9 +18,14 @@ namespace Id.Pages.Install
 	{
 		private readonly ILogger<CorsSettingsModel> _logger = logger;
 		private readonly ISettingsService _settingsService = settings;
-		public readonly IStringLocalizer<CorsSettingsModel> t = _t;
-		private readonly IInstallationStatusService _statusService = status;
 		private readonly ISelectOptionsServices _selectOptions = selectOptions;
+		private readonly IInstallationStatusService _statusService = status;
+
+		/// <summary>
+		/// Holds a localizer for string resources specific to the CorsSettingsModel. It is marked as readonly, indicating it
+		/// cannot be modified after initialization.
+		/// </summary>
+		public readonly IStringLocalizer<CorsSettingsModel> t = _t;
 
 		/// <summary>
 		/// HTTP methods options

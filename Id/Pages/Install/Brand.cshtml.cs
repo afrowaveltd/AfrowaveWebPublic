@@ -1,5 +1,3 @@
-using Id.Models.InputModels;
-using Id.Models.ResultModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace Id.Pages.Install
@@ -24,7 +22,17 @@ namespace Id.Pages.Install
 
 		private readonly ApplicationDbContext _context = context;
 		private readonly IInstallationStatusService _installationStatus = installationStatus;
+
+		/// <summary>
+		/// Holds a reference to a localized string provider for the BrandModel type. It is marked as readonly, indicating it
+		/// cannot be modified after initialization.
+		/// </summary>
 		public readonly IStringLocalizer<BrandModel> t = _t;
+
+		/// <summary>
+		/// Holds a reference to an instance of IBrandsManager, providing access to brand-related operations. It is marked as
+		/// readonly, ensuring it cannot be modified after initialization.
+		/// </summary>
 		public readonly IBrandsManager _brandService = brandService;
 
 		// Model binding

@@ -18,13 +18,13 @@ namespace Id.Pages.Account
 		/// Gets or sets the email address.
 		/// </summary>
 		[FromRoute]
-		public string email { get; set; } = string.Empty;
+		public string Email { get; set; } = string.Empty;
 
 		/// <summary>
 		/// Handles the GET request.
 		/// </summary>
 		/// <returns>The password reset page</returns>
-		public async Task<ActionResult> OnGetAsync()
+		public ActionResult OnGet()
 		{
 			return Page();
 		}
@@ -34,7 +34,7 @@ namespace Id.Pages.Account
 		/// </summary>
 		/// <param name="email">Email where to send password reset link</param>
 		/// <returns>Redirect to the reset result page</returns>
-		public async Task<ActionResult> OnPostAsync(string email)
+		public ActionResult OnPost(string email)
 		{
 			return Page();
 		}

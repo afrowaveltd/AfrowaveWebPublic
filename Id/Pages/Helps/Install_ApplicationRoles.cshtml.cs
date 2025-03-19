@@ -6,6 +6,10 @@ namespace Id.Pages.Helps
 	/// <param name="_t"></param>
 	public class Install_ApplicationRolesModel(IStringLocalizer<Install_ApplicationRolesModel> _t) : PageModel
 	{
+		/// <summary>
+		/// Holds a reference to an IStringLocalizer for localizing strings in the Install_ApplicationRolesModel. It is marked
+		/// as readonly.
+		/// </summary>
 		public readonly IStringLocalizer<Install_ApplicationRolesModel> t = _t;
 
 		/// <summary>

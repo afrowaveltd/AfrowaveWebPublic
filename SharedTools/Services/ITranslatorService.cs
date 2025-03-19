@@ -8,6 +8,10 @@ namespace SharedTools.Services
 	/// </summary>
 	public interface ITranslatorService
 	{
+		/// <summary>
+		/// Provides options for customizing the behavior of JSON serialization and deserialization. It allows configuration
+		/// of various settings.
+		/// </summary>
 		JsonSerializerOptions Options { get; }
 
 		/// <summary>

@@ -2,6 +2,10 @@
 
 namespace Id.Tests.Pages.Account
 {
+	/// <summary>
+	/// Tests the behavior of the AuthenticatorUserRegistrationModel during user registration. It checks redirection on
+	/// missing IDs and page return for existing users.
+	/// </summary>
 	public class AuthenticatorUserRegistrationModelTests
 	{
 		private readonly ApplicationDbContext _dbContext;
@@ -9,6 +13,9 @@ namespace Id.Tests.Pages.Account
 		private readonly Mock<ILogger<AuthenticatorUserRegistrationModel>> _mockLogger;
 		private readonly AuthenticatorUserRegistrationModel _pageModel;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AuthenticatorUserRegistrationModelTests"/> class.
+		/// </summary>
 		public AuthenticatorUserRegistrationModelTests()
 		{
 			DbContextOptions<ApplicationDbContext> options = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -26,6 +33,11 @@ namespace Id.Tests.Pages.Account
 			);
 		}
 
+		/// <summary>
+		/// Handles the GET request and checks for missing AuthenticatorId or UserId. Redirects to a 404 error page if either is
+		/// absent.
+		/// </summary>
+		/// <returns>Returns a RedirectToPageResult that points to the 404 error page.</returns>
 		[Fact]
 		public async Task OnGetAsync_ShouldRedirectToError_WhenAuthenticatorIdOrUserIdIsMissing()
 		{
@@ -41,6 +53,10 @@ namespace Id.Tests.Pages.Account
 			Assert.Equal("/Error/404", redirectResult.PageName);
 		}
 
+		/// <summary>
+		/// Tests the OnGetAsync method to ensure it returns a page when a user exists in the database.
+		/// </summary>
+		/// <returns>Returns a PageResult indicating the page was successfully retrieved.</returns>
 		[Fact]
 		public async Task OnGetAsync_ShouldReturnPage_WhenUserExists()
 		{

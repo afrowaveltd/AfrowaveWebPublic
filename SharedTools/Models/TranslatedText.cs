@@ -21,6 +21,10 @@
 		public List<string>? Alternatives { get; set; }
 	}
 
+	/// <summary>
+	/// Represents a detected language with its corresponding language code. The Language property holds the code as a
+	/// string.
+	/// </summary>
 	public class DetectedLanguage
 	{
 		//public int Confidence { get; set; } = 0;

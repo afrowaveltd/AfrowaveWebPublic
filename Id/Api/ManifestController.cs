@@ -1,21 +1,29 @@
-﻿using Id.Models.ResultModels;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Id.Api
+﻿namespace Id.Api
 {
+	/// <summary>
+	/// Handles requests for the web app manifest, returning a JSON object with app details and icon links. Ensures valid
+	/// URLs and defaults if necessary.
+	/// </summary>
 	[Route("manifest.json")]
 	[ApiController]
 	public class ManifestController : ControllerBase
 	{
 		private readonly IApplicationsManager _applicationsManager;
 
+		/// <summary>
+		/// Initializes a new instance of the ManifestController class.
+		/// </summary>
+		/// <param name="applicationsManager">Provides access to application management functionalities.</param>
 		public ManifestController(IApplicationsManager applicationsManager)
 		{
 			_applicationsManager = applicationsManager;
 		}
 
+		/// <summary>
+		/// Retrieves a manifest object containing application details and icon links. It constructs the manifest based on
+		/// available icon URLs.
+		/// </summary>
+		/// <returns>Returns a JsonResult containing the manifest object.</returns>
 		[HttpGet]
 		[ProducesResponseType(typeof(Manifest), 200)]
 		[ProducesResponseType(500)]
@@ -27,7 +35,7 @@ namespace Id.Api
 			icons ??= new ImageLinksResult();
 
 			// Ensure Url property is not null
-			if (Url == null)
+			if(Url == null)
 			{
 				return StatusCode(500, "Url helper is not available.");
 			}
@@ -56,23 +64,64 @@ namespace Id.Api
 			return new JsonResult(manifest);
 		}
 
-		// Define the Manifest class
+		/// <summary>
+		/// Represents a manifest with properties for name, short name, icons, theme color, background color, and display
+		/// type.
+		/// </summary>
 		public class Manifest
 		{
-			public string Name { get; set; }
-			public string ShortName { get; set; }
-			public ManifestIcon[] Icons { get; set; }
-			public string ThemeColor { get; set; }
-			public string BackgroundColor { get; set; }
-			public string Display { get; set; }
+			/// <summary>
+			/// Represents the name of an entity. It can be both retrieved and modified.
+			/// </summary>
+			public string Name { get; set; } = string.Empty;
+
+			/// <summary>
+			/// Represents a short name as a string. It can be both retrieved and modified.
+			/// </summary>
+			public string ShortName { get; set; } = string.Empty;
+
+			/// <summary>
+			/// Represents an array of icons associated with a manifest. Each icon provides visual representation for the
+			/// application.
+			/// </summary>
+			public ManifestIcon[] Icons { get; set; } = Array.Empty<ManifestIcon>();
+
+			/// <summary>
+			/// Represents the color theme of a user interface element. It is a string property that can be set or retrieved.
+			/// </summary>
+			public string ThemeColor { get; set; } = string.Empty;
+
+			/// <summary>
+			/// Gets or sets the background color as a string. It defines the color used for the background.
+			/// </summary>
+			public string BackgroundColor { get; set; } = string.Empty;
+
+			/// <summary>
+			/// Represents the display name of an object. It can be accessed and modified as a string property.
+			/// </summary>
+			public string Display { get; set; } = string.Empty;
 		}
 
 		// Define the ManifestIcon class
+		/// <summary>
+		/// Represents an icon for a web application manifest. Contains properties for the icon's source, size, and type.
+		/// </summary>
 		public class ManifestIcon
 		{
-			public string Src { get; set; }
-			public string Sizes { get; set; }
-			public string Type { get; set; }
+			/// <summary>
+			/// Represents the source as a string. It can be used to get or set the value of the source.
+			/// </summary>
+			public string Src { get; set; } = string.Empty;
+
+			/// <summary>
+			/// Represents a collection of sizes as a string. It can be used to store and retrieve size information.
+			/// </summary>
+			public string Sizes { get; set; } = string.Empty;
+
+			/// <summary>
+			/// Represents a type of the icon
+			/// </summary>
+			public string Type { get; set; } = string.Empty;
 		}
 	}
 }

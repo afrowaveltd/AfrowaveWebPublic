@@ -1,5 +1,3 @@
-using Id.Models.SettingsModels;
-using SharedTools.Services;
 using System.Globalization;
 
 namespace Id.Pages.Install
@@ -24,7 +22,12 @@ namespace Id.Pages.Install
 		ITranslatorService translatorService,
 		ILogger<InstallationResultModel> logger) : PageModel
 	{
+		/// <summary>
+		/// Holds a localizer for string resources related to the InstallationResultModel. It is read-only and initialized
+		/// with the value of _t.
+		/// </summary>
 		public readonly IStringLocalizer<InstallationResultModel> t = _t;
+
 		private readonly ApplicationDbContext _context = context;
 		private readonly IApplicationsManager _applicationService = applicationService;
 		private readonly IBrandsManager _brandService = brandService;
