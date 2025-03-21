@@ -41,7 +41,7 @@
 			}
 
 			// Construct the manifest object
-			var manifest = new Manifest
+			Manifest manifest = new Manifest
 			{
 				Name = "Afrowave",
 				ShortName = "Afrowave",
