@@ -5,7 +5,7 @@
 /// </summary>
 public class JsonStringLocalizerFactoryTests
 {
-	private readonly Mock<IDistributedCache> _mockCache;
+	private readonly IDistributedCache _mockCache;
 	private readonly JsonStringLocalizerFactory _factory;
 
 	/// <summary>
@@ -13,8 +13,8 @@ public class JsonStringLocalizerFactoryTests
 	/// </summary>
 	public JsonStringLocalizerFactoryTests()
 	{
-		_mockCache = new Mock<IDistributedCache>();
-		_factory = new JsonStringLocalizerFactory(_mockCache.Object);
+		_mockCache = Substitute.For<IDistributedCache>();
+		_factory = new JsonStringLocalizerFactory(_mockCache);
 	}
 
 	/// <summary>

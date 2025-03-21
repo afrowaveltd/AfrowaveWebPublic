@@ -4,170 +4,136 @@ namespace Id.Tests.Pages.Account;
 
 public class RegisterModelTests
 {
-	private readonly Mock<IUsersManager> _mockUsersManager;
-	private readonly Mock<IApplicationUsersManager> _mockApplicationUsersManager;
-	private readonly Mock<IApplicationsManager> _mockApplicationsManager;
-	private readonly Mock<IRolesManager> _mockRolesManager;
-	private readonly Mock<ISelectOptionsServices> _mockSelectOptionsServices;
-	private readonly Mock<ISettingsService> _mockSettingsService;
-	private readonly Mock<ILogger<RegisterUserModel>> _mockLogger;
-	private readonly Mock<IEncryptionService> _mockEncryptionService;
-	private readonly Mock<IStringLocalizer<RegisterUserModel>> _mockLocalizer;
+	private readonly IUsersManager _mockUsersManager;
+	private readonly IApplicationUsersManager _mockApplicationUsersManager;
+	private readonly IApplicationsManager _mockApplicationsManager;
+	private readonly IRolesManager _mockRolesManager;
+	private readonly ISelectOptionsServices _mockSelectOptionsServices;
+	private readonly ISettingsService _mockSettingsService;
+	private readonly ILogger<RegisterUserModel> _mockLogger;
+	private readonly IEncryptionService _mockEncryptionService;
+	private readonly IStringLocalizer<RegisterUserModel> _mockLocalizer;
 	private readonly RegisterUserModel _pageModel;
 
 	public RegisterModelTests()
 	{
-		_mockUsersManager = new Mock<IUsersManager>();
-		_mockApplicationUsersManager = new Mock<IApplicationUsersManager>();
-		_mockApplicationsManager = new Mock<IApplicationsManager>();
-		_mockRolesManager = new Mock<IRolesManager>();
-		_mockSelectOptionsServices = new Mock<ISelectOptionsServices>();
-		_mockSettingsService = new Mock<ISettingsService>();
-		_mockLogger = new Mock<ILogger<RegisterUserModel>>();
-		_mockEncryptionService = new Mock<IEncryptionService>();
-		_mockLocalizer = new Mock<IStringLocalizer<RegisterUserModel>>();
+		_mockUsersManager = Substitute.For<IUsersManager>();
+		_mockApplicationUsersManager = Substitute.For<IApplicationUsersManager>();
+		_mockApplicationsManager = Substitute.For<IApplicationsManager>();
+		_mockRolesManager = Substitute.For<IRolesManager>();
+		_mockSelectOptionsServices = Substitute.For<ISelectOptionsServices>();
+		_mockSettingsService = Substitute.For<ISettingsService>();
+		_mockLogger = Substitute.For<ILogger<RegisterUserModel>>();
+		_mockEncryptionService = Substitute.For<IEncryptionService>();
+		_mockLocalizer = Substitute.For<IStringLocalizer<RegisterUserModel>>();
 
 		_pageModel = new RegisterUserModel(
-			 _mockLogger.Object,
-			 _mockUsersManager.Object,
-			 _mockApplicationUsersManager.Object,
-			 _mockApplicationsManager.Object,
-			 _mockEncryptionService.Object,
-			 _mockRolesManager.Object,
-			 _mockSelectOptionsServices.Object,
-			 _mockSettingsService.Object,
-			 _mockLocalizer.Object
+			_mockLogger,
+			_mockUsersManager,
+			_mockApplicationUsersManager,
+			_mockApplicationsManager,
+			_mockEncryptionService,
+			_mockRolesManager,
+			_mockSelectOptionsServices,
+			_mockSettingsService,
+			_mockLocalizer
 		);
 
-		_ = _mockApplicationsManager.Setup(am => am.ApplicationExistsAsync(It.IsAny<string>()))
-										.ReturnsAsync(true);
-		_ = _mockEncryptionService.Setup(x => x.EncryptTextAsync(It.IsAny<string>(), It.IsAny<string>()))
-									  .Returns("encryptedValue");
-		_ = _mockSettingsService.Setup(x => x.GetPasswordRulesAsync()).ReturnsAsync(new PasswordRules());
-		_ = _mockSettingsService.Setup(x => x.GetLoginRulesAsync()).ReturnsAsync(new LoginRules());
+		_mockApplicationsManager.ApplicationExistsAsync(Arg.Any<string>()).Returns(true);
+		_mockEncryptionService.HashPasswordAsync(Arg.Any<string>()).Returns("encryptedValue");
+		_mockSettingsService.GetPasswordRulesAsync().Returns(new PasswordRules());
+		_mockSettingsService.GetLoginRulesAsync().Returns(new LoginRules());
 	}
 
-	private void InitializeValidInput()
+	private void WithValidModelState()
 	{
-		if(string.IsNullOrEmpty(_pageModel.ApplicationId))
-		{
-			_pageModel.ApplicationId = "testAppId";
-		}
 		_pageModel.ModelState.Clear();
-		if(_pageModel.Input == null)
+		_pageModel.Input = new RegisterUserInput
 		{
-			_pageModel.Input = new RegisterUserInput
-			{
-				Email = "test@example.com",
-				Password = "StrongPassword123!",
-				PasswordConfirm = "StrongPassword123!",
-				AcceptTerms = true,
-				AcceptPrivacyPolicy = true,
-				AcceptCookiePolicy = true
-			};
-		}
-		_ = _mockUsersManager.Setup(um => um.IsEmailFreeAsync(It.IsAny<string>()))
-							  .ReturnsAsync(true);
+			Email = "test@example.com",
+			Password = "StrongPassword123!",
+			PasswordConfirm = "StrongPassword123!",
+			FirstName = "John",
+			LastName = "Doe",
+			DisplayedName = "JohnDoe",
+			AcceptTerms = true,
+			AcceptPrivacyPolicy = true,
+			AcceptCookiePolicy = true
+		};
 	}
 
 	[Fact]
 	public async Task OnPostAsync_ShouldRedirectToAuthenticatorPage_OnSuccessfulRegistration()
 	{
-		InitializeValidInput();
-		_ = _mockUsersManager.Setup(um => um.RegisterUserAsync(It.IsAny<RegisterUserInput>()))
-							  .ReturnsAsync(new RegisterUserResult { UserCreated = true });
+		WithValidModelState();
+		_mockUsersManager.RegisterUserAsync(Arg.Any<RegisterUserInput>())
+			.Returns(new RegisterUserResult { UserCreated = true });
 
-		if(_pageModel.Input == null)
-		{
-			InitializeValidInput();
-		}
 		_pageModel.ApplicationId = "testAppId";
-		_pageModel.ModelState.Clear();
 
 		IActionResult result = await _pageModel.OnPostAsync();
-		_ = Assert.IsType<RedirectToPageResult>(result);
+
+		Assert.IsType<RedirectToPageResult>(result);
 	}
 
 	[Fact]
 	public async Task OnPostAsync_ShouldReturnPage_WhenPasswordConfirmationFails()
 	{
-		// Arrange
 		WithValidModelState();
-		_pageModel.ApplicationId = "testAppId";
-
-		// Ensure Input is set
-		if(_pageModel.Input == null)
-		{
-			WithValidModelState();
-		}
-
 		_pageModel.Input.PasswordConfirm = "DifferentPassword!";
+		_mockUsersManager.RegisterUserAsync(Arg.Any<RegisterUserInput>())
+			.Returns(new RegisterUserResult { UserCreated = false, Errors = new List<string> { "Password don't match" } });
 
-		// Act
 		IActionResult result = await _pageModel.OnPostAsync();
 
-		// Assert
-		_ = Assert.IsType<PageResult>(result);
+		Assert.IsType<PageResult>(result);
 	}
 
 	[Fact]
 	public async Task OnPostAsync_ShouldReturnPage_WhenPolicyAcceptanceIsMissing()
 	{
-		// Arrange
 		WithValidModelState();
-		_pageModel.ApplicationId = "testAppId";
-
-		// Ensure Input is set
-		if(_pageModel.Input == null)
-		{
-			WithValidModelState();
-		}
-
 		_pageModel.Input.AcceptTerms = false;
 
-		// Act
+		_mockUsersManager.RegisterUserAsync(Arg.Any<RegisterUserInput>())
+			.Returns(new RegisterUserResult { UserCreated = false, Errors = new List<string> { "Terms must be accepted" } });
+
 		IActionResult result = await _pageModel.OnPostAsync();
 
-		// Assert
-		_ = Assert.IsType<PageResult>(result);
+		Assert.IsType<PageResult>(result);
 	}
 
 	[Fact]
 	public async Task OnPostAsync_ShouldReturnError_WhenUserAlreadyExists()
 	{
-		// Arrange
 		WithValidModelState();
-		_pageModel.ApplicationId = "testAppId";
-
 		_mockUsersManager.IsEmailFreeAsync(Arg.Any<string>()).Returns(false);
 
-		// Act
+		_mockUsersManager.RegisterUserAsync(Arg.Any<RegisterUserInput>())
+			.Returns(new RegisterUserResult { UserCreated = false, Errors = new List<string> { "User already exists" } });
+
 		IActionResult result = await _pageModel.OnPostAsync();
 
-		// Assert
-		_ = Assert.IsType<PageResult>(result);
+		Assert.IsType<PageResult>(result);
 	}
 
 	[Fact]
 	public async Task OnPostAsync_ShouldLogError_OnFailure()
 	{
-		InitializeValidInput();
-		_ = _mockUsersManager.Setup(um => um.RegisterUserAsync(It.IsAny<RegisterUserInput>()))
-							  .ReturnsAsync(new RegisterUserResult { UserCreated = false, Errors = new List<string> { "Registration failed" } });
+		WithValidModelState();
+		_mockUsersManager.RegisterUserAsync(Arg.Any<RegisterUserInput>())
+			.Returns(new RegisterUserResult { UserCreated = false, Errors = new List<string> { "Registration failed" } });
 
 		IActionResult result = await _pageModel.OnPostAsync();
 
-		_mockLogger.Verify(
-			 x => x.Log(
-				  LogLevel.Error,
-				  It.IsAny<EventId>(),
-				  It.IsAny<object>(),
-				  It.IsAny<Exception>(),
-				  (Func<object, Exception?, string>)It.IsAny<object>()
-			 ),
-			 Times.AtLeastOnce()
+		_mockLogger.Received(1).Log(
+				LogLevel.Error,
+				Arg.Any<EventId>(),
+				Arg.Any<object>(),
+				Arg.Any<Exception>(),
+				(Arg.Any<Func<object, Exception, string>>())
 		);
 
-		_ = Assert.IsType<PageResult>(result);
+		Assert.IsType<PageResult>(result);
 	}
 }

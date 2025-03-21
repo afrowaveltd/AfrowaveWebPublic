@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace Id.Tests.Api
 {
 	/// <summary>
@@ -7,8 +5,8 @@ namespace Id.Tests.Api
 	/// </summary>
 	public class IsEmailUniqueTests
 	{
-		private readonly Mock<IUsersManager> _usersManagerMock;
-		private readonly Mock<IStringLocalizer<IsEmailUnique>> _localizerMock;
+		private readonly IUsersManager _usersManagerMock;
+		private readonly IStringLocalizer<IsEmailUnique> _localizerMock;
 		private readonly IsEmailUnique _controller;
 
 		/// <summary>
@@ -16,10 +14,10 @@ namespace Id.Tests.Api
 		/// </summary>
 		public IsEmailUniqueTests()
 		{
-			_usersManagerMock = new Mock<IUsersManager>();
-			_localizerMock = new Mock<IStringLocalizer<IsEmailUnique>>();
+			_usersManagerMock = Substitute.For<IUsersManager>();
+			_localizerMock = Substitute.For<IStringLocalizer<IsEmailUnique>>();
 
-			_controller = new IsEmailUnique(_usersManagerMock.Object, _localizerMock.Object);
+			_controller = new IsEmailUnique(_usersManagerMock, _localizerMock);
 		}
 
 		/// <summary>
@@ -30,7 +28,7 @@ namespace Id.Tests.Api
 		public async Task OnGetAsync_ShouldReturnTrue_WhenEmailIsUnique()
 		{
 			// Arrange
-			_ = _usersManagerMock.Setup(m => m.IsEmailFreeAsync("unique@example.com")).ReturnsAsync(true);
+			_ = _usersManagerMock.IsEmailFreeAsync("unique@example.com").Returns(true);
 
 			// Act
 			OkObjectResult? result = await _controller.OnGetAsync("unique@example.com") as OkObjectResult;
@@ -39,7 +37,7 @@ namespace Id.Tests.Api
 			_ = result.Should().NotBeNull();
 			_ = result!.Value.Should().BeEquivalentTo(new { isUnique = true });
 
-			_usersManagerMock.Verify(m => m.IsEmailFreeAsync("unique@example.com"), Times.Once);
+			await _usersManagerMock.Received(1).IsEmailFreeAsync("unique@example.com");
 		}
 
 		/// <summary>
@@ -50,7 +48,7 @@ namespace Id.Tests.Api
 		public async Task OnGetAsync_ShouldReturnFalse_WhenEmailIsTaken()
 		{
 			// Arrange
-			_ = _usersManagerMock.Setup(m => m.IsEmailFreeAsync("taken@example.com")).ReturnsAsync(false);
+			_ = _usersManagerMock.IsEmailFreeAsync("taken@example.com").Returns(false);
 
 			// Act
 			OkObjectResult? result = await _controller.OnGetAsync("taken@example.com") as OkObjectResult;
@@ -59,7 +57,7 @@ namespace Id.Tests.Api
 			_ = result.Should().NotBeNull();
 			_ = result!.Value.Should().BeEquivalentTo(new { isUnique = false });
 
-			_usersManagerMock.Verify(m => m.IsEmailFreeAsync("taken@example.com"), Times.Once);
+			await _usersManagerMock.Received(1).IsEmailFreeAsync("taken@example.com");
 		}
 
 		/// <summary>
@@ -70,7 +68,7 @@ namespace Id.Tests.Api
 		public async Task OnGetAsync_ShouldReturnBadRequest_WhenEmailIsInvalid()
 		{
 			// Arrange
-			_ = _localizerMock.Setup(l => l["Invalid email address"]).Returns(new LocalizedString("Invalid email address", "Invalid email address"));
+			_ = _localizerMock["Invalid email address"].Returns(new LocalizedString("Invalid email address", "Invalid email address"));
 
 			// Act
 			BadRequestObjectResult? result = await _controller.OnGetAsync("invalid-email") as BadRequestObjectResult;

@@ -1,46 +1,41 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Globalization;
-
-namespace Id.Tests.Middlewares
+﻿namespace Id.Tests.Middlewares
 {
 	/// <summary>
-	/// Unit tests for the <see cref="I18nMiddleware"/> class.
+	/// Unit tests for the <see cref="I18nMiddleware"/> class using NSubstitute.
 	/// </summary>
 	public class I18nMiddlewareTests
 	{
-		private readonly Mock<ICookieService> _mockCookieService;
-		private readonly Mock<ILogger<I18nMiddleware>> _mockLogger;
+		private readonly ICookieService _cookieService;
+		private readonly ILogger<I18nMiddleware> _logger;
 		private readonly I18nMiddleware _middleware;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="I18nMiddlewareTests"/> class.
+		/// Initializes an instance of the I18nMiddlewareTests class. Sets up mock services for cookie handling and logging.
 		/// </summary>
 		public I18nMiddlewareTests()
 		{
-			_mockCookieService = new Mock<ICookieService>();
-			_mockLogger = new Mock<ILogger<I18nMiddleware>>();
-			_middleware = new I18nMiddleware(_mockCookieService.Object, _mockLogger.Object);
+			_cookieService = Substitute.For<ICookieService>();
+			_logger = Substitute.For<ILogger<I18nMiddleware>>();
+			_middleware = new I18nMiddleware(_cookieService, _logger);
 		}
 
 		private async Task<HttpContext> CreateTestHttpContext(string acceptLanguage = "en")
 		{
-			DefaultHttpContext context = new DefaultHttpContext();
+			var context = new DefaultHttpContext();
 			context.Request.Headers["Accept-Language"] = acceptLanguage;
 			return await Task.FromResult(context);
 		}
 
 		/// <summary>
-		/// Verifies that the <see cref="I18nMiddleware"/> sets the culture based on the cookie value.
+		/// Tests if the middleware sets the culture based on the language cookie value.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>No return value; it asserts that the culture is set correctly.</returns>
 		[Fact]
 		public async Task InvokeAsync_ShouldSetCultureFromCookie()
 		{
 			// Arrange
-			HttpContext context = await CreateTestHttpContext();
-			_ = _mockCookieService.SetupSequence(c => c.GetCookie("language"))
-									  .Returns("fr")
-									  .Returns("");
+			var context = await CreateTestHttpContext();
+			_cookieService.GetCookie("language").Returns("fr");
 
 			string? actualCulture = null;
 			string? actualUICulture = null;
@@ -56,21 +51,23 @@ namespace Id.Tests.Middlewares
 			// Assert
 			Assert.Equal("fr", actualCulture);
 			Assert.Equal("fr", actualUICulture);
-			_mockCookieService.Verify(c => c.SetCookie("language", "fr", It.IsAny<int>()), Times.Once);
+			_cookieService.Received(1).SetCookie("language", "fr");
 		}
 
 		/// <summary>
-		/// Verifies that the <see cref="I18nMiddleware"/> sets the culture based on the Accept-Language header.
+		/// Tests the middleware's behavior when no language cookie or header is present, ensuring the default culture is set
+		/// to English.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>No return value as this is a void method.</returns>
 		[Fact]
 		public async Task InvokeAsync_ShouldSetDefaultCulture_WhenNoCookieOrHeader()
 		{
 			// Arrange
 			CultureInfo.CurrentCulture = new CultureInfo("en");
 			CultureInfo.CurrentUICulture = new CultureInfo("en");
-			HttpContext context = await CreateTestHttpContext("");
-			_ = _mockCookieService.Setup(c => c.GetCookie("language")).Returns((string)null);
+
+			var context = await CreateTestHttpContext("");
+			_cookieService.GetCookie("language").Returns((string?)null);
 
 			// Act
 			await _middleware.InvokeAsync(context, (ctx) => Task.CompletedTask);
@@ -81,15 +78,15 @@ namespace Id.Tests.Middlewares
 		}
 
 		/// <summary>
-		/// Verifies that the <see cref="I18nMiddleware"/> sets the culture based on the Accept-Language header.
+		/// Tests the middleware's behavior when the Accept-Language header is used instead of a cookie for language settings.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>Verifies that the culture and UI culture are set to the language specified in the Accept-Language header.</returns>
 		[Fact]
 		public async Task InvokeAsync_ShouldUseAcceptLanguageHeader_WhenNoCookie()
 		{
 			// Arrange
-			HttpContext context = await CreateTestHttpContext("es");
-			_ = _mockCookieService.Setup(c => c.GetCookie("language")).Returns("");
+			var context = await CreateTestHttpContext("es");
+			_cookieService.GetCookie("language").Returns("");
 
 			string? actualCulture = null;
 			string? actualUICulture = null;
@@ -105,21 +102,22 @@ namespace Id.Tests.Middlewares
 			// Assert
 			Assert.Equal("es", actualCulture);
 			Assert.Equal("es", actualUICulture);
-			_mockCookieService.Verify(c => c.SetCookie("language", "es", It.IsAny<int>()), Times.Once);
+			_cookieService.Received(1).SetCookie("language", "es");
 		}
 
 		/// <summary>
-		/// Verifies that the <see cref="I18nMiddleware"/> sets the culture to English when the cookie value is invalid.
+		/// Tests the middleware's behavior when an invalid culture is provided, ensuring it defaults to English.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>No return value; the method is asynchronous and performs assertions.</returns>
 		[Fact]
 		public async Task InvokeAsync_ShouldFallbackToEnglish_WhenCultureIsInvalid()
 		{
 			// Arrange
 			CultureInfo.CurrentCulture = new CultureInfo("en");
 			CultureInfo.CurrentUICulture = new CultureInfo("en");
-			HttpContext context = await CreateTestHttpContext("invalid-culture");
-			_ = _mockCookieService.Setup(c => c.GetCookie("language")).Returns("invalid-culture");
+
+			var context = await CreateTestHttpContext("invalid-culture");
+			_cookieService.GetCookie("language").Returns("invalid-culture");
 
 			// Act
 			await _middleware.InvokeAsync(context, (ctx) => Task.CompletedTask);

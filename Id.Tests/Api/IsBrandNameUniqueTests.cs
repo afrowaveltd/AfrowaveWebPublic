@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace Id.Tests.Api
 {
 	/// <summary>
@@ -7,7 +5,7 @@ namespace Id.Tests.Api
 	/// </summary>
 	public class IsBrandNameUniqueTests
 	{
-		private readonly Mock<IBrandsManager> _brandsManagerMock;
+		private readonly IBrandsManager _brandsManagerMock;
 		private readonly IsBrandNameUnique _controller;
 
 		/// <summary>
@@ -15,8 +13,8 @@ namespace Id.Tests.Api
 		/// </summary>
 		public IsBrandNameUniqueTests()
 		{
-			_brandsManagerMock = new Mock<IBrandsManager>();
-			_controller = new IsBrandNameUnique(_brandsManagerMock.Object);
+			_brandsManagerMock = Substitute.For<IBrandsManager>();
+			_controller = new IsBrandNameUnique(_brandsManagerMock);
 		}
 
 		/// <summary>
@@ -27,7 +25,7 @@ namespace Id.Tests.Api
 		public async Task OnGetAsync_ShouldReturnTrue_WhenBrandNameIsUnique()
 		{
 			// Arrange
-			_ = _brandsManagerMock.Setup(m => m.IsNameUnique("UniqueBrand")).ReturnsAsync(true);
+			_ = _brandsManagerMock.IsNameUnique("UniqueBrand").Returns(true);
 
 			// Act
 			OkObjectResult? result = await _controller.OnGetAsync("UniqueBrand") as OkObjectResult;
@@ -36,7 +34,7 @@ namespace Id.Tests.Api
 			_ = result.Should().NotBeNull();
 			_ = result!.Value.Should().BeEquivalentTo(new { IsUnique = true });
 
-			_brandsManagerMock.Verify(m => m.IsNameUnique("UniqueBrand"), Times.Once);
+			await _brandsManagerMock.Received(1).IsNameUnique("UniqueBrand");
 		}
 
 		/// <summary>
@@ -47,7 +45,7 @@ namespace Id.Tests.Api
 		public async Task OnGetAsync_ShouldReturnFalse_WhenBrandNameIsTaken()
 		{
 			// Arrange
-			_ = _brandsManagerMock.Setup(m => m.IsNameUnique("TakenBrand")).ReturnsAsync(false);
+			_ = _brandsManagerMock.IsNameUnique("TakenBrand").Returns(false);
 
 			// Act
 			OkObjectResult? result = await _controller.OnGetAsync("TakenBrand") as OkObjectResult;
@@ -56,7 +54,7 @@ namespace Id.Tests.Api
 			_ = result.Should().NotBeNull();
 			_ = result!.Value.Should().BeEquivalentTo(new { IsUnique = false });
 
-			_brandsManagerMock.Verify(m => m.IsNameUnique("TakenBrand"), Times.Once);
+			await _brandsManagerMock.Received(1).IsNameUnique("TakenBrand");
 		}
 	}
 }

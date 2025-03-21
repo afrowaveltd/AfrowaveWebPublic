@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace Id.Tests.Api;
 
 /// <summary>
@@ -7,7 +5,7 @@ namespace Id.Tests.Api;
 /// </summary>
 public class IsApplicationNameUniqueTests
 {
-	private readonly Mock<IApplicationsManager> _applicationsManagerMock;
+	private readonly IApplicationsManager _applicationsManagerMock;
 	private readonly IsApplicationNameUnique _controller;
 
 	/// <summary>
@@ -15,8 +13,8 @@ public class IsApplicationNameUniqueTests
 	/// </summary>
 	public IsApplicationNameUniqueTests()
 	{
-		_applicationsManagerMock = new Mock<IApplicationsManager>();
-		_controller = new IsApplicationNameUnique(_applicationsManagerMock.Object);
+		_applicationsManagerMock = Substitute.For<IApplicationsManager>();
+		_controller = new IsApplicationNameUnique(_applicationsManagerMock);
 	}
 
 	/// <summary>
@@ -27,7 +25,7 @@ public class IsApplicationNameUniqueTests
 	public async Task OnGetAsync_ShouldReturnTrue_WhenNameIsUnique()
 	{
 		// Arrange
-		_ = _applicationsManagerMock.Setup(m => m.IsNameUnique("UniqueApp")).ReturnsAsync(true);
+		_ = _applicationsManagerMock.IsNameUnique("UniqueApp").Returns(true);
 
 		// Act
 		OkObjectResult? result = await _controller.OnGetAsync("UniqueApp") as OkObjectResult;
@@ -36,7 +34,7 @@ public class IsApplicationNameUniqueTests
 		_ = result.Should().NotBeNull();
 		_ = result!.Value.Should().BeEquivalentTo(new { IsUnique = true });
 
-		_applicationsManagerMock.Verify(m => m.IsNameUnique("UniqueApp"), Times.Once);
+		await _applicationsManagerMock.Received(1).IsNameUnique("UniqueApp");
 	}
 
 	/// <summary>
@@ -47,7 +45,7 @@ public class IsApplicationNameUniqueTests
 	public async Task OnGetAsync_ShouldReturnFalse_WhenNameIsTaken()
 	{
 		// Arrange
-		_ = _applicationsManagerMock.Setup(m => m.IsNameUnique("TakenApp")).ReturnsAsync(false);
+		_ = _applicationsManagerMock.IsNameUnique("TakenApp").Returns(false);
 
 		// Act
 		OkObjectResult? result = await _controller.OnGetAsync("TakenApp") as OkObjectResult;
@@ -56,6 +54,6 @@ public class IsApplicationNameUniqueTests
 		_ = result.Should().NotBeNull();
 		_ = result!.Value.Should().BeEquivalentTo(new { IsUnique = false });
 
-		_applicationsManagerMock.Verify(m => m.IsNameUnique("TakenApp"), Times.Once);
+		await _applicationsManagerMock.Received(1).IsNameUnique("TakenApp");
 	}
 }

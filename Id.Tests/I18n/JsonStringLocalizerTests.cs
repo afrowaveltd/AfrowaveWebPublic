@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Globalization;
 using System.Reflection;
 
 namespace Id.Tests.I18n
@@ -10,7 +9,7 @@ namespace Id.Tests.I18n
 	public class JsonStringLocalizerTests : IDisposable
 	{
 		private readonly string _tempLocalesPath;
-		private readonly Mock<IDistributedCache> _mockCache;
+		private readonly IDistributedCache _mockCache;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JsonStringLocalizerTests"/> class.
@@ -19,7 +18,7 @@ namespace Id.Tests.I18n
 		{
 			_tempLocalesPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
 			_ = Directory.CreateDirectory(_tempLocalesPath);
-			_mockCache = new Mock<IDistributedCache>();
+			_mockCache = Substitute.For<IDistributedCache>();
 		}
 
 		/// <summary>
@@ -35,7 +34,7 @@ namespace Id.Tests.I18n
 
 		private JsonStringLocalizer CreateLocalizerWithTempLocales()
 		{
-			JsonStringLocalizer localizer = new JsonStringLocalizer(_mockCache.Object);
+			JsonStringLocalizer localizer = new JsonStringLocalizer(_mockCache);
 			SetPrivateField(localizer, "_localesPath", _tempLocalesPath);
 			return localizer;
 		}
@@ -43,7 +42,7 @@ namespace Id.Tests.I18n
 		private static void SetPrivateField(JsonStringLocalizer instance, string fieldName, object value)
 		{
 			FieldInfo? field = typeof(JsonStringLocalizer).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
-			field.SetValue(instance, value);
+			field?.SetValue(instance, value);
 		}
 
 		/// <summary>
