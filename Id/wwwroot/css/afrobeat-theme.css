@@ -37,7 +37,7 @@ a:active {
   color: #00cc00; }
 
 body {
-  background-color: #ff0000;
+  background-color: #aa0000;
   color: #ffff00; }
 
 .navbar {
@@ -118,13 +118,13 @@ select:-webkit-autofill:active {
   border-color: #00ff00; }
 
 .input-invalid {
-  border-color: #ff0066; }
+  border-color: #ffff00; }
 
 .success {
   color: #00ff00; }
 
 .error {
-  color: #ff0066; }
+  color: #ffff00; }
 
 .warning {
   color: #ffcc00; }

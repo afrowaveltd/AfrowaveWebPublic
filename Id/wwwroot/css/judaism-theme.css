@@ -28,13 +28,13 @@ body {
   --jd-color-icon: $error; }
 
 a {
-  color: #0057B7; }
+  color: #0057E7; }
 
 a:hover {
-  color: #003F9A; }
+  color: #00aF9A; }
 
 a:active {
-  color: #002677; }
+  color: #0026E7; }
 
 body {
   background-color: #13294B;
@@ -45,13 +45,13 @@ body {
   color: #EEEEEE; }
 
 a.nav-link {
-  color: #0057B7; }
+  color: #0057E7; }
 
 a.nav-link:hover {
-  color: #003F9A; }
+  color: #00aF9A; }
 
 a.nav-link:active {
-  color: #002677; }
+  color: #0026E7; }
 
 .container {
   color: #FFFFFF;
@@ -133,19 +133,19 @@ select:-webkit-autofill:active {
   color: #1E90FF; }
 
 .btn-primary {
-  background-color: #0057B7;
-  border-color: #0057B7;
+  background-color: #0057E7;
+  border-color: #0057E7;
   color: #EEEEEE; }
 
 .btn-primary:hover {
-  background-color: #0057B7;
-  border-color: #003F9A;
+  background-color: #0057E7;
+  border-color: #00aF9A;
   color: #EEEEEE; }
 
 .btn:disabled {
   background-color: #555555;
   color: #AAAAAA;
-  border-color: #0057B7; }
+  border-color: #0057E7; }
 
 table.result {
   border: 2px solid #990000;
@@ -173,7 +173,7 @@ table {
   color: #EAEAEA; }
 
 .terms h1, h2, h3, h4, h5, h6 {
-  color: #003F9A;
+  color: #00aF9A;
   font-weight: bold;
   font-style: italic; }
 

@@ -130,7 +130,7 @@ select:-webkit-autofill:active {
   color: #bf7e29; }
 
 .information {
-  color: #2266aa; }
+  color: #5555FF; }
 
 .btn-primary {
   background-color: #69d2e7;
@@ -178,4 +178,4 @@ table {
   font-style: italic; }
 
 .terms li {
-  color: #2266aa; }
+  color: #5555FF; }

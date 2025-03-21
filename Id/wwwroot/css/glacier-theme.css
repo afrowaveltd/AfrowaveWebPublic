@@ -42,7 +42,7 @@ body {
 
 .navbar {
   background-color: rgba(144, 192, 213, 0.8);
-  color: #ffffff; }
+  color: #333333; }
 
 a.nav-link {
   color: #328ba8; }
@@ -69,7 +69,7 @@ a.nav-link:active {
   background-color: #93c2d5; }
 
 input {
-  -webkit-tap-highlight-color: #ffffff; }
+  -webkit-tap-highlight-color: #333333; }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -105,7 +105,7 @@ select:-webkit-autofill:active {
   color: #28a03c; }
 
 .helper {
-  color: #ffffff;
+  color: #333333;
   border: solid 2px #7f2626;
   padding: 10px;
   margin-right: 0px;
@@ -135,12 +135,12 @@ select:-webkit-autofill:active {
 .btn-primary {
   background-color: #328ba8;
   border-color: #328ba8;
-  color: #ffffff; }
+  color: #333333; }
 
 .btn-primary:hover {
   background-color: #328ba8;
   border-color: #276b82;
-  color: #ffffff; }
+  color: #333333; }
 
 .btn:disabled {
   background-color: #87a4b2;

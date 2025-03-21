@@ -1,40 +1,32 @@
 ﻿using SharedTools.Models;
-using System.Text.Json;
 
-namespace SharedTools.Services
+namespace SharedTools.Services;
+
+/// <summary>
+/// Interface for language translation services.
+/// </summary>
+public interface ITranslatorService
 {
 	/// <summary>
-	/// ITranslatorService is an interface that is used to translate text.
+	/// Translates given text by auto-detecting the source language.
 	/// </summary>
-	public interface ITranslatorService
-	{
-		/// <summary>
-		/// Provides options for customizing the behavior of JSON serialization and deserialization. It allows configuration
-		/// of various settings.
-		/// </summary>
-		JsonSerializerOptions Options { get; }
+	/// <param name="text">The text to translate.</param>
+	/// <param name="targetLanguage">The target language code (e.g., "cs", "en").</param>
+	/// <returns>Translated text and additional metadata wrapped in <see cref="ApiResponse{T}"/>.</returns>
+	Task<ApiResponse<TranslateResponse>> AutodetectSourceLanguageAndTranslateAsync(string text, string targetLanguage);
 
-		/// <summary>
-		/// AutodetectSourceLanguageAndTranslateAsync is a method that takes a string input and returns a translated string output.
-		/// </summary>
-		/// <param name="text">Text for translation</param>
-		/// <param name="targetLanguage">Target language code</param>
-		/// <returns>TranslateResponse instance</returns>
-		Task<ApiResponse<TranslateResponse>> AutodetectSourceLanguageAndTranslateAsync(string text, string targetLanguage);
+	/// <summary>
+	/// Gets the list of supported language codes.
+	/// </summary>
+	/// <returns>Array of language codes supported by the translation service.</returns>
+	Task<string[]> GetSupportedLanguagesAsync();
 
-		/// <summary>
-		/// GetSupportedLanguagesAsync is a method that returns a list of supported languages.
-		/// </summary>
-		/// <returns>List of the language codes for languages supported by libre translate server</returns>
-		Task<string[]> GetSupportedLanguagesAsync();
-
-		/// <summary>
-		/// TranslateAsync is a method that takes a string input and returns a translated string output.
-		/// </summary>
-		/// <param name="text">Text for translation</param>
-		/// <param name="sourceLanguage">Input language code</param>
-		/// <param name="targetLanguage">Target language code</param>
-		/// <returns></returns>
-		Task<ApiResponse<string>> TranslateAsync(string text, string sourceLanguage, string targetLanguage);
-	}
+	/// <summary>
+	/// Translates text from a specified source language to a target language.
+	/// </summary>
+	/// <param name="text">Text to be translated.</param>
+	/// <param name="sourceLanguage">Language code of the source text.</param>
+	/// <param name="targetLanguage">Language code of the target text.</param>
+	/// <returns>Translated text wrapped in <see cref="ApiResponse{T}"/>.</returns>
+	Task<ApiResponse<string>> TranslateAsync(string text, string sourceLanguage, string targetLanguage);
 }

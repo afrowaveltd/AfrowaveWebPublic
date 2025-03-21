@@ -28,13 +28,13 @@ body {
   --jd-color-icon: $error; }
 
 a {
-  color: #0033CC; }
+  color: #0066DD; }
 
 a:hover {
-  color: #990000; }
+  color: #CC0000; }
 
 a:active {
-  color: #CC0000; }
+  color: #DD0000; }
 
 body {
   background-color: #2C2F33;
@@ -45,13 +45,13 @@ body {
   color: #EEEEEE; }
 
 a.nav-link {
-  color: #0033CC; }
+  color: #0066DD; }
 
 a.nav-link:hover {
-  color: #990000; }
+  color: #CC0000; }
 
 a.nav-link:active {
-  color: #CC0000; }
+  color: #DD0000; }
 
 .container {
   color: #FFFFFF;
@@ -106,7 +106,7 @@ select:-webkit-autofill:active {
 
 .helper {
   color: #EEEEEE;
-  border: solid 2px #AA0000;
+  border: solid 2px #BB0000;
   padding: 10px;
   margin-right: 0px;
   -moz-border-radius: inherit;
@@ -118,13 +118,13 @@ select:-webkit-autofill:active {
   border-color: #32CD32; }
 
 .input-invalid {
-  border-color: #DC143C; }
+  border-color: #EC143C; }
 
 .success {
   color: #32CD32; }
 
 .error {
-  color: #DC143C; }
+  color: #EC143C; }
 
 .warning {
   color: #FFA500; }
@@ -133,34 +133,34 @@ select:-webkit-autofill:active {
   color: #1E90FF; }
 
 .btn-primary {
-  background-color: #0033CC;
-  border-color: #0033CC;
+  background-color: #0066DD;
+  border-color: #0066DD;
   color: #EEEEEE; }
 
 .btn-primary:hover {
-  background-color: #0033CC;
-  border-color: #990000;
+  background-color: #0066DD;
+  border-color: #CC0000;
   color: #EEEEEE; }
 
 .btn:disabled {
   background-color: #555555;
   color: #AAAAAA;
-  border-color: #0033CC; }
+  border-color: #0066DD; }
 
 table.result {
-  border: 2px solid #AA0000;
+  border: 2px solid #BB0000;
   border-radius: 7px;
   padding: 5px;
   width: 95%;
   background-color: #5E2129; }
 
 th.result {
-  border: 2px solid #AA0000;
+  border: 2px solid #BB0000;
   padding: 5px;
   color: #EAEAEA; }
 
 td.result {
-  border: 1px solid #AA0000;
+  border: 1px solid #BB0000;
   padding: 5px; }
 
 table {
@@ -173,7 +173,7 @@ table {
   color: #EAEAEA; }
 
 .terms h1, h2, h3, h4, h5, h6 {
-  color: #990000;
+  color: #CC0000;
   font-weight: bold;
   font-style: italic; }
 

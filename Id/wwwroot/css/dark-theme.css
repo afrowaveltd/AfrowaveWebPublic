@@ -31,7 +31,7 @@ a {
   color: #fa9929; }
 
 a:hover {
-  color: #990000; }
+  color: #bb0000; }
 
 a:active {
   color: #ff0808; }
@@ -48,7 +48,7 @@ a.nav-link {
   color: #fa9929; }
 
 a.nav-link:hover {
-  color: #990000; }
+  color: #bb0000; }
 
 a.nav-link:active {
   color: #ff0808; }
@@ -118,19 +118,19 @@ select:-webkit-autofill:active {
   border-color: #32c832; }
 
 .input-invalid {
-  border-color: #aa0000; }
+  border-color: #cc0000; }
 
 .success {
   color: #32c832; }
 
 .error {
-  color: #aa0000; }
+  color: #cc0000; }
 
 .warning {
   color: #aa9900; }
 
 .information {
-  color: #2222ee; }
+  color: #3366ff; }
 
 .btn-primary {
   background-color: #fa9929;
@@ -139,7 +139,7 @@ select:-webkit-autofill:active {
 
 .btn-primary:hover {
   background-color: #fa9929;
-  border-color: #990000;
+  border-color: #bb0000;
   color: #eeeeee; }
 
 .btn:disabled {
@@ -173,9 +173,9 @@ table {
   color: #E2E2E2; }
 
 .terms h1, h2, h3, h4, h5, h6 {
-  color: #990000;
+  color: #bb0000;
   font-weight: bold;
   font-style: italic; }
 
 .terms li {
-  color: #2222ee; }
+  color: #3366ff; }

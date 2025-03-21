@@ -28,7 +28,7 @@ body {
   --jd-color-icon: $error; }
 
 a {
-  color: #00335C; }
+  color: #008c44; }
 
 a:hover {
   color: #AA0000; }
@@ -45,7 +45,7 @@ body {
   color: #FFFFE0; }
 
 a.nav-link {
-  color: #00335C; }
+  color: #008c44; }
 
 a.nav-link:hover {
   color: #AA0000; }
@@ -130,22 +130,22 @@ select:-webkit-autofill:active {
   color: #CC9900; }
 
 .information {
-  color: #0044CC; }
+  color: #0066ee; }
 
 .btn-primary {
-  background-color: #00335C;
-  border-color: #00335C;
+  background-color: #008c44;
+  border-color: #008c44;
   color: #FFFFE0; }
 
 .btn-primary:hover {
-  background-color: #00335C;
+  background-color: #008c44;
   border-color: #AA0000;
   color: #FFFFE0; }
 
 .btn:disabled {
   background-color: #808080;
   color: #AAAAAA;
-  border-color: #00335C; }
+  border-color: #008c44; }
 
 table.result {
   border: 2px solid #660000;
@@ -178,4 +178,4 @@ table {
   font-style: italic; }
 
 .terms li {
-  color: #0044CC; }
+  color: #0066ee; }

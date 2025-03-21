@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace Id.Tests.Api
+﻿namespace Id.Tests.Api
 {
 	/// <summary>
 	/// Unit tests for the <see cref="PasswordRequirements"/> class.
 	/// </summary>
 	public class PasswordRequirementsTests
 	{
-		private readonly Mock<ISettingsService> _mockSettingsService;
+		private readonly ISettingsService _mockSettingsService;
 		private readonly PasswordRequirements _controller;
 
 		/// <summary>
@@ -15,10 +13,10 @@ namespace Id.Tests.Api
 		/// </summary>
 		public PasswordRequirementsTests()
 		{
-			_mockSettingsService = new Mock<ISettingsService>();
+			_mockSettingsService = Substitute.For<ISettingsService>();
 
 			// Create an instance of the PasswordRequirements controller with the mocked service
-			_controller = new PasswordRequirements(_mockSettingsService.Object);
+			_controller = new PasswordRequirements(_mockSettingsService);
 		}
 
 		/// <summary>
@@ -40,7 +38,7 @@ namespace Id.Tests.Api
 			};
 
 			IdentificatorSettings settings = new IdentificatorSettings { PasswordRules = expectedRules };
-			_ = _mockSettingsService.Setup(s => s.GetSettingsAsync()).ReturnsAsync(settings);
+			_ = _mockSettingsService.GetSettingsAsync().Returns(settings);
 
 			// Act
 			IActionResult result = await _controller.Get();
@@ -64,7 +62,7 @@ namespace Id.Tests.Api
 		public async Task Get_ShouldReturnDefaultRules_WhenServiceFails()
 		{
 			// Arrange: Simulate a failure by returning null
-			_ = _mockSettingsService.Setup(s => s.GetSettingsAsync()).ReturnsAsync((IdentificatorSettings)null);
+			_ = _mockSettingsService.GetSettingsAsync().Returns((IdentificatorSettings)null);
 
 			// Act
 			IActionResult result = await _controller.Get();

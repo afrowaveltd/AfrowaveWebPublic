@@ -118,19 +118,19 @@ select:-webkit-autofill:active {
   border-color: #6b8e23; }
 
 .input-invalid {
-  border-color: #8b0000; }
+  border-color: #cc0033; }
 
 .success {
   color: #6b8e23; }
 
 .error {
-  color: #8b0000; }
+  color: #cc0033; }
 
 .warning {
   color: #cd853f; }
 
 .information {
-  color: #556b2f; }
+  color: #4da443; }
 
 .btn-primary {
   background-color: #8c7a6d;
@@ -178,4 +178,4 @@ table {
   font-style: italic; }
 
 .terms li {
-  color: #556b2f; }
+  color: #4da443; }

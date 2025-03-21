@@ -39,12 +39,12 @@ public class RegisterModelTests
 			 _mockLocalizer.Object
 		);
 
-		_mockApplicationsManager.Setup(am => am.ApplicationExistsAsync(It.IsAny<string>()))
+		_ = _mockApplicationsManager.Setup(am => am.ApplicationExistsAsync(It.IsAny<string>()))
 										.ReturnsAsync(true);
-		_mockEncryptionService.Setup(x => x.EncryptTextAsync(It.IsAny<string>(), It.IsAny<string>()))
+		_ = _mockEncryptionService.Setup(x => x.EncryptTextAsync(It.IsAny<string>(), It.IsAny<string>()))
 									  .Returns("encryptedValue");
-		_mockSettingsService.Setup(x => x.GetPasswordRulesAsync()).ReturnsAsync(new PasswordRules());
-		_mockSettingsService.Setup(x => x.GetLoginRulesAsync()).ReturnsAsync(new LoginRules());
+		_ = _mockSettingsService.Setup(x => x.GetPasswordRulesAsync()).ReturnsAsync(new PasswordRules());
+		_ = _mockSettingsService.Setup(x => x.GetLoginRulesAsync()).ReturnsAsync(new LoginRules());
 	}
 
 	private void InitializeValidInput()
@@ -66,7 +66,7 @@ public class RegisterModelTests
 				AcceptCookiePolicy = true
 			};
 		}
-		_mockUsersManager.Setup(um => um.IsEmailFreeAsync(It.IsAny<string>()))
+		_ = _mockUsersManager.Setup(um => um.IsEmailFreeAsync(It.IsAny<string>()))
 							  .ReturnsAsync(true);
 	}
 
@@ -74,7 +74,7 @@ public class RegisterModelTests
 	public async Task OnPostAsync_ShouldRedirectToAuthenticatorPage_OnSuccessfulRegistration()
 	{
 		InitializeValidInput();
-		_mockUsersManager.Setup(um => um.RegisterUserAsync(It.IsAny<RegisterUserInput>()))
+		_ = _mockUsersManager.Setup(um => um.RegisterUserAsync(It.IsAny<RegisterUserInput>()))
 							  .ReturnsAsync(new RegisterUserResult { UserCreated = true });
 
 		if(_pageModel.Input == null)
@@ -85,45 +85,74 @@ public class RegisterModelTests
 		_pageModel.ModelState.Clear();
 
 		IActionResult result = await _pageModel.OnPostAsync();
-		Assert.IsType<RedirectToPageResult>(result);
+		_ = Assert.IsType<RedirectToPageResult>(result);
 	}
 
 	[Fact]
 	public async Task OnPostAsync_ShouldReturnPage_WhenPasswordConfirmationFails()
 	{
-		InitializeValidInput();
+		// Arrange
+		WithValidModelState();
+		_pageModel.ApplicationId = "testAppId";
+
+		// Ensure Input is set
+		if(_pageModel.Input == null)
+		{
+			WithValidModelState();
+		}
+
 		_pageModel.Input.PasswordConfirm = "DifferentPassword!";
-		_pageModel.ModelState.Clear();
+
+		// Act
 		IActionResult result = await _pageModel.OnPostAsync();
-		Assert.IsType<PageResult>(result);
+
+		// Assert
+		_ = Assert.IsType<PageResult>(result);
 	}
 
 	[Fact]
 	public async Task OnPostAsync_ShouldReturnPage_WhenPolicyAcceptanceIsMissing()
 	{
-		InitializeValidInput();
+		// Arrange
+		WithValidModelState();
+		_pageModel.ApplicationId = "testAppId";
+
+		// Ensure Input is set
+		if(_pageModel.Input == null)
+		{
+			WithValidModelState();
+		}
+
 		_pageModel.Input.AcceptTerms = false;
-		_pageModel.ModelState.Clear();
+
+		// Act
 		IActionResult result = await _pageModel.OnPostAsync();
-		Assert.IsType<PageResult>(result);
+
+		// Assert
+		_ = Assert.IsType<PageResult>(result);
 	}
 
 	[Fact]
 	public async Task OnPostAsync_ShouldReturnError_WhenUserAlreadyExists()
 	{
-		InitializeValidInput();
-		_mockUsersManager.Setup(um => um.IsEmailFreeAsync(It.IsAny<string>()))
-							  .ReturnsAsync(false);
-		_pageModel.ModelState.Clear();
+		// Arrange
+		WithValidModelState();
+		_pageModel.ApplicationId = "testAppId";
+
+		_mockUsersManager.IsEmailFreeAsync(Arg.Any<string>()).Returns(false);
+
+		// Act
 		IActionResult result = await _pageModel.OnPostAsync();
-		Assert.IsType<PageResult>(result);
+
+		// Assert
+		_ = Assert.IsType<PageResult>(result);
 	}
 
 	[Fact]
 	public async Task OnPostAsync_ShouldLogError_OnFailure()
 	{
 		InitializeValidInput();
-		_mockUsersManager.Setup(um => um.RegisterUserAsync(It.IsAny<RegisterUserInput>()))
+		_ = _mockUsersManager.Setup(um => um.RegisterUserAsync(It.IsAny<RegisterUserInput>()))
 							  .ReturnsAsync(new RegisterUserResult { UserCreated = false, Errors = new List<string> { "Registration failed" } });
 
 		IActionResult result = await _pageModel.OnPostAsync();
@@ -134,11 +163,11 @@ public class RegisterModelTests
 				  It.IsAny<EventId>(),
 				  It.IsAny<object>(),
 				  It.IsAny<Exception>(),
-				  (Func<object, Exception, string>)It.IsAny<object>()
+				  (Func<object, Exception?, string>)It.IsAny<object>()
 			 ),
 			 Times.AtLeastOnce()
 		);
 
-		Assert.IsType<PageResult>(result);
+		_ = Assert.IsType<PageResult>(result);
 	}
 }

@@ -28,7 +28,7 @@ body {
   --jd-color-icon: $error; }
 
 a {
-  color: #0033AA; }
+  color: #00aa33; }
 
 a:hover {
   color: #FF6600; }
@@ -45,7 +45,7 @@ body {
   color: #EEEEEE; }
 
 a.nav-link {
-  color: #0033AA; }
+  color: #00aa33; }
 
 a.nav-link:hover {
   color: #FF6600; }
@@ -106,7 +106,7 @@ select:-webkit-autofill:active {
 
 .helper {
   color: #EEEEEE;
-  border: solid 2px #880000;
+  border: solid 2px #cc0000;
   padding: 10px;
   margin-right: 0px;
   -moz-border-radius: inherit;
@@ -118,49 +118,49 @@ select:-webkit-autofill:active {
   border-color: #00AA00; }
 
 .input-invalid {
-  border-color: #AA0000; }
+  border-color: #CC0000; }
 
 .success {
   color: #00AA00; }
 
 .error {
-  color: #AA0000; }
+  color: #CC0000; }
 
 .warning {
   color: #FFAA00; }
 
 .information {
-  color: #002299; }
+  color: #00aa33; }
 
 .btn-primary {
-  background-color: #0033AA;
-  border-color: #0033AA;
+  background-color: #00aa33;
+  border-color: #00aa33;
   color: #EEEEEE; }
 
 .btn-primary:hover {
-  background-color: #0033AA;
+  background-color: #00aa33;
   border-color: #FF6600;
   color: #EEEEEE; }
 
 .btn:disabled {
   background-color: #888888;
   color: #CCCCCC;
-  border-color: #0033AA; }
+  border-color: #00aa33; }
 
 table.result {
-  border: 2px solid #880000;
+  border: 2px solid #cc0000;
   border-radius: 7px;
   padding: 5px;
   width: 95%;
   background-color: #AAAAAA; }
 
 th.result {
-  border: 2px solid #880000;
+  border: 2px solid #cc0000;
   padding: 5px;
   color: #F0F0F0; }
 
 td.result {
-  border: 1px solid #880000;
+  border: 1px solid #cc0000;
   padding: 5px; }
 
 table {
@@ -178,4 +178,4 @@ table {
   font-style: italic; }
 
 .terms li {
-  color: #002299; }
+  color: #00aa33; }

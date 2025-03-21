@@ -1,162 +1,155 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SharedTools.Models;
-using System.Net.Http.Json;
+using SharedTools.Services;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace SharedTools.Services
+/// <summary>
+/// Implementation of <see cref="ITranslatorService"/> using an HTTP translation API (e.g., LibreTranslate).
+/// Handles both direct and auto-detected translations, and retrieves supported languages.
+/// </summary>
+public class TranslatorService : ITranslatorService
 {
-	/// <summary>
-	/// TranslatorService is a class that is used to translate text.
-	/// </summary>
-	public class TranslatorService : ITranslatorService
+	private readonly IHttpService _httpService;
+	private readonly ILogger<TranslatorService> _logger;
+	private readonly string _languagesEndpoint;
+	private readonly string _translateEndpoint;
+
+	private readonly JsonSerializerOptions _options = new()
 	{
-		private readonly HttpClient _client;
-		private readonly ILogger<TranslatorService> _logger;
-		private readonly string languagesEndpoint;
-		private readonly string translateEndpoint;
+		PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+		DefaultIgnoreCondition = JsonIgnoreCondition.Never,
+		ReferenceHandler = ReferenceHandler.IgnoreCycles
+	};
 
-		/// <summary>
-		/// Options is a JsonSerializerOptions object that is used to configure the JSON serialization options.
-		/// </summary>
-		public JsonSerializerOptions Options { get; } = new JsonSerializerOptions
-		{
-			PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-			DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.Never,
-			ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles
-		};
+	/// <summary>
+	/// Initializes a new instance of <see cref="TranslatorService"/>.
+	/// </summary>
+	/// <param name="httpService">Injected HTTP service for making requests.</param>
+	/// <param name="config">Configuration object providing translation API host.</param>
+	/// <param name="logger">Logger instance for logging errors and warnings.</param>
+	public TranslatorService(IHttpService httpService, IConfiguration config, ILogger<TranslatorService> logger)
+	{
+		_httpService = httpService;
+		_logger = logger;
 
-		/// <summary>
-		/// TranslatorService is a constructor that takes a configuration and logger.
-		/// </summary>
-		/// <param name="config">Configuration</param>
-		/// <param name="logger">Logger</param>
-		/// <param name="client">HttpClient</param>
-		public TranslatorService(IConfiguration config, ILogger<TranslatorService> logger, HttpClient client)
-		{
-			Translator translator = config.GetSection("Translator").Get<Translator>() ?? new Translator();
-			languagesEndpoint = $"{translator.Host}/languages";
-			translateEndpoint = $"{translator.Host}/translate";
-			_client = client;
-			_logger = logger;
-		}
+		Translator translator = config.GetSection("Translator").Get<Translator>() ?? new();
+		_languagesEndpoint = $"{translator.Host}/languages";
+		_translateEndpoint = $"{translator.Host}/translate";
+	}
 
-		/// <summary>
-		/// GetSupportedLanguagesAsync is a method that returns a list of supported languages.
-		/// </summary>
-		/// <returns>List of supported languages</returns>
-		public async Task<string[]> GetSupportedLanguagesAsync()
+	/// <summary>
+	/// Retrieves a list of supported languages from the translation API.
+	/// </summary>
+	/// <returns>array of strings or empty array</returns>
+	public async Task<string[]> GetSupportedLanguagesAsync()
+	{
+		try
 		{
-			try
+			HttpResponseMessage response = await _httpService.GetAsync(_languagesEndpoint);
+			_ = response.EnsureSuccessStatusCode();
+
+			List<LibretranslateLanguage> languages = await _httpService.ReadJsonAsync<List<LibretranslateLanguage>>(response.Content, _options) ?? new();
+			if(languages.Count == 0)
 			{
-				HttpResponseMessage response = await _client.GetAsync(languagesEndpoint);
-				_ = response.EnsureSuccessStatusCode();
-				List<LibretranslateLanguage> supportedLanguages = await _client.GetFromJsonAsync<List<LibretranslateLanguage>>(languagesEndpoint, Options) ?? new();
-				if(supportedLanguages.Count == 0)
-				{
-					_logger.LogWarning("No supported languages found");
-					return Array.Empty<string>();
-				}
-				return supportedLanguages.Select(language => language.Code).ToArray();
-			}
-			catch(HttpRequestException e)
-			{
-				_logger.LogError(e, "Error getting supported languages");
+				_logger.LogWarning("No supported languages found");
 				return Array.Empty<string>();
 			}
-		}
 
-		/// <summary>
-		/// TranslateAsync is a method that takes a string input and returns a translated string output.
-		/// </summary>
-		/// <param name="text">Text for translation</param>
-		/// <param name="sourceLanguage">Source language code</param>
-		/// <param name="targetLanguage">Target language code</param>
-		/// <returns>ApiResponse with a string data containing translated string</returns>
-		public async Task<ApiResponse<string>> TranslateAsync(string text, string sourceLanguage, string targetLanguage)
-		{
-			ApiResponse<string> returnValue = new ApiResponse<string>();
-			int tries = 0;
-			int maxTries = 20;
-			bool success = false;
-			while(tries < maxTries && success == false)
-			{
-				try
-				{
-					HttpRequestMessage request = new(HttpMethod.Post, translateEndpoint);
-					request.Content = new FormUrlEncodedContent(new Dictionary<string, string>
-					 {
-						  { "q", text },
-						  { "source", sourceLanguage },
-						  { "target", targetLanguage }
-					 });
-					HttpResponseMessage response = await _client.PostAsync(translateEndpoint, request.Content);
-					_ = response.EnsureSuccessStatusCode();
-					TranslateResponse translation = await response.Content.ReadFromJsonAsync<TranslateResponse>(Options) ?? new();
-					if(translation.TranslatedText == string.Empty)
-					{
-						_logger.LogWarning("No translation found");
-						returnValue.Successful = false;
-						returnValue.Message = "No translation found";
-						returnValue.Data = text;
-						return returnValue;
-					}
-					success = true;
-					returnValue.Data = translation.TranslatedText;
-					return returnValue;
-				}
-				catch(HttpRequestException)
-				{
-					_logger.LogWarning("Error translating text, retrying");
-					await Task.Delay(5000);
-					tries++;
-				}
-			}
-			_logger.LogError("Error translating text");
-			returnValue.Successful = false;
-			returnValue.Message = "Error translating text: ";
-			returnValue.Data = text;
-			return returnValue;
+			return languages.Select(l => l.Code).ToArray();
 		}
-
-		/// <summary>
-		/// AutodetectSourceLanguageAndTranslateAsync is a method that takes a string input and returns a translated string output.
-		/// </summary>
-		/// <param name="text">Text for translation</param>
-		/// <param name="targetLanguage">Target language code</param>
-		/// <returns>ApiResponse with TranslateResponse object</returns>
-		public async Task<ApiResponse<TranslateResponse>> AutodetectSourceLanguageAndTranslateAsync(string text, string targetLanguage)
+		catch(HttpRequestException e)
 		{
-			ApiResponse<TranslateResponse> returnValue = new ApiResponse<TranslateResponse>();
+			_logger.LogError(e, "Error getting supported languages");
+			return Array.Empty<string>();
+		}
+	}
+
+	/// <summary>
+	/// Translates text from a source language to a target language.
+	/// </summary>
+	/// <param name="text">Text to translate</param>
+	/// <param name="sourceLanguage">Source language code</param>
+	/// <param name="targetLanguage">Target language code</param>
+	/// <returns>Api response with string data representating the translation</returns>
+	public async Task<ApiResponse<string>> TranslateAsync(string text, string sourceLanguage, string targetLanguage)
+	{
+		_ = new ApiResponse<string>();
+		int tries = 0;
+		const int maxTries = 20;
+		bool success = false;
+
+		while(tries < maxTries && !success)
+		{
 			try
 			{
-				HttpRequestMessage request = new(HttpMethod.Post, translateEndpoint);
-				request.Content = new FormUrlEncodedContent(new Dictionary<string, string>
-					 {
-						  { "q", text },
-						  { "source", "auto"},
-						  { "target", targetLanguage }
-					 });
-				HttpResponseMessage response = await _client.PostAsync(translateEndpoint, request.Content);
+				Dictionary<string, string> content = new Dictionary<string, string>
+				{
+					{ "q", text },
+					{ "source", sourceLanguage },
+					{ "target", targetLanguage }
+				};
+
+				HttpResponseMessage response = await _httpService.PostFormAsync(_translateEndpoint, content);
 				_ = response.EnsureSuccessStatusCode();
-				TranslateResponse translation = await response.Content.ReadFromJsonAsync<TranslateResponse>(Options) ?? new();
-				return new ApiResponse<TranslateResponse>
+
+				TranslateResponse translation = await _httpService.ReadJsonAsync<TranslateResponse>(response.Content, _options) ?? new();
+
+				if(string.IsNullOrEmpty(translation.TranslatedText))
 				{
-					Successful = true,
-					Data = translation
-				};
+					_logger.LogWarning("No translation found");
+					return new ApiResponse<string> { Successful = false, Message = "No translation found", Data = text };
+				}
+
+				success = true;
+				return new ApiResponse<string> { Data = translation.TranslatedText };
 			}
-			catch(HttpRequestException e)
+			catch(HttpRequestException)
 			{
-				_logger.LogError(e, "Error translating text");
-				returnValue.Successful = false;
-				returnValue.Message = "Error translating text: " + e.Message;
-				returnValue.Data = new TranslateResponse
-				{
-					TranslatedText = text
-				};
-				return returnValue;
+				_logger.LogWarning("Error translating text, retrying");
+				await Task.Delay(5000);
+				tries++;
 			}
+		}
+
+		_logger.LogError("Translation failed after retries");
+		return new ApiResponse<string> { Successful = false, Message = "Translation failed", Data = text };
+	}
+
+	/// <summary>
+	/// Translates text by auto-detecting the source language.
+	/// </summary>
+	/// <param name="text">Text to translate</param>
+	/// <param name="targetLanguage">Target language code</param>
+	/// <returns>ApiResponse with TranslateResponse containing the translation</returns>
+	public async Task<ApiResponse<TranslateResponse>> AutodetectSourceLanguageAndTranslateAsync(string text, string targetLanguage)
+	{
+		try
+		{
+			Dictionary<string, string> content = new Dictionary<string, string>
+			{
+				{ "q", text },
+				{ "source", "auto" },
+				{ "target", targetLanguage }
+			};
+
+			HttpResponseMessage response = await _httpService.PostFormAsync(_translateEndpoint, content);
+			_ = response.EnsureSuccessStatusCode();
+
+			TranslateResponse translation = await _httpService.ReadJsonAsync<TranslateResponse>(response.Content, _options) ?? new();
+
+			return new ApiResponse<TranslateResponse> { Successful = true, Data = translation };
+		}
+		catch(HttpRequestException e)
+		{
+			_logger.LogError(e, "Error translating text");
+			return new ApiResponse<TranslateResponse>
+			{
+				Successful = false,
+				Message = $"Error translating text: {e.Message}",
+				Data = new TranslateResponse { TranslatedText = text }
+			};
 		}
 	}
 }

@@ -123,6 +123,7 @@ public class Program
 		_ = builder.Services.AddScoped<ITranslatorService, TranslatorService>();
 		_ = builder.Services.AddScoped<IUsersManager, UsersManager>();
 		_ = builder.Services.AddScoped<IEmailManager, EmailManager>();
+		_ = builder.Services.AddScoped<IHttpService, HttpService>();
 
 		// Transient slu�by (stateless)
 		_ = builder.Services.AddTransient<IStringLocalizerFactory, JsonStringLocalizerFactory>();

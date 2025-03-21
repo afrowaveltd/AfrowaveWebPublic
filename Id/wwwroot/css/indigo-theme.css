@@ -106,7 +106,7 @@ select:-webkit-autofill:active {
 
 .helper {
   color: #ffffff;
-  border: solid 2px #8b0000;
+  border: solid 2px #ab0000;
   padding: 10px;
   margin-right: 0px;
   -moz-border-radius: inherit;
@@ -118,13 +118,13 @@ select:-webkit-autofill:active {
   border-color: #5f9ea0; }
 
 .input-invalid {
-  border-color: #8b0000; }
+  border-color: #ab0000; }
 
 .success {
   color: #5f9ea0; }
 
 .error {
-  color: #8b0000; }
+  color: #ab0000; }
 
 .warning {
   color: #daa520; }
@@ -148,19 +148,19 @@ select:-webkit-autofill:active {
   border-color: #6a5acd; }
 
 table.result {
-  border: 2px solid #8b0000;
+  border: 2px solid #ab0000;
   border-radius: 7px;
   padding: 5px;
   width: 95%;
   background-color: #1a2f4d; }
 
 th.result {
-  border: 2px solid #8b0000;
+  border: 2px solid #ab0000;
   padding: 5px;
   color: #e6e6fa; }
 
 td.result {
-  border: 1px solid #8b0000;
+  border: 1px solid #ab0000;
   padding: 5px; }
 
 table {

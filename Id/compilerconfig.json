@@ -134,5 +134,77 @@
   {
     "outputFile": "wwwroot/css/as400-theme.css",
     "inputFile": "wwwroot/css/as400-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/afrobeat-theme.css",
+    "inputFile": "wwwroot/css/afrobeat-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/amiga-theme.css",
+    "inputFile": "wwwroot/css/amiga-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/baobab-theme.css",
+    "inputFile": "wwwroot/css/baobab-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/buddhism-theme.css",
+    "inputFile": "wwwroot/css/buddhism-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/christianity-theme.css",
+    "inputFile": "wwwroot/css/christianity-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/cosmic-theme.css",
+    "inputFile": "wwwroot/css/cosmic-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/diplomatic-theme.css",
+    "inputFile": "wwwroot/css/diplomatic-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/dos-theme.css",
+    "inputFile": "wwwroot/css/dos-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/hinduism-theme.css",
+    "inputFile": "wwwroot/css/hinduism-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/indigo-theme.css",
+    "inputFile": "wwwroot/css/indigo-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/judaism-theme.css",
+    "inputFile": "wwwroot/css/judaism-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/metropolis-theme.css",
+    "inputFile": "wwwroot/css/metropolis-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/norton-theme.css",
+    "inputFile": "wwwroot/css/norton-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/nubian-theme.css",
+    "inputFile": "wwwroot/css/nubian-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/protest-theme.css",
+    "inputFile": "wwwroot/css/protest-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/saharanight-theme.css",
+    "inputFile": "wwwroot/css/saharanight-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/windows95-theme.css",
+    "inputFile": "wwwroot/css/windows95-theme.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/zxspetrum-theme.css",
+    "inputFile": "wwwroot/css/zxspetrum-theme.scss"
   }
 ]

@@ -118,13 +118,13 @@ select:-webkit-autofill:active {
   border-color: #00AA00; }
 
 .input-invalid {
-  border-color: #AA0000; }
+  border-color: #CC0000; }
 
 .success {
   color: #00AA00; }
 
 .error {
-  color: #AA0000; }
+  color: #CC0000; }
 
 .warning {
   color: #FFAA00; }

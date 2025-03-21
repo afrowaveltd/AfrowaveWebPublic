@@ -130,7 +130,7 @@ select:-webkit-autofill:active {
   color: #FFAA00; }
 
 .information {
-  color: #0099FF; }
+  color: #00FF99; }
 
 .btn-primary {
   background-color: #FFFF00;
@@ -178,7 +178,7 @@ table {
   font-style: italic; }
 
 .terms li {
-  color: #0099FF; }
+  color: #00FF99; }
 
 body {
   /* Margin bottom by footer height */
@@ -311,7 +311,7 @@ select:-webkit-autofill:active {
   color: #FFAA00; }
 
 .information {
-  color: #0099FF; }
+  color: #00FF99; }
 
 .btn-primary {
   background-color: #FFFF00;
@@ -359,4 +359,4 @@ table {
   font-style: italic; }
 
 .terms li {
-  color: #0099FF; }
+  color: #00FF99; }

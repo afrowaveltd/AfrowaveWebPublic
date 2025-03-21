@@ -28,10 +28,10 @@ body {
   --jd-color-icon: $error; }
 
 a {
-  color: #9b6fc3; }
+  color: #6b4f83; }
 
 a:hover {
-  color: #6f4a8f; }
+  color: #3f2a5f; }
 
 a:active {
   color: #5a3570; }
@@ -45,10 +45,10 @@ body {
   color: #331133; }
 
 a.nav-link {
-  color: #9b6fc3; }
+  color: #6b4f83; }
 
 a.nav-link:hover {
-  color: #6f4a8f; }
+  color: #3f2a5f; }
 
 a.nav-link:active {
   color: #5a3570; }
@@ -133,19 +133,19 @@ select:-webkit-autofill:active {
   color: #786fb8; }
 
 .btn-primary {
-  background-color: #9b6fc3;
-  border-color: #9b6fc3;
+  background-color: #6b4f83;
+  border-color: #6b4f83;
   color: #331133; }
 
 .btn-primary:hover {
-  background-color: #9b6fc3;
-  border-color: #6f4a8f;
+  background-color: #6b4f83;
+  border-color: #3f2a5f;
   color: #331133; }
 
 .btn:disabled {
   background-color: #b59bc5;
   color: #887998;
-  border-color: #9b6fc3; }
+  border-color: #6b4f83; }
 
 table.result {
   border: 2px solid #9a3050;
@@ -173,7 +173,7 @@ table {
   color: #ffffff; }
 
 .terms h1, h2, h3, h4, h5, h6 {
-  color: #6f4a8f;
+  color: #3f2a5f;
   font-weight: bold;
   font-style: italic; }
 
