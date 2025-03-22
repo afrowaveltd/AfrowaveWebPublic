@@ -13,12 +13,12 @@
 		/// <summary>
 		/// Gets or sets the favicon-16.png.
 		/// </summary>
-		public string Png16 { get; set; } = "img/favicon-16.png";
+		public string Png16 { get; set; } = "img/favicon_16.png";
 
 		/// <summary>
 		/// Gets or sets the favicon-32.png.
 		/// </summary>
-		public string Png32 { get; set; } = "img/favicon-32.png";
+		public string Png32 { get; set; } = "img/favicon_32.png";
 
 		/// <summary>
 		/// Gets or sets the favicon-76.png.
