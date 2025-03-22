@@ -5,11 +5,6 @@
  *  Get the path to the icon of a brand, get the path to the full size logo of a brand, and check if a user is the owner of a brand.
  */
 
-using Id.Models.DataViews;
-using Id.Models.InputModels;
-using Id.Models.ResultModels;
-using SharedTools.Services;
-
 namespace Id.Services
 {
 	/// <summary>

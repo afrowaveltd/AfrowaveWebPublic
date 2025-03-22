@@ -47,14 +47,14 @@
 				ShortName = "Afrowave",
 				Icons = new[]
 				{
-					new ManifestIcon { Src = icons.Png16 != null ? Url.Content(icons.Png16) : "", Sizes = "16x16", Type = "image/png" },
-					new ManifestIcon { Src = icons.Png32 != null ? Url.Content(icons.Png32) : "", Sizes = "32x32", Type = "image/png" },
-					new ManifestIcon { Src = icons.Png76 != null ? Url.Content(icons.Png76) : "", Sizes = "76x76", Type = "image/png" },
-					new ManifestIcon { Src = icons.Png120 != null ? Url.Content(icons.Png120) : "", Sizes = "120x120", Type = "image/png" },
-					new ManifestIcon { Src = icons.Png152 != null ? Url.Content(icons.Png152) : "", Sizes = "152x152", Type = "image/png" },
-					new ManifestIcon { Src = icons.Png180 != null ? Url.Content(icons.Png180) : "", Sizes = "180x180", Type = "image/png" },
-					new ManifestIcon { Src = icons.Png192 != null ? Url.Content(icons.Png192) : "", Sizes = "192x192", Type = "image/png" },
-					new ManifestIcon { Src = icons.Png512 != null ? Url.Content(icons.Png512) : "", Sizes = "512x512", Type = "image/png" }
+					new ManifestIcon { Src = icons.Png16 != null ? Url.Content(icons.Png16) : "/img/favicon_16.png", Sizes = "16x16", Type = "image/png" },
+					new ManifestIcon { Src = icons.Png32 != null ? Url.Content(icons.Png32) : "/img/favicon_32.png", Sizes = "32x32", Type = "image/png" },
+					new ManifestIcon { Src = icons.Png76 != null ? Url.Content(icons.Png76) : "/img/no-icon_76.png", Sizes = "76x76", Type = "image/png" },
+					new ManifestIcon { Src = icons.Png120 != null ? Url.Content(icons.Png120) : "/img/no-icon_120.png", Sizes = "120x120", Type = "image/png" },
+					new ManifestIcon { Src = icons.Png152 != null ? Url.Content(icons.Png152) : "/img/no-icon_152.png", Sizes = "152x152", Type = "image/png" },
+					new ManifestIcon { Src = icons.Png180 != null ? Url.Content(icons.Png180) : "/img/no-icon.png", Sizes = "180x180", Type = "image/png" },
+					new ManifestIcon { Src = icons.Png192 != null ? Url.Content(icons.Png192) : "/web-app-manifest-192x192.png", Sizes = "192x192", Type = "image/png" },
+					new ManifestIcon { Src = icons.Png512 != null ? Url.Content(icons.Png512) : "", Sizes = "/web-app-manifest-512x512.png", Type = "image/png" }
 				}.Where(icon => !string.IsNullOrEmpty(icon.Src)).ToArray(),  // Ensure empty URLs are removed
 				ThemeColor = "#000000",
 				BackgroundColor = "#ffffff",

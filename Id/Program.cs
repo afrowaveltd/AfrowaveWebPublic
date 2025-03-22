@@ -207,26 +207,7 @@ public class Program
 		_ = app.MapStaticAssets();
 		_ = app.MapRazorPages()
 			.WithStaticAssets();
-		_ = app.Use(async (context, next) =>
-		{
-			await next();
 
-			if(context.Response.StatusCode == 404) // Detects 404 responses
-			{
-				ILogger<Program> logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
-				logger.LogWarning("404 Not Found: {Path}", context.Request.Path);
-
-				// Clear the response and reprocess it through the custom middleware
-				context.Response.Clear();
-				context.Response.StatusCode = 404;
-
-				CustomErrorHandlingMiddleware middleware = new CustomErrorHandlingMiddleware(_ => Task.CompletedTask,
-			 context.RequestServices.GetRequiredService<IWebHostEnvironment>(),
-			 context.RequestServices.GetRequiredService<ILogger<CustomErrorHandlingMiddleware>>());
-
-				await middleware.InvokeAsync(context);
-			}
-		});
 		app.Run();
 	}
 }
