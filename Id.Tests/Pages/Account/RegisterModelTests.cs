@@ -5,6 +5,10 @@ using System.Security.Claims;
 
 namespace Id.Tests.Pages.Account
 {
+	/// <summary>
+	/// Tests the functionality of the RegisterUserModel class, including user registration and validation scenarios. It
+	/// verifies redirects and page returns based on various conditions.
+	/// </summary>
 	public class RegisterUserModelTests
 	{
 		private RegisterUserModel CreatePageModelWith(
@@ -25,7 +29,6 @@ namespace Id.Tests.Pages.Account
 			var localizer = Substitute.For<IStringLocalizer<RegisterUserModel>>();
 
 			var appId = "test-app-id";
-			var userId = "test-user-id";
 
 			settingsService.GetPasswordRulesAsync().Returns(new PasswordRules { MinimumLength = 8 });
 			settingsService.GetLoginRulesAsync().Returns(new LoginRules { RequireConfirmedEmail = false });
@@ -89,6 +92,10 @@ namespace Id.Tests.Pages.Account
 			return model;
 		}
 
+		/// <summary>
+		/// Handles the post request for user registration and returns a redirect upon successful registration.
+		/// </summary>
+		/// <returns>Returns a redirect result to the specified page after successful user registration.</returns>
 		[Fact]
 		public async Task OnPostAsync_ReturnsRedirect_WhenRegistrationSucceeds()
 		{
@@ -105,6 +112,10 @@ namespace Id.Tests.Pages.Account
 			Assert.Equal("/Account/AuthenticatorUserRegistration", redirect.PageName);
 		}
 
+		/// <summary>
+		/// Handles the registration process and checks if the user is too young based on their birthdate.
+		/// </summary>
+		/// <returns>Returns a PageResult when the user is deemed too young to register.</returns>
 		[Fact]
 		public async Task OnPostAsync_ReturnsPage_WhenBirthdateTooYoung()
 		{
@@ -123,6 +134,10 @@ namespace Id.Tests.Pages.Account
 			Assert.Contains("User is too young", model.RegistrationErrors);
 		}
 
+		/// <summary>
+		/// Handles the GET request for a page and checks if the application exists. If not, it redirects to a 404 error page.
+		/// </summary>
+		/// <returns>Returns a redirect result to the error page if the application does not exist.</returns>
 		[Fact]
 		public async Task OnGetAsync_ShouldRedirectToError_WhenAppDoesNotExist()
 		{
@@ -134,6 +149,11 @@ namespace Id.Tests.Pages.Account
 			Assert.Equal("/Error/404", redirect.PageName);
 		}
 
+		/// <summary>
+		/// Tests the OnGetAsync method to ensure it redirects to the Index page when the user is authenticated. It verifies the
+		/// redirect result and the target page.
+		/// </summary>
+		/// <returns>Returns a RedirectToPageResult indicating the page to redirect to.</returns>
 		[Fact]
 		public async Task OnGetAsync_ShouldRedirectToIndex_WhenAuthenticated()
 		{
@@ -145,6 +165,10 @@ namespace Id.Tests.Pages.Account
 			Assert.Equal("/Account/Index", redirect.PageName);
 		}
 
+		/// <summary>
+		/// Handles the GET request and checks if the application information is null, redirecting to an error page if so.
+		/// </summary>
+		/// <returns>Returns a PageResult indicating the outcome of the GET request.</returns>
 		[Fact]
 		public async Task OnGetAsync_ShouldRedirectToError_WhenAppInfoIsNull()
 		{
@@ -155,6 +179,10 @@ namespace Id.Tests.Pages.Account
 			Assert.IsType<PageResult>(result);
 		}
 
+		/// <summary>
+		/// Handles the GET request asynchronously and returns a page result if all conditions are valid.
+		/// </summary>
+		/// <returns>Returns a PageResult indicating the success of the operation.</returns>
 		[Fact]
 		public async Task OnGetAsync_ShouldReturnPage_WhenAllIsValid()
 		{

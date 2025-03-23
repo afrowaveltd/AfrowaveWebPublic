@@ -17,8 +17,8 @@ namespace Id.Tests.SharedTools.Tests
 		/// </summary>
 		public EncryptionServiceTests()
 		{
-			Mock<ILogger<EncryptionService>> mockLogger = new Mock<ILogger<EncryptionService>>();
-			_encryptionService = new EncryptionService(mockLogger.Object);
+			ILogger<EncryptionService> mockLogger = Substitute.For<ILogger<EncryptionService>>();
+			_encryptionService = new EncryptionService(mockLogger);
 		}
 
 		/// <summary>

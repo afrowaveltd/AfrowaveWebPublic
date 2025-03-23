@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace Id.Tests.SharedTools.Tests;
@@ -10,7 +9,7 @@ namespace Id.Tests.SharedTools.Tests;
 /// </summary>
 public class ImageServiceTests
 {
-	private readonly Mock<ILogger<ImageService>> _mockLogger;
+	private readonly ILogger<ImageService> _mockLogger;
 	private readonly ImageService _imageService;
 
 	/// <summary>
@@ -18,8 +17,8 @@ public class ImageServiceTests
 	/// </summary>
 	public ImageServiceTests()
 	{
-		_mockLogger = new Mock<ILogger<ImageService>>();
-		_imageService = new ImageService(_mockLogger.Object);
+		_mockLogger = Substitute.For<ILogger<ImageService>>();
+		_imageService = new ImageService(_mockLogger);
 	}
 
 	/// <summary>
@@ -29,11 +28,11 @@ public class ImageServiceTests
 	public void IsImage_ValidExtensions_ReturnsTrue()
 	{
 		// Arrange
-		Mock<IFormFile> mockFile = new Mock<IFormFile>();
-		_ = mockFile.Setup(f => f.FileName).Returns("image.jpg");
+		IFormFile mockFile = Substitute.For<IFormFile>();
+		_ = mockFile.FileName.Returns("image.jpg");
 
 		// Act
-		bool result = _imageService.IsImage(mockFile.Object);
+		bool result = _imageService.IsImage(mockFile);
 
 		// Assert
 		Assert.True(result);

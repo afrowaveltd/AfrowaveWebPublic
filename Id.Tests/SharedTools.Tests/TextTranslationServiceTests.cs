@@ -5,8 +5,8 @@ namespace Id.Tests.SharedTools.Tests;
 /// </summary>
 public class TextTranslationServiceTests
 {
-	private readonly Mock<ITranslatorService> _translatorMock;
-	private readonly Mock<ILogger<TextTranslationService>> _loggerMock;
+	private readonly ITranslatorService _translatorMock;
+	private readonly ILogger<TextTranslationService> _loggerMock;
 	private readonly TextTranslationService _textTranslationService;
 
 	/// <summary>
@@ -14,9 +14,9 @@ public class TextTranslationServiceTests
 	/// </summary>
 	public TextTranslationServiceTests()
 	{
-		_translatorMock = new Mock<ITranslatorService>();
-		_loggerMock = new Mock<ILogger<TextTranslationService>>();
-		_textTranslationService = new TextTranslationService(_translatorMock.Object, _loggerMock.Object);
+		_translatorMock = Substitute.For<ITranslatorService>();
+		_loggerMock = Substitute.For<ILogger<TextTranslationService>>();
+		_textTranslationService = new TextTranslationService(_translatorMock, _loggerMock);
 	}
 
 	/// <summary>
@@ -45,10 +45,10 @@ public class TextTranslationServiceTests
 	{
 		// Arrange
 		string input = "  Hello\n\n  Welcome to translation!";
-		_ = _translatorMock.Setup(t => t.TranslateAsync("Hello", "en", "es"))
-			 .ReturnsAsync(new ApiResponse<string> { Data = "Hola", Successful = true });
-		_ = _translatorMock.Setup(t => t.TranslateAsync("Welcome to translation!", "en", "es"))
-			 .ReturnsAsync(new ApiResponse<string> { Data = "¡Bienvenido a la traducción!", Successful = true });
+		_ = _translatorMock.TranslateAsync("Hello", "en", "es")
+			 .Returns(new ApiResponse<string> { Data = "Hola", Successful = true });
+		_ = _translatorMock.TranslateAsync("Welcome to translation!", "en", "es")
+			 .Returns(new ApiResponse<string> { Data = "¡Bienvenido a la traducción!", Successful = true });
 
 		// Act
 		string result = await _textTranslationService.TranslateAndFormatAsync(input, "en", "es");
@@ -66,8 +66,8 @@ public class TextTranslationServiceTests
 	{
 		// Arrange
 		string input = "\thttps://example.com";
-		_ = _translatorMock.Setup(t => t.TranslateAsync("https://example.com", "en", "es"))
-			 .ReturnsAsync(new ApiResponse<string> { Data = "https://ejemplo.com", Successful = true });
+		_ = _translatorMock.TranslateAsync("https://example.com", "en", "es")
+			 .Returns(new ApiResponse<string> { Data = "https://ejemplo.com", Successful = true });
 
 		// Act
 		string result = await _textTranslationService.TranslateAndFormatAsync(input, "en", "es");
@@ -84,7 +84,7 @@ public class TextTranslationServiceTests
 	public async Task TranslateFolder_ShouldFail_WhenLanguageNotSupported()
 	{
 		// Arrange
-		_ = _translatorMock.Setup(t => t.GetSupportedLanguagesAsync()).ReturnsAsync(new string[] { "es", "fr" });
+		_ = _translatorMock.GetSupportedLanguagesAsync().Returns(new string[] { "es", "fr" });
 
 		// Act
 		ApiResponse<List<string>> result = await _textTranslationService.TranslateFolder("test_folder", "de");
