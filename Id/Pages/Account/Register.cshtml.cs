@@ -46,7 +46,7 @@ namespace Id.Pages.Account
 		/// <summary>
 		/// Gets the application information.
 		/// </summary>
-		public ApplicationView ApplicationInfo => _applicationService.GetInfoAsync(AuthenticatorId).GetAwaiter().GetResult() ?? new();
+		public ApplicationView? ApplicationInfo => _applicationService.GetInfoAsync(AuthenticatorId).GetAwaiter().GetResult() ?? new();
 
 		/// <summary>
 		/// Gets the list of privacy options.
@@ -137,15 +137,12 @@ namespace Id.Pages.Account
 			{
 				return RedirectToPage("/Account/Index");
 			}
-			else
+			if(ApplicationInfo == null)
 			{
-				if(ApplicationInfo == null)
-				{
-					_logger.LogError("ApplicationInfo is null");
-					return RedirectToPage("/Error/404");
-				}
-				return Page();
+				_logger.LogError("ApplicationInfo is null");
+				return RedirectToPage("/Error/404");
 			}
+			return Page();
 		}
 
 		/// <summary>

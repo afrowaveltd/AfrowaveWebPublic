@@ -9,8 +9,8 @@ namespace Id.Tests.Pages.Account
 	public class AuthenticatorUserRegistrationModelTests
 	{
 		private readonly ApplicationDbContext _dbContext;
-		private readonly Mock<IStringLocalizer<AuthenticatorUserRegistrationModel>> _mockLocalizer;
-		private readonly Mock<ILogger<AuthenticatorUserRegistrationModel>> _mockLogger;
+		private readonly IStringLocalizer<AuthenticatorUserRegistrationModel> _mockLocalizer;
+		private readonly ILogger<AuthenticatorUserRegistrationModel> _mockLogger;
 		private readonly AuthenticatorUserRegistrationModel _pageModel;
 
 		/// <summary>
@@ -23,13 +23,13 @@ namespace Id.Tests.Pages.Account
 				 .Options;
 
 			_dbContext = new ApplicationDbContext(options);
-			_mockLocalizer = new Mock<IStringLocalizer<AuthenticatorUserRegistrationModel>>();
-			_mockLogger = new Mock<ILogger<AuthenticatorUserRegistrationModel>>();
+			_mockLocalizer = Substitute.For<IStringLocalizer<AuthenticatorUserRegistrationModel>>();
+			_mockLogger = Substitute.For<ILogger<AuthenticatorUserRegistrationModel>>();
 
 			_pageModel = new AuthenticatorUserRegistrationModel(
-				 _mockLocalizer.Object,
+				 _mockLocalizer,
 				 _dbContext,
-				 _mockLogger.Object
+				 _mockLogger
 			);
 		}
 

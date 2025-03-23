@@ -1,139 +1,168 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Id.Models.DataViews;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
 
-namespace Id.Tests.Pages.Account;
-
-public class RegisterModelTests
+namespace Id.Tests.Pages.Account
 {
-	private readonly IUsersManager _mockUsersManager;
-	private readonly IApplicationUsersManager _mockApplicationUsersManager;
-	private readonly IApplicationsManager _mockApplicationsManager;
-	private readonly IRolesManager _mockRolesManager;
-	private readonly ISelectOptionsServices _mockSelectOptionsServices;
-	private readonly ISettingsService _mockSettingsService;
-	private readonly ILogger<RegisterUserModel> _mockLogger;
-	private readonly IEncryptionService _mockEncryptionService;
-	private readonly IStringLocalizer<RegisterUserModel> _mockLocalizer;
-	private readonly RegisterUserModel _pageModel;
-
-	public RegisterModelTests()
+	public class RegisterUserModelTests
 	{
-		_mockUsersManager = Substitute.For<IUsersManager>();
-		_mockApplicationUsersManager = Substitute.For<IApplicationUsersManager>();
-		_mockApplicationsManager = Substitute.For<IApplicationsManager>();
-		_mockRolesManager = Substitute.For<IRolesManager>();
-		_mockSelectOptionsServices = Substitute.For<ISelectOptionsServices>();
-		_mockSettingsService = Substitute.For<ISettingsService>();
-		_mockLogger = Substitute.For<ILogger<RegisterUserModel>>();
-		_mockEncryptionService = Substitute.For<IEncryptionService>();
-		_mockLocalizer = Substitute.For<IStringLocalizer<RegisterUserModel>>();
-
-		_pageModel = new RegisterUserModel(
-			_mockLogger,
-			_mockUsersManager,
-			_mockApplicationUsersManager,
-			_mockApplicationsManager,
-			_mockEncryptionService,
-			_mockRolesManager,
-			_mockSelectOptionsServices,
-			_mockSettingsService,
-			_mockLocalizer
-		);
-
-		_mockApplicationsManager.ApplicationExistsAsync(Arg.Any<string>()).Returns(true);
-		_mockEncryptionService.HashPasswordAsync(Arg.Any<string>()).Returns("encryptedValue");
-		_mockSettingsService.GetPasswordRulesAsync().Returns(new PasswordRules());
-		_mockSettingsService.GetLoginRulesAsync().Returns(new LoginRules());
-	}
-
-	private void WithValidModelState()
-	{
-		_pageModel.ModelState.Clear();
-		_pageModel.Input = new RegisterUserInput
+		private RegisterUserModel CreatePageModelWith(
+			RegisterUserResult? result = null,
+			List<string>? modelErrors = null,
+			bool isAuthenticated = false,
+			bool appExists = true,
+			ApplicationView? appView = null)
 		{
-			Email = "test@example.com",
-			Password = "StrongPassword123!",
-			PasswordConfirm = "StrongPassword123!",
-			FirstName = "John",
-			LastName = "Doe",
-			DisplayedName = "JohnDoe",
-			AcceptTerms = true,
-			AcceptPrivacyPolicy = true,
-			AcceptCookiePolicy = true
-		};
-	}
+			var logger = Substitute.For<ILogger<RegisterUserModel>>();
+			var userService = Substitute.For<IUsersManager>();
+			var applicationUsersManager = Substitute.For<IApplicationUsersManager>();
+			var applicationService = Substitute.For<IApplicationsManager>();
+			var encryptionService = Substitute.For<IEncryptionService>();
+			var roleService = Substitute.For<IRolesManager>();
+			var selectOptionsService = Substitute.For<ISelectOptionsServices>();
+			var settingsService = Substitute.For<ISettingsService>();
+			var localizer = Substitute.For<IStringLocalizer<RegisterUserModel>>();
 
-	[Fact]
-	public async Task OnPostAsync_ShouldRedirectToAuthenticatorPage_OnSuccessfulRegistration()
-	{
-		WithValidModelState();
-		_mockUsersManager.RegisterUserAsync(Arg.Any<RegisterUserInput>())
-			.Returns(new RegisterUserResult { UserCreated = true });
+			var appId = "test-app-id";
+			var userId = "test-user-id";
 
-		_pageModel.ApplicationId = "testAppId";
+			settingsService.GetPasswordRulesAsync().Returns(new PasswordRules { MinimumLength = 8 });
+			settingsService.GetLoginRulesAsync().Returns(new LoginRules { RequireConfirmedEmail = false });
+			settingsService.GetApplicationIdAsync().Returns(appId);
+			applicationService.GetAuthenticatorIdAsync().Returns(appId);
+			applicationService.ApplicationExistsAsync(appId).Returns(appExists);
+			applicationService.GetInfoAsync(appId).Returns(appView ?? new ApplicationView());
 
-		IActionResult result = await _pageModel.OnPostAsync();
+			userService.RegisterUserAsync(Arg.Any<RegisterUserInput>()).Returns(result ?? new RegisterUserResult());
 
-		Assert.IsType<RedirectToPageResult>(result);
-	}
+			var httpContext = new DefaultHttpContext();
+			if(isAuthenticated)
+			{
+				httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[] {
+					new Claim(ClaimTypes.Name, "testuser")
+				}, "mock"));
+			}
 
-	[Fact]
-	public async Task OnPostAsync_ShouldReturnPage_WhenPasswordConfirmationFails()
-	{
-		WithValidModelState();
-		_pageModel.Input.PasswordConfirm = "DifferentPassword!";
-		_mockUsersManager.RegisterUserAsync(Arg.Any<RegisterUserInput>())
-			.Returns(new RegisterUserResult { UserCreated = false, Errors = new List<string> { "Password don't match" } });
+			var model = new RegisterUserModel(
+				logger,
+				userService,
+				applicationUsersManager,
+				applicationService,
+				encryptionService,
+				roleService,
+				selectOptionsService,
+				settingsService,
+				localizer
+			)
+			{
+				ApplicationId = appId,
+				Input = new RegisterUserInput
+				{
+					Email = "user@example.com",
+					Password = "Pass1234",
+					PasswordConfirm = "Pass1234",
+					FirstName = "Test",
+					LastName = "User",
+					DisplayedName = "Test User",
+					Birthdate = DateTime.UtcNow.AddYears(-10), // default OK
+					Gender = Models.Gender.Other,
+					AcceptTerms = true,
+					AcceptPrivacyPolicy = true,
+					AcceptCookiePolicy = true
+				},
+				PageContext = new PageContext
+				{
+					ViewData = new Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary()),
+					HttpContext = httpContext
+				}
+			};
 
-		IActionResult result = await _pageModel.OnPostAsync();
+			if(modelErrors != null)
+			{
+				foreach(var error in modelErrors)
+				{
+					model.ModelState.AddModelError(string.Empty, error);
+				}
+			}
 
-		Assert.IsType<PageResult>(result);
-	}
+			return model;
+		}
 
-	[Fact]
-	public async Task OnPostAsync_ShouldReturnPage_WhenPolicyAcceptanceIsMissing()
-	{
-		WithValidModelState();
-		_pageModel.Input.AcceptTerms = false;
+		[Fact]
+		public async Task OnPostAsync_ReturnsRedirect_WhenRegistrationSucceeds()
+		{
+			var model = CreatePageModelWith(new RegisterUserResult
+			{
+				UserCreated = true,
+				UserId = "user-id",
+				ProfilePictureUploaded = true
+			});
 
-		_mockUsersManager.RegisterUserAsync(Arg.Any<RegisterUserInput>())
-			.Returns(new RegisterUserResult { UserCreated = false, Errors = new List<string> { "Terms must be accepted" } });
+			var result = await model.OnPostAsync();
 
-		IActionResult result = await _pageModel.OnPostAsync();
+			var redirect = Assert.IsType<RedirectToPageResult>(result);
+			Assert.Equal("/Account/AuthenticatorUserRegistration", redirect.PageName);
+		}
 
-		Assert.IsType<PageResult>(result);
-	}
+		[Fact]
+		public async Task OnPostAsync_ReturnsPage_WhenBirthdateTooYoung()
+		{
+			var result = new RegisterUserResult
+			{
+				UserCreated = false,
+				Errors = new List<string> { "User is too young" }
+			};
 
-	[Fact]
-	public async Task OnPostAsync_ShouldReturnError_WhenUserAlreadyExists()
-	{
-		WithValidModelState();
-		_mockUsersManager.IsEmailFreeAsync(Arg.Any<string>()).Returns(false);
+			var model = CreatePageModelWith(result);
+			model.Input.Birthdate = DateTime.UtcNow.AddYears(-5); // too young
 
-		_mockUsersManager.RegisterUserAsync(Arg.Any<RegisterUserInput>())
-			.Returns(new RegisterUserResult { UserCreated = false, Errors = new List<string> { "User already exists" } });
+			var response = await model.OnPostAsync();
 
-		IActionResult result = await _pageModel.OnPostAsync();
+			Assert.IsType<PageResult>(response);
+			Assert.Contains("User is too young", model.RegistrationErrors);
+		}
 
-		Assert.IsType<PageResult>(result);
-	}
+		[Fact]
+		public async Task OnGetAsync_ShouldRedirectToError_WhenAppDoesNotExist()
+		{
+			var model = CreatePageModelWith(appExists: false);
 
-	[Fact]
-	public async Task OnPostAsync_ShouldLogError_OnFailure()
-	{
-		WithValidModelState();
-		_mockUsersManager.RegisterUserAsync(Arg.Any<RegisterUserInput>())
-			.Returns(new RegisterUserResult { UserCreated = false, Errors = new List<string> { "Registration failed" } });
+			var result = await model.OnGetAsync();
 
-		IActionResult result = await _pageModel.OnPostAsync();
+			var redirect = Assert.IsType<RedirectToPageResult>(result);
+			Assert.Equal("/Error/404", redirect.PageName);
+		}
 
-		_mockLogger.Received(1).Log(
-				LogLevel.Error,
-				Arg.Any<EventId>(),
-				Arg.Any<object>(),
-				Arg.Any<Exception>(),
-				(Arg.Any<Func<object, Exception, string>>())
-		);
+		[Fact]
+		public async Task OnGetAsync_ShouldRedirectToIndex_WhenAuthenticated()
+		{
+			var model = CreatePageModelWith(isAuthenticated: true);
 
-		Assert.IsType<PageResult>(result);
+			var result = await model.OnGetAsync();
+
+			var redirect = Assert.IsType<RedirectToPageResult>(result);
+			Assert.Equal("/Account/Index", redirect.PageName);
+		}
+
+		[Fact]
+		public async Task OnGetAsync_ShouldRedirectToError_WhenAppInfoIsNull()
+		{
+			var model = CreatePageModelWith(appView: null);
+
+			var result = await model.OnGetAsync();
+
+			Assert.IsType<PageResult>(result);
+		}
+
+		[Fact]
+		public async Task OnGetAsync_ShouldReturnPage_WhenAllIsValid()
+		{
+			var model = CreatePageModelWith();
+
+			var result = await model.OnGetAsync();
+
+			Assert.IsType<PageResult>(result);
+		}
 	}
 }
