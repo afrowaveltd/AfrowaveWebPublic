@@ -3,10 +3,6 @@
 </p>
 
 # AfrowaveWebPublic
-...
-
-
-# AfrowaveWebPublic
 
 **Afrowave is not just a community, it is the society.**  
 Welcome to the official open-source repository of the Afrowave community.
