@@ -1,3 +1,11 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/afrowaveltd/AfrowaveWebPublic/main/Id/wwwroot/img/afrowave-family.png" alt="Afrowave Logo" width="200"/>
+</p>
+
+# AfrowaveWebPublic
+...
+
+
 # AfrowaveWebPublic
 
 **Afrowave is not just a community, it is the society.**  
