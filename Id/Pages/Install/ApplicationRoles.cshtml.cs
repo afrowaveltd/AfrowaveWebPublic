@@ -1,5 +1,3 @@
-using Id.Models.InputModels;
-using Id.Models.ResultModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Id.Pages.Install
@@ -40,11 +38,6 @@ namespace Id.Pages.Install
 		private readonly IRolesManager _roleService = roleService;
 		private readonly ISettingsService _settingsService = settingsService;
 		private readonly IUsersManager _userService = userService;
-
-		// private properties
-		private readonly string successMessage = "<span class='text-center success'><i class='bi bi-check-lg'></i></span>";
-
-		private readonly string failMessage = "<span class='text-center error'><i class='bi bi-x-lg'></i></span>";
 
 		// public properties
 		/// <summary>

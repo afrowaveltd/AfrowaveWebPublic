@@ -16,8 +16,12 @@ namespace Id.Pages.Install
 		private readonly ILogger<JwtSettingsModel> _logger = logger;
 
 		private readonly ISettingsService _settingsService = settings;
-		public readonly IStringLocalizer<JwtSettingsModel> t = _t;
 		private readonly IInstallationStatusService _statusService = status;
+
+		/// <summary>
+		/// Localizer for the JWT settings page.
+		/// </summary>
+		public readonly IStringLocalizer<JwtSettingsModel> t = _t;
 
 		/// <summary>
 		/// Binds an InputModel property for use in a Razor page. It initializes the property with a new instance.
