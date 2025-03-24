@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/afrowaveltd/AfrowaveWebPublic/main/Id/wwwroot/img/afrowave-family.png" alt="Afrowave Logo" width="200"/>
+  <img src="https://github.com/afrowaveltd/AfrowaveWebPublic/blob/master/Id/wwwroot/img/afrowave-family.png" alt="Afrowave Logo" width="200"/>
 </p>
 
 # AfrowaveWebPublic
