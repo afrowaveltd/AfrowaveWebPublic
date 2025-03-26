@@ -57,5 +57,27 @@ namespace Id.Tests.Helpers
 
 			Services = services.BuildServiceProvider();
 		}
+
+		/// <summary>
+		/// Replaces a service instance in the service collection and rebuilds the service provider with new dependencies.
+		/// </summary>
+		/// <typeparam name="TService">Represents a class type that will be registered as a singleton in the service collection.</typeparam>
+		/// <param name="instance">The specific instance of the service to be registered in the service collection.</param>
+		protected void ReplaceService<TService>(TService instance) where TService : class
+		{
+			var services = new ServiceCollection();
+
+			services.AddSingleton(instance);
+			services.AddTransient<SmtpSettingsModel>();
+
+			services.AddSingleton<ITempDataProvider, FakeTempDataProvider>();
+			services.AddSingleton(Substitute.For<ILogger<SmtpSettingsModel>>());
+			services.AddSingleton(Substitute.For<IStringLocalizer<SmtpSettingsModel>>());
+			services.AddSingleton(Substitute.For<IInstallationStatusService>());
+			services.AddSingleton(Substitute.For<ISettingsService>());
+			services.AddSingleton(Substitute.For<ISelectOptionsServices>());
+
+			Services = services.BuildServiceProvider();
+		}
 	}
 }

@@ -151,10 +151,9 @@ public class SmtpSettingsModelTests : RazorPageTestBase<SmtpSettingsModel>
 	[Fact]
 	public async Task OnPostAsync_ShouldReturnPage_WhenSaveFails()
 	{
-		ApplicationDbContext db = Substitute.For<ApplicationDbContext>(
-		new DbContextOptionsBuilder<ApplicationDbContext>()
-		.UseInMemoryDatabase("FailingSave").Options
-);
+		var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+			.UseInMemoryDatabase("FailingSave").Options;
+		var db = new FailingDbContext(options);
 
 		_ = db.Users.Add(new User
 		{
@@ -171,7 +170,6 @@ public class SmtpSettingsModelTests : RazorPageTestBase<SmtpSettingsModel>
 			Name = "Test Brand",
 			OwnerId = "owner1"
 		});
-
 		_ = db.Applications.Add(new Application
 		{
 			Id = "app123",
@@ -182,12 +180,10 @@ public class SmtpSettingsModelTests : RazorPageTestBase<SmtpSettingsModel>
 		});
 		_ = db.SaveChanges();
 
-		db.When(d => d.SaveChangesAsync(Arg.Any<CancellationToken>()))
-		  .Do(call => throw new Exception("Fake DB error"));
+		// ✨ Nahradí ApplicationDbContext bez přepsání všech služeb
+		ReplaceService<ApplicationDbContext>(db);
 
-		OverrideService(db);
-
-		SmtpSettingsModel page = CreatePageModel();
+		var page = CreatePageModel();
 		page.Input = new SmtpSettingsModel.InputModel
 		{
 			ApplicationId = "app123",
@@ -202,7 +198,7 @@ public class SmtpSettingsModelTests : RazorPageTestBase<SmtpSettingsModel>
 		};
 		page.ModelState.Clear();
 
-		IActionResult result = await page.OnPostAsync();
+		var result = await page.OnPostAsync();
 
 		_ = Assert.IsType<PageResult>(result);
 		Assert.Equal("Mocked error message", page.ErrorMessage);
