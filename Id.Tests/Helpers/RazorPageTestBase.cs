@@ -1,4 +1,6 @@
-﻿namespace Id.Tests.Helpers
+﻿using Microsoft.Extensions.DependencyInjection.Extensions;
+
+namespace Id.Tests.Helpers
 {
 	/// <summary>
 	/// Base class for unit testing Razor Pages using shared PageFactory and default service provider.
@@ -9,7 +11,7 @@
 		/// <summary>
 		/// The service provider used to resolve dependencies during test setup.
 		/// </summary>
-		protected readonly IServiceProvider Services;
+		protected IServiceProvider Services;
 
 		/// <summary>
 		/// Initializes a new instance of the test base with default services for the PageModel type.
@@ -33,5 +35,27 @@
 		/// </summary>
 		/// <returns>The testable instance of the PageModel</returns>
 		protected TPageModel CreatePageModel() => PageFactory.Create<TPageModel>(Services);
+
+		/// <summary>
+		/// Overrides a service registration with a new instance.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="instance"></param>
+		protected void OverrideService<T>(T instance) where T : class
+		{
+			ServiceCollection services = new ServiceCollection();
+			_ = services.AddSingleton(instance);
+
+			// Zachová ostatní služby
+			foreach(ServiceDescriptor descriptor in ((ServiceProvider)Services).GetService<IServiceCollection>() ?? new ServiceCollection())
+			{
+				if(descriptor.ServiceType != typeof(T))
+				{
+					_ = services.Add(descriptor);
+				}
+			}
+
+			Services = services.BuildServiceProvider();
+		}
 	}
 }

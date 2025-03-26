@@ -12,7 +12,7 @@ namespace Id.Pages.Install
 	/// <param name="settingsService"></param>
 	/// <param name="_t"></param>
 	/// <param name="selectOptions"></param>
-	public class SmtpSettingsModel(ILogger<BrandModel> logger,
+	public class SmtpSettingsModel(ILogger<SmtpSettingsModel> logger,
 		ApplicationDbContext context,
 		IInstallationStatusService installationStatus,
 		ISettingsService settingsService,
@@ -20,7 +20,7 @@ namespace Id.Pages.Install
 		ISelectOptionsServices selectOptions)
 	  : PageModel
 	{
-		private readonly ILogger<BrandModel> _logger = logger;
+		private readonly ILogger<SmtpSettingsModel> _logger = logger;
 		private readonly ApplicationDbContext _context = context;
 		private readonly IInstallationStatusService _installationStatus = installationStatus;
 		private readonly ISettingsService _settingsService = settingsService;
@@ -132,7 +132,11 @@ namespace Id.Pages.Install
 
 			options = await _selectOptions.GetSecureSocketOptionsAsync();
 			Application app = await GetApplicationAsync();
-
+			if(app == null)
+			{
+				_logger.LogError("No application found to be the owner of the smtp settings");
+				return RedirectToPage("/Error");
+			}
 			Input.ApplicationId = app.Id;
 			if(Input.ApplicationId == null)
 			{
@@ -206,10 +210,10 @@ namespace Id.Pages.Install
 			if(settings.ApplicationId == null)
 			{
 				_logger.LogError("No application found to be the owner of the smtp settings");
-				return new();
+				return null;
 			}
 
-			return await _context.Applications.FirstOrDefaultAsync(a => a.Id == settings.ApplicationId) ?? new();
+			return await _context.Applications.FirstOrDefaultAsync(a => a.Id == settings.ApplicationId) ?? null;
 		}
 	}
 }

@@ -39,11 +39,25 @@ public class ApplicationModelTests : RazorPageTestBase<ApplicationModel>
 		_ = services.AddSingleton(encryption);
 
 		// In-memory EF Core DB
-		DbContextOptions<ApplicationDbContext> dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-			.UseInMemoryDatabase("Install_Application_TestDb")
-			.Options;
-		ApplicationDbContext db = new ApplicationDbContext(dbOptions);
+		ApplicationDbContext db = AfrowaveTestDbFactory.Create("ApplicationInstallTest", db =>
+		{
+			_ = db.Users.Add(new User
+			{
+				Id = "owner1",
+				Email = "test@email.com",
+				Firstname = "Test",
+				Lastname = "User",
+				Password = "Password01",
+				DisplayName = "Test User"
+			});
 
+			_ = db.Brands.Add(new Brand
+			{
+				Id = 1,
+				Name = "Test Brand",
+				OwnerId = "owner1"
+			});
+		});
 		_ = services.AddSingleton(db);
 
 		// Mock encryption service

@@ -17,9 +17,19 @@
 			_ = services.AddSingleton(install);
 
 			// In-memory EF Core
-			DbContextOptions<ApplicationDbContext> dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-				.UseInMemoryDatabase("Afrowave_Install_TestDb").Options;
-			_ = services.AddSingleton(new ApplicationDbContext(dbOptions));
+			ApplicationDbContext db = AfrowaveTestDbFactory.Create("BrandTest", db =>
+			{
+				_ = db.Users.Add(new User
+				{
+					Id = "Test",
+					Email = "Test",
+					Firstname = "Test",
+					Lastname = "Test",
+					Password = "Test",
+					DisplayName = "Test",
+				});
+			});
+			_ = services.AddSingleton(db);
 
 			// Mock: Brand manager service
 			IBrandsManager brandService = Substitute.For<IBrandsManager>();
@@ -39,6 +49,7 @@
 		public async Task OnGetAsync_ShouldReturnPage_WhenInstallIsReady()
 		{
 			// Arrange
+
 			BrandModel page = CreatePageModel();
 			// Act
 			IActionResult result = await page.OnGetAsync();

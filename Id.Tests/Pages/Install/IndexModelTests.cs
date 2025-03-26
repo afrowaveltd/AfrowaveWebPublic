@@ -1,6 +1,4 @@
-﻿using Id.Models;
-using Id.Tests.Helpers;
-using IndexModel = Id.Pages.Install.IndexModel;
+﻿using IndexModel = Id.Pages.Install.IndexModel;
 
 namespace Id.Tests.Pages.Install;
 
@@ -26,9 +24,11 @@ public class IndexModelTests : RazorPageTestBase<IndexModel>
 		_ = services.AddSingleton(encryption);
 
 		// In-memory EF Core
-		DbContextOptions<ApplicationDbContext> dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-			.UseInMemoryDatabase("Afrowave_Install_TestDb").Options;
-		_ = services.AddSingleton(new ApplicationDbContext(dbOptions));
+		ApplicationDbContext db = AfrowaveTestDbFactory.Create("BrandTest", db =>
+		{
+		});
+
+		_ = services.AddSingleton(db);
 	}
 
 	/// <summary>
