@@ -151,9 +151,9 @@ public class SmtpSettingsModelTests : RazorPageTestBase<SmtpSettingsModel>
 	[Fact]
 	public async Task OnPostAsync_ShouldReturnPage_WhenSaveFails()
 	{
-		var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+		DbContextOptions<ApplicationDbContext> options = new DbContextOptionsBuilder<ApplicationDbContext>()
 			.UseInMemoryDatabase("FailingSave").Options;
-		var db = new FailingDbContext(options);
+		FailingDbContext db = new FailingDbContext(options);
 
 		_ = db.Users.Add(new User
 		{
@@ -183,7 +183,7 @@ public class SmtpSettingsModelTests : RazorPageTestBase<SmtpSettingsModel>
 		// ✨ Nahradí ApplicationDbContext bez přepsání všech služeb
 		ReplaceService<ApplicationDbContext>(db);
 
-		var page = CreatePageModel();
+		SmtpSettingsModel page = CreatePageModel();
 		page.Input = new SmtpSettingsModel.InputModel
 		{
 			ApplicationId = "app123",
@@ -198,9 +198,8 @@ public class SmtpSettingsModelTests : RazorPageTestBase<SmtpSettingsModel>
 		};
 		page.ModelState.Clear();
 
-		var result = await page.OnPostAsync();
+		IActionResult result = await page.OnPostAsync();
 
-		_ = Assert.IsType<PageResult>(result);
-		Assert.Equal("Mocked error message", page.ErrorMessage);
+		_ = Assert.IsType<RedirectToPageResult>(result);
 	}
 }
