@@ -1,7 +1,16 @@
 ﻿namespace Id.Tests.Pages.Install;
 
+/// <summary>
+/// Tests the LoginRulesModel for various scenarios including redirection on invalid install state and handling of valid
+/// and invalid model states.
+/// Verifies settings are correctly captured and applied.
+/// </summary>
 public class LoginRulesModelTests : RazorPageTestBase<LoginRulesModel>
 {
+	/// <summary>
+	/// Configures services for dependency injection, setting up mock implementations for various services.
+	/// </summary>
+	/// <param name="services">Facilitates the registration of services that can be injected into other components.</param>
 	protected override void ConfigureServices(IServiceCollection services)
 	{
 		IdentificatorSettings mockSettings = new IdentificatorSettings
@@ -21,6 +30,10 @@ public class LoginRulesModelTests : RazorPageTestBase<LoginRulesModel>
 		_ = services.AddSingleton(Substitute.For<ILogger<LoginRulesModel>>());
 	}
 
+	/// <summary>
+	/// Tests the OnGetAsync method to ensure it redirects when the installation state is invalid.
+	/// </summary>
+	/// <returns>Returns a RedirectToPageResult that points to the SmtpSettings page.</returns>
 	[Fact]
 	public async Task OnGetAsync_ShouldRedirect_WhenInstallStateInvalid()
 	{
@@ -34,6 +47,11 @@ public class LoginRulesModelTests : RazorPageTestBase<LoginRulesModel>
 		Assert.Equal("/Install/SmtpSettings", redirect.PageName);
 	}
 
+	/// <summary>
+	/// Handles the GET request for the page and returns the page result when the input is valid. It verifies that the
+	/// input is not null and matches expected values.
+	/// </summary>
+	/// <returns>Returns a PageResult indicating the page was successfully retrieved.</returns>
 	[Fact]
 	public async Task OnGetAsync_ShouldReturnPage_WhenValid()
 	{
@@ -45,6 +63,11 @@ public class LoginRulesModelTests : RazorPageTestBase<LoginRulesModel>
 		Assert.Equal("app123", page.Input!.ApplicationId);
 	}
 
+	/// <summary>
+	/// Tests the OnPostAsync method to ensure it returns a PageResult when the model state is invalid due to a missing
+	/// required field.
+	/// </summary>
+	/// <returns>Returns a PageResult indicating the page should be displayed with validation errors.</returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldReturnPage_WhenModelInvalid()
 	{
@@ -56,6 +79,10 @@ public class LoginRulesModelTests : RazorPageTestBase<LoginRulesModel>
 		_ = Assert.IsType<PageResult>(result);
 	}
 
+	/// <summary>
+	/// Tests the OnPostAsync method to ensure it redirects correctly when valid input is provided.
+	/// </summary>
+	/// <returns>Returns a RedirectToPageResult indicating the page to redirect to after successful processing.</returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldRedirect_WhenValid()
 	{
