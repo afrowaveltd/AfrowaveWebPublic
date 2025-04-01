@@ -11,7 +11,7 @@ namespace Id.Pages.Helps
 		/// <summary>
 		/// Help title
 		/// </summary>
-		public string Title2 { get; set; } = "";
+		public string Title { get; set; } = "";
 
 		/// <summary>
 		/// Lines
@@ -24,7 +24,7 @@ namespace Id.Pages.Helps
 		/// <returns></returns>
 		public IActionResult OnGet()
 		{
-			Title2 = t["Email address"];
+			Title = t["Email address"];
 			Lines.Add(t["The email address is used to send notifications and to recover your password."]);
 			Lines.Add(t["It must be a valid email address."]);
 			return Page();

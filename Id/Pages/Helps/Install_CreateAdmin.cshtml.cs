@@ -11,7 +11,7 @@ namespace Id.Pages.Helps
 		/// <summary>
 		/// Title for help
 		/// </summary>
-		public string Title2 { get; set; } = "";
+		public string Title { get; set; } = "";
 
 		/// <summary>
 		/// Lines
@@ -24,7 +24,7 @@ namespace Id.Pages.Helps
 		/// <returns></returns>
 		public IActionResult OnGet()
 		{
-			Title2 = t["Create administrator's account"];
+			Title = t["Create administrator's account"];
 
 			Lines.Add(t["To create an administrator's account, fill the form properly and click on the 'Next' button"]);
 

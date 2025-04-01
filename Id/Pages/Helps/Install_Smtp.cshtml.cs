@@ -22,7 +22,7 @@ namespace Id.Pages.Helps
 		/// Get method for the SMTP installation page.
 		/// </summary>
 		/// <returns></returns>
-		public void OnGetAsync()
+		public void OnGet()
 		{
 			Title = t["Smtp settings"];
 			Lines.Add(t["To send emails, you need to configure the SMTP settings."]);

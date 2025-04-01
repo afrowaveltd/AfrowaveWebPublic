@@ -1,7 +1,14 @@
 ﻿namespace Id.Tests.Pages.Install;
 
+/// <summary>
+/// Installation result page model tests
+/// </summary>
 public class InstallationResultModelTests : RazorPageTestBase<InstallationResultModel>
 {
+	/// <summary>
+	/// Configures services for the test
+	/// </summary>
+	/// <param name="services">Services for the test</param>
 	protected override void ConfigureServices(IServiceCollection services)
 	{
 		// 1. Registrace EF kontextu jako testovací InMemory databáze
@@ -36,6 +43,10 @@ public class InstallationResultModelTests : RazorPageTestBase<InstallationResult
 		_ = services.AddSingleton(Substitute.For<IStringLocalizer<InstallationResultModel>>());
 	}
 
+	/// <summary>
+	/// Creates the page model
+	/// </summary>
+	/// <returns></returns>
 	[Fact]
 	public async Task OnGetAsync_ShouldRedirect_WhenInstallStateInvalid()
 	{
@@ -49,6 +60,10 @@ public class InstallationResultModelTests : RazorPageTestBase<InstallationResult
 		Assert.Equal("/", redirect.PageName);
 	}
 
+	/// <summary>
+	/// Creates the page model
+	/// </summary>
+	/// <returns></returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldMarkAsFinished_AndRedirectToIndex()
 	{

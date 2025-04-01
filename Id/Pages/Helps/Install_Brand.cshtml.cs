@@ -16,7 +16,7 @@ namespace Id.Pages.Helps
 		/// <summary>
 		/// Lines of the page
 		/// </summary>
-		public List<string> Lines = new List<string>();
+		public List<string> Lines = [];
 
 		/// <summary>
 		/// The OnGet method
