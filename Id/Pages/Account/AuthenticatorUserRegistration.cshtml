@@ -1,4 +1,40 @@
 ﻿@page "/Account/AuthenticatorUserRegistration"
+@inject IStringLocalizer<AuthenticatorUserRegistrationModel> t;
 @model Id.Pages.Account.AuthenticatorUserRegistrationModel
+
 @{
+	ViewData["Title"] = t["Register"] ?? "";
 }
+
+@section Scripts {
+<script src="~/js/api.js"></script>
+<script src="~/js/account.js"></script>
+}
+
+<style>
+	#icon_preview img {
+	width: 85px;
+	height: 85px;
+	margin-top: 8px;
+	object-fit: cover;
+	/* Ensures the image fits nicely */
+	}
+</style>
+
+<div class="row">
+	<div class="col-md-12">
+		<h2>@t["Register"]</h2>
+		</hr>
+	</div>
+	<div class="col-md-7">
+		@if (!Model.CanRegister)
+		{
+			<div class="error">@Model.Error</div>
+		}
+		@if (Model.CanRegister)
+		{
+			
+		}
+
+	</div>
+</div>

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace Id.Tests.Pages.Account
+﻿namespace Id.Tests.Pages.Account
 {
 	/// <summary>
 	/// Tests the behavior of the AuthenticatorUserRegistrationModel during user registration. It checks redirection on
@@ -12,6 +10,7 @@ namespace Id.Tests.Pages.Account
 		private readonly IStringLocalizer<AuthenticatorUserRegistrationModel> _mockLocalizer;
 		private readonly ILogger<AuthenticatorUserRegistrationModel> _mockLogger;
 		private readonly AuthenticatorUserRegistrationModel _pageModel;
+		private readonly IApplicationUsersManager _mockApplicationUsersManager;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AuthenticatorUserRegistrationModelTests"/> class.
@@ -24,11 +23,13 @@ namespace Id.Tests.Pages.Account
 
 			_dbContext = new ApplicationDbContext(options);
 			_mockLocalizer = Substitute.For<IStringLocalizer<AuthenticatorUserRegistrationModel>>();
+			_mockApplicationUsersManager = Substitute.For<IApplicationUsersManager>();
 			_mockLogger = Substitute.For<ILogger<AuthenticatorUserRegistrationModel>>();
 
 			_pageModel = new AuthenticatorUserRegistrationModel(
 				 _mockLocalizer,
 				 _dbContext,
+				 _mockApplicationUsersManager,
 				 _mockLogger
 			);
 		}
@@ -39,7 +40,7 @@ namespace Id.Tests.Pages.Account
 		/// </summary>
 		/// <returns>Returns a RedirectToPageResult that points to the 404 error page.</returns>
 		[Fact]
-		public async Task OnGetAsync_ShouldRedirectToError_WhenAuthenticatorIdOrUserIdIsMissing()
+		public async Task OnGetAsync_ShouldRedirectToPage_WhenAuthenticatorIdOrUserIdIsMissing()
 		{
 			// Arrange
 			_pageModel.AuthenticatorId = "";
@@ -49,8 +50,7 @@ namespace Id.Tests.Pages.Account
 			IActionResult result = await _pageModel.OnGetAsync();
 
 			// Assert
-			RedirectToPageResult redirectResult = Assert.IsType<RedirectToPageResult>(result);
-			Assert.Equal("/Error/404", redirectResult.PageName);
+			_ = Assert.IsType<PageResult>(result);
 		}
 
 		/// <summary>
