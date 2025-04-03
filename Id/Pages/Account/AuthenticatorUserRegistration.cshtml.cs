@@ -57,6 +57,10 @@ namespace Id.Pages.Account
 		/// </summary>
 		public string Error { get; set; } = string.Empty;
 
+		/// <summary>
+		/// Holds input data for registering an application user, including consent flags for sharing details, cookies, and
+		/// terms. Initializes with default values.
+		/// </summary>
 		public RegisterApplicationUserInput Input { get; set; } = new RegisterApplicationUserInput()
 		{
 			AgreedSharingUserDetails = true,
