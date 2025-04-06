@@ -81,17 +81,11 @@
             @RenderBody()
         </main>
     </div>
-    <!--
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Id - <a asp-area="" asp-page="/Privacy">@t["Rules"]</a>
-        </div>
-    </footer>
-    -->
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
