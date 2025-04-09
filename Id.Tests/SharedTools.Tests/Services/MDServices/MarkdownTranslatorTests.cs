@@ -25,6 +25,6 @@ public class MarkdownTranslatorTests
 		Assert.Contains("překlad1", result);
 		Assert.Contains("překlad2", result);
 		Assert.Contains("překlad3", result);
-		Assert.DoesNotContain("This is", result); // původní text by tam neměl být
+		Assert.DoesNotContain("This is", result); // original text should not be present
 	}
 }
