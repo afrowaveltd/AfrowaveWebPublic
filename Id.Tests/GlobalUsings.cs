@@ -28,6 +28,7 @@ global using Microsoft.Extensions.Logging;
 global using NSubstitute;
 global using SharedTools.Models;
 global using SharedTools.Services;
+global using SharedTools.Services.MdServices;
 global using System.Collections.Generic;
 global using System.Globalization;
 global using System.IO;

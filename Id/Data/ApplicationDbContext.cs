@@ -11,6 +11,11 @@
 		public DbSet<Application> Applications { get; set; } = null!;
 
 		/// <summary>
+		/// Gets or sets the ApplicationDescriptionTranslations table.
+		/// </summary>
+		public DbSet<ApplicationDescriptionTranslation> ApplicationDescriptionTranslations { get; set; } = null!;
+
+		/// <summary>
 		/// Gets or sets the ApplicationPolicies table.
 		/// </summary>
 		public DbSet<ApplicationPolicy> ApplicationPolicies { get; set; } = null!;
@@ -31,9 +36,19 @@
 		public DbSet<ApplicationUser> ApplicationUsers { get; set; } = null!;
 
 		/// <summary>
+		/// Gets or sets the ApplicationUserDescriptionTranslation table.
+		/// </summary>
+		public DbSet<ApplicationUserDescriptionTranslation> ApplicationUserDescriptionTranslations { get; set; } = null!;
+
+		/// <summary>
 		/// Gets or sets the Brands table.
 		/// </summary>
 		public DbSet<Brand> Brands { get; set; } = null!;
+
+		/// <summary>
+		/// Gets or sets the BrandDescriptionTranslations table.
+		/// </summary>
+		public DbSet<BrandDescriptionTranslation> BrandDescriptionTranslations { get; set; } = null!;
 
 		/// <summary>
 		/// Gets or sets the Countries table.

@@ -1,9 +1,9 @@
-﻿namespace SharedTools.Models.MDModels
+﻿namespace SharedTools.Models.MdModels
 {
 	/// <summary>
 	/// Represents a line in a Markdown document.
 	/// </summary>
-	public class MDLine
+	public class MdLine
 	{
 		/// <summary>
 		/// The index of the line in the document.
@@ -18,6 +18,6 @@
 		/// <summary>
 		/// List of translatable segments in the line.
 		/// </summary>
-		public List<MDToken> Tokens { get; set; } = [];
+		public List<MdToken> Tokens { get; set; } = [];
 	}
 }

@@ -1,9 +1,9 @@
-﻿namespace SharedTools.Models.MDModels
+﻿namespace SharedTools.Models.MdModels
 {
 	/// <summary>
 	/// Represents a token in a Markdown line.
 	/// </summary>
-	public class MDToken
+	public class MdToken
 	{
 		/// <summary>
 		/// The MD tag of the token.

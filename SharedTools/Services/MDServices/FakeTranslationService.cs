@@ -1,6 +1,6 @@
 ﻿using SharedTools.Models;
 
-namespace SharedTools.Services.MDServices;
+namespace SharedTools.Services.MdServices;
 
 /// <summary>
 /// A fake implementation of <see cref="ITranslatorService"/> used for testing.

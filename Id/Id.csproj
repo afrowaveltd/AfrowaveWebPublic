@@ -19,7 +19,6 @@
 		<Folder Include="Locales\" />
 		<Folder Include="logs\" />
 		<Folder Include="Migrations\" />
-		<Folder Include="Extensions\" />
 		<Folder Include="temp\" />
 		<Folder Include="wwwroot\users\" />
 	</ItemGroup>

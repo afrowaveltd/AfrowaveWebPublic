@@ -11,6 +11,7 @@ global using Microsoft.AspNetCore.Mvc.RazorPages;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Localization;
 global using SharedTools.Models;
+global using SharedTools.Models.BaseEntities;
 global using SharedTools.Services;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;

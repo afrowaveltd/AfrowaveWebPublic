@@ -1,0 +1,44 @@
+[
+	{
+		"MdStart": "# ",
+		"MdEnd": null,
+		"HtmlElement": "h1",
+		"SelfClosing": false,
+		"CssClass": null
+	},
+	{
+		"MdStart": "## ",
+		"MdEnd": null,
+		"HtmlElement": "h2",
+		"SelfClosing": false,
+		"CssClass": null
+	},
+	{
+		"MdStart": "### ",
+		"MdEnd": null,
+		"HtmlElement": "h3",
+		"SelfClosing": false,
+		"CssClass": null
+	},
+	{
+		"MdStart": "> ",
+		"MdEnd": null,
+		"HtmlElement": "blockquote",
+		"SelfClosing": false,
+		"CssClass": null
+	},
+	{
+		"MdStart": "---",
+		"MdEnd": null,
+		"HtmlElement": "hr",
+		"SelfClosing": true,
+		"CssClass": null
+	},
+	{
+		"MdStart": "- ",
+		"MdEnd": null,
+		"HtmlElement": "li",
+		"SelfClosing": false,
+		"CssClass": null
+	}
+]

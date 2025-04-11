@@ -1,4 +1,4 @@
-﻿namespace SharedTools.Models.MDModels
+﻿namespace SharedTools.Models.MdModels
 {
 	/// <summary>
 	/// Represents a translatable segment in a Markdown document.

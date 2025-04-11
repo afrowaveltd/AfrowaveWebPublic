@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace SharedTools.Services.MDServices
+namespace SharedTools.Services.MdServices
 {
 	/// <summary>
 	/// Provides sentence splitting utilities for translation parsing.

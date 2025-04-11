@@ -1,6 +1,9 @@
 ﻿namespace Id.Models.DatabaseModels
 {
-	public class BrandDescriptionTranslation
+	/// <summary>
+	/// This class represents a translation of a brand description.
+	/// </summary>
+	public class BrandDescriptionTranslation : TranslationBase
 	{
 	}
 }

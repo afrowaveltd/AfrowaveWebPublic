@@ -1,14 +1,19 @@
-﻿using SharedTools.Services.MDServices;
+﻿namespace Id.Tests.SharedTools.Tests.Services.MdServices;
 
-namespace Id.Tests.SharedTools.Tests.Services.MDServices;
-
+/// <summary>
+/// Tests for the <see cref="MdTranslator"/> class.
+/// </summary>
 public class MarkdownTranslatorTests
 {
+	/// <summary>
+	/// Tests the <see cref="MdTranslator.TranslateMarkdownPreservingTagsAsync(string, string, string, int, CancellationToken)"/> method.
+	/// </summary>
+	/// <returns></returns>
 	[Fact]
 	public async Task TranslateMarkdownPreservingTagsAsync_TranslatesLines_WithFakeService()
 	{
 		// Arrange
-		MarkdownTranslator translator = new MarkdownTranslator(new FakeTranslationService());
+		MdTranslator translator = new MdTranslator(new FakeTranslationService());
 
 		string input = """
             # Welcome
@@ -18,13 +23,33 @@ public class MarkdownTranslatorTests
             """;
 
 		// Act
-		string result = await translator.TranslateMarkdownPreservingTagsAsync(input, "en", "cs");
+		ApiResponse<string> result = await translator.TranslateMarkdownPreservingTagsAsync(input, "en", "cs");
 
 		// Assert
-		Assert.NotNull(result);
-		Assert.Contains("překlad1", result);
-		Assert.Contains("překlad2", result);
-		Assert.Contains("překlad3", result);
-		Assert.DoesNotContain("This is", result); // original text should not be present
+		Assert.NotNull(result.Data);
+		Assert.Contains("překlad1", result.Data);
+		Assert.Contains("překlad2", result.Data);
+		Assert.Contains("překlad3", result.Data);
+		Assert.DoesNotContain("This is", result.Data); // original text should not be present
+	}
+
+	/// <summary>
+	/// Tests the <see cref="MdTranslator.TranslateMarkdownPreservingTagsAsync(string, string, string, int, CancellationToken)"/> method with empty input.
+	/// </summary>
+	/// <returns></returns>
+	[Fact]
+	public async Task TranslateMarkdown_ShouldFail_WhenHtmlDetected()
+	{
+		// Arrange
+		string input = "<div>Not markdown</div>";
+		MdTranslator translator = new(new FakeTranslationService());
+
+		// Act
+		ApiResponse<string> result = await translator.TranslateMarkdownPreservingTagsAsync(input, "en", "cs");
+
+		// Assert
+		Assert.False(result.Successful);
+		Assert.Null(result.Data);
+		Assert.Contains("HTML", result.Message);
 	}
 }

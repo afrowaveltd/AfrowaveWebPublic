@@ -1,6 +1,9 @@
 ﻿namespace Id.Models.DatabaseModels
 {
-	public class ApplicationUserDescriptionTranslation
+	/// <summary>
+	/// /// This class represents a translation of a user description.
+	/// </summary>
+	public class ApplicationUserDescriptionTranslation : TranslationBase
 	{
 	}
 }
