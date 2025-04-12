@@ -3,11 +3,20 @@ using System.Text.Json;
 
 namespace SharedTools.Services.MdServices;
 
+/// <summary>
+/// Manages Markdown element mappings by loading, saving, and updating user and master configurations. Supports
+/// combining, resetting, and deleting mappings.
+/// </summary>
 public class MdConfigService : IMdConfigService
 {
 	private readonly string _masterPath;
 	private readonly string _userPath;
 
+	/// <summary>
+	/// Initializes the configuration service for Markdown mappings with specified file paths for master and user settings.
+	/// </summary>
+	/// <param name="masterPath">Specifies the file path for the master settings configuration.</param>
+	/// <param name="userPath">Specifies the file path for the user settings configuration.</param>
 	public MdConfigService(
 		 string masterPath = "SharedTools/Settings/MarkdownMappings.master.json",
 		 string userPath = "SharedTools/Settings/MarkdownMappings.user.json")
@@ -16,6 +25,11 @@ public class MdConfigService : IMdConfigService
 		_userPath = userPath;
 	}
 
+	/// <summary>
+	/// Combines mappings from a master JSON file and an optional user JSON file. User mappings override master mappings
+	/// when they share the same key.
+	/// </summary>
+	/// <returns>A list of MdElementMapping objects containing the combined mappings.</returns>
 	public async Task<List<MdElementMapping>> GetCombinedMappingsAsync()
 	{
 		List<MdElementMapping> master = await LoadJsonAsync(_masterPath);
@@ -32,6 +46,10 @@ public class MdConfigService : IMdConfigService
 		return combined.Values.ToList();
 	}
 
+	/// <summary>
+	/// Deletes the user overrides file if it exists, effectively resetting any user-specific settings.
+	/// </summary>
+	/// <returns>This method does not return a value.</returns>
 	public async Task ResetUserOverridesAsync()
 	{
 		if(File.Exists(_userPath))
@@ -40,6 +58,11 @@ public class MdConfigService : IMdConfigService
 		}
 	}
 
+	/// <summary>
+	/// Saves or updates the mappings file
+	/// </summary>
+	/// <param name="mapping"></param>
+	/// <returns></returns>
 	public async Task SaveOrUpdateMappingAsync(MdElementMapping mapping)
 	{
 		List<MdElementMapping> userList = File.Exists(_userPath)
@@ -59,6 +82,11 @@ public class MdConfigService : IMdConfigService
 		await SaveJsonAsync(_userPath, userList);
 	}
 
+	/// <summary>
+	/// Deletes the user mapping fromt he file
+	/// </summary>
+	/// <param name="mdStart"></param>
+	/// <returns></returns>
 	public async Task DeleteUserMappingAsync(string mdStart)
 	{
 		if(!File.Exists(_userPath)) return;

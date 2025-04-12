@@ -4,16 +4,29 @@ using System.Text.RegularExpressions;
 
 namespace SharedTools.Services.MdServices;
 
+/// <summary>
+/// Converts markdown text to HTML by mapping markdown elements to HTML tags. It handles inline elements like images,
+/// links, and formatting.
+/// </summary>
 public class MdParserService : IMdParserService
 {
 	private readonly IMdConfigService _configService;
 	private List<MdElementMapping>? _mappings;
 
+	/// <summary>
+	/// Initializes the Markdown parser service with a configuration service for managing settings.
+	/// </summary>
+	/// <param name="configService">Provides the necessary configuration settings for the Markdown parser.</param>
 	public MdParserService(IMdConfigService configService)
 	{
 		_configService = configService;
 	}
 
+	/// <summary>
+	/// Converts the text to the HTML
+	/// </summary>
+	/// <param name="markdown"></param>
+	/// <returns>Task returns the HTML string</returns>
 	public async Task<string> ConvertToHtmlAsync(string markdown)
 	{
 		_mappings ??= await _configService.GetCombinedMappingsAsync();
@@ -61,6 +74,11 @@ public class MdParserService : IMdParserService
 		return htmlBuilder.ToString();
 	}
 
+	/// <summary>
+	/// Converts inline markdown elements in a string to their corresponding HTML representations.
+	/// </summary>
+	/// <param name="input">A string containing markdown formatted text to be parsed into HTML.</param>
+	/// <returns>A string with the markdown elements replaced by HTML tags.</returns>
 	internal string ParseInlineElements(string input)
 	{
 		if(string.IsNullOrWhiteSpace(input)) return input;

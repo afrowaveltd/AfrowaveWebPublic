@@ -2,8 +2,17 @@
 
 namespace Id.Tests.SharedTools.Tests.Services.MdServices;
 
+/// <summary>
+/// Tests the conversion of basic Markdown to HTML using specified mappings. It verifies that headers and list items are
+/// correctly transformed.
+/// </summary>
 public class MdParserServiceTests
 {
+	/// <summary>
+	/// Converts basic Markdown input into HTML format using specified mappings for headers and list items. It processes
+	/// the input asynchronously.
+	/// </summary>
+	/// <returns>Returns the converted HTML string.</returns>
 	[Fact]
 	public async Task ConvertToHtmlAsync_ShouldConvertBasicMarkdown()
 	{
