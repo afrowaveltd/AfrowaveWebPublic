@@ -2,8 +2,17 @@
 
 namespace Id.Tests.Pages.Install;
 
+/// <summary>
+/// Tests the PasswordRulesModel class, ensuring proper redirection and validation of password rules during GET and POST
+/// requests.
+/// Validates installation state and model state for correct behavior.
+/// </summary>
 public class PasswordRulesModelTests : RazorPageTestBase<PasswordRulesModel>
 {
+	/// <summary>
+	/// Configures services for dependency injection by setting up various service instances with mock implementations.
+	/// </summary>
+	/// <param name="services">Facilitates the registration of service instances into the application's service collection for later use.</param>
 	protected override void ConfigureServices(IServiceCollection services)
 	{
 		var settingsService = Substitute.For<ISettingsService>();
@@ -26,6 +35,10 @@ public class PasswordRulesModelTests : RazorPageTestBase<PasswordRulesModel>
 		services.AddSingleton(Substitute.For<ILogger<PasswordRulesModel>>());
 	}
 
+	/// <summary>
+	/// Tests the OnGetAsync method to ensure it redirects when the installation state is invalid.
+	/// </summary>
+	/// <returns>Returns a RedirectToPageResult that points to the LoginRules page.</returns>
 	[Fact]
 	public async Task OnGetAsync_ShouldRedirect_WhenInstallStateInvalid()
 	{
@@ -39,6 +52,11 @@ public class PasswordRulesModelTests : RazorPageTestBase<PasswordRulesModel>
 		Assert.Equal("/Install/LoginRules", redirect.PageName);
 	}
 
+	/// <summary>
+	/// Tests the OnGetAsync method to ensure it returns a page when the installation state is valid. Validates that
+	/// certain input properties are not null or empty.
+	/// </summary>
+	/// <returns>Returns a PageResult indicating the success of the page retrieval.</returns>
 	[Fact]
 	public async Task OnGetAsync_ShouldReturnPage_WhenInstallStateValid()
 	{
@@ -53,6 +71,11 @@ public class PasswordRulesModelTests : RazorPageTestBase<PasswordRulesModel>
 		Assert.NotEmpty(page.RequireNonAlphanumeric);
 	}
 
+	/// <summary>
+	/// Handles the post request for a page model and checks the behavior when the model state is invalid. It verifies that
+	/// the result is a PageResult.
+	/// </summary>
+	/// <returns>Returns a PageResult when the model state contains errors.</returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldReturnPage_WhenModelInvalid()
 	{
@@ -64,6 +87,10 @@ public class PasswordRulesModelTests : RazorPageTestBase<PasswordRulesModel>
 		Assert.IsType<PageResult>(result);
 	}
 
+	/// <summary>
+	/// Tests the OnPostAsync method to ensure it redirects correctly when valid input is provided.
+	/// </summary>
+	/// <returns>Returns a RedirectToPageResult indicating the next page to navigate to.</returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldRedirect_WhenValid()
 	{

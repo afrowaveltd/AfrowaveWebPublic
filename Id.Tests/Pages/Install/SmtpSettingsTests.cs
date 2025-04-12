@@ -2,8 +2,17 @@
 
 namespace Id.Tests.Pages.Install;
 
+/// <summary>
+/// Tests the SmtpSettingsModel class, ensuring proper behavior for various scenarios including redirects and page
+/// returns.
+/// Validates installation state, application existence, and model state during GET and POST requests.
+/// </summary>
 public class SmtpSettingsModelTests : RazorPageTestBase<SmtpSettingsModel>
 {
+	/// <summary>
+	/// Configures services for the application by setting up various dependencies and mock implementations.
+	/// </summary>
+	/// <param name="services">Facilitates the registration of services and their dependencies within the application's service container.</param>
 	protected override void ConfigureServices(IServiceCollection services)
 	{
 		ApplicationDbContext db = AfrowaveTestDbFactory.Create("SmtpTest", db =>
@@ -60,6 +69,11 @@ public class SmtpSettingsModelTests : RazorPageTestBase<SmtpSettingsModel>
 		_ = services.AddSingleton(Substitute.For<ILogger<SmtpSettingsModel>>());
 	}
 
+	/// <summary>
+	/// Handles the GET request for a page and checks the installation state. If the installation state is invalid, it
+	/// redirects to the Index page.
+	/// </summary>
+	/// <returns>Returns a RedirectToPageResult that indicates the page to redirect to.</returns>
 	[Fact]
 	public async Task OnGetAsync_ShouldRedirect_WhenInstallStateInvalid()
 	{
@@ -73,6 +87,11 @@ public class SmtpSettingsModelTests : RazorPageTestBase<SmtpSettingsModel>
 		Assert.Equal("/Index", redirect.PageName);
 	}
 
+	/// <summary>
+	/// Tests the OnGetAsync method to ensure it returns a page when all inputs are valid. Validates the properties of the
+	/// page model.
+	/// </summary>
+	/// <returns>Returns a PageResult indicating successful page retrieval.</returns>
 	[Fact]
 	public async Task OnGetAsync_ShouldReturnPage_WhenAllValid()
 	{
@@ -86,6 +105,10 @@ public class SmtpSettingsModelTests : RazorPageTestBase<SmtpSettingsModel>
 		_ = Assert.Single(page.options);
 	}
 
+	/// <summary>
+	/// Handles the asynchronous GET request and redirects to an error page if the application is not found.
+	/// </summary>
+	/// <returns>Returns a redirect result to the error page.</returns>
 	[Fact]
 	public async Task OnGetAsync_ShouldRedirect_WhenAppNotFound()
 	{
@@ -102,6 +125,10 @@ public class SmtpSettingsModelTests : RazorPageTestBase<SmtpSettingsModel>
 		Assert.Equal("/Error", redirect.PageName);
 	}
 
+	/// <summary>
+	/// Tests the OnPostAsync method to ensure it redirects to the LoginRules page when valid input is provided.
+	/// </summary>
+	/// <returns>Returns a RedirectToPageResult indicating the page to redirect to.</returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldRedirect_WhenValid()
 	{
@@ -124,6 +151,11 @@ public class SmtpSettingsModelTests : RazorPageTestBase<SmtpSettingsModel>
 		Assert.Equal("/Install/LoginRules", redirect.PageName);
 	}
 
+	/// <summary>
+	/// Tests the OnPostAsync method to ensure it returns a PageResult when the model state is invalid due to a missing
+	/// 'Host' value.
+	/// </summary>
+	/// <returns>Returns a PageResult indicating the page should be displayed with validation errors.</returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldReturnPage_WhenModelInvalid()
 	{
@@ -135,6 +167,10 @@ public class SmtpSettingsModelTests : RazorPageTestBase<SmtpSettingsModel>
 		_ = Assert.IsType<PageResult>(result);
 	}
 
+	/// <summary>
+	/// Tests the OnPostAsync method to ensure it redirects to the error page when the application ID is not found.
+	/// </summary>
+	/// <returns>Returns a RedirectToPageResult that points to the '/Error' page.</returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldRedirect_WhenAppNotFound()
 	{
@@ -148,6 +184,10 @@ public class SmtpSettingsModelTests : RazorPageTestBase<SmtpSettingsModel>
 		Assert.Equal("/Error", redirect.PageName);
 	}
 
+	/// <summary>
+	/// Tests the OnPostAsync method to ensure it returns a page when saving data fails.
+	/// </summary>
+	/// <returns>Returns a RedirectToPageResult indicating the outcome of the save operation.</returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldReturnPage_WhenSaveFails()
 	{

@@ -5,6 +5,11 @@
 /// </summary>
 public class ApplicationModelTests : RazorPageTestBase<ApplicationModel>
 {
+	/// <summary>
+	/// Configures services for dependency injection, setting up various mocked services and an in-memory database for
+	/// testing.
+	/// </summary>
+	/// <param name="services">Facilitates the registration of services that can be injected into other components of the application.</param>
 	protected override void ConfigureServices(IServiceCollection services)
 	{
 		// Mock installation status
@@ -64,6 +69,10 @@ public class ApplicationModelTests : RazorPageTestBase<ApplicationModel>
 		_ = Substitute.For<IEncryptionService>();
 	}
 
+	/// <summary>
+	/// Tests the OnGetAsync method to ensure it returns a page when the state is valid.
+	/// </summary>
+	/// <returns>Returns a PageResult if the state is valid.</returns>
 	[Fact]
 	public async Task OnGetAsync_ShouldReturnPage_WhenStateIsValid()
 	{
@@ -76,6 +85,10 @@ public class ApplicationModelTests : RazorPageTestBase<ApplicationModel>
 		Assert.Equal(1, page.Input.BrandId);
 	}
 
+	/// <summary>
+	/// Tests the OnGetAsync method to ensure it redirects to the Index page when the installation state is invalid.
+	/// </summary>
+	/// <returns>Returns a RedirectToPageResult indicating the page to redirect to.</returns>
 	[Fact]
 	public async Task OnGetAsync_ShouldRedirect_WhenInvalidInstallState()
 	{
@@ -89,6 +102,10 @@ public class ApplicationModelTests : RazorPageTestBase<ApplicationModel>
 		Assert.Equal("/Index", redirect.PageName);
 	}
 
+	/// <summary>
+	/// Handles the asynchronous post request for a page model and checks for a successful redirect.
+	/// </summary>
+	/// <returns>Returns a redirect result to the specified page upon successful processing.</returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldRedirect_WhenSuccessful()
 	{
@@ -107,6 +124,10 @@ public class ApplicationModelTests : RazorPageTestBase<ApplicationModel>
 		Assert.Equal("/Install/ApplicationRoles", redirect.PageName);
 	}
 
+	/// <summary>
+	///	Tests the OnPostAsync method to ensure it returns a PageResult when the model state is invalid.
+	/// </summary>
+	/// <returns>Returns a PageResult indicating the page should be rendered again due to model validation errors.</returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldReturnPage_WhenModelInvalid()
 	{
@@ -118,6 +139,10 @@ public class ApplicationModelTests : RazorPageTestBase<ApplicationModel>
 		_ = Assert.IsType<PageResult>(result);
 	}
 
+	/// <summary>
+	/// Tests the OnPostAsync method to ensure it returns a page when the application is not created due to an error.
+	/// </summary>
+	/// <returns>Returns a PageResult indicating the outcome of the application registration attempt.</returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldReturnPage_WhenAppNotCreated()
 	{
@@ -141,6 +166,11 @@ public class ApplicationModelTests : RazorPageTestBase<ApplicationModel>
 		Assert.Equal("Something went wrong", page.ErrorMessage);
 	}
 
+	/// <summary>
+	/// Tests the OnPostAsync method to ensure it redirects when the owner ID does not match the expected value. It sets up
+	/// a page model with specific input values.
+	/// </summary>
+	/// <returns>Returns a RedirectToPageResult that indicates a redirection to the '/Index' page.</returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldRedirect_WhenOwnerMismatch()
 	{

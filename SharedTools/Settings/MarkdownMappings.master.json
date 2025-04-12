@@ -40,5 +40,40 @@
 		"HtmlElement": "li",
 		"SelfClosing": false,
 		"CssClass": null
+	},
+	{
+		"MdStart": "**",
+		"MdEnd": "**",
+		"HtmlElement": "strong",
+		"SelfClosing": false,
+		"CssClass": null
+	},
+	{
+		"MdStart": "*",
+		"MdEnd": "*",
+		"HtmlElement": "em",
+		"SelfClosing": false,
+		"CssClass": null
+	},
+	{
+		"MdStart": "`",
+		"MdEnd": "`",
+		"HtmlElement": "code",
+		"SelfClosing": false,
+		"CssClass": null
+	},
+	{
+		"MdStart": "[",
+		"MdEnd": ")",
+		"HtmlElement": "a",
+		"SelfClosing": false,
+		"CssClass": null
+	},
+	{
+		"MdStart": "![",
+		"MdEnd": ")",
+		"HtmlElement": "img",
+		"SelfClosing": true,
+		"CssClass": null
 	}
 ]

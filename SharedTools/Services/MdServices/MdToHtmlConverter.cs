@@ -16,7 +16,7 @@ namespace SharedTools.Services.MdServices
 		/// <returns>HTML string</returns>
 		public string Convert(string markdown, MdConversionOptions? options = null)
 		{
-			_ = options ?? new MdConversionOptions();
+			options = options ?? new MdConversionOptions();
 			return $"<pre>{System.Net.WebUtility.HtmlEncode(markdown)}</pre>{(options.PrettyPrint ? "\n" : string.Empty)}";
 		}
 
@@ -29,7 +29,7 @@ namespace SharedTools.Services.MdServices
 		/// <returns>HTML stream</returns>
 		public async IAsyncEnumerable<string> StreamConvertAsync(string markdown, MdConversionOptions? options = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			_ = options ?? new MdConversionOptions();
+			options = options ?? new MdConversionOptions();
 
 			using StringReader reader = new StringReader(markdown);
 			string? line;

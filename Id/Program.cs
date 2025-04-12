@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
+using SharedTools.Services.MdServices;
 
 /// <summary>
 /// The main entry point for the application.
@@ -137,6 +138,12 @@ public class Program
 		_ = builder.Services.AddSingleton<HttpClient>();
 		ISettingsService settingsService = builder.Services.BuildServiceProvider().GetRequiredService<ISettingsService>();
 		Id.Models.SettingsModels.IdentificatorSettings Settings = await settingsService.GetSettingsAsync();
+		builder.Services.AddSingleton<IMdConfigService>(provider =>
+	 new MdConfigService(
+		  masterPath: "SharedTools/Settings/MarkdownMappings.master.json",
+		  userPath: "SharedTools/Settings/MarkdownMappings.user.json"
+	 ));
+
 		// Hosted services
 		_ = builder.Services.AddHostedService<ScssCompilerService>();
 		_ = builder.Services.AddHostedService<UiTranslatorHostedService>();

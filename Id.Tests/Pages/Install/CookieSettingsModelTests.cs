@@ -2,8 +2,17 @@
 
 namespace Id.Tests.Pages.Install;
 
+/// <summary>
+/// Tests the CookieSettingsModel class, verifying redirection and page loading based on installation state and model
+/// validity.
+/// Also checks settings saving functionality.
+/// </summary>
 public class CookieSettingsModelTests : RazorPageTestBase<CookieSettingsModel>
 {
+	/// <summary>
+	/// Configures services for dependency injection, setting up various service mocks for testing purposes.
+	/// </summary>
+	/// <param name="services">Facilitates the registration of service instances within the application's service container.</param>
 	protected override void ConfigureServices(IServiceCollection services)
 	{
 		var settings = Substitute.For<ISettingsService>();
@@ -30,6 +39,10 @@ public class CookieSettingsModelTests : RazorPageTestBase<CookieSettingsModel>
 		services.AddSingleton(Substitute.For<ILogger<CookieSettingsModel>>());
 	}
 
+	/// <summary>
+	/// Tests the OnGetAsync method to ensure it redirects when the installation state is invalid.
+	/// </summary>
+	/// <returns>Returns a RedirectToPageResult that redirects to the home page.</returns>
 	[Fact]
 	public async Task OnGetAsync_ShouldRedirect_WhenInstallStateInvalid()
 	{
@@ -43,6 +56,10 @@ public class CookieSettingsModelTests : RazorPageTestBase<CookieSettingsModel>
 		Assert.Equal("/", redirect.PageName);
 	}
 
+	/// <summary>
+	/// Handles the GET request asynchronously, returning a page and loading various cookie options.
+	/// </summary>
+	/// <returns>Returns a PageResult indicating the success of the page load.</returns>
 	[Fact]
 	public async Task OnGetAsync_ShouldReturnPage_AndLoadOptions()
 	{
@@ -55,6 +72,10 @@ public class CookieSettingsModelTests : RazorPageTestBase<CookieSettingsModel>
 		Assert.NotEmpty(page.CookieHttpOnlyOptions);
 	}
 
+	/// <summary>
+	/// Tests the OnPostAsync method to ensure it redirects when the installation state is invalid.
+	/// </summary>
+	/// <returns>Returns a RedirectToPageResult that redirects to the home page.</returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldRedirect_WhenInstallStateInvalid()
 	{
@@ -68,6 +89,11 @@ public class CookieSettingsModelTests : RazorPageTestBase<CookieSettingsModel>
 		Assert.Equal("/", redirect.PageName);
 	}
 
+	/// <summary>
+	/// Tests the OnPostAsync method to ensure it returns a PageResult when the model state is invalid due to a missing
+	/// cookie name.
+	/// </summary>
+	/// <returns>Returns a PageResult indicating the page should be rendered again with validation errors.</returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldReturnPage_WhenModelInvalid()
 	{
@@ -79,6 +105,10 @@ public class CookieSettingsModelTests : RazorPageTestBase<CookieSettingsModel>
 		Assert.IsType<PageResult>(result);
 	}
 
+	/// <summary>
+	/// Handles the asynchronous posting of settings, saving cookie configurations and redirecting to a specified page.
+	/// </summary>
+	/// <returns>Returns a redirect result to the '/Install/JwtSettings' page.</returns>
 	[Fact]
 	public async Task OnPostAsync_ShouldSaveSettings_AndRedirect()
 	{

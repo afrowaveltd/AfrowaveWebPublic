@@ -52,6 +52,10 @@ public class ExcludedLanguageTests
 		Assert.Equal(lang, excluded.LanguageCode);
 	}
 
+	/// <summary>
+	/// Tests that the default constructor of ExcludedLanguage initializes the ObjectId, ObjectType, and LanguageCode
+	/// fields. Ensures these fields are not null.
+	/// </summary>
 	[Fact]
 	public void DefaultConstructor_ShouldInitializeFields()
 	{
