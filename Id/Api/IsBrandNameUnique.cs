@@ -6,6 +6,7 @@
 	/// <param name="brandService"></param>
 	[Route("api/[controller]")]
 	[ApiController]
+	[Produces("application/json", "application/xml")]
 	public class IsBrandNameUnique(IBrandsManager brandService) : ControllerBase
 	{
 		private readonly IBrandsManager _brandService = brandService;

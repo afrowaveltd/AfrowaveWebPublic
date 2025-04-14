@@ -7,18 +7,38 @@
 	public class ApiResponse<T>
 	{
 		/// <summary>
-		/// Successful is a boolean that indicates if the operation was successful.
+		/// Indicates if the operation was successful.
 		/// </summary>
 		public bool Successful { get; set; } = true;
 
 		/// <summary>
-		/// Message is a string that contains a message that can be used to describe the response.
+		/// Describes the response, can include success/failure message.
 		/// </summary>
 		public string? Message { get; set; }
 
 		/// <summary>
-		/// Data is a generic type that can be used to return data from the API.
+		/// Optional data payload returned from the operation.
 		/// </summary>
 		public T? Data { get; set; }
+
+		/// <summary>
+		/// Creates a successful ApiResponse with optional message.
+		/// </summary>
+		public static ApiResponse<T> Success(T data, string? message = null) => new()
+		{
+			Successful = true,
+			Data = data,
+			Message = message
+		};
+
+		/// <summary>
+		/// Creates a failed ApiResponse with message.
+		/// </summary>
+		public static ApiResponse<T> Fail(string message) => new()
+		{
+			Successful = false,
+			Message = message,
+			Data = default
+		};
 	}
 }

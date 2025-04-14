@@ -1,18 +1,23 @@
 ﻿using SharedTools.Models.MdModels;
-using SharedTools.Services.MdServices;
 using System.Text.Json;
 
 namespace Id.Tests.SharedTools.Tests.Services.MdServices;
 
+/// <summary>
+/// Unit tests for the Markdown configuration service.
+/// </summary>
 public class MdConfigServiceTests
 {
 	private const string TestDir = "TestData/MdMappings/";
 	private readonly string _masterPath = Path.Combine(TestDir, "MarkdownMappings.master.json");
 	private readonly string _userPath = Path.Combine(TestDir, "MarkdownMappings.user.json");
 
+	/// <summary>
+	/// Initializes the test class and sets up the test environment by creating necessary directories and files.
+	/// </summary>
 	public MdConfigServiceTests()
 	{
-		Directory.CreateDirectory(TestDir);
+		_ = Directory.CreateDirectory(TestDir);
 
 		File.WriteAllText(_masterPath, """
         [
@@ -22,9 +27,15 @@ public class MdConfigServiceTests
         """);
 
 		if(File.Exists(_userPath))
+		{
 			File.Delete(_userPath);
+		}
 	}
 
+	/// <summary>
+	/// Tests the GetCombinedMappingsAsync method to ensure it correctly merges master and user mappings.
+	/// </summary>
+	/// <returns></returns>
 	[Fact]
 	public async Task GetCombinedMappingsAsync_ShouldMergeCorrectly()
 	{
@@ -43,12 +54,16 @@ public class MdConfigServiceTests
 		Assert.Contains(result, x => x.MdStart == "**" && x.HtmlElement == "b" && x.CssClass == "custom-bold");
 	}
 
+	/// <summary>
+	/// Tests the GetCombinedMappingsAsync method when the user file does not exist.
+	/// </summary>
+	/// <returns></returns>
 	[Fact]
 	public async Task SaveOrUpdateMappingAsync_ShouldAddAndUpdate()
 	{
 		IMdConfigService service = new MdConfigService(_masterPath, _userPath);
 
-		var newItem = new MdElementMapping
+		MdElementMapping newItem = new MdElementMapping
 		{
 			MdStart = "*",
 			HtmlElement = "em",
@@ -59,7 +74,7 @@ public class MdConfigServiceTests
 
 		List<MdElementMapping> loaded = await LoadFromUserFile();
 
-		Assert.Single(loaded);
+		_ = Assert.Single(loaded);
 		Assert.Equal("*", loaded[0].MdStart);
 
 		// Update
@@ -67,10 +82,14 @@ public class MdConfigServiceTests
 		await service.SaveOrUpdateMappingAsync(newItem);
 
 		loaded = await LoadFromUserFile();
-		Assert.Single(loaded);
+		_ = Assert.Single(loaded);
 		Assert.Equal("emphasis", loaded[0].CssClass);
 	}
 
+	/// <summary>
+	/// Tests the DeleteUserMappingAsync method to ensure it correctly removes a mapping from the user file.
+	/// </summary>
+	/// <returns></returns>
 	[Fact]
 	public async Task DeleteUserMappingAsync_ShouldRemoveCorrectEntry()
 	{
@@ -86,10 +105,14 @@ public class MdConfigServiceTests
 		await service.DeleteUserMappingAsync(">");
 
 		List<MdElementMapping> loaded = await LoadFromUserFile();
-		Assert.Single(loaded);
+		_ = Assert.Single(loaded);
 		Assert.Equal("-", loaded[0].MdStart);
 	}
 
+	/// <summary>
+	/// Tests the ResetUserOverridesAsync method to ensure it deletes the user file.
+	/// </summary>
+	/// <returns></returns>
 	[Fact]
 	public async Task ResetUserOverridesAsync_ShouldDeleteUserFile()
 	{

@@ -7,6 +7,7 @@
 	/// <param name="_t">Localization service</param>
 	[Route("api/[controller]")]
 	[ApiController]
+	[Produces("application/json", "application/xml")]
 	public class IsEmailUnique(IUsersManager userService,
 		 IStringLocalizer<IsEmailUnique> _t) : ControllerBase
 	{

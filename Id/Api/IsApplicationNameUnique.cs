@@ -6,6 +6,7 @@
 	/// <param name="applicationService">Service for application manager</param>
 	[Route("api/[controller]")]
 	[ApiController]
+	[Produces("application/json", "application/xml")]
 	public class IsApplicationNameUnique(IApplicationsManager applicationService) : ControllerBase
 	{
 		private readonly IApplicationsManager _applicationService = applicationService;

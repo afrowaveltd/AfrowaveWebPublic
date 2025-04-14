@@ -1,12 +1,11 @@
-﻿using SharedTools.Services;
-
-namespace Id.Api
+﻿namespace Id.Api
 {
 	/// <summary>
 	/// API controller for retrieving localized text.
 	/// </summary>
 	[Route("api/[controller]")]
 	[ApiController]
+	[Produces("application/json", "application/xml")]
 	public class GetLocalized(IStringLocalizer<GetLocalized> localizer,
 										ITranslatorService translator,
 										ILogger<GetLocalized> logger,

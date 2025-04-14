@@ -1,6 +1,4 @@
 ﻿using Id.Models.CommunicationModels;
-using Id.Models.InputModels;
-using Id.Models.ResultModels;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Id.Api
@@ -10,6 +8,7 @@ namespace Id.Api
 	/// </summary>
 	[Route("api/smtp")]
 	[ApiController]
+	[Produces("application/json", "application/xml")]
 	public class SmtpTools(IStringLocalizer<SmtpTools> _t, IEmailManager email) : ControllerBase
 	{
 		private readonly IStringLocalizer<SmtpTools> t = _t;

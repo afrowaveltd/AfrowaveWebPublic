@@ -103,7 +103,8 @@ public class Program
 
 				 // Handle circular references if applicable
 				 options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-			 });
+			 })
+			 .AddXmlDataContractSerializerFormatters();
 
 		// Middleware
 		_ = builder.Services.AddTransient<I18nMiddleware>();
@@ -122,6 +123,7 @@ public class Program
 		_ = builder.Services.AddScoped<ITextToHtmlService, TextToHtmlService>();
 		_ = builder.Services.AddScoped<ITextTranslationService, TextTranslationService>();
 		_ = builder.Services.AddScoped<ITranslatorService, TranslatorService>();
+		_ = builder.Services.AddScoped<ITranslationFilesManager, TranslationFilesManager>();
 		_ = builder.Services.AddScoped<IUsersManager, UsersManager>();
 		_ = builder.Services.AddScoped<IEmailManager, EmailManager>();
 		_ = builder.Services.AddScoped<IHttpService, HttpService>();
@@ -138,7 +140,7 @@ public class Program
 		_ = builder.Services.AddSingleton<HttpClient>();
 		ISettingsService settingsService = builder.Services.BuildServiceProvider().GetRequiredService<ISettingsService>();
 		Id.Models.SettingsModels.IdentificatorSettings Settings = await settingsService.GetSettingsAsync();
-		builder.Services.AddSingleton<IMdConfigService>(provider =>
+		_ = builder.Services.AddSingleton<IMdConfigService>(provider =>
 	 new MdConfigService(
 		  masterPath: "SharedTools/Settings/MarkdownMappings.master.json",
 		  userPath: "SharedTools/Settings/MarkdownMappings.user.json"

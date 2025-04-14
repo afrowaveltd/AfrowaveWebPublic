@@ -6,6 +6,7 @@
 	/// <param name="settingsService">The settings service</param>
 	[Route("api/[controller]")]
 	[ApiController]
+	[Produces("application/json", "application/xml")]
 	public class PasswordRequirements(ISettingsService settingsService) : ControllerBase
 	{
 		private readonly ISettingsService _settingsService = settingsService;
