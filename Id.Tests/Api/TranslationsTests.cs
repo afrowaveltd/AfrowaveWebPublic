@@ -1,4 +1,6 @@
-﻿namespace Id.Tests.Api
+﻿using System.Text;
+
+namespace Id.Tests.Api
 {
 	/// <summary>
 	/// Unit tests for the Translations API controller.
@@ -131,6 +133,27 @@
 
 			Assert.True(data.Successful);
 			Assert.Equal(2, data.Data?.Count);
+		}
+
+		[Fact]
+		public async Task ExportTranslationsAsZip_ShouldReturnOk_WhenZipIsCreated()
+		{
+			// Arrange
+			byte[] zipBytes = Encoding.UTF8.GetBytes("fake zip content");
+			ApiResponse<byte[]> response = ApiResponse<byte[]>.Success(zipBytes);
+
+			_manager.ExportTranslationsAsZipAsync(null, null).Returns(response);
+
+			// Act
+			IActionResult result = await _controller.GetTranslationsAsZip(null, null);
+
+			// Assert
+			FileContentResult ok = Assert.IsType<FileContentResult>(result);
+
+			Assert.Equal("application/zip", ok.ContentType);
+			Assert.True(ok.FileDownloadName?.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) ?? false);
+			Assert.Equal(zipBytes.Length, ok.FileContents.Length);
+			Assert.Equal(zipBytes, ok.FileContents);
 		}
 	}
 }

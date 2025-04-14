@@ -85,5 +85,28 @@ namespace Id.Api
 
 			return Ok(result);
 		}
+
+		/// <summary>
+		/// Generates and returns a ZIP file containing translations for specified languages.
+		/// </summary>
+		/// <param name="languages">Specifies the languages for which translations are to be included in the ZIP file.</param>
+		/// <param name="applicationId">Identifies the application associated with the translations being exported.</param>
+		/// <returns>Returns a file result containing the generated ZIP file or a bad request response if the operation fails.</returns>
+		[HttpGet("zip")]
+		[Produces("application/zip")]
+		public async Task<IActionResult> GetTranslationsAsZip(
+	 [FromQuery] List<string>? languages,
+	 [FromQuery] string? applicationId = null)
+		{
+			ApiResponse<byte[]> result = await _translationFilesManager.ExportTranslationsAsZipAsync(applicationId, languages);
+
+			if(!result.Successful || result.Data is null)
+			{
+				return BadRequest(result.Message ?? "Failed to generate ZIP file.");
+			}
+
+			string fileName = $"translations_{applicationId ?? "default"}_{DateTime.UtcNow:yyyyMMddHHmmss}.zip";
+			return File(result.Data, "application/zip", fileName);
+		}
 	}
 }
