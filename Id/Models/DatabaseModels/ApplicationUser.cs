@@ -112,6 +112,11 @@
 		public User? User { get; set; }
 
 		/// <summary>
+		/// Gets or sets the collection of themes available for use.
+		/// </summary>
+		public List<Theme> Themes { get; set; } = [];
+
+		/// <summary>
 		/// Gets or sets the user roles associated with the entity.
 		/// </summary>
 		public List<UserRole> UserRoles { get; set; } = [];

@@ -81,6 +81,21 @@
 		public DbSet<SuspendedUser> SuspendedUsers { get; set; } = null!;
 
 		/// <summary>
+		/// Gets or sets the collection of themes in the database.
+		/// </summary>
+		public DbSet<Theme> Themes { get; set; } = null!;
+
+		/// <summary>
+		/// Gets or sets the collection of theme description translations stored in the database.
+		/// </summary>
+		public DbSet<ThemeDescriptionTranslation> ThemeDescriptionTranslations { get; set; } = null!;
+
+		/// <summary>
+		/// Gets or sets the collection of theme name translations stored in the database.
+		/// </summary>
+		public DbSet<ThemeNameTranslation> ThemeNameTranslations { get; set; } = null!;
+
+		/// <summary>
 		/// Gets or sets the UiTranslatorLogs table.
 		/// </summary>
 		public DbSet<UiTranslatorLog> UiTranslatorLogs { get; set; } = null!;
@@ -128,6 +143,13 @@
 			_ = builder.Entity<PolicyTranslation>().HasOne(pt => pt.Language).WithMany(pt => pt.PolicyTranslations).HasForeignKey(pt => pt.LanguageId);
 			_ = builder.Entity<RefreshToken>().HasKey(rt => rt.Id);
 			_ = builder.Entity<RefreshToken>().HasOne(rt => rt.User).WithMany(u => u.RefreshTokens).HasForeignKey(rt => rt.UserId);
+			_ = builder.Entity<Theme>().HasKey(t => t.Id);
+			_ = builder.Entity<Theme>().HasOne(t => t.User).WithMany(u => u.Themes).HasForeignKey(t => t.UserId);
+			_ = builder.Entity<Theme>().HasOne(t => t.ApplicationUser).WithMany(au => au.Themes).HasForeignKey(t => t.ApplicationUserId);
+			_ = builder.Entity<ThemeDescriptionTranslation>().HasKey(tdt => tdt.Id);
+			_ = builder.Entity<ThemeDescriptionTranslation>().HasOne(tdt => tdt.Theme).WithMany(t => t.DescriptionTranslations).HasForeignKey(tdt => tdt.ThemeId);
+			_ = builder.Entity<ThemeNameTranslation>().HasKey(tnt => tnt.Id);
+			_ = builder.Entity<ThemeNameTranslation>().HasOne(tnt => tnt.Theme).WithMany(t => t.NameTranslations).HasForeignKey(tnt => tnt.ThemeId);
 			_ = builder.Entity<User>().HasKey(u => u.Id);
 			_ = builder.Entity<UserAddress>().HasKey(ua => ua.Id);
 			_ = builder.Entity<UserAddress>().HasOne(ua => ua.User).WithMany(u => u.UserAddresses).HasForeignKey(ua => ua.UserId);

@@ -1,0 +1,53 @@
+{
+	"ApplicationId": "b95f80ec-c585-47e4-9d29-05c9114f750e",
+	"LoginRules": {
+		"MaxFailedLoginAttempts": 5,
+		"LockoutTime": 15,
+		"PasswordResetTokenExpiration": 15,
+		"OTPTokenExpiration": 15,
+		"RequireConfirmedEmail": true,
+		"IsConfigured": true
+	},
+	"PasswordRules": {
+		"MinimumLength": 8,
+		"MaximumLength": 48,
+		"RequireNonAlphanumeric": false,
+		"RequireLowercase": true,
+		"RequireUppercase": true,
+		"RequireDigit": true,
+		"IsConfigured": true
+	},
+	"CookieSettings": {
+		"Name": ".AuthCookie",
+		"Domain": "afrowave.ltd",
+		"Path": "/",
+		"Secure": true,
+		"SameSite": 1,
+		"HttpOnly": true,
+		"Expiration": 240,
+		"IsConfigured": true
+	},
+	"JwtSettings": {
+		"Issuer": "afrowave.ltd",
+		"Audience": "afrowave.ltd",
+		"AccessTokenExpiration": 20,
+		"RefreshTokenExpiration": 365,
+		"IsConfigured": true
+	},
+	"CorsSettings": {
+		"PolicyMode": 1,
+		"AllowedOrigins": [
+			"https://afrowave.ltd",
+			"https://id.afrowave.ltd"
+		],
+		"AllowAnyMethod": true,
+		"AllowedMethods": [
+		],
+		"AllowAnyHeader": true,
+		"AllowedHeaders": [
+		],
+		"AllowCredentials": true,
+		"IsConfigured": true
+	},
+	"InstallationFinished": true
+}

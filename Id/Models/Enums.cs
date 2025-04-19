@@ -124,6 +124,28 @@
 	}
 
 	/// <summary>
+	///  Represents the privacy settings for themes.
+	///  </summary>
+
+	public enum ThemePrivacy
+	{
+		/// <summary>
+		/// The theme is public and can be viewed by anyone.
+		/// </summary>
+		Public,
+
+		/// <summary>
+		/// The theme is private and can only be viewed by the user who created it.
+		/// </summary>
+		Private,
+
+		/// <summary>
+		/// The theme is shared with a specific group of users.
+		/// </summary>
+		Application,
+	}
+
+	/// <summary>
 	/// Represents the size options for profile pictures.
 	/// </summary>
 	public enum ProfilePictureSize
