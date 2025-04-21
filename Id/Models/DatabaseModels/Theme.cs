@@ -23,7 +23,7 @@ namespace Id.Models.DatabaseModels
 		/// <summary>
 		/// Gets or sets the unique identifier for the user.
 		/// </summary>
-		public string UserId { get; set; }
+		public string? UserId { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of the theme.
@@ -58,23 +58,28 @@ namespace Id.Models.DatabaseModels
 		/// <summary>
 		/// Gets or sets the user associated with the current context.
 		/// </summary>
-		public User User { get; set; } = null!;
+		public User? User { get; set; }
+
+		/// <summary>
+		/// Gets or sets the theme definition that specifies the visual and styling properties for the application.
+		/// </summary>
+		public ThemeDefinition ThemeDefinition { get; set; } = null!;
 
 		/// <summary>
 		/// Gets or sets the application user associated with the current context.
 		/// </summary>
-		public ApplicationUser ApplicationUser { get; set; } = null!;
+		public ApplicationUser? ApplicationUser { get; set; }
 
 		/// <summary>
 		/// Gets or sets the collection of translations for the theme's name in different languages.
 		/// </summary>
-		public ICollection<ThemeNameTranslation> NameTranslations { get; set; }
+		public ICollection<ThemeNameTranslation> NameTranslations { get; set; } = [];
 
 		/// <summary>
 		/// Gets or sets the collection of localized translations for the theme's description.
 		/// </summary>
 		/// <remarks>Use this property to manage or retrieve localized descriptions for the theme in multiple
 		/// languages. Each translation in the collection should correspond to a unique language or culture.</remarks>
-		public ICollection<ThemeDescriptionTranslation> DescriptionTranslations { get; set; }
+		public ICollection<ThemeDescriptionTranslation> DescriptionTranslations { get; set; } = [];
 	}
 }
