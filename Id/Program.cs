@@ -117,6 +117,7 @@ public class Program
 		_ = builder.Services.AddScoped<IBrandsManager, BrandsManager>();
 		_ = builder.Services.AddScoped<ICookieService, CookieService>();
 		_ = builder.Services.AddScoped<IInstallationStatusService, InstallationStatusService>();
+		_ = builder.Services.AddScoped<ILanguagesManager, LanguagesManager>();
 		_ = builder.Services.AddScoped<IRolesManager, RolesManager>();
 		_ = builder.Services.AddScoped<ISelectOptionsServices, SelectOptionsServices>();
 		_ = builder.Services.AddScoped<ITermsService, TermsService>();

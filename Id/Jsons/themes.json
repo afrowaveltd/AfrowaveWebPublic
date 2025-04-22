@@ -22,7 +22,11 @@
 			"navbar": "#795548",
 			"hr": "#ff8f00",
 			"success": "#66bb6a",
+			// not all members listed - see ThemeDefinition for all members
 		}
+	},
+	{
+		// next theme
 	}
 
 ]

@@ -1,10 +1,9 @@
-﻿body {
+body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
   display: flex;
-  flex-direction: column;
-}
+  flex-direction: column; }
 
 .spinner {
   width: 32px;
@@ -13,80 +12,63 @@
   border-top-color: #0a0a0a;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin: 20px auto;
-}
+  margin: 20px auto; }
 
 @keyframes spin {
   0% {
-    transform: rotate(0deg);
-  }
+    transform: rotate(0deg); }
   100% {
-    transform: rotate(360deg);
-  }
-}
+    transform: rotate(360deg); } }
+
 :root {
   --jd-color-background-default: $bg;
   --jd-color-border: $linkHover;
   --jd-color-panel: $bg;
-  --jd-color-icon: $error;
-}
+  --jd-color-icon: $error; }
 
 a {
-  color: #44371c;
-}
+  color: #44371c; }
 
 a:hover {
-  color: firebrick;
-}
+  color: firebrick; }
 
 a:active {
-  color: #ff0808;
-}
+  color: #ff0808; }
 
 body {
   background-color: #977e51;
-  color: #0a0a0a;
-}
+  color: #0a0a0a; }
 
 .navbar {
   background-color: #c0b4a2;
-  color: #000000;
-}
+  color: #000000; }
 
 a.nav-link {
-  color: #44371c;
-}
+  color: #44371c; }
 
 a.nav-link:hover {
-  color: firebrick;
-}
+  color: firebrick; }
 
 a.nav-link:active {
-  color: #ff0808;
-}
+  color: #ff0808; }
 
 .container {
   color: #0a0a0a;
-  background-color: #e0d4c2;
-}
+  background-color: #e0d4c2; }
 
 .dimmed {
-  color: #c0b4a2;
-}
+  color: #c0b4a2; }
 
 .form-control {
   color: #e2e2e2;
-  background-color: #6e3c0d;
-}
+  background-color: #6e3c0d; }
 
 .form {
   color: #e2e2e2;
-  background-color: #6e3c0d;
-}
+  background-color: #6e3c0d; }
 
 input {
-  -webkit-tap-highlight-color: #000000;
-}
+  -webkit-tap-highlight-color: #000000; }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -95,8 +77,7 @@ input:-webkit-autofill:active {
   background-color: #6e3c0d, !important;
   color: #e2e2e2 !important;
   -webkit-text-fill-color: #e2e2e2 !important;
-  transition: background-color 1s ease-in-out 5000s !important;
-}
+  transition: background-color 1s ease-in-out 5000s !important; }
 
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
@@ -105,27 +86,22 @@ select:-webkit-autofill:active {
   background-color: #6e3c0d, !important;
   color: #e2e2e2 !important;
   -webkit-text-fill-color: #e2e2e2 !important;
-  transition: background-color 1s ease-in-out 5000s !important;
-}
+  transition: background-color 1s ease-in-out 5000s !important; }
 
 .form-control:disabled {
   background-color: #44371c;
-  color: gray;
-}
+  color: gray; }
 
 .form-control:valid {
   background-color: #6e3c0d;
-  color: #e2e2e2;
-}
+  color: #e2e2e2; }
 
 .form-control:active {
   background-color: #44371c;
-  color: gray;
-}
+  color: gray; }
 
 .success {
-  color: rgb(50, 200, 50);
-}
+  color: #32c832; }
 
 .helper {
   color: #000000;
@@ -135,69 +111,56 @@ select:-webkit-autofill:active {
   -moz-border-radius: inherit;
   -webkit-border-radius: inherit;
   border-radius: inherit;
-  border-radius: 8px 8px;
-}
+  border-radius: 8px 8px; }
 
 .input-valid {
-  border-color: rgb(50, 200, 50);
-}
+  border-color: #32c832; }
 
 .input-invalid {
-  border-color: #aa0000;
-}
+  border-color: #aa0000; }
 
 .success {
-  color: rgb(50, 200, 50);
-}
+  color: #32c832; }
 
 .error {
-  color: #aa0000;
-}
+  color: #aa0000; }
 
 .warning {
-  color: #aa5500;
-}
+  color: #aa5500; }
 
 .information {
-  color: #111190;
-}
+  color: #111190; }
 
 .btn-primary {
   background-color: #44371c;
   border-color: #44371c;
-  color: #000000;
-}
+  color: #000000; }
 
 .btn-primary:hover {
   background-color: #44371c;
   border-color: firebrick;
-  color: #000000;
-}
+  color: #000000; }
 
 .btn:disabled {
   background-color: #44371c;
   color: gray;
-  border-color: #44371c;
-}
+  border-color: #44371c; }
 
 table.result {
   border: 2px solid firebrick;
   border-radius: 7px;
   padding: 5px;
   width: 95%;
-  background-color: #6e3c0d;
-}
+  background-color: #6e3c0d; }
 
 th.result {
   border: 2px solid firebrick;
   padding: 5px;
-  color: #e2e2e2;
-}
+  color: #e2e2e2; }
 
 td.result {
   border: 1px solid firebrick;
-  padding: 5px;
-}
+  padding: 5px; }
 
 table {
   margin-top: 10px;
@@ -206,15 +169,12 @@ table {
   border-radius: 7px;
   margin-left: auto;
   background-color: #6e3c0d;
-  color: #e2e2e2;
-}
+  color: #e2e2e2; }
 
 .terms h1, h2, h3, h4, h5, h6 {
   color: firebrick;
   font-weight: bold;
-  font-style: italic;
-}
+  font-style: italic; }
 
 .terms li {
-  color: #111190;
-}
+  color: #111190; }
