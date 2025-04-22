@@ -50,7 +50,7 @@
 
 			// Assert
 			Assert.Equal("fr", actualCulture);
-			//Assert.Equal("fr", actualUICulture);
+			Assert.Equal("fr", actualUICulture);
 			_cookieService.Received(1).SetCookie("language", "fr");
 		}
 

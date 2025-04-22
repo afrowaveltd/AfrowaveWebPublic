@@ -49,18 +49,18 @@ namespace Id.Middlewares
 
 		public async Task InvokeAsync(HttpContext context, RequestDelegate next)
 		{
+			string? cookieValue = _cookieService.GetCookie("language") == string.Empty ? null : _cookieService.GetCookie("language");
+			cookieValue ??= _cookieService.GetCookie("Language") == string.Empty ? null : _cookieService.GetCookie("Language");
 			// 1. Determine UI culture
-			string uiCultureKey = _cookieService.GetCookie("language")
-								 ?? _cookieService.GetCookie("Language")
-								 ?? context.Request.Query["ui-lang"].ToString()
-								 ?? context.Request.Headers.AcceptLanguage.ToString();
+			string uiCultureKey = cookieValue
+								 ?? context.Request.Headers.AcceptLanguage.ToString()
+								 ?? context.Request.Query["ui-lang"].ToString();
 
 			// 2. Determine formatting culture
-			string cultureKey = context.Request.Headers.AcceptLanguage.ToString()
-				?? _cookieService.GetCookie("language")
-								 ?? _cookieService.GetCookie("Language")
-								 ?? uiCultureKey
-								 ?? "en";
+			string cultureKey = cookieValue
+								?? context.Request.Headers.AcceptLanguage.ToString()
+								?? uiCultureKey
+								?? "en";
 
 			// 3. Validate and apply cultures
 			CultureInfo uiCulture = IsValidCulture(uiCultureKey) ? new CultureInfo(uiCultureKey) : new CultureInfo("en");
@@ -81,13 +81,7 @@ namespace Id.Middlewares
 		/// <returns>True if the culture exists, otherwise false.</returns>
 		private static bool IsValidCulture(string? name)
 		{
-			if(string.IsNullOrWhiteSpace(name))
-			{
-				return false;
-			}
-
-			return CultureInfo.GetCultures(CultureTypes.AllCultures)
-				 .Any(c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+			return true;//CultureInfo.GetCultures(CultureTypes.AllCultures).Any(culture => string.Equals(culture.Name, name, StringComparison.CurrentCultureIgnoreCase));
 		}
 	}
 }
