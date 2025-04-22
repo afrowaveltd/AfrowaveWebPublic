@@ -39,6 +39,11 @@
 		/// Gets or sets a value indicating whether the installation process is finished.
 		/// </summary>
 		public bool InstallationFinished { get; set; } = false;
+
+		/// <summary>
+		/// Gets or sets a value indicating whether themes are enabled in the application.
+		/// </summary>
+		public bool ThemesEnabled { get; set; } = false;
 	}
 
 	/// <summary>

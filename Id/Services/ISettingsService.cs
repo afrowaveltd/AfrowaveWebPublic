@@ -1,6 +1,4 @@
-﻿using Id.Models.SettingsModels;
-
-namespace Id.Services
+﻿namespace Id.Services
 {
 	/// <summary>
 	/// Service to handle settings.
@@ -62,5 +60,12 @@ namespace Id.Services
 		/// <param name="settings">IdentificatorSettings</param>
 		/// <returns></returns>
 		Task SetSettingsAsync(IdentificatorSettings settings);
+
+		/// <summary>
+		/// Determines whether themes are enabled in the application.
+		/// </summary>
+		/// <returns>A task that represents the asynchronous operation. The task result contains <see langword="true"/> if themes are
+		/// enabled; otherwise, <see langword="false"/>.</returns>
+		Task<bool> ThemesEnabled();
 	}
 }

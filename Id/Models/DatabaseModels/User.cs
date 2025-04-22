@@ -139,5 +139,10 @@ namespace Id.Models.DatabaseModels
 		/// Gets or sets the list of suspended users.
 		/// </summary>
 		public List<SuspendedUser> Suspenders { get; set; } = [];
+
+		/// <summary>
+		/// Gets or sets the collection of themes available for use.
+		/// </summary>
+		public List<Theme> Themes { get; set; } = [];
 	}
 }

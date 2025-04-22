@@ -1,0 +1,28 @@
+[
+	{
+		"name": "African",
+		"Description": "A theme inspired by the rich cultures and traditions of Africa, featuring vibrant colors and patterns.",
+		"sourceLanguage": "en",
+		"isSystem": true,
+		"ThemeDefinition": {
+			"fontLink": "https://fonts.googleapis.com/css2?family=Mali&display=swap",
+			"background": "#603913",
+			"foreground": "#ffddaa",
+			"formForeground": "ffe082",
+			"bodyBackground": "#f9e4b7",
+			"link": "#ffb300",
+			"linkHover": "#dd2c00",
+			"linkActive": "#ff6d00",
+			"formBackground": "#8e4b10",
+			"redBorder": "d32f2f",
+			"disabledBackground": "#5d4037",
+			"disabledForeground": "#9e9e9e",
+			"formControlValidBackground": "#558b2f",
+			"formControlInvalidBackground": "#f32f2f",
+			"navbar": "#795548",
+			"hr": "#ff8f00",
+			"success": "#66bb6a",
+		}
+	}
+
+]

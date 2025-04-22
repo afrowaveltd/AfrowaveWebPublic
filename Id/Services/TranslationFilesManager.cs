@@ -156,7 +156,7 @@ namespace Id.Services
 							continue; // Skip history file
 						}
 
-						if(languages != null && !languages.Contains(lang, StringComparer.OrdinalIgnoreCase))
+						if(languages != null && languages.Count > 0 && !languages.Contains(lang, StringComparer.OrdinalIgnoreCase))
 						{
 							continue;
 						}

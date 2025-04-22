@@ -1,6 +1,4 @@
-﻿using Id.Models.SettingsModels;
-
-namespace Id.Services
+﻿namespace Id.Services
 {
 	/// <summary>
 	/// Service to handle settings.
@@ -39,6 +37,18 @@ namespace Id.Services
 		{
 			IdentificatorSettings settings = await GetSettingsAsync();
 			return settings.ApplicationId;
+		}
+
+		/// <summary>
+		/// Determines whether themes are enabled in the application settings.
+		/// </summary>
+		/// <remarks>This method retrieves the application settings asynchronously to check the status of the themes
+		/// feature.</remarks>
+		/// <returns><see langword="true"/> if themes are enabled; otherwise, <see langword="false"/>.</returns>
+		public async Task<bool> ThemesEnabled()
+		{
+			IdentificatorSettings settings = await GetSettingsAsync();
+			return settings.ThemesEnabled;
 		}
 
 		/// <summary>
@@ -97,26 +107,6 @@ namespace Id.Services
 			return settings.CorsSettings;
 		}
 
-		private async Task<IdentificatorSettings> LoadSettingsAsync()
-		{
-			IdentificatorSettings settings = new();
-			if(File.Exists(settingsPath))
-			{
-				string settingsJson = await File.ReadAllTextAsync(settingsPath);
-				try
-				{
-					settings = JsonSerializer.Deserialize<IdentificatorSettings>(settingsJson) ?? new();
-					return settings;
-				}
-				catch(Exception e)
-				{
-					_logger.LogError(e, "Error loading settings");
-					return settings;
-				}
-			}
-			return settings;
-		}
-
 		/// <summary>
 		/// Set the application ID.
 		/// </summary>
@@ -152,6 +142,26 @@ namespace Id.Services
 			{
 				_logger.LogError(e, "Error saving settings");
 			}
+		}
+
+		private async Task<IdentificatorSettings> LoadSettingsAsync()
+		{
+			IdentificatorSettings settings = new();
+			if(File.Exists(settingsPath))
+			{
+				string settingsJson = await File.ReadAllTextAsync(settingsPath);
+				try
+				{
+					settings = JsonSerializer.Deserialize<IdentificatorSettings>(settingsJson) ?? new();
+					return settings;
+				}
+				catch(Exception e)
+				{
+					_logger.LogError(e, "Error loading settings");
+					return settings;
+				}
+			}
+			return settings;
 		}
 	}
 }
