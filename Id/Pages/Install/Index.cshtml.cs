@@ -100,7 +100,8 @@ namespace Id.Pages.Install
 					DisplayName = "Administrator",
 					Firstname = "System",
 					Lastname = "Administrator",
-					EmailConfirmed = true
+					EmailConfirmed = true,
+					IsOwner = true
 				};
 
 				_ = await _context.Users.AddAsync(admin);

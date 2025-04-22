@@ -1,6 +1,4 @@
-﻿using Id.Models.SettingsModels;
-
-namespace Id.Services
+﻿namespace Id.Services
 {
 	/// <summary>
 	/// Provides methods to check and manage the installation status of the application.
@@ -114,20 +112,17 @@ namespace Id.Services
 			}
 
 			List<Application> applications = await _context.Applications.ToListAsync();
-			if(applications.Count != 1)
+			if(applications.Count == 0)
 			{
-				if(applications.Count == 0)
-				{
-					return;
-				}
-
-				throw new InvalidOperationException("There should be only one application in the database.");
+				return;
 			}
+			// Correct record in the file
+			string? applicationId = applications.Where(x => x.IsAuthenticator).Select(x => x.Id).FirstOrDefault()
+				?? throw new InvalidOperationException("No application marked as the Authenticator exists, but other applications found");
 
-			string dbApplicationId = applications.First().Id;
-			if(dbApplicationId != settings.ApplicationId)
+			if(applicationId != settings.ApplicationId)
 			{
-				settings.ApplicationId = dbApplicationId;
+				settings.ApplicationId = applicationId;
 				await _settingsService.SetSettingsAsync(settings);
 			}
 		}

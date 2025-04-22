@@ -339,6 +339,16 @@ namespace Id.Services
 				result.ErrorMessage = _t["Application name is not unique"];
 				return result;
 			}
+			if(input.IsAuthenticator)
+			{
+				if(await _context.Applications.Where(s => s.IsAuthenticator).AnyAsync())
+				{
+					result.ApplicationCreated = false;
+					result.LogoUploaded = false;
+					result.ErrorMessage = _t["Authenticator application already exists"];
+					return result;
+				}
+			}
 			if(!await _brandsManager.ValidBrandAndOwner(input.BrandId, input.OwnerId))
 			{
 				result.ApplicationCreated = false;

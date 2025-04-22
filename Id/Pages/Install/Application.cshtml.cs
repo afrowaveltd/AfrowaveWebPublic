@@ -1,5 +1,3 @@
-using Id.Models.InputModels;
-using Id.Models.ResultModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace Id.Pages.Install
@@ -195,6 +193,7 @@ namespace Id.Pages.Install
 				OwnerId = Input.OwnerId,
 				BrandId = Input.BrandId,
 				RequireTerms = true,
+				IsAuthenticator = true,
 				RequirePrivacyPolicy = true,
 				RequireCookiePolicy = true
 			};

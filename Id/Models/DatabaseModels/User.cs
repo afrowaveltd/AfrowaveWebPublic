@@ -71,6 +71,11 @@ namespace Id.Models.DatabaseModels
 		public Gender Gender { get; set; } = Gender.Other;
 
 		/// <summary>
+		/// Gets or sets the mark if the user is owner of the system
+		/// </summary>
+		public bool IsOwner { get; set; } = false;
+
+		/// <summary>
 		/// Gets or sets the OTP token of the user.
 		/// </summary>
 		public string? OTPToken { get; set; } = string.Empty;

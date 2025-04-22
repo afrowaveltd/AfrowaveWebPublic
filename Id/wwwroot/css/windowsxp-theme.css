@@ -28,7 +28,7 @@ body {
   --jd-color-icon: $error; }
 
 a {
-  color: #00335C; }
+  color: #CC9900; }
 
 a:hover {
   color: #AA0000; }
@@ -45,7 +45,7 @@ body {
   color: #FFFFE0; }
 
 a.nav-link {
-  color: #00335C; }
+  color: #CC9900; }
 
 a.nav-link:hover {
   color: #AA0000; }
@@ -133,19 +133,19 @@ select:-webkit-autofill:active {
   color: #0044CC; }
 
 .btn-primary {
-  background-color: #00335C;
-  border-color: #00335C;
+  background-color: #CC9900;
+  border-color: #CC9900;
   color: #FFFFE0; }
 
 .btn-primary:hover {
-  background-color: #00335C;
+  background-color: #CC9900;
   border-color: #AA0000;
   color: #FFFFE0; }
 
 .btn:disabled {
   background-color: #808080;
   color: #AAAAAA;
-  border-color: #00335C; }
+  border-color: #CC9900; }
 
 table.result {
   border: 2px solid #660000;

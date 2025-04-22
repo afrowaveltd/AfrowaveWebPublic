@@ -56,6 +56,11 @@ namespace Id.Models.InputModels
 		public bool RequireTerms { get; set; } = false;
 
 		/// <summary>
+		/// Gets or sets a value indicating whether the application is an authenticator app.
+		/// </summary>
+		public bool IsAuthenticator { get; set; } = false;
+
+		/// <summary>
 		/// Gets or sets a value indicating whether the application requires user to accept privacy policy.
 		/// </summary>
 		public bool RequirePrivacyPolicy { get; set; } = false;

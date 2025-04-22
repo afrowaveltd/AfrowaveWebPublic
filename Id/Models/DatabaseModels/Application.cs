@@ -31,6 +31,11 @@
 		public bool Logo { get; set; } = false;
 
 		/// <summary>
+		/// Gets or sets a value indicating whether the application is an authenticator app.
+		/// </summary>
+		public bool IsAuthenticator { get; set; } = false;
+
+		/// <summary>
 		/// Gets or sets the identifier of the owner of the application.
 		/// </summary>
 		public string OwnerId { get; set; } = string.Empty;
