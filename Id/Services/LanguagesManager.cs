@@ -25,6 +25,21 @@
 		public async Task<ApiResponse<LanguageView>> GetLanguageByCodeAsync(string code)
 		{
 			ApiResponse<LanguageView> response = new();
+
+			if(string.IsNullOrEmpty(code))
+			{
+				response.Successful = false;
+				response.Message = _t["Language code is required"];
+				return response;
+			}
+
+			if(code.Length != 2)
+			{
+				response.Successful = false;
+				response.Message = _t["Language code must be two characters"];
+				return response;
+			}
+
 			Language? language = await _context.Languages
 				.AsNoTracking()
 				.FirstOrDefaultAsync(l => l.Code == code);

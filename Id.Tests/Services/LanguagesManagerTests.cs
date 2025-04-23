@@ -15,7 +15,7 @@ public class LanguagesManagerTests
 	public LanguagesManagerTests()
 	{
 		DbContextOptions<ApplicationDbContext> options = new DbContextOptionsBuilder<ApplicationDbContext>()
-			 .UseInMemoryDatabase(databaseName: "LanguagesTestDb")
+			 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
 			 .Options;
 
 		_dbContext = new ApplicationDbContext(options);
@@ -108,7 +108,7 @@ public class LanguagesManagerTests
 		ApiResponse<List<Id.Models.DataViews.LanguageView>> result = await _languagesManager.GetAllTranslatableLanguagesAsync();
 
 		Assert.True(result.Successful);
-		Assert.Equal(2, result.Data.Count);
+		Assert.Equal(2, result.Data?.Count);
 		Assert.Contains(result.Data, l => l.Code == "en");
 		Assert.Contains(result.Data, l => l.Code == "fr");
 		Assert.DoesNotContain(result.Data, l => l.Code == "cs");
