@@ -68,8 +68,8 @@ namespace Id.Middlewares
 
 			Thread.CurrentThread.CurrentCulture = culture;
 			Thread.CurrentThread.CurrentUICulture = uiCulture;
-
-			_cookieService.SetCookie("language", uiCulture.Name);
+			context.Request.Headers["Accept-Language"] = uiCulture.TwoLetterISOLanguageName;
+			_cookieService.SetCookie("language", uiCulture.TwoLetterISOLanguageName);
 
 			await next(context);
 		}
@@ -81,7 +81,7 @@ namespace Id.Middlewares
 		/// <returns>True if the culture exists, otherwise false.</returns>
 		private static bool IsValidCulture(string? name)
 		{
-			return true;//CultureInfo.GetCultures(CultureTypes.AllCultures).Any(culture => string.Equals(culture.Name, name, StringComparison.CurrentCultureIgnoreCase));
+			return CultureInfo.GetCultures(CultureTypes.AllCultures).Any(culture => string.Equals(culture.Name, name, StringComparison.CurrentCultureIgnoreCase));
 		}
 	}
 }
