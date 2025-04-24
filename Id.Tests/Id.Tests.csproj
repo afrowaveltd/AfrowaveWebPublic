@@ -9,6 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Id.ConsoleToolkit\Id.ConsoleToolkit.csproj" />
 		<ProjectReference Include="..\Id\Id.csproj" />
 		<ProjectReference Include="..\SharedTools\SharedTools.csproj" />
 	</ItemGroup>

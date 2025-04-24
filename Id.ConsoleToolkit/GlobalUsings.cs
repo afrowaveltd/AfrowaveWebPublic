@@ -1,6 +1,8 @@
-﻿global using Id.Data;
-global using Microsoft.EntityFrameworkCore;
-global using Microsoft.Extensions.Configuration;
+﻿global using Id.ConsoleToolkit.Models.SettingsModels;
+global using Id.ConsoleToolkit.Services;
+global using Id.I18n;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
-global using Microsoft.Extensions.Logging;
+global using Microsoft.Extensions.Localization;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;

@@ -50,11 +50,13 @@ public class CustomErrorHandlingMiddleware
 
 	private async Task HandleErrorResponse(HttpContext context, int statusCode)
 	{
-		if(!context.Response.HasStarted)
+		if(context.Response.HasStarted)
 		{
-			context.Response.Clear();
+			_logger.LogWarning("Response has already started, cannot write error response.");
+			return;
 		}
 
+		context.Response.Clear();
 		context.Response.StatusCode = statusCode;
 		context.Response.ContentType = "application/json";
 

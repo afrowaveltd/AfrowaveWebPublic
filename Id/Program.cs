@@ -79,15 +79,6 @@ public class Program
 
 		_ = builder.Services.AddOpenApi("AfrowaveId");
 
-		/*
-        builder.Services.AddSwaggerGen(options =>
-        {
-            string xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            options.IncludeXmlComments(xmlPath);
-        });
-        */
-
 		// Add services to the container.
 		_ = builder.Services.AddRazorPages()
 			.AddViewLocalization();
@@ -198,6 +189,26 @@ public class Program
 		_ = app.UseHttpsRedirection();
 
 		_ = app.UseForwardedHeaders();
+		_ = app.UseStatusCodePages(async context =>
+		{
+			HttpResponse response = context.HttpContext.Response;
+
+			if(response.StatusCode == 404 && !response.HasStarted)
+			{
+				response.ContentType = "application/json";
+
+				ErrorDetails errorDetails = new ErrorDetails
+				{
+					StatusCode = 404,
+					Title = "Not Found",
+					Message = "The requested resource was not found.",
+					Timestamp = DateTime.UtcNow
+				};
+
+				await response.WriteAsync(JsonSerializer.Serialize(errorDetails));
+			}
+		});
+
 		_ = app.MapOpenApi()
 			.CacheOutput();
 
