@@ -27,7 +27,6 @@
   <ItemGroup>
     <Folder Include="Models\InputModels\" />
     <Folder Include="Models\ResultModels\" />
-    <Folder Include="Models\ViewModels\" />
     <Folder Include="Parsers\" />
     <Folder Include="Settings\" />
   </ItemGroup>

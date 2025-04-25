@@ -52,6 +52,10 @@
 			Current = settings;
 		}
 
+		/// <summary>
+		/// Gets the current application settings.
+		/// </summary>
+		/// <returns></returns>
 		public ApplicationSettings Get()
 		{
 			return Current;

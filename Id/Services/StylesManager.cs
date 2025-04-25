@@ -2,6 +2,13 @@
 
 namespace Id.Services
 {
+	/// <summary>
+	/// Service to manage styles and themes in the application.
+	/// </summary>
+	/// <param name="dbContext">ApplicationDbContext</param>
+	/// <param name="t">Localizer</param>
+	/// <param name="logger">Logger</param>
+	/// <param name="settingsService">The settings service</param>
 	public class StylesManager(ApplicationDbContext dbContext,
 		IStringLocalizer<StylesManager> t,
 		ILogger<StylesManager> logger,
@@ -58,37 +65,37 @@ namespace Id.Services
 			StringBuilder css = new();
 			if(theme.FontLink != null && theme.FontLink != string.Empty)
 			{
-				css.AppendLine($"@import url('{theme.FontLink}');");
+				_ = css.AppendLine($"@import url('{theme.FontLink}');");
 			}
-			css.AppendLine(@":root {");
-			css.AppendLine($"--bg: {theme.Background ?? definition.Background}");
-			css.AppendLine($"--foreground: {theme.Foreground ?? definition.Foreground}");
-			css.AppendLine($"--formForeground: {theme.FormForeground ?? definition.FormForeground}");
-			css.AppendLine($"--bodyBackground: {theme.BodyBackground ?? definition.BodyBackground}");
-			css.AppendLine($"--link: {theme.Link ?? definition.Link}");
-			css.AppendLine($"--linkHover: {theme.LinkHover ?? definition.LinkHover}");
-			css.AppendLine($"--linkActive: {theme.LinkActive ?? definition.LinkActive}");
-			css.AppendLine($"--formBackground: {theme.FormBackground ?? definition.FormBackground}");
-			css.AppendLine($"--redBorder: {theme.RedBorder ?? definition.RedBorder}");
-			css.AppendLine($"--disabledBackground: {theme.DisabledBackground ?? definition.DisabledBackground}");
-			css.AppendLine($"--disabledForeground: {theme.DisabledForeground ?? definition.DisabledForeground}");
-			css.AppendLine($"--formControlValidBackground: {theme.FormControlValidBackground ?? definition.FormControlValidBackground}");
-			css.AppendLine($"--formControlInvalidBackground: {theme.FormControlInvalidBackground ?? definition.FormControlInvalidBackground}");
-			css.AppendLine($"--navbar: {theme.Navbar ?? definition.Navbar}");
-			css.AppendLine($"--hr: {theme.Hr ?? definition.Hr}");
-			css.AppendLine($"--success: {theme.Success ?? definition.Success}");
-			css.AppendLine($"--error: {theme.Error ?? definition.Error}");
-			css.AppendLine($"--warning: {theme.Warning ?? definition.Warning}");
-			css.AppendLine($"--info: {theme.Info ?? definition.Info}");
-			css.AppendLine($"--highlight: {theme.Highlight ?? definition.Highlight}");
-			css.AppendLine($"--my: {theme.My ?? definition.My}");
-			css.AppendLine($"--family: {theme.Family ?? definition.Family}");
-			css.AppendLine($"--admin: {theme.Admin ?? definition.Admin}");
-			css.AppendLine($"--borderLight: {theme.BorderLight ?? definition.BorderLight}");
-			css.AppendLine($"--shadow: {theme.Shadow ?? definition.Shadow}");
-			css.AppendLine($"--modalBackground: {theme.ModalBackground ?? definition.ModalBackground}");
-			css.AppendLine($"--font: {theme.Font ?? definition.Font}");
-			css.AppendLine(@"}");
+			_ = css.AppendLine(@":root {");
+			_ = css.AppendLine($"--bg: {theme.Background ?? definition.Background}");
+			_ = css.AppendLine($"--foreground: {theme.Foreground ?? definition.Foreground}");
+			_ = css.AppendLine($"--formForeground: {theme.FormForeground ?? definition.FormForeground}");
+			_ = css.AppendLine($"--bodyBackground: {theme.BodyBackground ?? definition.BodyBackground}");
+			_ = css.AppendLine($"--link: {theme.Link ?? definition.Link}");
+			_ = css.AppendLine($"--linkHover: {theme.LinkHover ?? definition.LinkHover}");
+			_ = css.AppendLine($"--linkActive: {theme.LinkActive ?? definition.LinkActive}");
+			_ = css.AppendLine($"--formBackground: {theme.FormBackground ?? definition.FormBackground}");
+			_ = css.AppendLine($"--redBorder: {theme.RedBorder ?? definition.RedBorder}");
+			_ = css.AppendLine($"--disabledBackground: {theme.DisabledBackground ?? definition.DisabledBackground}");
+			_ = css.AppendLine($"--disabledForeground: {theme.DisabledForeground ?? definition.DisabledForeground}");
+			_ = css.AppendLine($"--formControlValidBackground: {theme.FormControlValidBackground ?? definition.FormControlValidBackground}");
+			_ = css.AppendLine($"--formControlInvalidBackground: {theme.FormControlInvalidBackground ?? definition.FormControlInvalidBackground}");
+			_ = css.AppendLine($"--navbar: {theme.Navbar ?? definition.Navbar}");
+			_ = css.AppendLine($"--hr: {theme.Hr ?? definition.Hr}");
+			_ = css.AppendLine($"--success: {theme.Success ?? definition.Success}");
+			_ = css.AppendLine($"--error: {theme.Error ?? definition.Error}");
+			_ = css.AppendLine($"--warning: {theme.Warning ?? definition.Warning}");
+			_ = css.AppendLine($"--info: {theme.Info ?? definition.Info}");
+			_ = css.AppendLine($"--highlight: {theme.Highlight ?? definition.Highlight}");
+			_ = css.AppendLine($"--my: {theme.My ?? definition.My}");
+			_ = css.AppendLine($"--family: {theme.Family ?? definition.Family}");
+			_ = css.AppendLine($"--admin: {theme.Admin ?? definition.Admin}");
+			_ = css.AppendLine($"--borderLight: {theme.BorderLight ?? definition.BorderLight}");
+			_ = css.AppendLine($"--shadow: {theme.Shadow ?? definition.Shadow}");
+			_ = css.AppendLine($"--modalBackground: {theme.ModalBackground ?? definition.ModalBackground}");
+			_ = css.AppendLine($"--font: {theme.Font ?? definition.Font}");
+			_ = css.AppendLine(@"}");
 			return css.ToString();
 		}
 	}

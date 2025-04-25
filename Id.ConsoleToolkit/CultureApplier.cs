@@ -1,7 +1,14 @@
 ﻿using System.Globalization;
 
+/// <summary>
+/// This class is used to set the culture for the current thread.
+/// </summary>
 public static class CultureApplier
 {
+	/// <summary>
+	/// Sets the culture for the current thread to the specified language code.
+	/// </summary>
+	/// <param name="languageCode">Two letters ISO code for the language</param>
 	public static void ApplyCulture(string languageCode)
 	{
 		try

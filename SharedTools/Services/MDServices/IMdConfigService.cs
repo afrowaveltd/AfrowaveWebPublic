@@ -15,8 +15,8 @@ public interface IMdConfigService
 	/// <summary>
 	/// Resets any user-specific overrides asynchronously.
 	/// </summary>
-	/// <returns>Returns a task that represents the asynchronous operation.</returns>
-	Task ResetUserOverridesAsync();
+
+	void ResetUserOverridesAsync();
 
 	/// <summary>
 	/// Saves or updates settings

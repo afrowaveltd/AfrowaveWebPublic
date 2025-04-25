@@ -1,4 +1,5 @@
-﻿global using Id.ConsoleToolkit.Models.SettingsModels;
+﻿global using Id.ConsoleToolkit.Helpers;
+global using Id.ConsoleToolkit.Models.SettingsModels;
 global using Id.ConsoleToolkit.Services;
 global using Id.I18n;
 global using Microsoft.Extensions.DependencyInjection;

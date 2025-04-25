@@ -10,6 +10,7 @@
 		_ = services.AddSingleton<ISettingsService, SettingsService>();
 		_ = services.AddLocalization();
 		_ = services.AddTransient<IStringLocalizerFactory, JsonStringLocalizerFactory>();
+		_ = services.AddTransient<IBrowser, Browser>();
 	})
 	.Build();
 

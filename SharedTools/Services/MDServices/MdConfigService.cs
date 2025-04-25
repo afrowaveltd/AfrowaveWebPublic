@@ -37,8 +37,8 @@ public class MdConfigService : IMdConfigService
 			 ? await LoadJsonAsync(_userPath)
 			 : [];
 
-		var combined = master.ToDictionary(e => e.MdStart);
-		foreach(var userItem in user)
+		Dictionary<string, MdElementMapping> combined = master.ToDictionary(e => e.MdStart);
+		foreach(MdElementMapping userItem in user)
 		{
 			combined[userItem.MdStart] = userItem; // override
 		}
@@ -50,7 +50,7 @@ public class MdConfigService : IMdConfigService
 	/// Deletes the user overrides file if it exists, effectively resetting any user-specific settings.
 	/// </summary>
 	/// <returns>This method does not return a value.</returns>
-	public async Task ResetUserOverridesAsync()
+	public void ResetUserOverridesAsync()
 	{
 		if(File.Exists(_userPath))
 		{
@@ -89,15 +89,22 @@ public class MdConfigService : IMdConfigService
 	/// <returns></returns>
 	public async Task DeleteUserMappingAsync(string mdStart)
 	{
-		if(!File.Exists(_userPath)) return;
+		if(!File.Exists(_userPath))
+		{
+			return;
+		}
 
 		List<MdElementMapping> userList = await LoadJsonAsync(_userPath);
-		userList.RemoveAll(e => e.MdStart == mdStart);
+		_ = userList.RemoveAll(e => e.MdStart == mdStart);
 
 		if(userList.Count == 0)
+		{
 			File.Delete(_userPath);
+		}
 		else
+		{
 			await SaveJsonAsync(_userPath, userList);
+		}
 	}
 
 	private async Task<List<MdElementMapping>> LoadJsonAsync(string path)

@@ -2,6 +2,14 @@
 
 namespace Id.Api
 {
+	/// <summary>
+	/// Controller for managing themes.
+	/// </summary>
+	/// <param name="themeService">The theme service</param>
+	/// <param name="logger">Logger</param>
+	/// <param name="usersManager">Users manager service</param>
+	/// <param name="applicationUsersManager">Application users manager service</param>
+	/// <param name="t">Localizer</param>
 	[Route("api/[controller]")]
 	[ApiController]
 	public class Themes(IThemeService themeService,
