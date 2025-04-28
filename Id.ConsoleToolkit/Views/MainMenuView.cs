@@ -20,7 +20,4 @@ namespace Id.ConsoleToolkit.Views
 			return Task.CompletedTask;
 		}
 	}
-
-	{
-	}
 }

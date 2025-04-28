@@ -86,7 +86,7 @@ namespace Id.Tests.Api
 			OkObjectResult ok = Assert.IsType<OkObjectResult>(result);
 			ApiResponse<Dictionary<string, string>> data = Assert.IsType<ApiResponse<Dictionary<string, string>>>(ok.Value);
 			Assert.True(data.Successful);
-			_ = Assert.Single(data.Data);
+			_ = Assert.Single(data.Data ?? null!);
 		}
 
 		/// <summary>
@@ -135,6 +135,10 @@ namespace Id.Tests.Api
 			Assert.Equal(2, data.Data?.Count);
 		}
 
+		/// <summary>
+		/// Tests the GetAllTranslationsForApp method of the Translations API controller when no translations exist.
+		/// </summary>
+		/// <returns>Ok status and zip file</returns>
 		[Fact]
 		public async Task ExportTranslationsAsZip_ShouldReturnOk_WhenZipIsCreated()
 		{
@@ -142,7 +146,7 @@ namespace Id.Tests.Api
 			byte[] zipBytes = Encoding.UTF8.GetBytes("fake zip content");
 			ApiResponse<byte[]> response = ApiResponse<byte[]>.Success(zipBytes);
 
-			_manager.ExportTranslationsAsZipAsync(null, null).Returns(response);
+			_ = _manager.ExportTranslationsAsZipAsync(null, null).Returns(response);
 
 			// Act
 			IActionResult result = await _controller.GetTranslationsAsZip(null, null);

@@ -120,7 +120,7 @@ public class MdConfigServiceTests
 		Assert.True(File.Exists(_userPath));
 
 		IMdConfigService service = new MdConfigService(_masterPath, _userPath);
-		await service.ResetUserOverridesAsync();
+		service.ResetUserOverridesAsync();
 
 		Assert.False(File.Exists(_userPath));
 	}
