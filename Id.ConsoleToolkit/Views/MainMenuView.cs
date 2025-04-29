@@ -1,10 +1,16 @@
-﻿using Id.ConsoleToolkit.Views.Base;
-
-namespace Id.ConsoleToolkit.Views
+﻿namespace Id.ConsoleToolkit.Views
 {
-	public class MainMenuView(IStringLocalizer<MainMenuView> t) : ConsoleViewBase
+	/// <summary>
+	/// Main menu view.
+	/// </summary>
+	/// <param name="t">Localizer</param>
+	/// <param name="viewHelper">Helper for the layout of the view</param>
+	public class MainMenuView(
+	 IConsoleViewHelper viewHelper,
+	 IStringLocalizer<MainMenuView> t) : ConsoleViewBase(viewHelper), IMainMenuView
 	{
 		private readonly IStringLocalizer<MainMenuView> _t = t;
+		private readonly IConsoleViewHelper _viewHelper = viewHelper;
 
 		/// <summary>
 		/// Non mandatory Title at the top
@@ -16,7 +22,7 @@ namespace Id.ConsoleToolkit.Views
 		/// </summary>
 		protected override Task ShowAsync()
 		{
-			Console.WriteLine("Main Menu");
+			_ = Console.ReadKey();
 			return Task.CompletedTask;
 		}
 	}

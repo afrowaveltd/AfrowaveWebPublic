@@ -13,7 +13,7 @@
 		/// <summary>
 		/// Gets or sets the default language for the application.
 		/// </summary>
-		public string DefaultLanguage { get; set; } = "en";
+		public string DefaultLanguage { get; set; } = "cs";
 
 		/// <summary>
 		/// Gets or sets the application ID for the application.

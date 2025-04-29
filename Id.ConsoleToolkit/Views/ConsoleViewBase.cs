@@ -1,14 +1,20 @@
 ﻿using Spectre.Console;
 
-namespace Id.ConsoleToolkit.Views.Base
+namespace Id.ConsoleToolkit.Views
 {
 	/// <summary>
 	/// Base class for console views.
 	/// </summary>
-	public abstract class ConsoleViewBase
+	/// <remarks>
+	/// Constructor for <see cref="ConsoleViewBase"/>.
+	/// </remarks>
+	/// <param name="viewHelper">Helper for the layout of the view</param>
+	public abstract class ConsoleViewBase(IConsoleViewHelper viewHelper)
 	{
+		private readonly IConsoleViewHelper _viewHelper = viewHelper;
+
 		/// <summary>
-		/// Volitelný nadpis zobrazený nahoře v rámci <see cref="RunAsync"/>.
+		/// The optional Title <see cref="RunAsync"/>.
 		/// </summary>
 		protected virtual string? Title => null;
 
@@ -21,7 +27,7 @@ namespace Id.ConsoleToolkit.Views.Base
 
 			if(!string.IsNullOrWhiteSpace(Title))
 			{
-				AnsiConsole.Write(new Rule($"[bold]{Title}[/]").RuleStyle("grey"));
+				_viewHelper.ShowTitle(Title, Color.Yellow2);
 			}
 
 			await ShowAsync();

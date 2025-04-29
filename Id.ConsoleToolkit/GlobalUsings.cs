@@ -1,9 +1,11 @@
 ﻿global using Id.ConsoleToolkit.Helpers;
 global using Id.ConsoleToolkit.Models.SettingsModels;
 global using Id.ConsoleToolkit.Services;
+global using Id.ConsoleToolkit.Views;
 global using Id.I18n;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Localization;
+global using Spectre.Console;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
