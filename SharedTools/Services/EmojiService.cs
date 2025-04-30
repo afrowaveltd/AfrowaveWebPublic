@@ -1,29 +1,19 @@
-﻿using System.Text.Json;
+﻿using SharedTools.Models;
+using System.Text.Json;
 
-namespace SharedTools.Services.I18n;
+namespace SharedTools.Services;
 
-public interface IEmojiService
-{
-	string Get(string input);
-
-	string GetByUnicode(string unicodeHex);
-
-	string GetByName(string name);
-}
-
-public class EmojiEntry
-{
-	public string? Name { get; set; }
-	public string? UnicodeHex { get; set; }
-	public string? Utf8String { get; set; }
-	public string? CSharpString { get; set; }
-}
-
+/// <summary>
+/// Service to handle emoji data.
+/// </summary>
 public class EmojiService : IEmojiService
 {
 	private readonly Dictionary<string, EmojiEntry> _emojiByName;
 	private readonly Dictionary<string, EmojiEntry> _emojiByUnicode;
 
+	/// <summary>
+	/// Constructor for the EmojiService class.
+	/// </summary>
 	public EmojiService()
 	{
 		_emojiByName = new(StringComparer.OrdinalIgnoreCase);
@@ -62,6 +52,11 @@ public class EmojiService : IEmojiService
 		}
 	}
 
+	/// <summary>
+	/// Get the emoji string based on the input name or unicode hex.
+	/// </summary>
+	/// <param name="input">Can be either unicode hex or emoji name</param>
+	/// <returns>CSharp emoji string</returns>
 	public string Get(string input)
 	{
 		if(string.IsNullOrWhiteSpace(input))
@@ -82,6 +77,11 @@ public class EmojiService : IEmojiService
 		return string.Empty;
 	}
 
+	/// <summary>
+	/// Get the emoji string based on the unicode hex.
+	/// </summary>
+	/// <param name="unicodeHex">Unicode hex of the emoji</param>
+	/// <returns>CSharp emoji string</returns>
 	public string GetByUnicode(string unicodeHex)
 	{
 		return _emojiByUnicode.TryGetValue(unicodeHex, out EmojiEntry? emoji)
@@ -89,6 +89,11 @@ public class EmojiService : IEmojiService
 			 : string.Empty;
 	}
 
+	/// <summary>
+	/// Get the emoji string based on the name.
+	/// </summary>
+	/// <param name="name">Emoji name</param>
+	/// <returns>CSharp emoji string</returns>
 	public string GetByName(string name)
 	{
 		return _emojiByName.TryGetValue(name, out EmojiEntry? emoji)

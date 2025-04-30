@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
+using SharedTools.Extensions;
 using SharedTools.Services.MdServices;
 
 /// <summary>
@@ -99,7 +100,9 @@ public class Program
 
 		// Middleware
 		_ = builder.Services.AddTransient<I18nMiddleware>();
-		// builder.Services.AddTransient<ErrorMiddleware>();
+
+		// Service extensions
+		_ = builder.Services.AddEmojiService();
 
 		// Scoped slu�by (HTTP request-based)
 		_ = builder.Services.AddScoped<IApplicationLoader, ApplicationLoader>();
