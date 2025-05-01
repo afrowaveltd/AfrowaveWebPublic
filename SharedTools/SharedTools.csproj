@@ -20,4 +20,10 @@
 		<InternalsVisibleTo Include="Id.Tests" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="Jsons\EmojiData.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>
