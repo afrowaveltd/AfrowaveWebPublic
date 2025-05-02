@@ -1,0 +1,151 @@
+﻿body {
+	font-family: sans-serif;
+	margin: 2em;
+	background-color: #f9f9f9;
+}
+
+
+input[type="text"], select, button.toggle {
+	padding: 0.5em;
+	margin-bottom: 1em;
+}
+
+select {
+	width: 200px;
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+	background: white;
+	margin-top: 1em;
+}
+
+th, td {
+	border: 1px solid #ccc;
+	padding: 0.5em;
+	text-align: left;
+}
+
+th {
+	background-color: #eee;
+}
+
+td.emoji {
+	font-size: 1.5em;
+	text-align: center;
+}
+
+button.copy, button.toggle {
+	padding: 0.3em 0.6em;
+	margin: 0 0.2em;
+}
+
+.grid-view {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.2em;
+	margin-top: 1em;
+}
+
+.emoji-cell {
+	cursor: pointer;
+	text-align: center;
+	transition: background 0.2s;
+}
+
+	.emoji-cell.small {
+		font-size: 1rem;
+		border: none;
+		padding: 0.2em;
+		margin: 0.1em;
+	}
+
+	.emoji-cell.standard {
+		font-size: 2rem;
+		border: 1px solid #ccc;
+		padding: 0.3em 0.4em;
+		border-radius: 5px;
+		background: white;
+	}
+
+	.emoji-cell.big {
+		width: 15em;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		border: 1px solid #ccc;
+		padding: 0.3em;
+		background: white;
+	}
+
+		.emoji-cell.big > div:first-child {
+			font-size: 2rem;
+		}
+
+		.emoji-cell.big .label {
+			font-size: 0.8rem;
+			margin-top: 0.2em;
+			
+		}
+
+	.emoji-cell:hover {
+		background: #eee;
+	}
+
+#emoji-table {
+	display: none;
+}
+
+[data-theme="dark"] {
+	background-color: #1e1e1e;
+	color: #ddd;
+}
+[data-theme="dark"] body {
+	color: #ddd;
+}
+
+	[data-theme="dark"] select,
+	[data-theme="dark"] input,
+	[data-theme="dark"] button {
+		background-color: #2a2a2a;
+		color: #ddd;
+		border: 1px solid #555;
+	}
+
+	[data-theme="dark"] table,
+	[data-theme="dark"] .emoji-cell.standard,
+	[data-theme="dark"] .emoji-cell.big {
+		background-color: #2a2a2a;
+		border-color: #555;
+		color: #ddd;
+	}
+
+	[data-theme="dark"] th {
+		background-color: #333;
+		color: #ddd;
+	}
+
+	[data-theme="dark"] .emoji-cell:hover {
+		background: #444;
+		color: #ddd;
+	}
+
+	[data-theme="dark"] select,
+	[data-theme="dark"] input,
+	[data-theme="dark"] button.toggle,
+	[data-theme="dark"] button.copy {
+		background-color: #2a2a2a;
+		color: #ddd;
+		border: 1px solid #555;
+	}
+
+	[data-theme="dark"] td,
+	[data-theme="dark"] label,
+	[data-theme="dark"] select,
+	[data-theme="dark"] input,
+	[data-theme="dark"] .label {
+		color: #ddd;
+	}
+
+

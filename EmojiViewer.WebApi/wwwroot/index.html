@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Emoji Viewer</title>
+   <link rel="stylesheet" href="styles.css" />
+</head>
+<body onload="applyPreferredTheme()">
+   <h1>Emoji Viewer</h1>
+   <label for="search">Search:</label>
+   <input type="text" id="search" placeholder="Search by name (use * for wildcard)..." />
+
+   <label for="format">Copy format:</label>
+   <select id="format">
+      <option value="Utf8String">Emoji</option>
+      <option value="Name">Name</option>
+      <option value="CSharpString">C#</option>
+   </select>
+
+   <label for="size">Size:</label>
+   <select id="size">
+      <option value="small">Small</option>
+      <option value="standard" selected>Standard</option>
+      <option value="big">Big</option>
+   </select>
+
+   <label for="theme">Theme:</label>
+   <select id="theme" onchange="applyTheme()">
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+   </select>
+
+   <button class="toggle" onclick="toggleView()">Show detailed list</button>
+   <span id="loading-indicator">Loading data...</span>
+   <div class="grid-view" id="emoji-grid"></div>
+
+   <table id="emoji-table">
+      <thead>
+         <tr>
+            <th>Emoji</th>
+            <th>Name</th>
+            <th>Unicode</th>
+            <th>C#</th>
+            <th>Actions</th>
+         </tr>
+      </thead>
+      <tbody></tbody>
+   </table>
+
+   <script src="script.js">
+
+   </script>
+</body>
+</html>

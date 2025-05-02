@@ -1,0 +1,6 @@
+@EmojiViewer.WebApi_HostAddress = http://localhost:5255
+
+GET {{EmojiViewer.WebApi_HostAddress}}/api/emojis/
+Accept: application/json
+
+###

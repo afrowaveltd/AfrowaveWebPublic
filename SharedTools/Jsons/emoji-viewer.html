@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>Emoji Viewer</title>
+   <style>
+      body {
+        font-family: sans-serif;
+        padding: 2em;
+        background: #f9f9f9;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        background: white;
+      }
+      th, td {
+        border: 1px solid #ccc;
+        padding: 0.5em;
+        text-align: left;
+      }
+      th {
+        background-color: #f0f0f0;
+      }
+      .emoji {
+        font-size: 1.5em;
+        text-align: center;
+      }
+      button {
+        padding: 0.3em 0.6em;
+        font-size: 0.9em;
+      }
+   </style>
+</head>
+<body>
+   <h1>Emoji Viewer</h1>
+   <table id="emoji-table">
+      <thead>
+         <tr>
+            <th>Emoji</th>
+            <th>Name</th>
+            <th>UTF Code</th>
+            <th>C#</th>
+            <th>Copy</th>
+         </tr>
+      </thead>
+      <tbody></tbody>
+   </table>
+
+   <script>
+      async function loadEmojis() {
+        const response = await fetch("emojis.json");
+        const emojis = await response.json();
+
+        const tbody = document.querySelector("#emoji-table tbody");
+
+        for (const emoji of emojis) {
+          const row = document.createElement("tr");
+
+          row.innerHTML = `
+            <td class="emoji">${emoji.utf8String}</td>
+            <td>${emoji.name}</td>
+            <td>${emoji.utf}</td>
+            <td><code>${emoji.cSharp}</code></td>
+            <td>
+              <button onclick="copyToClipboard('${emoji.utf8String}')">Emoji</button>
+              <button onclick="copyToClipboard('${emoji.name}')">Name</button>
+              <button onclick="copyToClipboard('${emoji.utf}')">UTF</button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        }
+      }
+
+      function copyToClipboard(text) {
+        navigator.clipboard.writeText(text)
+          .then(() => alert(`Copied: ${text}`))
+          .catch(err => alert("Failed to copy."));
+      }
+
+      loadEmojis();
+   </script>
+</body>
+</html>
