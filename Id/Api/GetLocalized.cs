@@ -1,4 +1,6 @@
-﻿namespace Id.Api
+﻿using System.Text;
+
+namespace Id.Api
 {
 	/// <summary>
 	/// API controller for retrieving localized text.
@@ -79,7 +81,7 @@
 			{
 				translated = result.Value;
 			}
-			return Ok(translated);
+			return Content(translated, "text/plain", Encoding.UTF8);
 		}
 	}
 }
