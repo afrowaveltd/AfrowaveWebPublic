@@ -1,0 +1,69 @@
+
+  Điều kiện cho cộng đồng người lùn
+
+Ngày hiệu quả: 22.12.2024
+
+    Quan sát cộng đồng Afrowave
+
+Cộng đồng Afrowave là một dự án mã nguồn mở cung cấp dịch vụ tự do sử dụng. Dịch vụ của chúng tôi bao gồm (nhưng không chỉ có):
+
+Một hệ thống xác thực và cấp phép tương tự như OAuth, được sử dụng trong các dự án của Afrowave và sẵn sàng cho các dự án cộng đồng bên ngoài.
+- Ứng dụng trò chuyện và mạng xã hội.
+- Các blog tin tức và các nền tảng chia sẻ truyền thông khác.
+- Hỗ trợ đa ngôn ngữ cho người dùng trên toàn thế giới.
+
+Các dịch vụ sang trọng như gửi tin nhắn (SMS) hoặc những dịch vụ khác liên quan đến chi phí bên ngoài, có thể được cung cấp trong tương lai. Những phí tổn về dịch vụ này chỉ trang trải các chi phí liên quan (v. d., phí tổ chức, tin nhắn).
+
+    Dữ liệu và sự riêng tư của người dùng
+     Bộ sưu tập dữ liệu và sử dụng
+ID sóng Afro: dữ liệu người dùng, chẳng hạn chi tiết xác thực, sẽ được chia sẻ qua các dự án sóng Afro để cung cấp đăng nhập và truy cập không liền mạch.
+Cookie: Bánh quy được dùng để cất giữ thiết lập kiểu như tối hoặc sắc thái sáng, ngôn ngữ người dùng và biểu tượng phiên chạy. Không có cookie thứ ba nào được truy cập hay dùng bởi Afrowave.
+GDPR Afrowave hợp tác với GDPR. Dữ liệu cá nhân của bạn sẽ không được chia sẻ với bất kỳ dịch vụ bên thứ ba hay thực thể nào mà không có sự đồng ý rõ ràng.
+
+    Chia sẻ dữ liệu
+Người dùng có thể chọn dữ liệu cá nhân để chia sẻ với bạn bè, quần chúng, hoặc khách không đăng ký. Người dùng duy trì kiểm soát các thiết lập tầm nhìn dữ liệu.
+Trách nhiệm cho nội dung do người dùng tạo ra hoàn toàn nằm trong tác giả nội dung. Sóng Afro không chịu trách nhiệm cho bất cứ thông tin chung nào.
+
+    Dùng dịch vụ
+     Việc sử dụng các dịch vụ Afrowave miễn phí cho tất cả mọi người dùng, theo các điều kiện:
+- Người dùng của mọi lứa tuổi được phép truy cập vào bục giảng.
+- Thỏa lòng được đánh dấu là “chỉ có thể dùng được cho người lớn.
+- Lạm dụng, nội dung bất hợp pháp (như được định nghĩa bởi luật EU), và các vật liệu cấm khác bị nghiêm cấm.
+- Sóng Afro dự trữ quyền loại bỏ nội dung bất hợp pháp hoặc lạm dụng và tạm dừng hoặc chấm dứt tài khoản vi phạm các điều khoản này.
+
+    Trách nhiệm của người dùng
+
+Người dùng chỉ chịu trách nhiệm về nội dung mà họ tạo ra, chia sẻ, hoặc phân phối thông qua các dịch vụ Afrowave.
+
+Người dùng không được tham gia:
+
+- Đăng hoặc chia sẻ nội dung bất hợp pháp hoặc có hại.
+- Tai hại, lạm dụng, hoặc kỳ thị.
+- Hoạt động vi phạm luật lệ của EU hay tiêu chuẩn cộng đồng.
+
+    Chính sách quảng cáo
+
+Quảng cáo được cho phép dùng các dịch vụ của Afrowave, miễn là nó tuân thủ các tiêu chuẩn của cộng đồng và không khuyến khích những hoạt động bất hợp pháp hoặc tai hại.
+
+    Hỗ trợ đa ngôn ngữ
+
+Afrowave cung cấp các bản dịch trong nhiều ngôn ngữ để đảm bảo tính bất tận. Dù người ta cố gắng hết sức để dịch chính xác, nhưng bản dịch tiếng Anh sẽ phổ biến trong trường hợp có sự khác biệt.
+
+    Hòa thuận và từ chối hợp pháp
+
+Afrowave hoạt động theo luật EU.
+Chúng ta không có trách nhiệm lạm dụng dịch vụ hay đảng thứ ba tuyên bố có liên quan đến hoạt động của người dùng.
+Trong khi Afrowave đảm bảo một nền tảng an toàn, người dùng chịu trách nhiệm bảo vệ thông tin và dữ liệu nhạy cảm của họ.
+
+    Cập nhật các từ và điều kiện
+
+Afrowave có quyền cập nhật những điều khoản và điều kiện này bất cứ lúc nào. Các thay đổi quan trọng sẽ được liên lạc với người dùng qua email hoặc trên nền tảng.
+
+    Thông tin liên lạc
+
+Nếu bạn có thắc mắc gì, xin liên lạc với chúng tôi tại:
+
+Website: https vội vàng.ltd
+
+Email: thông tin
+

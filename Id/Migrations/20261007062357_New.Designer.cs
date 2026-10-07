@@ -3,7 +3,6 @@ using System;
 using Id.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -12,89 +11,82 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Id.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250226124845_addedSuspensionTables")]
-    partial class addedSuspensionTables
+    [Migration("20261007062357_New")]
+    partial class New
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.4");
 
             modelBuilder.Entity("Id.Models.DatabaseModels.Application", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ApplicationCookiesPolicy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ApplicationEmail")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ApplicationPrivacyPolicy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ApplicationTermsAndConditions")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ApplicationWebsite")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("BrandId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ClientSecret")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsAuthenticator")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Logo")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PostLogoutRedirectUri")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Published")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ReasonForSuspension")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RedirectUri")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("RequireCookiePolicy")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("RequirePrivacyPolicy")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("RequireTerms")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Suspended")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -105,24 +97,64 @@ namespace Id.Migrations
                     b.ToTable("Applications");
                 });
 
+            modelBuilder.Entity("Id.Models.DatabaseModels.ApplicationDescriptionTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("AutoTranslated")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("ChangesAccepted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("EditorId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsOriginal")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastChange")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ObjectId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PreviousBody")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationDescriptionTranslations");
+                });
+
             modelBuilder.Entity("Id.Models.DatabaseModels.ApplicationPolicy", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ApplicationId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("OriginalLanguage")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("PolicyType")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -135,27 +167,25 @@ namespace Id.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("AllignToAll")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ApplicationId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("CanAdministerRoles")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("NormalizedName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -168,40 +198,38 @@ namespace Id.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ApplicationId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("AuthorizationRequired")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Host")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Port")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Secure")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("SenderEmail")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SenderName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Username")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -215,66 +243,64 @@ namespace Id.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("AgreedSharingUserDetails")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("AgreedToCookies")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("AgreedToTerms")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ApplicationId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Deleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("Locked")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("LockedReason")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("LockedUntil")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("ShowAddress")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("ShowBirthday")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("ShowEmail")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("ShowGender")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("ShowName")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("ShowPhone")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("ShowProfilePicture")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("UserDescription")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -285,33 +311,73 @@ namespace Id.Migrations
                     b.ToTable("ApplicationUsers");
                 });
 
+            modelBuilder.Entity("Id.Models.DatabaseModels.ApplicationUserDescriptionTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("AutoTranslated")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("ChangesAccepted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("EditorId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsOriginal")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastChange")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ObjectId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PreviousBody")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationUserDescriptionTranslations");
+                });
+
             modelBuilder.Entity("Id.Models.DatabaseModels.Brand", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Logo")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Website")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -320,29 +386,69 @@ namespace Id.Migrations
                     b.ToTable("Brands");
                 });
 
+            modelBuilder.Entity("Id.Models.DatabaseModels.BrandDescriptionTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("AutoTranslated")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("ChangesAccepted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("EditorId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsOriginal")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastChange")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ObjectId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PreviousBody")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BrandDescriptionTranslations");
+                });
+
             modelBuilder.Entity("Id.Models.DatabaseModels.Country", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Dial_code")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Emoji")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -353,24 +459,22 @@ namespace Id.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Native")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Rtl")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -381,30 +485,28 @@ namespace Id.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("LanguageId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("OldContent")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("PolicyId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("UnapprovedContent")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -419,39 +521,37 @@ namespace Id.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedByIp")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Expires")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ReasonRevoked")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ReplacedByToken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("Revoked")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("RevokedByIp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Token")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -464,29 +564,27 @@ namespace Id.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ApplicationId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Reason")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("SuspendedFrom")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("SuspendedUntil")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SuspenderId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("SuspensionActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -501,32 +599,30 @@ namespace Id.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ApplicationId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("ApplicationUserId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Reason")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("SuspendedFrom")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("SuspendedUntil")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("SuspenderId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("SuspensionActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -539,46 +635,286 @@ namespace Id.Migrations
                     b.ToTable("SuspendedUsers");
                 });
 
+            modelBuilder.Entity("Id.Models.DatabaseModels.Theme", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ApplicationUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsSystem")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Privacy")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SourceLanguage")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Themes");
+                });
+
+            modelBuilder.Entity("Id.Models.DatabaseModels.ThemeDefinition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Admin")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Background")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BodyBackground")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("BorderLight")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DisabledBackground")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DisabledForeground")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Error")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Family")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Font")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FontLink")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Foreground")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FormBackground")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FormControlInvalidBackground")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FormControlValidBackground")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FormForeground")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Highlight")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Hr")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Info")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LinkActive")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LinkHover")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModalBackground")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("My")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Navbar")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RedBorder")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Shadow")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Success")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ThemeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Warning")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ThemeId")
+                        .IsUnique();
+
+                    b.ToTable("ThemeDefinition");
+                });
+
+            modelBuilder.Entity("Id.Models.DatabaseModels.ThemeDescriptionTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CommunityTranslation")
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LanguageId")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PreviousBody")
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ThemeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TranslationStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ThemeId");
+
+                    b.ToTable("ThemeDescriptionTranslations");
+                });
+
+            modelBuilder.Entity("Id.Models.DatabaseModels.ThemeNameTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CommunityTranslation")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LanguageId")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PreviousBody")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ThemeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TranslationStatus")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ThemeId");
+
+                    b.ToTable("ThemeNameTranslations");
+                });
+
             modelBuilder.Entity("Id.Models.DatabaseModels.UiTranslatorLog", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("DefaultLanguageFound")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("OldTranslationsFound")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("PhrazesCount")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("PhrazesToRemoveCount")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("PhrazesToTranslateCount")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("TargetLanguagesCount")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<TimeSpan>("TotalTime")
-                        .HasColumnType("time");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("TranslatedPhrazesCount")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TranslationErrorCount")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -588,60 +924,63 @@ namespace Id.Migrations
             modelBuilder.Entity("Id.Models.DatabaseModels.User", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateOnly?>("BirthDate")
-                        .HasColumnType("date");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool?>("EmailConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Firstname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Gender")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsOwner")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Lastname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("MiddleName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("OTPToken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("OTPTokenExpiration")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PasswordResetToken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("PasswordResetTokenExpiration")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ProfilePicture")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -652,31 +991,29 @@ namespace Id.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<int?>("CountryId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PostCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("StreetAddress")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("StreetAddress2")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -691,18 +1028,16 @@ namespace Id.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("AddedToRole")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("ApplicationRoleId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("ApplicationUserId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -871,6 +1206,57 @@ namespace Id.Migrations
                     b.Navigation("Suspender");
                 });
 
+            modelBuilder.Entity("Id.Models.DatabaseModels.Theme", b =>
+                {
+                    b.HasOne("Id.Models.DatabaseModels.ApplicationUser", "ApplicationUser")
+                        .WithMany("Themes")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Id.Models.DatabaseModels.User", "User")
+                        .WithMany("Themes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Id.Models.DatabaseModels.ThemeDefinition", b =>
+                {
+                    b.HasOne("Id.Models.DatabaseModels.Theme", "Theme")
+                        .WithOne("ThemeDefinition")
+                        .HasForeignKey("Id.Models.DatabaseModels.ThemeDefinition", "ThemeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Theme");
+                });
+
+            modelBuilder.Entity("Id.Models.DatabaseModels.ThemeDescriptionTranslation", b =>
+                {
+                    b.HasOne("Id.Models.DatabaseModels.Theme", "Theme")
+                        .WithMany("DescriptionTranslations")
+                        .HasForeignKey("ThemeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Theme");
+                });
+
+            modelBuilder.Entity("Id.Models.DatabaseModels.ThemeNameTranslation", b =>
+                {
+                    b.HasOne("Id.Models.DatabaseModels.Theme", "Theme")
+                        .WithMany("NameTranslations")
+                        .HasForeignKey("ThemeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Theme");
+                });
+
             modelBuilder.Entity("Id.Models.DatabaseModels.UserAddress", b =>
                 {
                     b.HasOne("Id.Models.DatabaseModels.Country", "Country")
@@ -937,6 +1323,8 @@ namespace Id.Migrations
                 {
                     b.Navigation("SuspendedUsers");
 
+                    b.Navigation("Themes");
+
                     b.Navigation("UserRoles");
                 });
 
@@ -955,6 +1343,16 @@ namespace Id.Migrations
                     b.Navigation("PolicyTranslations");
                 });
 
+            modelBuilder.Entity("Id.Models.DatabaseModels.Theme", b =>
+                {
+                    b.Navigation("DescriptionTranslations");
+
+                    b.Navigation("NameTranslations");
+
+                    b.Navigation("ThemeDefinition")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Id.Models.DatabaseModels.User", b =>
                 {
                     b.Navigation("ApplicationUsers");
@@ -968,6 +1366,8 @@ namespace Id.Migrations
                     b.Navigation("SuspendedApplications");
 
                     b.Navigation("Suspenders");
+
+                    b.Navigation("Themes");
 
                     b.Navigation("UserAddresses");
                 });
